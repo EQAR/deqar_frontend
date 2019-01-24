@@ -62,13 +62,13 @@ class AssignedList extends Component {
   };
 
   render() {
-    const {values, errors, label, btnLabel, field} = this.props;
+    const {values, errors, label, btnLabel, field, labelShowRequired} = this.props;
 
     return(
       <div>
         <Text field={field} hidden validate={this.props.validate} />
         <FormGroup>
-          <Label>{label}</Label>
+          <Label className={labelShowRequired ? 'required' : ''}>{label}</Label>
           <ListGroup className={style.ListGroup}>
             {this.renderListItems(values)}
           </ListGroup>
@@ -87,6 +87,10 @@ class AssignedList extends Component {
   }
 }
 
+AssignedList.defaultValues = {
+  labelShowRequired: false
+};
+
 AssignedList.propTypes = {
   errors: PropTypes.object.isRequired,
   field: PropTypes.string.isRequired,
@@ -97,6 +101,7 @@ AssignedList.propTypes = {
   onRemove: PropTypes.func.isRequired,
   onEdit: PropTypes.func,
   label: PropTypes.string.isRequired,
+  labelShowRequired: PropTypes.bool,
   btnLabel: PropTypes.string
 };
 
