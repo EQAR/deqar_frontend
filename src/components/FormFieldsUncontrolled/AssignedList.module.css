@@ -1,0 +1,33 @@
+.ListGroup {
+}
+
+.ListGroupItem {
+  border-style: dashed;
+  padding-top: 0.4em;
+  vertical-align: middle;
+  padding-left: 20px;
+  min-height: 35px;
+  max-height: 35px;
+}
+
+.ListGroupItemHasError {
+  border-color: #f86c6b;
+}
+
+.ListGroupItemName {
+  color: hsl(0,0%,40%);
+  border-bottom: 1px dotted;
+  cursor: pointer;
+}
+
+.Button {
+  margin-top: 10px;
+}
+
+.removeButton {
+  color: hsl(0,0%,80%);
+}
+
+.removeButton:hover {
+  color: hsl(0,0%,60%);
+}

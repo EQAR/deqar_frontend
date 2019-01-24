@@ -1,0 +1,11 @@
+.reportFormCard {
+    padding-left: 5px;
+}
+
+.reportFormLeft {
+    border-right: 1px solid #CCCCCC;
+}
+
+.reportSubmitButton {
+    z-index: 0;
+}

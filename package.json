@@ -1,0 +1,59 @@
+{
+  "name": "deqar_frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@coreui/coreui": "^2.1.4",
+    "@coreui/icons": "^0.3.0",
+    "@coreui/react": "^2.1.2",
+    "ag-grid-community": "^20.0.0",
+    "ag-grid-react": "^20.0.0",
+    "axios": "^0.18.0",
+    "bootstrap": "^4.2.1",
+    "classnames": "^2.2.6",
+    "email-validator": "^2.0.4",
+    "flag-icon-css": "^3.2.1",
+    "font-awesome": "^4.7.0",
+    "history": "^4.7.2",
+    "informed": "^1.10.12",
+    "moment": "^2.23.0",
+    "node-sass": "^4.11.0",
+    "papaparse": "^4.6.2",
+    "prop-types": "^15.6.2",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-ladda": "^6.0.0",
+    "react-loadable": "^5.5.0",
+    "react-papaparse": "^1.0.5",
+    "react-redux": "^6.0.0",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "2.1.2",
+    "react-select": "^2.2.0",
+    "react-select-async-paginate": "^0.2.6",
+    "react-table": "^6.8.6",
+    "react-toastify": "^4.5.2",
+    "react-user-avatar": "^1.10.0",
+    "reactstrap": "^7.0.2",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
+    "simple-line-icons": "^2.4.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "redux-devtools-extension": "^2.13.7"
+  }
+}
