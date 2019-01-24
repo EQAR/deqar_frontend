@@ -39,7 +39,8 @@ class ReportForm extends Component {
       fileModalOpen: false,
       programmeModalOpen: false,
       alertVisible: false,
-      nonFieldErrors: []
+      nonFieldErrors: [],
+      loading: false
     }
   }
 
@@ -112,7 +113,9 @@ class ReportForm extends Component {
                   valueFields={['name_primary']}
                   values={formState.values.programmes}
                   label={'Assigned programmes'}
+                  labelShowRequired={true}
                   btnLabel={'Add programme'}
+                  validate={this.validateProgrammes}
                   onRemove={this.onProgrammeRemove}
                   onAddButtonClick={this.toggleProgrammeModal}
                   field={'programmes'}
@@ -153,6 +156,14 @@ class ReportForm extends Component {
     this.setState({
       programmeModalOpen: !this.state.programmeModalOpen
     })
+  };
+
+  // Toggle loading
+  loadingToggle = () => {
+    this.setState({
+      ...this.state,
+      loading: !this.state.loading
+    });
   };
 
   // Events
@@ -263,12 +274,34 @@ class ReportForm extends Component {
 
     // If activity is 'joint programme'
     if (activityType === 'joint programme') {
-      return "At least two institutions are required"
+      if(institutions.length < 2) {
+        return "At least two institutions are required"
+      }
     }
 
     // At least one institution is required
     if (institutions.length === 0) {
       return "Selection of minimum one institution is required"
+    }
+  };
+
+  validateProgrammes = (value, values) => {
+    let programmes = values.programmes;
+    programmes = programmes ? programmes : [];
+    const activityType = values.activity ? values.activity.activity_type : undefined;
+
+    // If activity is 'joint programme'
+    if (activityType === 'joint programme') {
+      if(!(programmes.length === 1)) {
+        return "One program record is required"
+      }
+    }
+
+    // If activity is 'programme'
+    if (activityType === 'programme') {
+      if(programmes.length === 0) {
+        return "At least one program record is required"
+      }
     }
   };
 
@@ -280,7 +313,7 @@ class ReportForm extends Component {
     const {files} = this.state;
     if('name' in files[idx]) {
       report.submitReportFile(files[idx], reportFileID).then((response) => {
-        toast.success(`Uploading file ${files[idx].name} was successful.`);
+        toast.warn(`Uploading file ${files[idx].name} was successful.`);
       }).catch((error) => {
         toast.error(`There was a problem uploading the file: ${files[idx].name}.`)
       });
@@ -288,6 +321,7 @@ class ReportForm extends Component {
   };
 
   onSubmit = (values) => {
+    this.loadingToggle();
     let normalizedForm = this.normalizeForm(values);
     report.submitReport(normalizedForm).then((response) => {
       toast.success("Report record was created.");
@@ -295,6 +329,9 @@ class ReportForm extends Component {
       filesResponse.forEach((file, idx) => {
         this.uploadFiles(file.id, idx);
       });
+    }).then(() =>{
+      this.loadingToggle();
+      this.formApi.reset();
     }).catch((error) => {
       const errors = error.response.data.errors;
       if ('non_field_errors' in errors) {
@@ -330,6 +367,9 @@ class ReportForm extends Component {
                   case "institutions":
                     normalizedForm[key].push({deqar_id: v.deqar_id});
                     break;
+                  case "countries":
+                    normalizedForm[key].push(v.iso_3166_alpha2);
+                    break;
                   default:
                     normalizedForm[key].push(v.id.toString());
                 }
@@ -346,6 +386,9 @@ class ReportForm extends Component {
                   break;
                 case "agency":
                   normalizedForm[key] = value.acronym_primary;
+                  break;
+                case "qf_ehea_level":
+                  normalizedForm[key] = value.level;
                   break;
                 default:
                   normalizedForm[key] = value.id.toString();
@@ -440,6 +483,7 @@ class ReportForm extends Component {
                             field={'institutions'}
                             validate={this.validateInstitutions}
                             label={'Assigned institutions'}
+                            labelShowRequired={true}
                             valueFields={['name_primary']}
                             values={formState.values.institutions}
                             onRemove={this.onInstitutionRemove}
@@ -514,6 +558,7 @@ class ReportForm extends Component {
                             errors={formState.errors}
                             valueFields={['filename', 'original_location']}
                             label={'Assigned files'}
+                            labelShowRequired={true}
                             btnLabel={'Add file'}
                             validate={validateRequired}
                             values={formState.values.report_files}
