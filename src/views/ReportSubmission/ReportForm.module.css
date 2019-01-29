@@ -9,3 +9,9 @@
 .reportSubmitButton {
     z-index: 0;
 }
+
+.yearPlus {
+    color: hsl(0,0%,40%);
+    border-bottom: 1px dotted;
+    cursor: pointer;
+}

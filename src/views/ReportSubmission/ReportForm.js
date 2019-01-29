@@ -6,7 +6,7 @@ import {
   CardFooter,
   CardHeader,
   Col,
-  FormGroup,
+  FormGroup, FormText,
   Label,
   Row
 } from "reactstrap";
@@ -25,6 +25,7 @@ import FilePopupForm from "./components/FilePopupForm";
 import ProgrammePopupForm from "./components/ProgrammePopupForm";
 import ReportAlert from "./components/ReportAlert";
 import { toast } from 'react-toastify';
+import FormDatePickerField from "../../components/FormFields/FormDatePickerField";
 
 class ReportForm extends Component {
   constructor(props) {
@@ -248,6 +249,20 @@ class ReportForm extends Component {
       this.setState({
         files: files
       })
+    }
+  };
+
+  onYearPlusClick = () => {
+    const valid_from = this.formApi.getValue('valid_from');
+    let valid_to = this.formApi.getValue('valid_to');
+
+    if(valid_from) {
+      if(!valid_to) {
+        valid_to = moment(valid_from);
+      } else {
+        valid_to = moment(valid_to);
+      }
+      this.formApi.setValue('valid_to', valid_to.add(1, 'y').format('YYYY-MM-DD'))
     }
   };
 
@@ -525,21 +540,26 @@ class ReportForm extends Component {
                         <Col md={6}>
                           <FormGroup>
                             <Label for="valid_from" className={'required'}>Valid from</Label>
-                            <FormTextField
+                            <FormDatePickerField
                               field={'valid_from'}
                               validate={this.validateDateFrom}
-                              placeholder={'YYYY-MM-DD'}
+                              placeholderText={'YYYY-MM-DD'}
                             />
                           </FormGroup>
                         </Col>
                         <Col md={6}>
                           <FormGroup>
                             <Label for="valid_to">Valid to</Label>
-                            <FormTextField
+                            <FormDatePickerField
                               field={'valid_to'}
                               validate={validateDate}
-                              placeholder={'YYYY-MM-DD'}
+                              placeholderText={'YYYY-MM-DD'}
                             />
+                            <FormText color="muted">
+                              <span onClick={this.onYearPlusClick} className={style.yearPlus}>
+                                +1 Year
+                              </span>
+                            </FormText>
                           </FormGroup>
                         </Col>
                       </Row>
