@@ -10,18 +10,26 @@ const FormDatePickerField = asField(({ fieldState, fieldApi, ...props }) => {
   const { setValue, setTouched } = fieldApi;
   const { onChange, onBlur, initialValue,...rest } = props;
 
+  const setDateValue = (value) => {
+    return value ? moment(value).format('YYYY-MM-DD') : null;
+  };
+
+  const getDateValue = (value) => {
+    return value? moment(value, 'YYYY-MM-DD').toDate() : null;
+  };
+
   return (
     <div className={'datepicker'}>
       <DatePicker
-        selected={value ? moment(value, 'YYYY-MM-DD').toDate() : null}
+        selected={ getDateValue(value) }
         showYearDropdown
         {...rest}
         dateFormat="yyyy-MM-dd"
         className={fieldState.error ? 'form-control is-invalid' : 'form-control'}
         onSelect={(value) => {
-          setValue(moment(value).format('YYYY-MM-DD'));
+          setValue(setDateValue(value));
           if (onChange) {
-            onChange(moment(value).format('YYYY-MM-DD'));
+            onChange(setDateValue(value));
           }
         }}
         onChange={value => {
