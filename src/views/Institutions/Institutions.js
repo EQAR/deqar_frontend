@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import {
   Card,
   CardBody,
+  CardFooter,
   CardHeader,
   Col,
   Row
 } from "reactstrap";
+import InstitutionsTable from './InstitutionsTable';
 
 class Institutions extends Component {
   render() {
@@ -18,8 +20,10 @@ class Institutions extends Component {
             </Row>
           </CardHeader>
           <CardBody>
-              hey
+            <InstitutionsTable />
           </CardBody>
+          <CardFooter>
+          </CardFooter>
         </Card>
       </div>
     )

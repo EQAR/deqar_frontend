@@ -3,7 +3,7 @@ import {GET_INSTITUTIONS} from "./config-api";
 
 class Institution {
   async select(search, loadedOptions) {
-    if(search) {
+    if (search) {
       const params = {
         query: search,
         limit: 10,
@@ -18,7 +18,10 @@ class Institution {
         }
       });
     }
-  };
+    return axios.get(GET_INSTITUTIONS);
+  }
+
+
 }
 
 const institution = new Institution();

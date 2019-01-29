@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 
-class DataTable extends Component {
+class InstitutionReferenceTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,14 +23,12 @@ class DataTable extends Component {
 
   componentDidMount() {
     const {initialState} = this.props;
-    const {page, pageSize, sorted, filtered, expanded, resized} = initialState;
+    const {page, pageSize, sorted, filtered} = initialState;
     this.setState({
       page: page,
       pageSize: pageSize,
       sorted: sorted,
-      filtered: filtered,
-      expanded: expanded,
-      resized: resized
+      filtered: filtered
     },
       () => this.fetchData(this.state)
     );
@@ -100,8 +98,10 @@ class DataTable extends Component {
 
   fetchData = (state) => {
     this.setState({ loading: true });
-    this.props.onFetchData(state).then((response) => {
-      if(this._ismounted) {
+    this.props.onFetchData().then((response) => {
+      console.log(response);
+
+      if (this._ismounted) {
         this.setState({
           pages: response.data.count,
           data: response.data.results,
@@ -165,12 +165,11 @@ class DataTable extends Component {
   }
 }
 
-DataTable.propTypes = {
+InstitutionReferenceTable.propTypes = {
   columnConfig: PropTypes.array.isRequired,
   onFetchData: PropTypes.func.isRequired,
   initialState: PropTypes.object,
-  saveState: PropTypes.func,
-  defaultPageSize: PropTypes.number
+  saveState: PropTypes.func
 };
 
-export default DataTable;
+export default InstitutionReferenceTable;
