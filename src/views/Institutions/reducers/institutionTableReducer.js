@@ -1,7 +1,7 @@
 import {SET_INSTITUTION_TABLE} from "../../../store/actionTypes";
 
 const initialState = {
-  pageSize: 20,
+  pageSize: 10,
   page: 0,
   sorted: [],
   filtered: []

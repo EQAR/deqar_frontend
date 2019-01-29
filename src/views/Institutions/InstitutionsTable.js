@@ -7,28 +7,30 @@ import setInstitutionTable from "./actions/setInstitutionTable";
 
 const columnConfig = [
   {
-    field: 'deqar-id',
+    field: 'deqar_id',
     label: 'DEQARINST ID',
     sortable: true,
     filterable: true,
     width: 100
   }, {
-    field: 'eter-id',
+    field: 'eter_id',
     label: 'ETER ID',
     sortable: true,
     filterable: true
   }, {
-    field: 'institution',
+    field: 'name_primary',
     label: 'Institution',
     sortable: true,
     filterable: true
-  }, {
-    field: 'country',
+  },
+  {
+    field: 'countries',
     label: 'Country',
     sortable: true,
     filterable: true,
     width: 100
-}];
+  }
+];
 
 
 class InstitutionsTable extends Component {

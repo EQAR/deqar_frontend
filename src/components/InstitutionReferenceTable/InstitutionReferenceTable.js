@@ -99,27 +99,30 @@ class InstitutionReferenceTable extends Component {
   fetchData = (state) => {
     this.setState({ loading: true });
     this.props.onFetchData().then((response) => {
-      console.log(response);
-
       if (this._ismounted) {
         this.setState({
           pages: response.data.count,
-          data: response.data.results,
+          data: this.convertResult(response.data.results),
           loading: false
         })
       }
     });
   };
 
+  convertResult = (response) => {
+    response.forEach(res => res.countries = res.countries.map(country => country.country))
+    return response;
+  }
+
   makeHeader = () => {
-    const {columnConfig} = this.props;
+    const { columnConfig } = this.props;
     let header = [];
     columnConfig.forEach((column) => {
       let columnConfig = {};
       columnConfig['Header'] = column.label;
       columnConfig['sortable'] = column.sortable;
       columnConfig['filterable'] = column.filterable;
-      columnConfig['accessor'] = column.field;
+      columnConfig['accessor'] = column.field
 
       columnConfig['width'] = column.width;
 
