@@ -1,6 +1,7 @@
-import {SET_REPORT_TABLE} from "../../../store/actionTypes";
+import { SET_REPORT_TABLE } from "../../../store/actionTypes";
 
 const initialState = {
+  tableType: 'report',
   pageSize: 20,
   page: 0,
   sorted: [],

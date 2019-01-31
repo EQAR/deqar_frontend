@@ -91,6 +91,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (store) => {
   return {
     initialState: {
+      tableType: store.reportTable.tableType,
       pageSize: store.reportTable.pageSize,
       page: store.reportTable.page,
       sorted: store.reportTable.sorted,

@@ -1,15 +1,16 @@
-import {SET_INSTITUTION_TABLE} from "../../../store/actionTypes";
+import { SET_INSTITUTIONS_TABLE } from "../../../store/actionTypes";
 
 const initialState = {
+  tableType: 'institution',
   pageSize: 10,
   page: 0,
   sorted: [],
   filtered: []
 };
 
-function institutionTableReducer(state = initialState, action) {
+function institutionsTableReducer(state = initialState, action) {
   switch (action.type) {
-    case SET_INSTITUTION_TABLE: {
+    case SET_INSTITUTIONS_TABLE: {
       return {
         ...state,
         pageSize: action.payload.state.pageSize,
@@ -24,4 +25,4 @@ function institutionTableReducer(state = initialState, action) {
   }
 }
 
-export default institutionTableReducer;
+export default institutionsTableReducer;

@@ -1,13 +1,13 @@
 import { combineReducers } from "redux";
 import userReducer from "../components/DefaultLayout/reducers/userReducer";
 import reportTableReducer from "../views/Dashboard/reducers/reportTableReducer";
-import institutionTableReducer from "../views/Institutions/reducers/institutionTableReducer";
+import institutionsTableReducer from "../views/Institutions/reducers/institutionsTableReducer";
 
 // Create the combined reducer
 const reducer = combineReducers(
   {
     user: userReducer,
-    institutionTable: institutionTableReducer,
+    institutionsTable: institutionsTableReducer,
     reportTable: reportTableReducer
   }
 );

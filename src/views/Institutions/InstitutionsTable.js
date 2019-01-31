@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import InstitutionReferenceTable from "../../components/InstitutionReferenceTable/InstitutionReferenceTable";
+import DataTable from "../../components/DataTable/DataTable";
 import institution from "../../services/Institution";
 import { connect } from "react-redux";
-import setInstitutionTable from "./actions/setInstitutionTable";
+import setInstitutionsTable from "./actions/setInstitutionsTable";
 
 
 const columnConfig = [
@@ -34,17 +34,22 @@ const columnConfig = [
 
 
 class InstitutionsTable extends Component {
-  onFetchData = () => {
-    return institution.select();
+  onFetchData = (state) => {
+    return institution.getInstitutions(state);
+  };
+
+  saveState = (state) => {
+    this.props.setInstitutionsTable(state);
   };
 
   render() {
     const {initialState} = this.props;
 
     return (
-      <InstitutionReferenceTable
+      <DataTable
         onFetchData={this.onFetchData}
         columnConfig={columnConfig}
+        saveState={this.saveState}
         initialState={initialState}
       />
     )
@@ -53,8 +58,8 @@ class InstitutionsTable extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setInstitutionTable: state => {
-      dispatch(setInstitutionTable(state))
+    setInstitutionsTable: state => {
+      dispatch(setInstitutionsTable(state))
     }
   }
 };
@@ -62,10 +67,11 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (store) => {
   return {
     initialState: {
-      pageSize: store.reportTable.pageSize,
-      page: store.reportTable.page,
-      sorted: store.reportTable.sorted,
-      filtered: store.reportTable.filtered
+      tableType: store.institutionsTable.tableType,
+      pageSize: store.institutionsTable.pageSize,
+      page: store.institutionsTable.page,
+      sorted: store.institutionsTable.sorted,
+      filtered: store.institutionsTable.filtered
     }
   }
 };

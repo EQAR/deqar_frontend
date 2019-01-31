@@ -17,20 +17,22 @@ class DataTable extends Component {
       sorted: [],
       filtered: [],
       expanded: {},
-      resized: []
+      resized: [],
+      tableType: ''
     };
   }
 
   componentDidMount() {
-    const {initialState} = this.props;
-    const {page, pageSize, sorted, filtered, expanded, resized} = initialState;
+    const { initialState } = this.props;
+    const { page, pageSize, sorted, filtered, expanded, resized, tableType } = initialState;
     this.setState({
       page: page,
       pageSize: pageSize,
       sorted: sorted,
       filtered: filtered,
       expanded: expanded,
-      resized: resized
+      resized: resized,
+      tableType: tableType
     },
       () => this.fetchData(this.state)
     );
@@ -101,15 +103,23 @@ class DataTable extends Component {
   fetchData = (state) => {
     this.setState({ loading: true });
     this.props.onFetchData(state).then((response) => {
-      if(this._ismounted) {
+      if (this._ismounted) {
         this.setState({
           pages: response.data.count,
-          data: response.data.results,
+          data: this.parseResult(response.data.results, state.tableType),
           loading: false
         })
       }
     });
   };
+
+  parseResult = (response, tableType) => {
+    if (tableType === 'institution') {
+      response.forEach(res => res.countries = res.countries.map(country => country.country));
+    }
+
+    return response;
+  }
 
   makeHeader = () => {
     const {columnConfig} = this.props;
