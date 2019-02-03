@@ -67,6 +67,8 @@ class DataTable extends Component {
   };
 
   onSortedChange = (newSorted, column, shiftKey) => {
+    console.log(newSorted, column, shiftKey);
+
     this.setState({
         sorted: newSorted
       },() => {
@@ -126,6 +128,7 @@ class DataTable extends Component {
     let header = [];
     columnConfig.forEach((column) => {
       let columnConfig = {};
+
       columnConfig['Header'] = column.label;
       columnConfig['sortable'] = column.sortable;
       columnConfig['filterable'] = column.filterable;
@@ -143,11 +146,12 @@ class DataTable extends Component {
 
       header.push(columnConfig);
     });
+
     return header;
   };
 
   render() {
-    const { page, pageSize, sorted, filtered, resized, expanded, data, pages, loading } = this.state;
+    const { page, pageSize, sorted, filtered, resized, expanded, data, pages, loading, filterable } = this.state;
 
     return(
       <ReactTable
@@ -160,6 +164,7 @@ class DataTable extends Component {
         onPageSizeChange={this.onPageSizeChange}
         sorted={sorted}
         onSortedChange={this.onSortedChange}
+        filterable={filterable}
         filtered={filtered}
         onFilteredChange={this.onFilteredChange}
         resized={resized}

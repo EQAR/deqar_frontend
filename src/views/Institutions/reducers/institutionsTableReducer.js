@@ -5,7 +5,8 @@ const initialState = {
   pageSize: 10,
   page: 0,
   sorted: [],
-  filtered: []
+  filtered: [],
+  filterable: true
 };
 
 function institutionsTableReducer(state = initialState, action) {

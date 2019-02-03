@@ -10,8 +10,7 @@ const columnConfig = [
     field: 'deqar_id',
     label: 'DEQARINST ID',
     sortable: true,
-    filterable: true,
-    width: 100
+    filterable: true
   }, {
     field: 'eter_id',
     label: 'ETER ID',
@@ -27,8 +26,7 @@ const columnConfig = [
     field: 'countries',
     label: 'Country',
     sortable: true,
-    filterable: true,
-    width: 100
+    filterable: true
   }
 ];
 
@@ -48,9 +46,11 @@ class InstitutionsTable extends Component {
     return (
       <DataTable
         onFetchData={this.onFetchData}
+        filterMethod={this.onFilter}
         columnConfig={columnConfig}
         saveState={this.saveState}
         initialState={initialState}
+        filerMethod={this.onFilter}
       />
     )
   }
