@@ -18,7 +18,9 @@ class DataTable extends Component {
       filtered: [],
       expanded: {},
       resized: [],
-      tableType: ''
+      tableType: '',
+      countryOptions: [],
+      country: null
     };
   }
 
@@ -32,11 +34,19 @@ class DataTable extends Component {
       filtered: filtered,
       expanded: expanded,
       resized: resized,
-      tableType: tableType
+      tableType: tableType,
+      selectedOption: null,
     },
       () => this.fetchData(this.state)
     );
     this._ismounted = true;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      countryOptions: nextProps.countryOptions
+    })
+
   }
 
   // See - https://reactjs.org/blog/2015/12/16/ismounted-antipattern.html
@@ -67,8 +77,6 @@ class DataTable extends Component {
   };
 
   onSortedChange = (newSorted, column, shiftKey) => {
-    console.log(newSorted, column, shiftKey);
-
     this.setState({
         sorted: newSorted
       },() => {
@@ -119,7 +127,6 @@ class DataTable extends Component {
     if (tableType === 'institution') {
       response.forEach(res => res.countries = res.countries.map(country => country.country));
     }
-
     return response;
   }
 
@@ -133,8 +140,8 @@ class DataTable extends Component {
       columnConfig['sortable'] = column.sortable;
       columnConfig['filterable'] = column.filterable;
       columnConfig['accessor'] = column.field;
-
       columnConfig['width'] = column.width;
+      columnConfig['Filter'] = column.selectable ? this.getSelect : null;
 
       if ('render' in column) {
         columnConfig['Cell'] = column.render;
@@ -146,9 +153,30 @@ class DataTable extends Component {
 
       header.push(columnConfig);
     });
-
     return header;
   };
+
+  getSelect = (filter) => {
+    return (
+      <select
+        onChange={event => this.handleChange(event.target.value)}
+        style={{ width: "100%" }}
+        value={filter ? filter.value : "empty"}
+      >
+        <option value="empty">select a country</option>
+        {this.state.countryOptions.map((country, index) => <option key={index} value={country.value}>{country.label}</option>)}
+      </select>
+    )
+  }
+
+  handleChange = (selectedOption) => {
+    this.setState({
+      filtered: [...this.state.filtered.filter(f => f.id !== 'country'), {id: 'country', value: selectedOption}]
+    }, () => {
+      this.fetchData(this.state);
+      this.saveState(this.state);
+    })
+  }
 
   render() {
     const { page, pageSize, sorted, filtered, resized, expanded, data, pages, loading, filterable } = this.state;
@@ -182,6 +210,7 @@ class DataTable extends Component {
 
 DataTable.propTypes = {
   columnConfig: PropTypes.array.isRequired,
+  countryOptions: PropTypes.array,
   onFetchData: PropTypes.func.isRequired,
   initialState: PropTypes.object,
   saveState: PropTypes.func,

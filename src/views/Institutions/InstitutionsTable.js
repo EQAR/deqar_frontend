@@ -3,6 +3,7 @@ import DataTable from "../../components/DataTable/DataTable";
 import institution from "../../services/Institution";
 import { connect } from "react-redux";
 import setInstitutionsTable from "./actions/setInstitutionsTable";
+import country from '../../services/Country';
 
 
 const columnConfig = [
@@ -26,12 +27,32 @@ const columnConfig = [
     field: 'countries',
     label: 'Country',
     sortable: true,
-    filterable: true
+    filterable: true,
+    selectable: true,
   }
 ];
 
 
 class InstitutionsTable extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      countryOptions: []
+    }
+  }
+
+  componentDidMount() {
+    country.select().then((response) => {
+      this.setState({
+        countryOptions: this.converOptions(response.data)
+      })
+    });
+  }
+
+  converOptions = (countries) => {
+    return countries.map(country => ({value: country.id, label: country.name_english}));
+  }
+
   onFetchData = (state) => {
     return institution.getInstitutions(state);
   };
@@ -42,15 +63,15 @@ class InstitutionsTable extends Component {
 
   render() {
     const {initialState} = this.props;
+    const countryOptions = this.state.countryOptions;
 
     return (
       <DataTable
         onFetchData={this.onFetchData}
-        filterMethod={this.onFilter}
         columnConfig={columnConfig}
         saveState={this.saveState}
         initialState={initialState}
-        filerMethod={this.onFilter}
+        countryOptions={countryOptions}
       />
     )
   }

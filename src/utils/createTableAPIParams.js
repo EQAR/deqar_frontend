@@ -11,11 +11,14 @@ const createTableAPIParams = (tableState) => {
   }
 
   filtered.forEach(f => {
-    params = f.id === 'deqar_id' || f.id === 'eter_id' || f.id === 'country' ?
-      {...params, ...{[f.id]: f.value}} :
-      {...params, query: f.value}
-  });
-  return params;
+    if (f.value !== 'empty') {
+      params = f.id === 'deqar_id' || f.id === 'eter_id' || (f.id === 'country' && f.value !== 'empty') ?
+        {...params, ...{[f.id]: f.value}} :
+        {...params, query: f.value}
+      }
+    });
+
+    return params;
 };
 
 export default createTableAPIParams;
