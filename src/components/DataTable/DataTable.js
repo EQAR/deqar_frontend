@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 
+import style from './DataTable.module.css';
+
 class DataTable extends Component {
   constructor(props) {
     super(props);
@@ -141,6 +143,9 @@ class DataTable extends Component {
       columnConfig['filterable'] = column.filterable;
       columnConfig['accessor'] = column.field;
       columnConfig['width'] = column.width;
+      columnConfig['width'] = column.width;
+      columnConfig['minWidth'] = column.minWidth;
+      columnConfig['maxWidth'] = column.maxWidth;
       columnConfig['Filter'] = column.selectable ? this.getSelect : null;
 
       if ('render' in column) {
@@ -158,14 +163,16 @@ class DataTable extends Component {
 
   getSelect = (filter) => {
     return (
-      <select
-        onChange={event => this.handleChange(event.target.value)}
-        style={{ width: "100%" }}
-        value={filter ? filter.value : "empty"}
-      >
-        <option value="empty">select a country</option>
-        {this.state.countryOptions.map((country, index) => <option key={index} value={country.value}>{country.label}</option>)}
-      </select>
+      <div className={style.selectFilter}>
+        <select
+          onChange={event => this.handleChange(event.target.value)}
+          style={{ width: "100%", background: 'transparent', border: 'none'}}
+          value={filter ? filter.value : "empty"}
+        >
+          <option value="empty">select a country</option>
+          {this.state.countryOptions.map((country, index) => <option key={index} value={country.value}>{country.label}</option>)}
+        </select>
+      </div>
     )
   }
 

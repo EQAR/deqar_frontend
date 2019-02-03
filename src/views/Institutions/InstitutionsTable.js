@@ -11,17 +11,24 @@ const columnConfig = [
     field: 'deqar_id',
     label: 'DEQARINST ID',
     sortable: true,
-    filterable: true
-  }, {
+    filterable: true,
+    minWidth: 80,
+    maxWidth: 150
+  },
+  {
     field: 'eter_id',
     label: 'ETER ID',
     sortable: true,
-    filterable: true
-  }, {
+    filterable: true,
+    minWidth: 80,
+    maxWidth: 150
+  },
+  {
     field: 'name_primary',
     label: 'Institution',
     sortable: true,
-    filterable: true
+    filterable: true,
+    minWidth: 200,
   },
   {
     field: 'countries',
@@ -29,6 +36,8 @@ const columnConfig = [
     sortable: true,
     filterable: true,
     selectable: true,
+    minWidth: 150,
+    maxWidth: 200
   }
 ];
 
