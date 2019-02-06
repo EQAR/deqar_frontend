@@ -53,12 +53,12 @@ class InstitutionsTable extends Component {
   componentDidMount() {
     country.select().then((response) => {
       this.setState({
-        countryOptions: this.converOptions(response.data)
+        countryOptions: this.convertOptions(response.data)
       })
     });
   }
 
-  converOptions = (countries) => {
+  convertOptions = (countries) => {
     return countries.map(country => ({value: country.id, label: country.name_english}));
   }
 
@@ -69,6 +69,11 @@ class InstitutionsTable extends Component {
   saveState = (state) => {
     this.props.setInstitutionsTable(state);
   };
+
+  parseResult = (response) => {
+    response.forEach(res => res.countries = res.countries.map(country => country.country));
+    return response;
+  }
 
   render() {
     const {initialState} = this.props;
@@ -81,6 +86,7 @@ class InstitutionsTable extends Component {
         saveState={this.saveState}
         initialState={initialState}
         countryOptions={countryOptions}
+        parseResult={this.parseResult}
       />
     )
   }

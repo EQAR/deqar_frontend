@@ -13,19 +13,18 @@ class Institution {
         query: search,
         limit: 10,
         offset: loadedOptions.length
-      };
-    }
-
-    return axios.get(GET_INSTITUTIONS, { params: params}).then((response) => {
-      hasMore = response.data.next ? true : false;
-      return {
-        options: response.data.results,
-        hasMore: hasMore
       }
-    });
+      return axios.get(GET_INSTITUTIONS, {params: params}).then((response) => {
+        hasMore = response.data.next ? true : false;
+        return {
+          options: response.data.results,
+          hasMore: hasMore
+        }
+      });
+    }
   }
 
-  async getInstitutions(state) {
+  getInstitutions(state) {
     const params = createTableAPIParams(state);
     return axios.get(GET_INSTITUTIONS, { params: params });
   }

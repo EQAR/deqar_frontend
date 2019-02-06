@@ -63,6 +63,10 @@ class ReportTable extends Component {
     this.props.setReportTableParams(state);
   };
 
+  parseResult = (response) => {
+    return response;
+  }
+
   render() {
     const {initialState} = this.props;
 
@@ -72,6 +76,7 @@ class ReportTable extends Component {
         saveState={this.saveState}
         initialState={initialState}
         columnConfig={columnConfig}
+        parseResult={this.parseResult}
         subComponent={
           (row) => <ReportDetail row={row}/>
         }

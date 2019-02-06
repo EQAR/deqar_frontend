@@ -23,7 +23,7 @@ class DataTable extends Component {
       tableType: '',
       countryOptions: [],
       country: null
-    };
+    }
   }
 
   componentDidMount() {
@@ -44,13 +44,6 @@ class DataTable extends Component {
     this._ismounted = true;
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      countryOptions: nextProps.countryOptions
-    })
-
-  }
-
   // See - https://reactjs.org/blog/2015/12/16/ismounted-antipattern.html
   componentWillUnmount() {
     this._ismounted = false;
@@ -66,7 +59,7 @@ class DataTable extends Component {
     },() => {
         this.fetchData(this.state);
         this.saveState(this.state);
-    })
+    });
   };
 
   onPageSizeChange = (pageSize, pageIndex) => {
@@ -75,7 +68,7 @@ class DataTable extends Component {
       },() => {
       this.fetchData(this.state);
       this.saveState(this.state);
-    })
+    });
   };
 
   onSortedChange = (newSorted, column, shiftKey) => {
@@ -84,7 +77,7 @@ class DataTable extends Component {
       },() => {
       this.fetchData(this.state);
       this.saveState(this.state);
-    })
+    });
   };
 
   onFilteredChange = (filtered, column) => {
@@ -93,7 +86,7 @@ class DataTable extends Component {
       },() => {
       this.fetchData(this.state);
       this.saveState(this.state);
-    })
+    });
   };
 
   onResizedChange = (newResized, event) => {
@@ -101,7 +94,7 @@ class DataTable extends Component {
       resized: newResized
     },() => {
       this.saveState(this.state);
-    })
+    });
   };
 
   onExpandedChange = (newExpanded, index, event) => {
@@ -109,7 +102,7 @@ class DataTable extends Component {
       expanded: newExpanded
     },() => {
       this.saveState(this.state);
-    })
+    });
   };
 
   fetchData = (state) => {
@@ -117,19 +110,16 @@ class DataTable extends Component {
     this.props.onFetchData(state).then((response) => {
       if (this._ismounted) {
         this.setState({
-          pages: response.data.count,
-          data: this.parseResult(response.data.results, state.tableType),
+          pages: this.getPagesNumber(response.data.count),
+          data: this.props.parseResult(response.data.results, state.tableType),
           loading: false
-        })
+        });
       }
     });
-  };
+  }
 
-  parseResult = (response, tableType) => {
-    if (tableType === 'institution') {
-      response.forEach(res => res.countries = res.countries.map(country => country.country));
-    }
-    return response;
+  getPagesNumber = (itemCount) => {
+    return Math.floor(itemCount / this.state.pageSize);
   }
 
   makeHeader = () => {
@@ -170,7 +160,7 @@ class DataTable extends Component {
           value={filter ? filter.value : "empty"}
         >
           <option value="empty">select a country</option>
-          {this.state.countryOptions.map((country, index) => <option key={index} value={country.value}>{country.label}</option>)}
+          {this.props.countryOptions.map((country, index) => <option key={index} value={country.value}>{country.label}</option>)}
         </select>
       </div>
     )
@@ -221,7 +211,8 @@ DataTable.propTypes = {
   onFetchData: PropTypes.func.isRequired,
   initialState: PropTypes.object,
   saveState: PropTypes.func,
+  parseResult: PropTypes.func,
   defaultPageSize: PropTypes.number
-};
+}
 
 export default DataTable;
