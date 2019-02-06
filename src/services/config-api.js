@@ -40,6 +40,7 @@ export const GET_LANGUAGES = ADMINAPI_URL_V1 + '/select/language/';
 
 // Country endpoints
 export const GET_COUNTRIES = ADMINAPI_URL_V1 + '/select/country/';
+export const GET_INSTITUTION_COUNTRIES = ADMINAPI_URL_V1 + '/select/institutions/country/';
 
 // QF-EHEA level endpoints
 export const GET_QFEHEA_LEVELS = ADMINAPI_URL_V1 + '/select/qf_ehea_level/';

@@ -51,7 +51,7 @@ class InstitutionsTable extends Component {
   }
 
   componentDidMount() {
-    country.select().then((response) => {
+    country.getInstitutionCountries().then((response) => {
       this.setState({
         countryOptions: this.convertOptions(response.data)
       })
