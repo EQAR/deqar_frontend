@@ -21,11 +21,11 @@ const flagRender = (row) => {
       return null;
   }
   return(<div className={'text-center'}><span className={className}>{row.value}</span></div>);
-};
+}
 
 const institutionRender = (row) => {
-  return(row.value.join('; '));
-};
+  return row.value.join('; ');
+}
 
 const columnConfig = [
   {

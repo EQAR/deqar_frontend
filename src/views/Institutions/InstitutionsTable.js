@@ -4,42 +4,12 @@ import institution from "../../services/Institution";
 import { connect } from "react-redux";
 import setInstitutionsTable from "./actions/setInstitutionsTable";
 import country from '../../services/Country';
-
-
-const columnConfig = [
-  {
-    field: 'deqar_id',
-    label: 'DEQARINST ID',
-    sortable: true,
-    filterable: true,
-    minWidth: 80,
-    maxWidth: 150
-  },
-  {
-    field: 'eter_id',
-    label: 'ETER ID',
-    sortable: true,
-    filterable: true,
-    minWidth: 80,
-    maxWidth: 150
-  },
-  {
-    field: 'name_primary',
-    label: 'Institution',
-    sortable: true,
-    filterable: true,
-    minWidth: 200,
-  },
-  {
-    field: 'countries',
-    label: 'Country',
-    sortable: true,
-    filterable: true,
-    selectable: true,
-    minWidth: 150,
-    maxWidth: 200
-  }
-];
+import {
+  Button,
+  Col,
+  Row
+} from 'reactstrap';
+import { Link } from 'react-router-dom'
 
 
 class InstitutionsTable extends Component {
@@ -48,6 +18,45 @@ class InstitutionsTable extends Component {
     this.state = {
       countryOptions: []
     }
+
+    this.columnConfig = [
+      {
+        field: 'deqar_id',
+        label: 'DEQARINST ID',
+        sortable: true,
+        filterable: true,
+        minWidth: 80,
+        maxWidth: 150
+      },
+      {
+        field: 'eter_id',
+        label: 'ETER ID',
+        sortable: true,
+        filterable: true,
+        minWidth: 80,
+        maxWidth: 150
+      },
+      {
+        field: 'name_primary',
+        label: 'Institution',
+        sortable: true,
+        filterable: true,
+        minWidth: 150,
+      },
+      {
+        field: 'countries',
+        label: 'Country',
+        sortable: true,
+        filterable: true,
+        selectable: true,
+        minWidth: 100,
+        maxWidth: 200
+      },
+      {
+        render: this.buttonRender,
+        width: 102
+      }
+    ];
   }
 
   componentDidMount() {
@@ -57,6 +66,30 @@ class InstitutionsTable extends Component {
       })
     });
   }
+
+  buttonRender = (row) => {
+    return (
+      <Row>
+        <Col xs="3">
+          <Link to={{pathname: `/institution/view/${row.original.id}`}}>
+            <Button
+              size="sm"
+              color="primary"
+              id="add-button">View</Button>
+          </Link>
+        </Col>
+        <Col xs={{size: 3, offset: 2 }}>
+          <Link to={{pathname: `/institution/edit/${row.original.id}`}}>
+            <Button
+              size="sm"
+              color="primary"
+              id="add-button">Edit</Button>
+          </Link>
+        </Col>
+      </Row>
+    );
+  }
+
 
   convertOptions = (countries) => {
     return countries.map(country => ({value: country.id, label: country.name_english}));
@@ -82,7 +115,7 @@ class InstitutionsTable extends Component {
     return (
       <DataTable
         onFetchData={this.onFetchData}
-        columnConfig={columnConfig}
+        columnConfig={this.columnConfig}
         saveState={this.saveState}
         initialState={initialState}
         countryOptions={countryOptions}
