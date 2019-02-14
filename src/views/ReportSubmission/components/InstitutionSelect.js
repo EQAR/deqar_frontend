@@ -29,10 +29,11 @@ class InstitutionSelect extends Component {
 
     return(
       <AsyncPaginate
-        placeholder={'Enter institution name, city or country'}
+        placeholder={'Enter institution name, ETER ID, city or country'}
         styles={customStyles}
+        filterOption={() => true}
         loadOptions={institution.select}
-        getOptionLabel={(option) => {return option.name_primary}}
+        getOptionLabel={(option) => {return option.name_select_display}}
         getOptionValue={(option) => {return option.id}}
         onChange={this.onChange}
       />

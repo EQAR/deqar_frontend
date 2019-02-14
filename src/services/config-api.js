@@ -1,6 +1,8 @@
 const BACKEND_DOMAIN = process.env.REACT_APP_BACKEND_API;
 
 export const ADMINAPI_URL_V1 = BACKEND_DOMAIN + '/adminapi/v1';
+export const ADMINAPI_URL_V2 = BACKEND_DOMAIN + '/adminapi/v2';
+
 export const SUBMISSIONAPI_URL = BACKEND_DOMAIN + '/submissionapi/v1';
 export const WEBAPI_URL = BACKEND_DOMAIN + '/webapi/v1';
 
@@ -33,7 +35,7 @@ export const GET_STATUSES = ADMINAPI_URL_V1 + '/select/report_status/';
 export const GET_DECISIONS = ADMINAPI_URL_V1 + '/select/report_decision/';
 
 // Institution endpoints
-export const GET_INSTITUTIONS = ADMINAPI_URL_V1 + '/select/institutions/';
+export const GET_INSTITUTIONS = ADMINAPI_URL_V2 + '/select/institutions/';
 
 // Language endpoints
 export const GET_LANGUAGES = ADMINAPI_URL_V1 + '/select/language/';
