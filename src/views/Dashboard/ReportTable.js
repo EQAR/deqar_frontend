@@ -21,11 +21,11 @@ const flagRender = (row) => {
       return null;
   }
   return(<div className={'text-center'}><span className={className}>{row.value}</span></div>);
-};
+}
 
 const institutionRender = (row) => {
-  return(row.value.join('; '));
-};
+  return row.value.join('; ');
+}
 
 const columnConfig = [
   {
@@ -63,6 +63,10 @@ class ReportTable extends Component {
     this.props.setReportTableParams(state);
   };
 
+  parseResult = (response) => {
+    return response;
+  }
+
   render() {
     const {initialState} = this.props;
 
@@ -72,6 +76,7 @@ class ReportTable extends Component {
         saveState={this.saveState}
         initialState={initialState}
         columnConfig={columnConfig}
+        parseResult={this.parseResult}
         subComponent={
           (row) => <ReportDetail row={row}/>
         }
@@ -91,6 +96,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (store) => {
   return {
     initialState: {
+      tableType: store.reportTable.tableType,
       pageSize: store.reportTable.pageSize,
       page: store.reportTable.page,
       sorted: store.reportTable.sorted,

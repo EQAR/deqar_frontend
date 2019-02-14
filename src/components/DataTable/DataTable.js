@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 
+import style from './DataTable.module.css';
+
 class DataTable extends Component {
   constructor(props) {
     super(props);
@@ -17,20 +19,25 @@ class DataTable extends Component {
       sorted: [],
       filtered: [],
       expanded: {},
-      resized: []
-    };
+      resized: [],
+      tableType: '',
+      countryOptions: [],
+      country: null
+    }
   }
 
   componentDidMount() {
-    const {initialState} = this.props;
-    const {page, pageSize, sorted, filtered, expanded, resized} = initialState;
+    const { initialState } = this.props;
+    const { page, pageSize, sorted, filtered, expanded, resized, tableType } = initialState;
     this.setState({
       page: page,
       pageSize: pageSize,
       sorted: sorted,
       filtered: filtered,
       expanded: expanded,
-      resized: resized
+      resized: resized,
+      tableType: tableType,
+      selectedOption: null,
     },
       () => this.fetchData(this.state)
     );
@@ -52,7 +59,7 @@ class DataTable extends Component {
     },() => {
         this.fetchData(this.state);
         this.saveState(this.state);
-    })
+    });
   };
 
   onPageSizeChange = (pageSize, pageIndex) => {
@@ -61,7 +68,7 @@ class DataTable extends Component {
       },() => {
       this.fetchData(this.state);
       this.saveState(this.state);
-    })
+    });
   };
 
   onSortedChange = (newSorted, column, shiftKey) => {
@@ -70,7 +77,7 @@ class DataTable extends Component {
       },() => {
       this.fetchData(this.state);
       this.saveState(this.state);
-    })
+    });
   };
 
   onFilteredChange = (filtered, column) => {
@@ -79,7 +86,7 @@ class DataTable extends Component {
       },() => {
       this.fetchData(this.state);
       this.saveState(this.state);
-    })
+    });
   };
 
   onResizedChange = (newResized, event) => {
@@ -87,7 +94,7 @@ class DataTable extends Component {
       resized: newResized
     },() => {
       this.saveState(this.state);
-    })
+    });
   };
 
   onExpandedChange = (newExpanded, index, event) => {
@@ -95,33 +102,41 @@ class DataTable extends Component {
       expanded: newExpanded
     },() => {
       this.saveState(this.state);
-    })
+    });
   };
 
   fetchData = (state) => {
     this.setState({ loading: true });
     this.props.onFetchData(state).then((response) => {
-      if(this._ismounted) {
+      if (this._ismounted) {
         this.setState({
-          pages: response.data.count,
-          data: response.data.results,
+          pages: this.getPagesNumber(response.data.count),
+          data: this.props.parseResult(response.data.results, state.tableType),
           loading: false
-        })
+        });
       }
     });
-  };
+  }
+
+  getPagesNumber = (itemCount) => {
+    return Math.floor(itemCount / this.state.pageSize);
+  }
 
   makeHeader = () => {
     const {columnConfig} = this.props;
     let header = [];
     columnConfig.forEach((column) => {
       let columnConfig = {};
+
       columnConfig['Header'] = column.label;
       columnConfig['sortable'] = column.sortable;
       columnConfig['filterable'] = column.filterable;
       columnConfig['accessor'] = column.field;
-
       columnConfig['width'] = column.width;
+      columnConfig['width'] = column.width;
+      columnConfig['minWidth'] = column.minWidth;
+      columnConfig['maxWidth'] = column.maxWidth;
+      columnConfig['Filter'] = column.selectable ? this.getSelect : null;
 
       if ('render' in column) {
         columnConfig['Cell'] = column.render;
@@ -136,8 +151,32 @@ class DataTable extends Component {
     return header;
   };
 
+  getSelect = (filter) => {
+    return (
+      <div className={style.selectFilter}>
+        <select
+          onChange={event => this.handleChange(event.target.value)}
+          style={{ width: "100%", background: 'transparent', border: 'none'}}
+          value={filter ? filter.value : "empty"}
+        >
+          <option value="empty">select a country</option>
+          {this.props.countryOptions.map((country, index) => <option key={index} value={country.value}>{country.label}</option>)}
+        </select>
+      </div>
+    )
+  }
+
+  handleChange = (selectedOption) => {
+    this.setState({
+      filtered: [...this.state.filtered.filter(f => f.id !== 'country'), {id: 'country', value: selectedOption}]
+    }, () => {
+      this.fetchData(this.state);
+      this.saveState(this.state);
+    })
+  }
+
   render() {
-    const { page, pageSize, sorted, filtered, resized, expanded, data, pages, loading } = this.state;
+    const { page, pageSize, sorted, filtered, resized, expanded, data, pages, loading, filterable } = this.state;
 
     return(
       <ReactTable
@@ -150,6 +189,7 @@ class DataTable extends Component {
         onPageSizeChange={this.onPageSizeChange}
         sorted={sorted}
         onSortedChange={this.onSortedChange}
+        filterable={filterable}
         filtered={filtered}
         onFilteredChange={this.onFilteredChange}
         resized={resized}
@@ -167,10 +207,12 @@ class DataTable extends Component {
 
 DataTable.propTypes = {
   columnConfig: PropTypes.array.isRequired,
+  countryOptions: PropTypes.array,
   onFetchData: PropTypes.func.isRequired,
   initialState: PropTypes.object,
   saveState: PropTypes.func,
+  parseResult: PropTypes.func,
   defaultPageSize: PropTypes.number
-};
+}
 
 export default DataTable;

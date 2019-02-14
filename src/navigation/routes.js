@@ -3,13 +3,17 @@ import MyProfile from "../views/MyProfile/MyProfile";
 import Dashboard from "../views/Dashboard/Dashboard";
 import CSVUpload from "../views/CSVUpload/CSVUpload";
 import ReportForm from "../views/ReportSubmission/ReportForm";
+import Institutions from '../views/Institutions/Institutions';
+import InstitutionForm from '../views/InstitutionForm/InstitutionForm';
 
 const routes = [
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
   { path: '/dashboard', exact: true, name: 'Dashboard', component: Dashboard },
   { path: '/my-profile', exact: true, name: 'My Profile', component: MyProfile },
   { path: '/upload-csv', exact: true, name: 'CSV Upload', component: CSVUpload },
-  { path: '/report-form', exact: true, name: 'Report Submission', component: ReportForm}
+  { path: '/report-form', exact: true, name: 'Report Submission', component: ReportForm},
+  { path: '/institutions', exact: true, name: 'Institutions Referece Datas', component: Institutions},
+  { path: '/institution/:param/:id', exact: true, name: 'Institution Form', component: InstitutionForm}
 ];
 
 export default routes;
