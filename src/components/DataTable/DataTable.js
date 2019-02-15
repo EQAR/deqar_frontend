@@ -27,7 +27,7 @@ class DataTable extends Component {
 
   componentDidMount() {
     const { initialState } = this.props;
-    const { page, pageSize, sorted, filtered, expanded, resized, tableType } = initialState;
+    const { page, pageSize, sorted, filtered, expanded, resized } = initialState;
     this.setState({
       page: page,
       pageSize: pageSize,
@@ -35,7 +35,6 @@ class DataTable extends Component {
       filtered: filtered,
       expanded: expanded,
       resized: resized,
-      tableType: tableType,
       selectedOption: null,
     },
       () => this.fetchData(this.state)
@@ -110,7 +109,7 @@ class DataTable extends Component {
       if (this._ismounted) {
         this.setState({
           pages: this.getPagesNumber(response.data.count),
-          data: this.props.parseResult(response.data.results, state.tableType),
+          data: this.props.parseResult(response.data.results),
           loading: false
         });
       }
@@ -210,7 +209,7 @@ class DataTable extends Component {
         break;
       case 'clear':
         this.setState({
-          filtered: [this.state.filtered.filter(f => f.id !== filterParam)]
+          filtered: [...this.state.filtered.filter(f => f.id !== filterParam)]
         }, () => {
           this.fetchData(this.state);
           this.saveState(this.state);
