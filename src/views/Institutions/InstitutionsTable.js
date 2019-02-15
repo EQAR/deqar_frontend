@@ -15,9 +15,6 @@ import { Link } from 'react-router-dom'
 class InstitutionsTable extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      countryOptions: []
-    }
 
     this.columnConfig = [
       {
@@ -48,7 +45,9 @@ class InstitutionsTable extends Component {
         label: 'Country',
         sortable: true,
         filterable: true,
-        selectable: true,
+        filterParam: 'country',
+        selectFilter: true,
+        selectFilterLabel: 'name_english',
         minWidth: 100,
         maxWidth: 200
       },
@@ -61,9 +60,7 @@ class InstitutionsTable extends Component {
 
   componentDidMount() {
     country.getInstitutionCountries().then((response) => {
-      this.setState({
-        countryOptions: this.convertOptions(response.data)
-      })
+      this.columnConfig[3]['selectFilterOptions'] = response.data
     });
   }
 
@@ -88,12 +85,7 @@ class InstitutionsTable extends Component {
         </Col>
       </Row>
     );
-  }
-
-
-  convertOptions = (countries) => {
-    return countries.map(country => ({value: country.id, label: country.name_english}));
-  }
+  };
 
   onFetchData = (state) => {
     return institution.getInstitutions(state);
@@ -106,11 +98,10 @@ class InstitutionsTable extends Component {
   parseResult = (response) => {
     response.forEach(res => res.countries = res.countries.map(country => country.country));
     return response;
-  }
+  };
 
   render() {
     const {initialState} = this.props;
-    const countryOptions = this.state.countryOptions;
 
     return (
       <DataTable
@@ -118,7 +109,6 @@ class InstitutionsTable extends Component {
         columnConfig={this.columnConfig}
         saveState={this.saveState}
         initialState={initialState}
-        countryOptions={countryOptions}
         parseResult={this.parseResult}
       />
     )

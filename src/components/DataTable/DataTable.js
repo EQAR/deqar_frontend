@@ -6,6 +6,7 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 
 import style from './DataTable.module.css';
+import Select from "react-select";
 
 class DataTable extends Component {
   constructor(props) {
@@ -20,9 +21,7 @@ class DataTable extends Component {
       filtered: [],
       expanded: {},
       resized: [],
-      tableType: '',
-      countryOptions: [],
-      country: null
+      tableType: ''
     }
   }
 
@@ -116,11 +115,11 @@ class DataTable extends Component {
         });
       }
     });
-  }
+  };
 
   getPagesNumber = (itemCount) => {
     return Math.floor(itemCount / this.state.pageSize);
-  }
+  };
 
   makeHeader = () => {
     const {columnConfig} = this.props;
@@ -136,7 +135,8 @@ class DataTable extends Component {
       columnConfig['width'] = column.width;
       columnConfig['minWidth'] = column.minWidth;
       columnConfig['maxWidth'] = column.maxWidth;
-      columnConfig['Filter'] = column.selectable ? this.getSelect : null;
+      columnConfig['Filter'] = column.selectFilter ?
+          this.getSelect(column.filterParam, column.selectFilterLabel, column.selectFilterOptions) : null;
 
       if ('render' in column) {
         columnConfig['Cell'] = column.render;
@@ -151,29 +151,81 @@ class DataTable extends Component {
     return header;
   };
 
-  getSelect = (filter) => {
+  getSelect = (filterParam, filterLabel, filterOptions) => {
+    const customStyles = {
+      container: (provided, state) => ({
+        ...provided,
+        '&:focus': {
+          borderColor: 'none'
+        }
+      }),
+      control: (provided, state) => ({
+        ...provided,
+        borderColor: 'rgba(0,0,0,0.1)',
+        boxShadow: null,
+        maxHeight: '29px',
+        minHeight: '25px',
+        '&:hover': {
+          borderColor: 'none'
+        },
+        '&:focus': {
+          borderColor: 'none'
+        }
+      }),
+      input: (provided, state) => ({
+        ...provided,
+        '&:focus': {
+          borderColor: 'none'
+        }
+      }),
+      menu: (provided, state) => ({
+        ...provided,
+        textAlign: 'left'
+      }),
+    };
+
     return (
       <div className={style.selectFilter}>
-        <select
-          onChange={event => this.handleChange(event.target.value)}
-          style={{ width: "100%", background: 'transparent', border: 'none'}}
-          value={filter ? filter.value : "empty"}
-        >
-          <option value="empty">select a country</option>
-          {this.props.countryOptions.map((country, index) => <option key={index} value={country.value}>{country.label}</option>)}
-        </select>
+        <Select
+           styles={customStyles}
+           options={filterOptions}
+           isClearable={true}
+           getOptionLabel={(option) => {return option[filterLabel]}}
+           getOptionValue={(option) => {return option.id}}
+           onChange={(value, props) => this.handleChange(filterParam, value, props)}
+        />
       </div>
     )
-  }
+  };
 
-  handleChange = (selectedOption) => {
-    this.setState({
-      filtered: [...this.state.filtered.filter(f => f.id !== 'country'), {id: 'country', value: selectedOption}]
-    }, () => {
-      this.fetchData(this.state);
-      this.saveState(this.state);
-    })
-  }
+  handleChange = (filterParam, value, props) => {
+    switch(props.action) {
+      case 'select-option':
+        this.setState({
+          filtered: [...this.state.filtered.filter(f => f.id !== filterParam), {id: filterParam, value: value['id']}]
+        }, () => {
+          this.fetchData(this.state);
+          this.saveState(this.state);
+        });
+        break;
+      case 'clear':
+        this.setState({
+          filtered: [this.state.filtered.filter(f => f.id !== filterParam)]
+        }, () => {
+          this.fetchData(this.state);
+          this.saveState(this.state);
+        });
+        break;
+      default:
+        return null;
+    }
+  };
+
+  setOverFlow = () => {
+    return {
+      style: { overflow: 'visible' }
+    };
+  };
 
   render() {
     const { page, pageSize, sorted, filtered, resized, expanded, data, pages, loading, filterable } = this.state;
@@ -199,6 +251,7 @@ class DataTable extends Component {
         loading={loading}
         columns={this.makeHeader()}
         className="-striped -highlight"
+        getTheadFilterThProps={this.setOverFlow}
         SubComponent={this.props.subComponent}
       />
     )
@@ -213,6 +266,6 @@ DataTable.propTypes = {
   saveState: PropTypes.func,
   parseResult: PropTypes.func,
   defaultPageSize: PropTypes.number
-}
+};
 
 export default DataTable;
