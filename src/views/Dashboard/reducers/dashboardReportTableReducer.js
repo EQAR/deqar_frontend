@@ -1,4 +1,4 @@
-import { SET_REPORT_TABLE } from "../../../store/actionTypes";
+import { SET_DASHBOARD_REPORT_TABLE } from "../../../store/actionTypes";
 
 const initialState = {
   pageSize: 20,
@@ -9,9 +9,9 @@ const initialState = {
   resized: []
 };
 
-function reportTableReducer(state = initialState, action) {
+function dashboardDeportTableReducer(state = initialState, action) {
   switch (action.type) {
-    case SET_REPORT_TABLE: {
+    case SET_DASHBOARD_REPORT_TABLE: {
       return {
         ...state,
         pageSize: action.payload.state.pageSize,
@@ -28,4 +28,4 @@ function reportTableReducer(state = initialState, action) {
   }
 }
 
-export default reportTableReducer;
+export default dashboardDeportTableReducer;

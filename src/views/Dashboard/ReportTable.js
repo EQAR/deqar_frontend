@@ -2,69 +2,49 @@ import React, { Component } from 'react';
 import DataTable from "../../components/DataTable/DataTable";
 import report from '../../services/Report';
 import ReportDetail from "./ReportDetail";
-import setReportTableParams from "./actions/setReportTableParams";
 import {connect} from "react-redux";
-
-const flagRender = (row) => {
-  let className = '';
-  switch(row.value) {
-    case 'none':
-      className = 'badge badge-success';
-      break;
-    case 'low level':
-      className = 'badge badge-warning';
-      break;
-    case 'high level':
-      className = 'badge badge-danger';
-      break;
-    default:
-      return null;
-  }
-  return(<div className={'text-center'}><span className={className}>{row.value}</span></div>);
-};
-
-const institutionRender = (row) => {
-  return row.value.join('; ');
-};
-
-const columnConfig = [
-  {
-    field: 'id',
-    label: 'Report ID',
-    sortable: true,
-    filterable: false,
-    width: 100
-  }, {
-    field: 'institutions',
-    label: 'Institutions',
-    sortable: false,
-    filterable: false,
-    render: institutionRender
-  }, {
-    field: 'name',
-    label: 'Name',
-    sortable: false,
-    filterable: false
-  }, {
-    field: 'flag',
-    label: 'Flag',
-    sortable: false,
-    filterable: false,
-    render: flagRender,
-    width: 100
-}];
+import createTableAPIParams from "../../utils/createTableAPIParams";
+import {flagRender, institutionRender} from "../../utils/tableColumnRenderers";
+import setDashboardReportTable from "./actions/setDashboardReportTable";
 
 class ReportTable extends Component {
+  constructor(props) {
+    super(props);
+    this.columnConfig = [
+      {
+        field: 'id',
+        label: 'Report ID',
+        sortable: true,
+        filterable: false,
+        width: 80
+      }, {
+        field: 'institutions',
+        label: 'Institutions',
+        sortable: false,
+        filterable: false,
+        render: institutionRender
+      }, {
+        field: 'name',
+        label: 'Name',
+        sortable: false,
+        filterable: false
+      }, {
+        field: 'flag',
+        label: 'Flag',
+        sortable: false,
+        filterable: false,
+        width: 100,
+        render: flagRender
+      }];
+  }
+
   onFetchData = (state) => {
-    return report.listByInstitution(state);
+    const params = createTableAPIParams(state, this.columnConfig);
+    return report.listByAgency(params);
   };
 
   saveState = (state) => {
-    this.props.setReportTableParams(state);
-  };
-
-  parseResult = (response) => {
-    return response;
+    this.props.setDashboardReportTable(state);
   };
 
   render() {
@@ -75,8 +55,7 @@ class ReportTable extends Component {
         onFetchData={this.onFetchData}
         saveState={this.saveState}
         initialState={initialState}
-        columnConfig={columnConfig}
-        parseResult={this.parseResult}
+        columnConfig={this.columnConfig}
         subComponent={
           (row) => <ReportDetail row={row}/>
         }
@@ -87,8 +66,8 @@ class ReportTable extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setReportTableParams: state => {
-      dispatch(setReportTableParams(state))
+    setDashboardReportTable: state => {
+      dispatch(setDashboardReportTable(state))
     }
   }
 };
@@ -96,13 +75,13 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (store) => {
   return {
     initialState: {
-      tableType: store.reportTable.tableType,
-      pageSize: store.reportTable.pageSize,
-      page: store.reportTable.page,
-      sorted: store.reportTable.sorted,
-      filtered: store.reportTable.filtered,
-      expanded: store.reportTable.expanded,
-      resized: store.reportTable.resized
+      tableType: store.dashboardReportTable.tableType,
+      pageSize: store.dashboardReportTable.pageSize,
+      page: store.dashboardReportTable.page,
+      sorted: store.dashboardReportTable.sorted,
+      filtered: store.dashboardReportTable.filtered,
+      expanded: store.dashboardReportTable.expanded,
+      resized: store.dashboardReportTable.resized
     }
   }
 };
