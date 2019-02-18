@@ -4,21 +4,16 @@ import institution from "../../services/Institution";
 import { connect } from "react-redux";
 import setInstitutionsTable from "./actions/setInstitutionsTable";
 import country from '../../services/Country';
-import {
-  Button,
-  Col,
-  Row
-} from 'reactstrap';
-import { Link } from 'react-router-dom'
+import createTableAPIParams from "../../utils/createTableAPIParams";
+import ActionButtons from "../../components/DataTable/components/ActionButtons";
 
 
 class InstitutionsTable extends Component {
   constructor(props) {
     super(props);
-
     this.columnConfig = [
       {
-        field: 'deqar_id',
+        field: 'id',
         label: 'DEQARINST ID',
         sortable: true,
         filterable: true,
@@ -38,66 +33,55 @@ class InstitutionsTable extends Component {
         label: 'Institution',
         sortable: true,
         filterable: true,
+        filterQueryParam: 'query',
         minWidth: 150,
       },
       {
-        field: 'countries',
+        field: 'country',
         label: 'Country',
         sortable: true,
         filterable: true,
-        filterParam: 'country',
-        selectFilter: true,
-        selectFilterLabel: 'name_english',
+        filterQueryParam: 'country',
         minWidth: 100,
-        maxWidth: 200
+        maxWidth: 200,
+        filterType: 'select',
+        selectFilterValue: 'name_english',
+        selectFilterLabel: 'name_english',
+        selectFilterPopulate: country.getInstitutionCountries()
       },
       {
-        render: this.buttonRender,
-        width: 102
+        render: this.actionRender,
+        width: 100
       }
     ];
   }
 
-  componentDidMount() {
-    country.getInstitutionCountries().then((response) => {
-      this.columnConfig[3]['selectFilterOptions'] = response.data
-    });
-  }
+  actionRender = (row) => {
+    const pathConfig = [
+      {
+        path: 'institution/view',
+        buttonText: 'View'
+      }, {
+        path: 'institution/edit',
+        buttonText: 'Edit'
+      }
+    ];
 
-  buttonRender = (row) => {
-    return (
-      <Row>
-        <Col xs="3">
-          <Link to={{pathname: `/institution/view/${row.original.id}`}}>
-            <Button
-              size="sm"
-              color="primary"
-              id="add-button">View</Button>
-          </Link>
-        </Col>
-        <Col xs={{size: 3, offset: 2 }}>
-          <Link to={{pathname: `/institution/edit/${row.original.id}`}}>
-            <Button
-              size="sm"
-              color="primary"
-              id="add-button">Edit</Button>
-          </Link>
-        </Col>
-      </Row>
-    );
+    return(
+      <ActionButtons
+        row={row}
+        pathConfig={pathConfig}
+      />
+    )
   };
 
   onFetchData = (state) => {
-    return institution.getInstitutions(state);
+    const params = createTableAPIParams(state, this.columnConfig);
+    return institution.getInstitutions(params);
   };
 
   saveState = (state) => {
     this.props.setInstitutionsTable(state);
-  };
-
-  parseResult = (response) => {
-    response.forEach(res => res.countries = res.countries.map(country => country.country));
-    return response;
   };
 
   render() {
@@ -109,7 +93,6 @@ class InstitutionsTable extends Component {
         columnConfig={this.columnConfig}
         saveState={this.saveState}
         initialState={initialState}
-        parseResult={this.parseResult}
       />
     )
   }
