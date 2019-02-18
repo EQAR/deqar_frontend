@@ -6,7 +6,7 @@ import FormTextField from "../../../components/FormFields/FormTextField";
 import {validateRequired} from "../../../utils/validators";
 import country from '../../../services/Country';
 import FormSelectField from "../../../components/FormFields/FormSelectField";
-import qfEHEALevel from "../../../services/QFeheaLevel";
+import list from "../../../services/List";
 import style from "../../../components/FormFieldsUncontrolled/AssignedList.module.css";
 
 class ProgrammePopupForm extends Component {
@@ -43,7 +43,7 @@ class ProgrammePopupForm extends Component {
   };
 
   populateQFeheaLevels = () => {
-    qfEHEALevel.select().then((response) => {
+    list.selectQFEHEALevels().then((response) => {
       this.setState({
         qfEHEALevelOptions: response.data
       })

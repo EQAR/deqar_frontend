@@ -53,7 +53,7 @@ class ReportForm extends Component {
 
   // Populate selects
   populateAgencySelect = () => {
-    agency.select().then((response) => {
+    agency.selectMyAgency().then((response) => {
       this.setState({
         agencyOptions: response.data
       })
@@ -62,7 +62,7 @@ class ReportForm extends Component {
 
   populateActivitySelect = (agencyID) => {
     if(agencyID) {
-      agency.selectActivity(agencyID).then((response) => {
+      agency.selectMyActivity(agencyID).then((response) => {
         this.setState({
           agencyActivityOptions: response.data
         })
