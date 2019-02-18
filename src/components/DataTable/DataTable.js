@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 
-import style from './DataTable.module.css';
-import Select from "react-select";
+import ActiveDateFilter from "./components/ActiveDateFilter";
+import SelectFilter from "./components/SelectFilter";
 
 class DataTable extends Component {
   constructor(props) {
@@ -16,17 +16,17 @@ class DataTable extends Component {
       pages: null,
       loading: true,
       page: 0,
-      pageSize: 20,
+      pageSize: 10,
       sorted: [],
       filtered: [],
       expanded: {},
-      resized: [],
-      tableType: ''
+      resized: []
     }
   }
 
   componentDidMount() {
-    const { initialState } = this.props;
+    const { initialState, columnConfig } = this.props;
+
     const { page, pageSize, sorted, filtered, expanded, resized } = initialState;
     this.setState({
       page: page,
@@ -35,10 +35,22 @@ class DataTable extends Component {
       filtered: filtered,
       expanded: expanded,
       resized: resized,
-      selectedOption: null,
     },
       () => this.fetchData(this.state)
     );
+
+    // Populate selectFilter values and defaults
+    columnConfig.forEach((column) => {
+      if('selectFilterPopulate' in column) {
+        column['selectFilterPopulate'].then((response) => {
+          const fieldName = column['field'] + 'SelectOptions';
+          this.setState({
+            [fieldName]: response.data
+          });
+        })
+      }
+    });
+
     this._ismounted = true;
   }
 
@@ -80,6 +92,7 @@ class DataTable extends Component {
 
   onFilteredChange = (filtered, column) => {
     this.setState({
+        page: 0,
         filtered: filtered
       },() => {
       this.fetchData(this.state);
@@ -103,13 +116,36 @@ class DataTable extends Component {
     });
   };
 
+  onCustomFilterChange = (value, fieldID) => {
+    this.setState({
+      page: 0,
+      filtered: [
+        ...this.state.filtered.filter(f => f.id !== fieldID),
+        {id: fieldID, value: value}
+      ]
+    }, () => {
+      this.fetchData(this.state);
+      this.saveState(this.state);
+    })
+  };
+
+  onCustomFilterRemove = (fieldID) => {
+    this.setState({
+      page: 0,
+      filtered: [...this.state.filtered.filter(f => f.id !== fieldID)]
+    }, () => {
+      this.fetchData(this.state);
+      this.saveState(this.state);
+    });
+  };
+
   fetchData = (state) => {
     this.setState({ loading: true });
     this.props.onFetchData(state).then((response) => {
       if (this._ismounted) {
         this.setState({
           pages: this.getPagesNumber(response.data.count),
-          data: this.props.parseResult(response.data.results),
+          data: response.data.results,
           loading: false
         });
       }
@@ -122,20 +158,48 @@ class DataTable extends Component {
 
   makeHeader = () => {
     const {columnConfig} = this.props;
+    const {filtered} = this.state;
     let header = [];
+
     columnConfig.forEach((column) => {
       let columnConfig = {};
 
       columnConfig['Header'] = column.label;
       columnConfig['sortable'] = column.sortable;
       columnConfig['filterable'] = column.filterable;
+      columnConfig['resizable'] = column.resizable;
       columnConfig['accessor'] = column.field;
-      columnConfig['width'] = column.width;
       columnConfig['width'] = column.width;
       columnConfig['minWidth'] = column.minWidth;
       columnConfig['maxWidth'] = column.maxWidth;
-      columnConfig['Filter'] = column.selectFilter ?
-          this.getSelect(column.filterParam, column.selectFilterLabel, column.selectFilterOptions) : null;
+
+      if(column.filterType) {
+        switch(column.filterType) {
+          case 'select':
+            const optionFieldName = column.field + 'SelectOptions';
+            const selectFilterOptions = this.state[optionFieldName];
+
+            columnConfig['Filter'] =
+              <SelectFilter
+                filtered={filtered}
+                columnConfig={column}
+                onFilterChange={this.onCustomFilterChange}
+                onFilterRemove={this.onCustomFilterRemove}
+                selectFilterOptions={selectFilterOptions}
+              />;
+            break;
+          case 'activeDate':
+            columnConfig['Filter'] =
+              <ActiveDateFilter
+                filtered={filtered}
+                columnConfig={column}
+                onFilterChange={this.onCustomFilterChange}
+              />;
+            break;
+          default:
+            break;
+        }
+      }
 
       if ('render' in column) {
         columnConfig['Cell'] = column.render;
@@ -150,76 +214,6 @@ class DataTable extends Component {
     return header;
   };
 
-  getSelect = (filterParam, filterLabel, filterOptions) => {
-    const customStyles = {
-      container: (provided, state) => ({
-        ...provided,
-        '&:focus': {
-          borderColor: 'none'
-        }
-      }),
-      control: (provided, state) => ({
-        ...provided,
-        borderColor: 'rgba(0,0,0,0.1)',
-        boxShadow: null,
-        maxHeight: '29px',
-        minHeight: '25px',
-        '&:hover': {
-          borderColor: 'none'
-        },
-        '&:focus': {
-          borderColor: 'none'
-        }
-      }),
-      input: (provided, state) => ({
-        ...provided,
-        '&:focus': {
-          borderColor: 'none'
-        }
-      }),
-      menu: (provided, state) => ({
-        ...provided,
-        textAlign: 'left'
-      }),
-    };
-
-    return (
-      <div className={style.selectFilter}>
-        <Select
-           styles={customStyles}
-           options={filterOptions}
-           isClearable={true}
-           getOptionLabel={(option) => {return option[filterLabel]}}
-           getOptionValue={(option) => {return option.id}}
-           onChange={(value, props) => this.handleChange(filterParam, value, props)}
-        />
-      </div>
-    )
-  };
-
-  handleChange = (filterParam, value, props) => {
-    switch(props.action) {
-      case 'select-option':
-        this.setState({
-          filtered: [...this.state.filtered.filter(f => f.id !== filterParam), {id: filterParam, value: value['id']}]
-        }, () => {
-          this.fetchData(this.state);
-          this.saveState(this.state);
-        });
-        break;
-      case 'clear':
-        this.setState({
-          filtered: [...this.state.filtered.filter(f => f.id !== filterParam)]
-        }, () => {
-          this.fetchData(this.state);
-          this.saveState(this.state);
-        });
-        break;
-      default:
-        return null;
-    }
-  };
-
   setOverFlow = () => {
     return {
       style: { overflow: 'visible' }
@@ -227,7 +221,8 @@ class DataTable extends Component {
   };
 
   render() {
-    const { page, pageSize, sorted, filtered, resized, expanded, data, pages, loading, filterable } = this.state;
+    const { page, pageSize, sorted, filtered, resized, expanded, data, pages, loading } = this.state;
+    const columns = this.makeHeader();
 
     return(
       <ReactTable
@@ -240,7 +235,6 @@ class DataTable extends Component {
         onPageSizeChange={this.onPageSizeChange}
         sorted={sorted}
         onSortedChange={this.onSortedChange}
-        filterable={filterable}
         filtered={filtered}
         onFilteredChange={this.onFilteredChange}
         resized={resized}
@@ -248,7 +242,7 @@ class DataTable extends Component {
         expanded={expanded}
         onExpandedChange={this.onExpandedChange}
         loading={loading}
-        columns={this.makeHeader()}
+        columns={columns}
         className="-striped -highlight"
         getTheadFilterThProps={this.setOverFlow}
         SubComponent={this.props.subComponent}
@@ -258,13 +252,31 @@ class DataTable extends Component {
 }
 
 DataTable.propTypes = {
-  columnConfig: PropTypes.array.isRequired,
-  countryOptions: PropTypes.array,
+  columnConfig: PropTypes.arrayOf(PropTypes.shape({
+    field: PropTypes.string,
+    label: PropTypes.string,
+    sortable: PropTypes.bool,
+    filterable: PropTypes.bool,
+    width: PropTypes.number,
+    minWidth: PropTypes.number,
+    maxWidth: PropTypes.number,
+    // Defines the param name which will be passed to the API call.
+    filterQueryParam: PropTypes.string,
+    // Indicates the type of the filter (if nothing, it should be text).
+    filterType: PropTypes.oneOf(['select', 'activeDate']),
+    // Defines which object property should be displayed in the select dropdown from the API response.
+    selectFilterLabel: PropTypes.string,
+    // Defines which object property should act as the selected value and to be passed to the filter API call.
+    selectFilterValue: PropTypes.string,
+    // Function which gives back a Promise object to populate the select filters.
+    selectFilterPopulate: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+    // Function which can be used to display the values in the field.
+    render: PropTypes.func
+  })),
   onFetchData: PropTypes.func.isRequired,
   initialState: PropTypes.object,
   saveState: PropTypes.func,
-  parseResult: PropTypes.func,
-  defaultPageSize: PropTypes.number
+  subComponent: PropTypes.func
 };
 
 export default DataTable;
