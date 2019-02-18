@@ -6,7 +6,7 @@ import agency from "../../services/Agency";
 import country from "../../services/Country";
 import list from "../../services/List";
 import createTableAPIParams from "../../utils/createTableAPIParams";
-import {dateRender, flagRender} from "../../utils/tableColumnRenderers";
+import {arrayRenderer, dateRender, flagRender} from "../../utils/tableColumnRenderers";
 import DataTable from "../../components/DataTable/DataTable";
 import ActionButtons from "../../components/DataTable/components/ActionButtons";
 
@@ -37,6 +37,7 @@ class ReportsTable extends Component {
       }, {
         field: 'country',
         label: 'Country',
+        render: arrayRenderer,
         width: 150,
         resizable: false,
         sortable: true,

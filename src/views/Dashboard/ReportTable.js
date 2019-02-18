@@ -4,7 +4,7 @@ import report from '../../services/Report';
 import ReportDetail from "./ReportDetail";
 import {connect} from "react-redux";
 import createTableAPIParams from "../../utils/createTableAPIParams";
-import {flagRender, institutionRender} from "../../utils/tableColumnRenderers";
+import {flagRender, arrayRenderer} from "../../utils/tableColumnRenderers";
 import setDashboardReportTable from "./actions/setDashboardReportTable";
 
 class ReportTable extends Component {
@@ -22,7 +22,7 @@ class ReportTable extends Component {
         label: 'Institutions',
         sortable: false,
         filterable: false,
-        render: institutionRender
+        render: arrayRenderer
       }, {
         field: 'name',
         label: 'Name',

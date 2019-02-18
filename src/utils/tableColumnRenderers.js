@@ -19,7 +19,7 @@ export const flagRender = (row) => {
   return(<div className={'text-center'}><span className={className}>{row.value}</span></div>);
 };
 
-export const institutionRender = (row) => {
+export const arrayRenderer = (row) => {
   return row.value.join('; ');
 };
 
