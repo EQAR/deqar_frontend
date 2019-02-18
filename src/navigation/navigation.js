@@ -25,6 +25,25 @@ const nav = {
       name: 'My Agencies',
       url: '/my-agency',
       icon: 'fa fa-home'
+    }, {
+      name: 'My Reports',
+      url: '/report-data',
+      icon: 'icon-doc',
+      children: [
+        {
+          name: 'My Uploaded Reports',
+          url: '/my-reports',
+          icon: 'icon-docs'
+        }, {
+          name: 'Submit Report',
+          url: '/submit-report',
+          icon: 'fa fa-file-text-o'
+        }, {
+          name: 'Upload CSV',
+          url: '/upload-csv',
+          icon: 'icon-cloud-upload'
+        }
+      ]
     },
     {
       title: true,
@@ -35,23 +54,6 @@ const nav = {
       },
     },
     {
-      name: 'Submit Report',
-      url: '/report-data',
-      icon: 'icon-doc',
-      children: [
-        {
-          name: 'Report Form',
-          url: '/report-form',
-          icon: 'icon-doc'
-        },
-        {
-          name: 'Upload CSV',
-          url: '/upload-csv',
-          icon: 'icon-cloud-upload'
-        }
-      ]
-    },
-    {
       name: 'Reference Data',
       icon: 'icon-book-open',
       children: [
@@ -59,6 +61,11 @@ const nav = {
           name: 'Agencies',
           url: '#',
           icon: 'icon-home'
+        },
+        {
+          name: 'Reports',
+          url: '/reports',
+          icon: 'icon-doc'
         },
         {
           name: 'Institutions',
