@@ -19,7 +19,7 @@ export const POST_EMAIL = BACKEND_DOMAIN + '/accounts/change_email/';
 
 // Dashboard endpoints
 export const GET_BADGES = ADMINAPI_URL_V1 + '/dashboard/badges/';
-export const GET_REPORTS = ADMINAPI_URL_V1 + '/reports_by_agency/';
+export const GET_REPORTS_BY_AGENCY = ADMINAPI_URL_V1 + '/reports_by_agency/';
 
 // Submission endpoints
 export const POST_REPORT = SUBMISSIONAPI_URL + '/submit/report';
@@ -27,12 +27,16 @@ export const POST_FILE = SUBMISSIONAPI_URL + '/submit/reportfile';
 export const POST_CSV = SUBMISSIONAPI_URL + '/submit/csv';
 
 // Agency endpoints
-export const GET_AGENCIES = ADMINAPI_URL_V1 + '/select/agency/';
-export const GET_ACTIVITIES = ADMINAPI_URL_V1 + '/select/agency_esg_activity/';
+export const GET_MY_AGENCIES = ADMINAPI_URL_V1 + '/select/agency/';
+export const GET_MY_ACTIVITIES = ADMINAPI_URL_V1 + '/select/agency_esg_activity/';
+export const GET_ALL_AGENCIES = ADMINAPI_URL_V1 + '/select/agency_all/';
+export const GET_ACTIVITY_TYPES = ADMINAPI_URL_V1 + '/select/activity_type/';
 
 // Report related endpoints
 export const GET_STATUSES = ADMINAPI_URL_V1 + '/select/report_status/';
 export const GET_DECISIONS = ADMINAPI_URL_V1 + '/select/report_decision/';
+export const GET_MY_REPORTS = ADMINAPI_URL_V2 + '/browse/reports/';
+export const GET_REPORTS = ADMINAPI_URL_V2 + '/browse/reports/';
 
 // Institution endpoints
 export const GET_INSTITUTIONS = ADMINAPI_URL_V2 + '/select/institutions/';
@@ -44,5 +48,6 @@ export const GET_LANGUAGES = ADMINAPI_URL_V1 + '/select/language/';
 export const GET_COUNTRIES = ADMINAPI_URL_V1 + '/select/country/';
 export const GET_INSTITUTION_COUNTRIES = ADMINAPI_URL_V1 + '/select/institutions/country/';
 
-// QF-EHEA level endpoints
+// List endpoints
 export const GET_QFEHEA_LEVELS = ADMINAPI_URL_V1 + '/select/qf_ehea_level/';
+export const GET_FLAGS = ADMINAPI_URL_V1 + '/select/flag/';

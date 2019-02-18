@@ -1,11 +1,17 @@
 import axios from 'axios';
-import {GET_DECISIONS, GET_REPORTS, GET_STATUSES, POST_CSV, POST_FILE, POST_REPORT} from "./config-api";
-import createTableAPIParams from "../utils/createTableAPIParams";
+import {
+  GET_DECISIONS,
+  GET_MY_REPORTS,
+  GET_REPORTS, GET_REPORTS_BY_AGENCY,
+  GET_STATUSES,
+  POST_CSV,
+  POST_FILE,
+  POST_REPORT
+} from "./config-api";
 
 class Report {
-  listByInstitution = (state) => {
-    const params = createTableAPIParams(state);
-    return axios.get(GET_REPORTS, {params: params})
+  listByAgency = (params) => {
+    return axios.get(GET_REPORTS_BY_AGENCY, {params: params})
   };
 
   submitCSV = (csvData) => {
@@ -29,6 +35,14 @@ class Report {
   selectDecisions = () => {
     return axios.get(GET_DECISIONS);
   };
+
+  getReports = (params) => {
+    return axios.get(GET_REPORTS, { params: params });
+  };
+
+  getMyReports = (params) => {
+    return axios.get(GET_MY_REPORTS, { params: params });
+  }
 }
 
 const report = new Report();

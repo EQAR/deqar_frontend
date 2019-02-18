@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { GET_INSTITUTIONS } from "./config-api";
-import createTableAPIParams from "../utils/createTableAPIParams";
 
 
 class Institution {
@@ -13,7 +12,7 @@ class Institution {
         query: search,
         limit: 10,
         offset: loadedOptions.length
-      }
+      };
       return axios.get(GET_INSTITUTIONS, {params: params}).then((response) => {
         hasMore = response.data.next ? true : false;
         return {
@@ -24,8 +23,7 @@ class Institution {
     }
   }
 
-  getInstitutions(state) {
-    const params = createTableAPIParams(state);
+  getInstitutions = (params) => {
     return axios.get(GET_INSTITUTIONS, { params: params });
   }
 }

@@ -1,15 +1,23 @@
 import axios from 'axios';
-import {GET_ACTIVITIES, GET_AGENCIES} from "./config-api";
+import {GET_ACTIVITY_TYPES, GET_ALL_AGENCIES, GET_MY_ACTIVITIES, GET_MY_AGENCIES} from "./config-api";
 
 class Agency {
-  select = () => {
-    return axios.get(GET_AGENCIES);
+  selectMyAgency = () => {
+    return axios.get(GET_MY_AGENCIES);
   };
 
-  selectActivity = (agencyID) => {
+  selectAllAgency = () => {
+    return axios.get(GET_ALL_AGENCIES);
+  };
+
+  selectMyActivity = (agencyID) => {
     if(agencyID) {
-      return axios.get(`${GET_ACTIVITIES}${agencyID}/`)
+      return axios.get(`${GET_MY_ACTIVITIES}${agencyID}/`)
     }
+  };
+
+  selectActivityType = () => {
+    return axios.get(GET_ACTIVITY_TYPES);
   }
 }
 
