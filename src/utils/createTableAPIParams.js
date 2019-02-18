@@ -1,24 +1,35 @@
-const createTableAPIParams = (tableState) => {
+const createTableAPIParams = (tableState, tableColumnConfig) => {
   const {pageSize, page, sorted, filtered} = tableState;
   let params = {};
 
-  const order = sorted.map((sort) => sort.desc ? `-${sort.id}` : sort.id).join(',');
+  // If there is a sortQueryParam, change the request parameter here
+  let ordering = [];
+  sorted.forEach((sort) => {
+    const cc = tableColumnConfig.find(c => c.field === sort.id);
+    if(cc && 'sortQueryParam' in cc) {
+      ordering.push(sort.desc ? `-${cc['sortQueryParam']}` : cc['sortQueryParam'])
+    } else {
+      ordering.push(sort.desc ? `-${sort.id}` : sort.id)
+    }
+  });
 
   params = {
     limit: pageSize,
     offset: page * pageSize,
-    ordering: order
-  }
+    ordering: ordering.join(', ')
+  };
 
+  // If there is a filterQueryParam, change the request parameter here
   filtered.forEach(f => {
-    if (f.value !== 'empty') {
-      params = f.id === 'deqar_id' || f.id === 'eter_id' || (f.id === 'country' && f.value !== 'empty') ?
-        {...params, ...{[f.id]: f.value}} :
-        {...params, query: f.value}
-      }
-    });
+    const cc = tableColumnConfig.find(c => c.field === f.id);
+    if(cc && 'filterQueryParam' in cc) {
+      params = {...params, ...{[cc['filterQueryParam']]: f.value}}
+    } else {
+      params = {...params, ...{[f.id]: f.value}}
+    }
+  });
 
-    return params;
+  return params;
 };
 
 export default createTableAPIParams;
