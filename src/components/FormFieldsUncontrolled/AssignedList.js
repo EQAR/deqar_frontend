@@ -16,9 +16,15 @@ class AssignedList extends Component {
   };
 
   renderListItems = (values) => {
+    const { disabled } = this.props;
+
     values = values ? values : [];
     const emptyBox = (
-      <ListGroupItem className={cx(style.ListGroupItem, {[style.ListGroupItemHasError]: this.fieldHasError()})}>
+      <ListGroupItem className={cx(style.ListGroupItem,
+        {
+          [style.ListGroupItemHasError]: this.fieldHasError(),
+          [style.ListGroupItemDisabled]: disabled
+        })}>
         <span className={style.ListGroupItemName}> </span>
       </ListGroupItem>
     );
@@ -27,13 +33,20 @@ class AssignedList extends Component {
       return values.map((value, idx) => {
         return(
           <ListGroupItem
-            className={cx(style.ListGroupItem, {[style.ListGroupItemHasError]: this.fieldHasError()})}
+            className={cx(style.ListGroupItem,
+              {
+                [style.ListGroupItemHasError]: this.fieldHasError(),
+                [style.ListGroupItemDisabled]: disabled
+
+              })}
             key={idx}
           >
-            <span className={style.ListGroupItemName}>{this.renderDisplayValue(value)}</span>
-            <div className={style.removeButton + " pull-right"} onClick={() => {this.props.onRemove(idx)}}>
-              <i className="fa fa-close"> </i>
-            </div>
+            <span onClick={() => this.props.onClick(idx)} className={style.ListGroupItemName}>{this.renderDisplayValue(value)}</span>
+            { disabled ? "" :
+              <div className={style.removeButton + " pull-right"} onClick={() => {this.props.onRemove(idx)}}>
+                <i className="fa fa-close"> </i>
+              </div>
+            }
           </ListGroupItem>
         )
       });
@@ -62,7 +75,7 @@ class AssignedList extends Component {
   };
 
   render() {
-    const {values, errors, label, btnLabel, field, labelShowRequired} = this.props;
+    const {values, errors, label, btnLabel, field, labelShowRequired, disabled} = this.props;
 
     return(
       <div>
@@ -73,7 +86,7 @@ class AssignedList extends Component {
             {this.renderListItems(values)}
           </ListGroup>
           {this.displayErrors(errors, field)}
-          {btnLabel ?
+          {btnLabel && !disabled ?
             <Button
               type={'button'}
               size="sm"
@@ -88,7 +101,8 @@ class AssignedList extends Component {
 }
 
 AssignedList.defaultValues = {
-  labelShowRequired: false
+  labelShowRequired: false,
+  disabled: false
 };
 
 AssignedList.propTypes = {
@@ -99,10 +113,11 @@ AssignedList.propTypes = {
   valueFields: PropTypes.array.isRequired,
   onAddButtonClick: PropTypes.func,
   onRemove: PropTypes.func.isRequired,
-  onEdit: PropTypes.func,
+  onClick: PropTypes.func,
   label: PropTypes.string.isRequired,
   labelShowRequired: PropTypes.bool,
-  btnLabel: PropTypes.string
+  btnLabel: PropTypes.string,
+  disabled: PropTypes.bool
 };
 
 export default AssignedList;

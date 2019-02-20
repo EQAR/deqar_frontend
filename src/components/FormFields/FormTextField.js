@@ -1,10 +1,12 @@
 import React from 'react';
 import { BasicText, asField } from 'informed';
 
-const FormTextField = asField(({ fieldState, ...props }) => (
+const FormTextField = asField(({ fieldState, placeholder, disabled, ...props }) => (
   <React.Fragment>
     <BasicText
       fieldState={fieldState}
+      placeholder={disabled ? "" : placeholder}
+      disabled={disabled}
       {...props}
       className={fieldState.error ? ' form-control is-invalid' : ' form-control'}
     />

@@ -10,6 +10,10 @@
   max-height: 35px;
 }
 
+.ListGroupItemDisabled {
+  background-color: hsl(0,0%,95%);
+}
+
 .ListGroupItemHasError {
   border-color: #f86c6b;
 }
