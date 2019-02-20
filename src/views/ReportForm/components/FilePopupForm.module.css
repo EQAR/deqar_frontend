@@ -1,0 +1,14 @@
+.originalLocation {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.filenameDisplay {
+    padding-top: 5px;
+}
+
+.fileName {
+    color: hsl(0,0%,40%);
+    border-bottom: 1px dotted;
+}
