@@ -30,3 +30,7 @@ label.required:after {
 .datepicker .react-datepicker-popper {
   z-index: 999;
 }
+
+.form-control:disabled {
+  background-color: hsl(0,0%,95%);
+}
