@@ -2,8 +2,10 @@ import axios from 'axios';
 import {
   GET_DECISIONS,
   GET_MY_REPORTS,
-  GET_REPORTS, GET_REPORTS_BY_AGENCY,
+  GET_REPORTS,
+  GET_REPORTS_BY_AGENCY,
   GET_STATUSES,
+  MANAGE_REPORT,
   POST_CSV,
   POST_FILE,
   POST_REPORT
@@ -42,6 +44,10 @@ class Report {
 
   getMyReports = (params) => {
     return axios.get(GET_MY_REPORTS, { params: params });
+  };
+
+  getReport = (reportID) => {
+    return axios.get(`${MANAGE_REPORT}/${reportID}/ `);
   }
 }
 
