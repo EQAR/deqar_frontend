@@ -22,7 +22,7 @@ class SelectFilter extends Component {
   };
 
   render() {
-    const { filtered, columnConfig, selectFilterOptions} = this.props;
+    const { filtered, columnConfig, selectFilterOptions } = this.props;
     const { selectFilterLabel, selectFilterValue, filterQueryParam } = columnConfig;
 
     let value = null;

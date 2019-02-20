@@ -18,6 +18,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 
 // sidebar nav config
 import navigation from '../../navigation/navigation';
+
 // routes config
 import routes from '../../navigation/routes';
 

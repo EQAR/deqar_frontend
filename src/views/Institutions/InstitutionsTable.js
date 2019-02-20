@@ -13,8 +13,8 @@ class InstitutionsTable extends Component {
     super(props);
     this.columnConfig = [
       {
-        field: 'id',
-        label: 'DEQARINST ID',
+        field: 'deqar_id',
+        label: 'DEQAR ID',
         sortable: true,
         filterable: true,
         minWidth: 80,
