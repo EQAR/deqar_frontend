@@ -40,6 +40,7 @@ export const MANAGE_REPORT = ADMINAPI_URL + '/reports';
 
 // Institution endpoints
 export const GET_INSTITUTIONS = ADMINAPI_URL + '/select/institutions/';
+export const GET_INSTITUTION = ADMINAPI_URL + '/institutions/';
 
 // Language endpoints
 export const GET_LANGUAGES = ADMINAPI_URL + '/select/language/';

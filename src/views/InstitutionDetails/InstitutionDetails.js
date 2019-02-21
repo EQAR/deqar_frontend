@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import InstitutionForm from '../InstitutionForm/InstituttionForm';
 
-class Institution extends Component {
+class InstitutionDetails extends Component {
 
   render() {
     const {id, param} = this.props.match.params;
@@ -10,7 +10,7 @@ class Institution extends Component {
       <React.Fragment>
         <InstitutionForm
           formType={param}
-          reportID={id}
+          formID={id}
           backPath={'/institutions'}
         />
       </React.Fragment>
@@ -18,4 +18,4 @@ class Institution extends Component {
   }
 }
 
-export default Institution;
+export default InstitutionDetails;

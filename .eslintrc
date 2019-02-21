@@ -4,6 +4,7 @@
     "react"
   ],
   "rules": {
-    "no-undef": [ 1 ]
+    "no-undef": [ 1 ],
+    "no-unused-expressions": ["error", {"allowTernary": true}]
   }
 }
