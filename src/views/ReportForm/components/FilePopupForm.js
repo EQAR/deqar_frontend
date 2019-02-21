@@ -93,7 +93,7 @@ class FilePopupForm extends Component {
           <input
             style={{display: 'block'}}
             type={'file'}
-            accept='.doc,.docx,.pdf'
+            accept='.pdf'
             onChange={this.onFileChange}
             disabled={disabled}
           />
