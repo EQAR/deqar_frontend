@@ -8,6 +8,9 @@
   padding-left: 20px;
   min-height: 35px;
   max-height: 35px;
+  display: flex;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
 }
 
 .ListGroupItemDisabled {
@@ -22,6 +25,10 @@
   color: hsl(0,0%,40%);
   border-bottom: 1px dotted;
   cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  order: 1;
 }
 
 .Button {
@@ -30,6 +37,10 @@
 
 .removeButton {
   color: hsl(0,0%,80%);
+  order: 2;
+  text-align:right;
+  flex-grow: 1;
+  margin-left: 15px;
 }
 
 .removeButton:hover {
