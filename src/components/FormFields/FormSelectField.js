@@ -28,6 +28,12 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
     singleValue: (provided, state) => ({
       ...provided,
       color: state.isDisabled ? '#5c6873' : "#5C685C",
+    }),
+    option: (provided) => ({
+      ...provided,
+      whiteSpace: 'nowrap',
+      overFlow: 'hidden',
+      textOverFlow: 'ellipsis'
     })
   };
 
