@@ -51,6 +51,23 @@ class SelectFilter extends Component {
           borderColor: 'none'
         }
       }),
+      valueContainer: (provided) => ({
+        position: 'unset'
+      }),
+      placeholder: (provided) => ({
+        ...provided,
+        top: '13px',
+        paddingLeft: '5px'
+      }),
+      indicatorsContainer: (provided) => ({
+        ...provided,
+        position: 'relative',
+        top: '-3px'
+      }),
+      singleValue: (provided) => ({
+        ...provided,
+        paddingLeft: '5px'
+      }),
       input: (provided) => ({
         ...provided,
         '&:focus': {
