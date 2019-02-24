@@ -11,6 +11,8 @@ import {
   Label,
   Row
 } from "reactstrap";
+import PropTypes from 'prop-types';
+
 
 import FormTextField from "../../components/FormFields/FormTextField";
 import institution from "../../services/Institution";
@@ -88,28 +90,48 @@ class InstitutionForm extends Component {
                       </Row>
                       <Row>
                         <Col>
-                          <Label for="name_primary" className={'required'}>Institution Name, Official</Label>
+                          <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
                             <FormTextField
-                              field={'name_primary'}
+                              field={'names[0].name_official_transliterated'}
                               disabled={readOnly}
                             />
                         </Col>
                       </Row>
                       <Row>
                         <Col>
-                          <Label for="name_primary" className={'required'}>Institution Name, Official</Label>
+                          <Label for="name_english">Institution Name, English</Label>
                             <FormTextField
-                              field={'name_primary'}
+                              field={'names[0].name_english'}
                               disabled={readOnly}
                             />
                         </Col>
                       </Row>
                       <Row>
-                        <Col>
-                          <Label for="name_primary" className={'required'}>Institution Name, Official</Label>
+                        <Col md={6}>
+                          <Label for="acronym" className={'required'}>Institution Acronym</Label>
                             <FormTextField
-                              field={'name_primary'}
+                              field={'names[0].acronym'}
                               disabled={readOnly}
+                            />
+                        </Col>
+                      </Row>
+                    </Col>
+                    <Col md={6}>
+                      <Row>
+                        <Col md={6}>
+                          <Label for="deqar_id">DEQARINST ID</Label>
+                            <FormTextField
+                              field={'deqar_id'}
+                              disabled
+                            />
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col md={6}>
+                          <Label for="deqar_id">ETER ID</Label>
+                            <FormTextField
+                              field={'deqar_id'}
+                              disabled
                             />
                         </Col>
                       </Row>
@@ -123,6 +145,11 @@ class InstitutionForm extends Component {
       </div>
     )
   }
+}
+
+InstitutionForm.propTypes = {
+  formType: PropTypes.string.isRequired,
+  formID: PropTypes.number
 }
 
 export default InstitutionForm;
