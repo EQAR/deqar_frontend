@@ -7,26 +7,27 @@ import {
   CardFooter,
   CardHeader,
   Col,
-  FormGroup, FormText,
+  FormGroup,
+  FormText,
   Label,
   Row
 } from "reactstrap";
 import PropTypes from 'prop-types';
 
-
-import FormTextField from "../../components/FormFields/FormTextField";
-import institution from "../../services/Institution";
-import style from "./InstitutionForm.module.css";
-import AssignedList from "../../components/FormFieldsUncontrolled/AssignedList";
-
+import FormTextField from '../../components/FormFields/FormTextField';
+import institution from '../../services/Institution';
+import style from './InstitutionForm.module.css';
+import AssignedList from '../../components/FormFieldsUncontrolled/AssignedList';
+import AlternativeNameForm from './components/AlternativeNameForm';
 
 
 class InstitutionForm extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      readOnly: false
+      readOnly: false,
+      nameModalOpen: false,
+      alternativeNameValue: null
     }
   }
 
@@ -51,7 +52,7 @@ class InstitutionForm extends Component {
 
   setFormApi = (formApi) => {
     this.formApi = formApi;
-  };
+  }
 
   formTitle(formType) {
     return {
@@ -62,39 +63,33 @@ class InstitutionForm extends Component {
   }
 
   toggleNameModal = () => {
-    console.log('toggle');
+    this.setState({
+      nameModalOpen: !this.state.nameModalOpen
+    })
+  }
 
-    // this.setState({
-    //   programmeModalOpen: !this.state.programmeModalOpen,
-    //   programmeModalIndex: undefined,
-    //   programmeModalValue: undefined
-    // })
-  };
+  onNameSubmit = (value, index) => {
+    console.log(value, index);
+
+  }
 
   onNameRemove = (index) => {
     console.log(index);
-
-    // let programmes = this.formApi.getValue('programmes');
-    // programmes.splice(idx, 1);
-    // this.formApi.setValue('programmes', programmes);
   }
 
   onNameClick = (index) => {
-    console.log(index);
-
-    // this.setState({
-    //   programmeModalOpen: true,
-    //   programmeModalValue: this.formApi.getValue('programmes')[idx],
-    //   programmeModalIndex: idx
-    // });
-  };
+    this.setState({
+      nameModalOpen: true,
+      alternativeNameValue: this.formApi.getValue('names')[0].alternative_names[index]
+    });
+  }
 
   getAlternativeValues = (formState) => {
     return formState.values.names ? formState.values.names[0].alternative_names : null;
   }
 
   render() {
-    const { readOnly } = this.state;
+    const { readOnly, nameModalOpen, alternativeNameValue } = this.state;
     const { formType } = this.props;
 
     return (
@@ -151,6 +146,13 @@ class InstitutionForm extends Component {
                       </Row>
                       <Row>
                         <Col>
+                          <AlternativeNameForm
+                            modalOpen={nameModalOpen}
+                            onToggle={this.toggleNameModal}
+                            onFormSubmit={this.onNameSubmit}
+                            formValue={alternativeNameValue}
+                            disabled={readOnly}
+                          />
                           <AssignedList
                             errors={formState.errors}
                             valueFields={['name']}
