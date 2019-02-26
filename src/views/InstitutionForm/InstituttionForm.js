@@ -18,7 +18,10 @@ import FormTextField from '../../components/FormFields/FormTextField';
 import institution from '../../services/Institution';
 import style from './InstitutionForm.module.css';
 import AssignedList from '../../components/FormFieldsUncontrolled/AssignedList';
+import AssignedField from '../../components/FormFieldsUncontrolled/AssignedField';
 import AlternativeNameForm from './components/AlternativeNameForm';
+import LocationForm from './components/LocationForm';
+import country from '../../services/Country';
 
 
 class InstitutionForm extends Component {
@@ -27,7 +30,10 @@ class InstitutionForm extends Component {
     this.state = {
       readOnly: false,
       nameModalOpen: false,
-      alternativeNameValue: null
+      alternativeNameValue: null,
+      locationModalOpen: false,
+      locationValue: null,
+      countries: null
     }
   }
 
@@ -38,6 +44,7 @@ class InstitutionForm extends Component {
       readOnly: this.isReadOnly(formType)
     });
     this.populate();
+    this.getCountries();
   }
 
   isReadOnly = (formType) => formType === 'view';
@@ -48,6 +55,14 @@ class InstitutionForm extends Component {
     if (formType !== 'create') {
       institution.getInstitution(formID).then(response => this.formApi.setValues(response.data))
     }
+  }
+
+  getCountries = () => {
+    country.getInstitutionCountries().then((response, error) => {
+      this.setState({
+        countries: response.data
+      })
+    })
   }
 
   setFormApi = (formApi) => {
@@ -84,12 +99,33 @@ class InstitutionForm extends Component {
     });
   }
 
+  toggleLocationModal = () => {
+    this.setState({
+      locationModalOpen: !this.state.locationModalOpen
+    })
+  }
+
+  onCountryClick = (index) => {
+    this.setState({
+      locationModalOpen: true,
+      locationValue: this.formApi.getValue('country')[0].alternative_names[index]
+    });
+  }
+
   getAlternativeValues = (formState) => {
     return formState.values.names ? formState.values.names[0].alternative_names : null;
   }
 
+  getCountry = (formState) => {
+    const {countries} = this.state;
+
+    return formState.values.countries && countries ?
+            countries.filter(country => country.id === formState.values.countries[0].country)[0].name_english :
+            null;
+  }
+
   render() {
-    const { readOnly, nameModalOpen, alternativeNameValue } = this.state;
+    const { readOnly, nameModalOpen, alternativeNameValue, locationModalOpen, locationValue } = this.state;
     const { formType } = this.props;
 
     return (
@@ -163,6 +199,28 @@ class InstitutionForm extends Component {
                             onAddButtonClick={this.toggleNameModal}
                             onClick={this.onNameClick}
                             field={'alternative_names'}
+                            disabled={readOnly}
+                          />
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <LocationForm
+                            modalOpen={locationModalOpen}
+                            onToggle={this.toggleLocationModal}
+                            onFormSubmit={this.onNameSubmit}
+                            formValue={locationValue}
+                            disabled={readOnly}
+                          />
+                          <AssignedField
+                            errors={formState.errors}
+                            value={this.getCountry(formState)}
+                            label={'Geographic Location'}
+                            labelShowRequired={true}
+                            btnLabel={'Add Location'}
+                            onAddButtonClick={this.toggleLocationModal}
+                            onClick={this.onCountryClick}
+                            field={'countries'}
                             disabled={readOnly}
                           />
                         </Col>
