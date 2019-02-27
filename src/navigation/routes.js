@@ -8,6 +8,7 @@ import MyReports from "../views/MyReports/MyReports";
 import Reports from "../views/Reports/Reports";
 import ReportDetails from "../views/ReportDetails/ReportDetails";
 import ReportSubmission from "../views/ReportDetails/ReportSubmission";
+import MyReportDetails from "../views/ReportDetails/MyReportDetails";
 
 const routes = [
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
@@ -20,6 +21,7 @@ const routes = [
   { path: '/institution/:param/:id', exact: true, name: 'Institution Form', component: InstitutionForm},
   { path: '/reports', exact: true, name: 'Reports', component: Reports},
   { path: '/reports/:param/:id', exact: true, name: 'Report Form', component: ReportDetails},
+  { path: '/my-reports/:param/:id', exact: true, name: 'Report Form', component: MyReportDetails},
 ];
 
 export default routes;
