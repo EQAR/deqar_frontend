@@ -30,6 +30,7 @@ class ReportsTable extends Component {
       }, {
         field: 'institution_programme_primary',
         label: 'Institution : Programme',
+        resizable: true,
         sortable: true,
         sortQueryParam: 'institution_programme_sort',
         filterable: true,
