@@ -7,7 +7,8 @@ import agency from "../../services/Agency";
 import country from "../../services/Country";
 import list from "../../services/List";
 import createTableAPIParams from "../../utils/createTableAPIParams";
-import { dateRender, flagRender } from "../../utils/tableColumnRenderers";
+import {dateRender, flagRender, uploadDateRender} from "../../utils/tableColumnRenderers";
+import ActionButtons from "../../components/DataTable/components/ActionButtons";
 
 class MyReportsTable extends Component {
   constructor(props) {
@@ -15,17 +16,14 @@ class MyReportsTable extends Component {
 
     this.columnConfig = [
       {
-        field: 'agency',
-        label: 'Agency',
+        field: 'date_created',
+        label: 'Uploaded',
+        render: uploadDateRender,
         width: 150,
         resizable: false,
         sortable: true,
         filterable: true,
-        filterType: 'select',
-        filterQueryParam: 'agency',
-        selectFilterValue: 'acronym_primary',
-        selectFilterLabel: 'acronym_primary',
-        selectFilterPopulate: agency.selectAllAgency()
+        filterQueryParam: 'year_created',
       }, {
         field: 'institution_programme_primary',
         label: 'Institution : Programme',
@@ -46,10 +44,10 @@ class MyReportsTable extends Component {
         selectFilterLabel: 'name_english',
         selectFilterPopulate: country.select()
       }, {
-        field: 'activity_type',
+        field: 'activity',
         label: 'Activity',
         width: 150,
-        resizable: false,
+        resizable: true,
         sortable: true,
         filterable: true,
         filterType: 'select',
@@ -79,6 +77,9 @@ class MyReportsTable extends Component {
         selectFilterValue: 'flag',
         selectFilterLabel: 'flag',
         selectFilterPopulate: list.selectFlags()
+      }, {
+        render: this.actionRender,
+        width: 100
       }
     ];
   }
@@ -92,11 +93,30 @@ class MyReportsTable extends Component {
     this.props.setMyReportsTable(state);
   };
 
+  actionRender = (row) => {
+    const pathConfig = [
+      {
+        path: 'my-reports/view',
+        buttonText: 'View'
+      }, {
+        path: 'my-reports/edit',
+        buttonText: 'Edit'
+      }
+    ];
+
+    return(
+      <ActionButtons
+        row={row}
+        pathConfig={pathConfig}
+      />
+    )
+  };
+
   render() {
     const {initialState} = this.props;
 
     return (
-      <DataTable2
+      <DataTable
         onFetchData={this.onFetchData}
         columnConfig={this.columnConfig}
         saveState={this.saveState}
