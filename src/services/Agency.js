@@ -12,7 +12,7 @@ class Agency {
 
   selectMyActivity = (agencyID) => {
     if(agencyID) {
-      return axios.get(`${GET_MY_ACTIVITIES}${agencyID}/`)
+      return axios.get(`${GET_MY_ACTIVITIES}${agencyID}/`);
     }
   };
 
