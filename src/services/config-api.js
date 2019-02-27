@@ -33,7 +33,7 @@ export const GET_ACTIVITY_TYPES = ADMINAPI_URL + '/select/activity_type/';
 // Report related endpoints
 export const GET_STATUSES = ADMINAPI_URL + '/select/report_status/';
 export const GET_DECISIONS = ADMINAPI_URL + '/select/report_decision/';
-export const GET_MY_REPORTS = ADMINAPI_URL + '/browse/reports/';
+export const GET_MY_REPORTS = ADMINAPI_URL + '/browse/my-reports/';
 export const GET_REPORTS = ADMINAPI_URL + '/browse/reports/';
 
 export const MANAGE_REPORT = ADMINAPI_URL + '/reports';
