@@ -32,8 +32,7 @@ class InstitutionForm extends Component {
       nameModalOpen: false,
       alternativeNameValue: null,
       locationModalOpen: false,
-      locationValue: null,
-      countries: null
+      locationValue: null
     }
   }
 
@@ -44,7 +43,6 @@ class InstitutionForm extends Component {
       readOnly: this.isReadOnly(formType)
     });
     this.populate();
-    this.getCountries();
   }
 
   isReadOnly = (formType) => formType === 'view';
@@ -53,16 +51,10 @@ class InstitutionForm extends Component {
     const { formID, formType } = this.props;
 
     if (formType !== 'create') {
-      institution.getInstitution(formID).then(response => this.formApi.setValues(response.data))
-    }
-  }
-
-  getCountries = () => {
-    country.getInstitutionCountries().then((response, error) => {
-      this.setState({
-        countries: response.data
+      institution.getInstitution(formID).then((response, error) => {
+        this.formApi.setValues(response.data);
       })
-    })
+    }
   }
 
   setFormApi = (formApi) => {
@@ -105,10 +97,10 @@ class InstitutionForm extends Component {
     })
   }
 
-  onCountryClick = (index) => {
+  onCountryClick = () => {
     this.setState({
       locationModalOpen: true,
-      locationValue: this.formApi.getValue('country')[0].alternative_names[index]
+      locationValue: this.formApi.getValue('countries')
     });
   }
 
@@ -117,11 +109,7 @@ class InstitutionForm extends Component {
   }
 
   getCountry = (formState) => {
-    const {countries} = this.state;
-
-    return formState.values.countries && countries ?
-            countries.filter(country => country.id === formState.values.countries[0].country)[0].name_english :
-            null;
+    return formState.values.countries ? formState.values.countries[0].country.name_english : null;
   }
 
   render() {
@@ -213,14 +201,13 @@ class InstitutionForm extends Component {
                             disabled={readOnly}
                           />
                           <AssignedField
-                            errors={formState.errors}
                             value={this.getCountry(formState)}
                             label={'Geographic Location'}
                             labelShowRequired={true}
                             btnLabel={'Add Location'}
                             onAddButtonClick={this.toggleLocationModal}
                             onClick={this.onCountryClick}
-                            field={'countries'}
+                            field={'name_english'}
                             disabled={readOnly}
                           />
                         </Col>
