@@ -34,3 +34,9 @@ export const dateRender = (row) => {
     return `${valid_from} - `;
   }
 };
+
+export const uploadDateRender = (row) => {
+  let {date_created} = row.original;
+  date_created = moment(date_created, moment.ISO_8601).format("YYYY-MM-DD HH:mm")
+  return date_created;
+};
