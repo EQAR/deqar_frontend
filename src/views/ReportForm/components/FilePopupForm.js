@@ -60,7 +60,7 @@ class FilePopupForm extends Component {
 
   getFileName = () => {
     const { formValue } = this.props;
-    const filename = this.formApi.getValue('filename');
+    const filename = this.formApi.getValue('file');
 
     if( formValue ) {
       return(
@@ -131,14 +131,18 @@ class FilePopupForm extends Component {
   // Validation
   validateOriginalLocation = (value, values) => {
     const {file} = this.state;
+    const original_file = values['file'];
+
     if(file) {
       if(value) {
         return "Please either upload a file or enter its location. (Both were entered.)"
       }
-    } else {
-      if(!value) {
-        return "Please either upload a file or enter its location. (Neither were entered.)"
-      }
+    }
+
+    if(!file && !original_file) {
+        if(!value) {
+          return "Please either upload a file or enter its location. (Neither were entered.)"
+        }
     }
 
     if(value) {

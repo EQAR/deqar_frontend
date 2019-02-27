@@ -29,6 +29,11 @@ class ProgrammePopupForm extends Component {
     this.formApi = formApi;
     if(formValue) {
       this.formApi.setValues(formValue);
+      if('alternative_names' in formValue) {
+        this.setState({
+          alternativeNameCount: formValue['alternative_names'].length
+        })
+      }
     }
   };
 
@@ -57,7 +62,7 @@ class ProgrammePopupForm extends Component {
   renderAlternativeNames = () => {
     const {alternativeNameCount} = this.state;
     const {disabled} = this.props;
-    const count = Array.apply(null, {length: alternativeNameCount}).map(Number.call, Number)
+    const count = Array.apply(null, {length: alternativeNameCount}).map(Number.call, Number);
 
     return count.map((c, idx) => {
       const scopeName = `alternative_names[${idx}]`;
@@ -96,15 +101,16 @@ class ProgrammePopupForm extends Component {
   // Events
   onAddButtonClick = () => {
     const {alternativeNameCount} = this.state;
-
     if(alternativeNameCount !== 0) {
       let altNames = this.formApi.getValue('alternative_names');
       altNames = altNames ? altNames : [{}];
       const lastAltName = altNames.slice(-1).pop();
 
-      if('name_alternative' in lastAltName) {
-        if (lastAltName.name_alternative.length > 0) {
-          this.setState({alternativeNameCount: alternativeNameCount + 1})
+      if(lastAltName) {
+        if ('name_alternative' in lastAltName) {
+          if (lastAltName.name_alternative.length > 0) {
+            this.setState({alternativeNameCount: alternativeNameCount + 1})
+          }
         }
       }
     } else {
@@ -143,7 +149,7 @@ class ProgrammePopupForm extends Component {
         <Form
           getApi={this.setFormApi}
           onSubmit={(value) => this.props.onFormSubmit(value, formIndex)}
-          id="file-popup-form"
+          id={`file-popup-form-${formIndex}`}
         >
           {({ formState }) => (
             <React.Fragment>

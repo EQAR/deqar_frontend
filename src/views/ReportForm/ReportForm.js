@@ -6,7 +6,7 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  Col,
+  Col, Collapse,
   FormGroup, FormText,
   Label,
   Row
@@ -29,6 +29,10 @@ import { toast } from 'react-toastify';
 import FormDatePickerField from "../../components/FormFields/FormDatePickerField";
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
+import InfoBox from "./components/InfoBox";
+import {createFormNormalizer} from "./normalizers/createFormNormalizer";
+import {updateFormNormalizer} from "./normalizers/updateFormNormalizer";
+import {decodeProgrammeNameData, encodeProgrammeNameData} from "./normalizers/programmeNameNormalizer";
 
 class ReportForm extends Component {
   constructor(props) {
@@ -49,7 +53,8 @@ class ReportForm extends Component {
       alertVisible: false,
       nonFieldErrors: [],
       loading: false,
-      readOnly: false
+      readOnly: false,
+      infoBoxOpen: true
     }
   }
 
@@ -90,7 +95,17 @@ class ReportForm extends Component {
     const { reportID } = this.props;
 
     report.getReport(reportID).then((response) => {
-      this.formApi.setValues(response.data);
+      const formValues = decodeProgrammeNameData(response.data);
+      this.formApi.setValues(formValues);
+
+      if('agency' in formValues) {
+        this.populateActivitySelect(formValues['agency']['id'])
+      }
+
+      const files = new Array(formValues['report_files'].length);
+      this.setState({
+        files: files
+      });
     })
   };
 
@@ -218,6 +233,11 @@ class ReportForm extends Component {
     });
   };
 
+  // Infobox toggle
+  infoBoxToggle = () => {
+    this.setState({ infoBoxOpen: !this.state.infoBoxOpen });
+  };
+
   // Events
   onAlertClose = () => {
     this.setState({
@@ -231,6 +251,7 @@ class ReportForm extends Component {
     } else {
       this.populateActivitySelect(null);
     }
+    this.formApi.setValue('activity', '')
   };
 
   onInstitutionSelected = (value) => {
@@ -258,6 +279,7 @@ class ReportForm extends Component {
   onProgrammeSubmit = (value, idx) => {
     let programmes = this.formApi.getValue('programmes');
     programmes = programmes ? programmes : [];
+
     if(idx >= 0) {
       programmes[idx] = value;
     } else {
@@ -414,18 +436,20 @@ class ReportForm extends Component {
 
   uploadFiles = (reportFileID, idx) => {
     const {files} = this.state;
-    if('name' in files[idx]) {
-      report.submitReportFile(files[idx], reportFileID).then((response) => {
-        toast.warn(`Uploading file ${files[idx].name} was successful.`);
-      }).catch((error) => {
-        toast.error(`There was a problem uploading the file: ${files[idx].name}.`)
-      });
+    if(files[idx]) {
+      if('name' in files[idx]) {
+        report.submitReportFile(files[idx], reportFileID).then((response) => {
+          toast.warn(`Uploading file ${files[idx].name} was successful.`);
+        }).catch((error) => {
+          toast.error(`There was a problem uploading the file: ${files[idx].name}.`)
+        });
+      }
     }
   };
 
-  onSubmit = (values) => {
-    this.loadingToggle();
-    let normalizedForm = this.normalizeForm(values);
+  createReport = (values) => {
+    let normalizedForm = createFormNormalizer(values);
+    normalizedForm = encodeProgrammeNameData(normalizedForm);
     report.submitReport(normalizedForm).then((response) => {
       toast.success("Report record was created.");
       const filesResponse = response.data.submitted_report.files;
@@ -455,64 +479,42 @@ class ReportForm extends Component {
     });
   };
 
-  normalizeForm = (formValues) => {
-    let normalizedForm = {date_format: "%Y-%m-%d"};
-    Object.keys(formValues).forEach(key => {
-      const value = formValues[key];
-      if(value) {
-        switch (value.constructor) {
-          case Array:
-            normalizedForm[key] = [];
-            value.forEach((v) => {
-              if('id' in v) {
-                switch(key) {
-                  case "report_language":
-                    normalizedForm[key].push(v.iso_639_1);
-                    break;
-                  case "institutions":
-                    normalizedForm[key].push({deqar_id: v.deqar_id[0]});
-                    break;
-                  case "countries":
-                    normalizedForm[key].push(v.iso_3166_alpha2);
-                    break;
-                  default:
-                    normalizedForm[key].push(v.id.toString());
-                }
-              } else {
-                normalizedForm[key].push(this.normalizeForm(v))
-              }
-            });
-            break;
-          case Object:
-            if('id' in value) {
-              switch(key) {
-                case "activity":
-                  normalizedForm[key] = value.activity;
-                  break;
-                case "agency":
-                  normalizedForm[key] = value.acronym_primary;
-                  break;
-                case "qf_ehea_level":
-                  normalizedForm[key] = value.level;
-                  break;
-                default:
-                  normalizedForm[key] = value.id.toString();
-              }
-            }
-            break;
-          default:
-            normalizedForm[key] = value;
-        }
-      }
-    });
-    return normalizedForm;
+  updateReport = (values) => {
+    const { reportID } = this.props;
+    let normalizedForm = updateFormNormalizer(values);
+    normalizedForm = encodeProgrammeNameData(normalizedForm);
+    report.updateReport(normalizedForm, reportID).then((response) => {
+      toast.success("Report record was updated.");
+      this.formApi.setValues(decodeProgrammeNameData(response.data));
+      const filesResponse = response.data.report_files;
+      filesResponse.forEach((file, idx) => {
+        this.uploadFiles(file.id, idx);
+      });
+    }).then(() => {
+      this.loadingToggle();
+    })
+  };
+
+  onSubmit = (values) => {
+    const {formType} = this.props;
+    this.loadingToggle();
+    switch(formType) {
+      case 'create':
+        this.createReport(values);
+        break;
+      case 'edit':
+        this.updateReport(values);
+        break;
+      default:
+        break;
+    }
   };
 
   render() {
     const {agencyOptions, agencyActivityOptions, statusOptions, decisionOptions,
       fileModalOpen, fileModalValue, fileModalIndex,
-      readOnly,} = this.state;
-    const {formType, formTitle, backPath} = this.props;
+      readOnly, infoBoxOpen } = this.state;
+    const {formType, formTitle, backPath, reportID} = this.props;
 
     return(
       <div className="animated fadeIn">
@@ -684,7 +686,7 @@ class ReportForm extends Component {
                           <AssignedList
                             field={'report_files'}
                             errors={formState.errors}
-                            valueFields={['filename', 'original_location']}
+                            valueFields={['display_name', 'filename', 'original_location']}
                             label={'Assigned files'}
                             labelShowRequired={true}
                             btnLabel={'Add file'}
@@ -715,6 +717,16 @@ class ReportForm extends Component {
                     </Col>
                   </Row>
                 </CardBody>
+                <CardFooter className={style.infoFooter}>
+                  {formType === 'create' ? "" :
+                    <Collapse isOpen={infoBoxOpen}>
+                      <InfoBox
+                        id={reportID}
+                        formState={formState.values}
+                      />
+                    </Collapse>
+                  }
+                </CardFooter>
                 <CardFooter>
                   {formType === 'view' ? "" :
                     <LaddaButton
@@ -727,12 +739,21 @@ class ReportForm extends Component {
                     </LaddaButton>
                   }
                   {formType === 'create' ? "" :
+                    <React.Fragment>
                       <Link to={{pathname: `${backPath}`}}>
                         <Button
                           size="sm"
                           color="primary"
                         >Close</Button>
                       </Link>
+                      <div className={'pull-right'}>
+                        <Button
+                          size={'sm'}
+                          color={'primary'}
+                          onClick={this.infoBoxToggle}
+                        >{infoBoxOpen ? "Hide Info" : "Show Info"}</Button>
+                      </div>
+                    </React.Fragment>
                   }
                 </CardFooter>
               </React.Fragment>
