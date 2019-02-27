@@ -29,8 +29,9 @@ class LocationForm extends Component {
   setFormApi = (formApi) => {
     const { formValue } = this.props;
     this.formApi = formApi;
+
     if (formValue) {
-      this.formApi.setValues(formValue);
+      this.formApi.setValues(formValue[0]);
     }
   }
 
@@ -68,19 +69,19 @@ class LocationForm extends Component {
         <Form
           getApi={this.setFormApi}
           onSubmit={(value) => this.props.onFormSubmit(value, formIndex)}
-          id="alternative-name-form"
+          id="country-form"
         >
           {({ formState }) => (
             <React.Fragment>
-              <ModalHeader toggle={this.onToggle}>Alternative Name</ModalHeader>
+              <ModalHeader toggle={this.onToggle}>Geographic Location</ModalHeader>
               <ModalBody>
                 <Row>
                   <Col md={12}>
                     <FormGroup>
-                      <Label for="alternative_name">Alternative Institution Name</Label>
+                      <Label for="country" className="required">Country</Label>
                       <FormTextField
-                        field={'name'}
-                        placeholder={'Enter alternative institution name'}
+                        field={'country.name_english'}
+                        placeholder={'Enter country'}
                         validate={validateRequired}
                         disabled={disabled}
                       />
@@ -88,10 +89,30 @@ class LocationForm extends Component {
                   </Col>
                   <Col md={12}>
                     <FormGroup>
-                      <Label for="name_transliterated">Alternative Institution Name, Transliterated</Label>
+                      <Label for="city">City</Label>
                       <FormTextField
-                        field={'transliteration'}
-                        placeholder={'Enter alternative institution name, transliterated'}
+                        field={'city'}
+                        placeholder={'Enter city'}
+                        disabled={disabled}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md={12}>
+                    <FormGroup>
+                      <Label for="lat">Latitude</Label>
+                      <FormTextField
+                        field={'lat'}
+                        placeholder={'Enter latitude'}
+                        disabled={disabled}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col md={12}>
+                    <FormGroup>
+                      <Label for="city">Longitude</Label>
+                      <FormTextField
+                        field={'long'}
+                        placeholder={'Enter longitude'}
                         disabled={disabled}
                       />
                     </FormGroup>
@@ -117,7 +138,7 @@ class LocationForm extends Component {
 
 LocationForm.propTypes = {
   modalOpen: PropTypes.bool.isRequired,
-  formValue: PropTypes.object,
+  formValue: PropTypes.array,
   onToggle: PropTypes.func.isRequired,
   onFormSubmit: PropTypes.func.isRequired,
   disabled: PropTypes.bool
