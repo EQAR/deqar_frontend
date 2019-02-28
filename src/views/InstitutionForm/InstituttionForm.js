@@ -76,12 +76,10 @@ class InstitutionForm extends Component {
   }
 
   onNameSubmit = (value, index) => {
-    console.log(value, index);
 
   }
 
   onNameRemove = (index) => {
-    console.log(index);
   }
 
   onNameClick = (index) => {

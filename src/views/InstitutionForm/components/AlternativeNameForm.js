@@ -39,7 +39,6 @@ class AlternativeNameForm extends Component {
   }
 
   onAddButtonClick = () => {
-    console.log('add');
 
   }
 

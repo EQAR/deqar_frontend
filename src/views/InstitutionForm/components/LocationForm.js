@@ -40,7 +40,6 @@ class LocationForm extends Component {
   }
 
   onAddButtonClick = () => {
-    console.log('add');
 
   }
 
