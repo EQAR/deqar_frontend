@@ -6,7 +6,6 @@
   vertical-align: middle;
   padding-left: 20px;
   min-height: 35px;
-  max-height: 35px;
   display: flex;
   padding-top: 0.5em;
   padding-bottom: 0.5em;
@@ -22,11 +21,9 @@
 
 .ListGroupItemName {
   color: hsl(0,0%,40%);
-  border-bottom: 1px dotted;
+  text-decoration: underline;
+  text-decoration-style: dotted;
   cursor: pointer;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   order: 1;
 }
 

@@ -41,7 +41,9 @@ class AssignedList extends Component {
               })}
             key={idx}
           >
-            <span onClick={() => this.props.onClick(idx)} className={style.ListGroupItemName}>{this.renderDisplayValue(value)}</span>
+            <span onClick={() => this.props.onClick(idx)} className={style.ListGroupItemName}>
+              {this.renderDisplayValue(value)}
+            </span>
             { disabled ? "" :
               <div className={style.removeButton + " pull-right"} onClick={() => {this.props.onRemove(idx)}}>
                 <i className="fa fa-close"> </i>
