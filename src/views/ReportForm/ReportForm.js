@@ -90,6 +90,32 @@ class ReportForm extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const { formType } = this.props;
+
+    if (this.props.formType !== prevProps.formType) {
+      switch (formType) {
+        case 'view':
+          this.setState({
+            readOnly: true
+          });
+          break;
+        case 'create':
+          this.setState({
+            readOnly: false
+          });
+          break;
+        case 'edit':
+          this.setState({
+            readOnly: false
+          });
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
   // Populate form
   populateForm = () => {
     const { reportID } = this.props;
@@ -510,6 +536,99 @@ class ReportForm extends Component {
     }
   };
 
+  renderSubmitButton = () => {
+    return(
+      <div className={'pull-right'}>
+        <LaddaButton
+          className={style.reportSubmitButton + " btn btn-primary btn-ladda btn-sm"}
+          loading={this.state.loading}
+          data-color="blue"
+          data-style={EXPAND_RIGHT}
+        >
+          Submit
+        </LaddaButton>
+      </div>
+    )
+  };
+
+  renderHideInfoButton = () => {
+    const {infoBoxOpen} = this.state;
+
+    return (
+      <span className={style.InfoButton}>
+        <Button
+          size={'sm'}
+          color={'secondary'}
+          onClick={this.infoBoxToggle}
+        >{infoBoxOpen ? "Hide Info" : "Show Info"}</Button>
+      </span>
+    )
+  };
+
+  renderCloseButton = () => {
+    const {backPath} = this.props;
+
+    return(
+      <React.Fragment>
+        <Link to={{pathname: `${backPath}`}}>
+          <Button
+            size="sm"
+            color="secondary"
+          >Close</Button>
+        </Link>
+      </React.Fragment>
+    )
+  };
+
+  renderEditButton = () => {
+    const {backPath, reportID} = this.props;
+
+    if(backPath.includes('my-reports')) {
+      return(
+        <div className={'pull-right'}>
+          <Link to={{pathname: `${backPath}/edit/${reportID}`}}>
+            <Button
+              size="sm"
+              color="primary"
+            >Edit Report</Button>
+          </Link>
+        </div>
+      )
+    }
+  };
+
+  renderButtons = () => {
+    const {formType} = this.props;
+
+    switch(formType) {
+      case 'view':
+        return(
+          <div>
+            {this.renderCloseButton()}
+            {this.renderHideInfoButton()}
+            {this.renderEditButton()}
+          </div>
+        );
+      case 'create':
+        return(
+          <div>
+            {this.renderSubmitButton()}
+            {this.renderCloseButton()}
+          </div>
+        );
+      case 'edit':
+        return(
+          <div>
+            {this.renderSubmitButton()}
+            {this.renderCloseButton()}
+            {this.renderHideInfoButton()}
+          </div>
+        );
+      default:
+        break;
+    }
+  };
+
   render() {
     const {agencyOptions, agencyActivityOptions, statusOptions, decisionOptions,
       fileModalOpen, fileModalValue, fileModalIndex,
@@ -728,33 +847,7 @@ class ReportForm extends Component {
                   }
                 </CardFooter>
                 <CardFooter>
-                  {formType === 'view' ? "" :
-                    <LaddaButton
-                      className={style.reportSubmitButton + " btn btn-primary btn-ladda btn-sm"}
-                      loading={this.state.loading}
-                      data-color="blue"
-                      data-style={EXPAND_RIGHT}
-                    >
-                      Submit
-                    </LaddaButton>
-                  }
-                  {formType === 'create' ? "" :
-                    <React.Fragment>
-                      <Link to={{pathname: `${backPath}`}}>
-                        <Button
-                          size="sm"
-                          color="primary"
-                        >Close</Button>
-                      </Link>
-                      <div className={'pull-right'}>
-                        <Button
-                          size={'sm'}
-                          color={'primary'}
-                          onClick={this.infoBoxToggle}
-                        >{infoBoxOpen ? "Hide Info" : "Show Info"}</Button>
-                      </div>
-                    </React.Fragment>
-                  }
+                  {this.renderButtons()}
                 </CardFooter>
               </React.Fragment>
             )}

@@ -8,6 +8,8 @@ import list from "../../services/List";
 import createTableAPIParams from "../../utils/createTableAPIParams";
 import {arrayRenderer, dateRender, flagRender} from "../../utils/tableColumnRenderers";
 import DataTable from "../../components/DataTable/DataTable";
+import Link from "react-router-dom/es/Link";
+import style from "./ReportsTable.module.css";
 
 class ReportsTable extends Component {
   constructor(props) {
@@ -29,12 +31,13 @@ class ReportsTable extends Component {
       }, {
         field: 'institution_programme_primary',
         label: 'Institution : Programme',
+        render: this.linkRenderer,
         resizable: true,
         sortable: true,
         sortQueryParam: 'institution_programme_sort',
         filterable: true,
         filterQueryParam: 'query',
-        style:{ 'white-space': 'unset'}
+        style:{ 'whiteSpace': 'unset'}
       }, {
         field: 'country',
         label: 'Country',
@@ -93,6 +96,16 @@ class ReportsTable extends Component {
 
   saveState = (state) => {
     this.props.setReportsTable(state);
+  };
+
+  linkRenderer = (row) => {
+    return(
+      <Link
+        to={{pathname: `/reports/view/${row.original.id}`}}
+        className={style.Link}
+      >
+        {row.original.institution_programme_primary}
+      </Link>)
   };
 
   render() {

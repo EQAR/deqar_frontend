@@ -8,6 +8,8 @@ import country from "../../services/Country";
 import list from "../../services/List";
 import createTableAPIParams from "../../utils/createTableAPIParams";
 import {dateRender, flagRender, uploadDateRender} from "../../utils/tableColumnRenderers";
+import style from "../Reports/ReportsTable.module.css";
+import {Link} from "react-router-dom";
 
 class MyReportsTable extends Component {
   constructor(props) {
@@ -26,11 +28,12 @@ class MyReportsTable extends Component {
       }, {
         field: 'institution_programme_primary',
         label: 'Institution : Programme',
+        render: this.linkRenderer,
         sortable: true,
         sortQueryParam: 'institution_programme_sort',
         filterable: true,
         filterQueryParam: 'query',
-        style:{ 'white-space': 'unset'}
+        style:{ 'whiteSpace': 'unset'}
       }, {
         field: 'country',
         label: 'Country',
@@ -55,7 +58,7 @@ class MyReportsTable extends Component {
         selectFilterValue: 'type',
         selectFilterLabel: 'type',
         selectFilterPopulate: agency.selectActivityType(),
-        style:{ 'white-space': 'unset'}
+        style:{ 'whiteSpace': 'unset'}
       }, {
         field: 'date',
         label: 'Date',
@@ -66,7 +69,7 @@ class MyReportsTable extends Component {
         filterable: true,
         filterType: 'activeDate',
         filterQueryParam: 'year',
-        style:{ 'white-space': 'unset'}
+        style:{ 'whiteSpace': 'unset'}
       }, {
         field: 'flag_level',
         label: 'Flag',
@@ -90,6 +93,16 @@ class MyReportsTable extends Component {
 
   saveState = (state) => {
     this.props.setMyReportsTable(state);
+  };
+
+  linkRenderer = (row) => {
+    return(
+      <Link
+        to={{pathname: `/my-reports/view/${row.original.id}`}}
+        className={style.Link}
+      >
+        {row.original.institution_programme_primary}
+      </Link>)
   };
 
   render() {
