@@ -702,7 +702,7 @@ class ReportForm extends Component {
                         <Row>
                           <Col md={12}>
                             <FormGroup>
-                              <Label for="institution" className={'required'}>Institution</Label>
+                              <Label for="institution" className={'required'}>Add Institution</Label>
                               <InstitutionSelect
                                 onChange={this.onInstitutionSelected}
                               />
