@@ -52,6 +52,7 @@ class SelectFilter extends Component {
         }
       }),
       valueContainer: (provided) => ({
+        ...provided,
         position: 'unset'
       }),
       placeholder: (provided) => ({
