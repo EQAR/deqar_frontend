@@ -246,6 +246,13 @@ class DataTable extends Component {
         className="-striped -highlight"
         getTheadFilterThProps={this.setOverFlow}
         SubComponent={this.props.subComponent}
+        getTdProps={() => ({
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center'
+          }
+        })}
       />
     )
   }

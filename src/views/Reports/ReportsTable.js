@@ -8,7 +8,6 @@ import list from "../../services/List";
 import createTableAPIParams from "../../utils/createTableAPIParams";
 import {arrayRenderer, dateRender, flagRender} from "../../utils/tableColumnRenderers";
 import DataTable from "../../components/DataTable/DataTable";
-import ActionButtons from "../../components/DataTable/components/ActionButtons";
 
 class ReportsTable extends Component {
   constructor(props) {
@@ -35,6 +34,7 @@ class ReportsTable extends Component {
         sortQueryParam: 'institution_programme_sort',
         filterable: true,
         filterQueryParam: 'query',
+        style:{ 'white-space': 'unset'}
       }, {
         field: 'country',
         label: 'Country',
@@ -82,10 +82,6 @@ class ReportsTable extends Component {
         selectFilterValue: 'flag',
         selectFilterLabel: 'flag',
         selectFilterPopulate: list.selectFlags()
-      },
-      {
-        render: this.actionRender,
-        width: 100
       }
     ];
   }
@@ -99,21 +95,6 @@ class ReportsTable extends Component {
     this.props.setReportsTable(state);
   };
 
-  actionRender = (row) => {
-    const pathConfig = [
-      {
-        path: 'reports/view',
-        buttonText: 'View'
-      }
-    ];
-
-    return(
-      <ActionButtons
-        row={row}
-        pathConfig={pathConfig}
-      />
-    )
-  };
   render() {
     const {initialState} = this.props;
 

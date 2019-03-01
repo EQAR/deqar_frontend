@@ -8,7 +8,6 @@ import country from "../../services/Country";
 import list from "../../services/List";
 import createTableAPIParams from "../../utils/createTableAPIParams";
 import {dateRender, flagRender, uploadDateRender} from "../../utils/tableColumnRenderers";
-import ActionButtons from "../../components/DataTable/components/ActionButtons";
 
 class MyReportsTable extends Component {
   constructor(props) {
@@ -31,6 +30,7 @@ class MyReportsTable extends Component {
         sortQueryParam: 'institution_programme_sort',
         filterable: true,
         filterQueryParam: 'query',
+        style:{ 'white-space': 'unset'}
       }, {
         field: 'country',
         label: 'Country',
@@ -54,7 +54,8 @@ class MyReportsTable extends Component {
         filterQueryParam: 'activity_type',
         selectFilterValue: 'type',
         selectFilterLabel: 'type',
-        selectFilterPopulate: agency.selectActivityType()
+        selectFilterPopulate: agency.selectActivityType(),
+        style:{ 'white-space': 'unset'}
       }, {
         field: 'date',
         label: 'Date',
@@ -64,7 +65,8 @@ class MyReportsTable extends Component {
         sortQueryParam: 'valid_from',
         filterable: true,
         filterType: 'activeDate',
-        filterQueryParam: 'year'
+        filterQueryParam: 'year',
+        style:{ 'white-space': 'unset'}
       }, {
         field: 'flag_level',
         label: 'Flag',
@@ -77,9 +79,6 @@ class MyReportsTable extends Component {
         selectFilterValue: 'flag',
         selectFilterLabel: 'flag',
         selectFilterPopulate: list.selectFlags()
-      }, {
-        render: this.actionRender,
-        width: 100
       }
     ];
   }
@@ -91,25 +90,6 @@ class MyReportsTable extends Component {
 
   saveState = (state) => {
     this.props.setMyReportsTable(state);
-  };
-
-  actionRender = (row) => {
-    const pathConfig = [
-      {
-        path: 'my-reports/view',
-        buttonText: 'View'
-      }, {
-        path: 'my-reports/edit',
-        buttonText: 'Edit'
-      }
-    ];
-
-    return(
-      <ActionButtons
-        row={row}
-        pathConfig={pathConfig}
-      />
-    )
   };
 
   render() {

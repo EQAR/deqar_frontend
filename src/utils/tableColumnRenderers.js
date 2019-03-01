@@ -29,9 +29,9 @@ export const dateRender = (row) => {
 
   if(valid_to) {
     valid_to = moment(valid_to, moment.ISO_8601).format("YYYY-MM-DD");
-    return `${valid_from} - ${valid_to}`;
+    return (<div className={'text-center'}>{valid_from}<br/>{valid_to}</div>);
   } else {
-    return `${valid_from} - `;
+    return (<div className={'text-center'}>{valid_from}</div>);
   }
 };
 
