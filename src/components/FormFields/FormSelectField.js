@@ -14,7 +14,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
       ...provided,
       '&:focus': {
         borderColor: 'none'
-      }
+      },
     }),
     control: (provided, state) => ({
       ...provided,
@@ -23,7 +23,8 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
       minHeight: '25px',
       '&:hover': {
         borderColor: 'none'
-      }
+      },
+      backgroundColor: state.isDisabled ? '#FCFCFC' : '#FFFFFF'
     }),
     singleValue: (provided, state) => ({
       ...provided,
@@ -34,6 +35,9 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
       whiteSpace: 'nowrap',
       overFlow: 'hidden',
       textOverFlow: 'ellipsis'
+    }),
+    indicatorsContainer: (provided, state) => ({
+      display: state.isDisabled ? 'none' : 'flex'
     })
   };
 

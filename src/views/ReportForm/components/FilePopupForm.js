@@ -122,10 +122,12 @@ class FilePopupForm extends Component {
 
   // Events
   onFileChange = (e) => {
-    this.setState({
-      file: e.target.files[0]
-    });
-    this.formApi.setValue('filename', e.target.files[0].name)
+    if(e.target.files) {
+      this.setState({
+        file: e.target.files[0]
+      });
+      this.formApi.setValue('filename', e.target.files[0].name)
+    }
   };
 
   // Validation
