@@ -491,7 +491,8 @@ class ReportForm extends Component {
         this.setState({
           alertVisible: true,
           nonFieldErrors: errors.non_field_errors
-        })
+        });
+        this.loadingToggle();
       }
       Object.keys(errors).forEach(key => {
         if(key !== 'non_field_errors') {
