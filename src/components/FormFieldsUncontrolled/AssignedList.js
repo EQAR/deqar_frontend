@@ -6,15 +6,6 @@ import {Text} from "informed";
 import cx from 'classnames';
 
 class AssignedList extends Component {
-  renderDisplayValue = (value) => {
-    const {valueFields} = this.props;
-    for (const valueField of valueFields) {
-      if (value[valueField]) {
-        return value[valueField];
-      }
-    }
-  };
-
   renderListItems = (values) => {
     const { disabled } = this.props;
 
@@ -42,7 +33,7 @@ class AssignedList extends Component {
             key={idx}
           >
             <span onClick={() => this.props.onClick(idx)} className={style.ListGroupItemName}>
-              {this.renderDisplayValue(value)}
+              {this.props.renderDisplayValue(value)}
             </span>
             { disabled ? "" :
               <div className={style.removeButton + " pull-right"} onClick={() => {this.props.onRemove(idx)}}>
@@ -113,7 +104,7 @@ AssignedList.propTypes = {
   field: PropTypes.string.isRequired,
   validate: PropTypes.func,
   values: PropTypes.array,
-  valueFields: PropTypes.array.isRequired,
+  renderDisplayValue: PropTypes.func.isRequired,
   onAddButtonClick: PropTypes.func,
   onRemove: PropTypes.func.isRequired,
   onClick: PropTypes.func,

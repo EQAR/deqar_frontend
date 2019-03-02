@@ -197,7 +197,7 @@ class ReportForm extends Component {
                 />
                 <AssignedList
                   errors={formState.errors}
-                  valueFields={['name_primary']}
+                  renderDisplayValue={this.renderProgrammes}
                   values={formState.values.programmes}
                   label={'Assigned programmes'}
                   labelShowRequired={true}
@@ -630,6 +630,42 @@ class ReportForm extends Component {
     }
   };
 
+  // Assigned List display values
+  renderInstitutions = (value) => {
+    return value['name_primary'];
+  };
+
+  renderProgrammes = (value) => {
+    const {name_primary} = value;
+
+    const {qualification_primary} = value;
+    const degree = qualification_primary ? `, ${qualification_primary}` : '';
+
+    const qf_ehea = value['qf_ehea_level']['level'] ? ` (${value['qf_ehea_level']['level']})` : '';
+    return `${name_primary}${degree}${qf_ehea}`;
+  };
+
+  renderFiles = (value) => {
+    const {display_name} = value;
+    const {report_language} = value;
+    const {original_location} = value;
+    const {filename} = value;
+
+    const languages = report_language.map((lang) => { return(lang.language_name_en) });
+    let language_display = languages.join(', ');
+    language_display = language_display.length > 0 ? `(${language_display})` : '';
+
+    if(display_name) {
+      return `${display_name} ${language_display}`;
+    } else {
+      if(original_location) {
+        return `${original_location} ${language_display}`;
+      } else {
+        return `${filename} ${language_display}`;
+      }
+    }
+  };
+
   render() {
     const {agencyOptions, agencyActivityOptions, statusOptions, decisionOptions,
       fileModalOpen, fileModalValue, fileModalIndex,
@@ -719,7 +755,7 @@ class ReportForm extends Component {
                             validate={this.validateInstitutions}
                             label={'Assigned institutions'}
                             labelShowRequired={true}
-                            valueFields={['name_primary']}
+                            renderDisplayValue={this.renderInstitutions}
                             values={formState.values.institutions}
                             onRemove={this.onInstitutionRemove}
                             onClick={this.onInstitutionClick}
@@ -806,7 +842,7 @@ class ReportForm extends Component {
                           <AssignedList
                             field={'report_files'}
                             errors={formState.errors}
-                            valueFields={['display_name', 'filename', 'original_location']}
+                            renderDisplayValue={this.renderFiles}
                             label={'Assigned files'}
                             labelShowRequired={true}
                             btnLabel={'Add file'}
