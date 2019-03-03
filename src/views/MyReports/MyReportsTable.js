@@ -33,6 +33,7 @@ class MyReportsTable extends Component {
         sortQueryParam: 'institution_programme_sort',
         filterable: true,
         filterQueryParam: 'query',
+        minWidth: 150,
         style:{ 'whiteSpace': 'unset'}
       }, {
         field: 'country',
