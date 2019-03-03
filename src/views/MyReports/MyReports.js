@@ -8,6 +8,7 @@ import {
   Row
 } from "reactstrap";
 import MyReportsTable from "./MyReportsTable";
+import style from "./MyReports.module.css";
 
 class MyReports extends Component {
   render() {
@@ -19,7 +20,7 @@ class MyReports extends Component {
               <Col>My Uploaded Reports</Col>
             </Row>
           </CardHeader>
-          <CardBody>
+          <CardBody className={style.MyReportsCardBody}>
             <MyReportsTable/>
           </CardBody>
           <CardFooter>
