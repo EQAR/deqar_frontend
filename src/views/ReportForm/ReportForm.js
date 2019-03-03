@@ -670,7 +670,7 @@ class ReportForm extends Component {
     const {agencyOptions, agencyActivityOptions, statusOptions, decisionOptions,
       fileModalOpen, fileModalValue, fileModalIndex,
       readOnly, infoBoxOpen } = this.state;
-    const {formType, formTitle, backPath, reportID} = this.props;
+    const {formType, formTitle, reportID} = this.props;
 
     return(
       <div className="animated fadeIn">
