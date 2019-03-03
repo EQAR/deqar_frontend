@@ -641,7 +641,7 @@ class ReportForm extends Component {
     const {qualification_primary} = value;
     const degree = qualification_primary ? `, ${qualification_primary}` : '';
 
-    const qf_ehea = value['qf_ehea_level']['level'] ? ` (${value['qf_ehea_level']['level']})` : '';
+    const qf_ehea = value['qf_ehea_level'] ? ` (${value['qf_ehea_level']['level']})` : '';
     return `${name_primary}${degree}${qf_ehea}`;
   };
 
