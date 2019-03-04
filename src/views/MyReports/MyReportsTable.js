@@ -7,7 +7,7 @@ import agency from "../../services/Agency";
 import country from "../../services/Country";
 import list from "../../services/List";
 import createTableAPIParams from "../../utils/createTableAPIParams";
-import {dateRender, flagRender, uploadDateRender} from "../../utils/tableColumnRenderers";
+import {arrayRenderer, dateRender, flagRender, uploadDateRender} from "../../utils/tableColumnRenderers";
 import style from "../Reports/ReportsTable.module.css";
 import {Link} from "react-router-dom";
 
@@ -38,6 +38,7 @@ class MyReportsTable extends Component {
       }, {
         field: 'country',
         label: 'Country',
+        render: arrayRenderer,
         width: 150,
         resizable: false,
         sortable: true,
