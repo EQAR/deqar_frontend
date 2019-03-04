@@ -31,7 +31,7 @@ class ReportsTable extends Component {
       }, {
         field: 'institution_programme_primary',
         label: 'Institution : Programme',
-        minWidth: 150,
+        minWidth: 250,
         render: this.linkRenderer,
         resizable: true,
         sortable: true,
