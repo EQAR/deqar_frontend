@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Button,
   Card,
   CardBody,
   CardFooter,
@@ -9,6 +10,7 @@ import {
 } from "reactstrap";
 import MyReportsTable from "./MyReportsTable";
 import style from "./MyReports.module.css";
+import {Link} from "react-router-dom";
 
 class MyReports extends Component {
   render() {
@@ -24,6 +26,12 @@ class MyReports extends Component {
             <MyReportsTable/>
           </CardBody>
           <CardFooter>
+            <Link to={{pathname: '/submit-report'}}>
+              <Button
+                size="sm"
+                color="primary"
+              >Submit New Report</Button>
+            </Link>
           </CardFooter>
         </Card>
       </div>
