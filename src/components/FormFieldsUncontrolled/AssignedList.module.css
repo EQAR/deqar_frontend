@@ -1,10 +1,15 @@
+.Label {
+  margin-left: 20px;
+}
+
 .ListGroup {
+  margin-left: 20px;
 }
 
 .ListGroupItem {
   border-style: dashed;
   vertical-align: middle;
-  padding-left: 20px;
+  padding-left: 10px;
   min-height: 35px;
   display: flex;
   padding-top: 0.5em;
@@ -28,6 +33,7 @@
 }
 
 .Button {
+  margin-left: 20px;
   margin-bottom: 10px;
 }
 

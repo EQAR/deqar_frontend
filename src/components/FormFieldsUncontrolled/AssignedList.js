@@ -82,7 +82,7 @@ class AssignedList extends Component {
             className={style.Button}
           >{btnLabel}</Button> : null}
         <FormGroup>
-          <Label className={labelShowRequired ? 'required' : ''}>{label}</Label>
+          <Label className={cx(labelShowRequired ? 'required' : '', style.Label)}>{label}</Label>
           <ListGroup className={style.ListGroup}>
             {this.renderListItems(values)}
           </ListGroup>
