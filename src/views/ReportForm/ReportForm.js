@@ -606,10 +606,11 @@ class ReportForm extends Component {
         );
       case 'create':
         return(
-          <div>
-            {this.renderSubmitButton()}
-            {this.renderCloseButton()}
-          </div>
+            <Row>
+              <Col xs={12}>
+                {this.renderSubmitButton()}
+              </Col>
+            </Row>
         );
       case 'edit':
         return(
