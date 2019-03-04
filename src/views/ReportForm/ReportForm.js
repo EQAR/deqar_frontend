@@ -76,15 +76,6 @@ class ReportForm extends Component {
         this.populateStatusSelect();
         this.populateDecisionSelect();
         break;
-      case 'edit':
-        this.setState({
-          readOnly: false
-        });
-        this.populateForm();
-        this.populateAgencySelect();
-        this.populateStatusSelect();
-        this.populateDecisionSelect();
-        break;
       default:
         break;
     }
@@ -109,6 +100,9 @@ class ReportForm extends Component {
           this.setState({
             readOnly: false
           });
+          this.populateAgencySelect();
+          this.populateStatusSelect();
+          this.populateDecisionSelect();
           break;
         default:
           break;
