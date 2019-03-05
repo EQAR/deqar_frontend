@@ -1,9 +1,9 @@
 .Label {
-  margin-left: 20px;
+  margin-left: 40px;
 }
 
 .ListGroup {
-  margin-left: 20px;
+  margin-left: 40px;
 }
 
 .ListGroupItem {
@@ -17,6 +17,7 @@
 }
 
 .ListGroupItemDisabled {
+  border: unset;
   background-color: hsl(0,0%,99%);
 }
 
@@ -33,7 +34,6 @@
 }
 
 .Button {
-  margin-left: 20px;
   margin-bottom: 10px;
 }
 
