@@ -51,7 +51,7 @@ class AssignedList extends Component {
   displayErrors = (errors, field) => {
     if(errors) {
       if(field in errors) {
-        return(<small className="help-block form-text text-danger">{errors[field]}</small>)
+        return(<small className={cx('help-block form-text text-danger', style.ErrorText)}>{errors[field]}</small>)
       } else {
         return null
       }

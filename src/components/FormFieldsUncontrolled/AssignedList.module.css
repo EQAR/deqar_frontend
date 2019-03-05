@@ -6,6 +6,10 @@
   margin-left: 40px;
 }
 
+.ErrorText {
+  margin-left: 40px;
+}
+
 .ListGroupItem {
   border-style: dashed;
   vertical-align: middle;
