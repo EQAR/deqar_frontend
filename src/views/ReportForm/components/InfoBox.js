@@ -114,19 +114,16 @@ class InfoBox extends Component {
           </Col>
           <Col xs={6}>
             <FormGroup>
-              <Label>Record created</Label>
+              <Label>Record History</Label>
               <Input
                 className={style.infoInput}
                 disabled={true}
-                placeholder={this.renderDate(formState.created_at)}
+                placeholder={`Created at ${this.renderDate(formState.created_at)} by '${formState.created_by}'`}
               />
-            </FormGroup>
-            <FormGroup>
-              <Label>Record updated</Label>
               <Input
                 className={style.infoInput}
                 disabled={true}
-                placeholder={this.renderDate(formState.updated_at)}
+                placeholder={`Updated at ${this.renderDate(formState.updated_at)} by '${formState.updated_by}'`}
               />
             </FormGroup>
           </Col>
