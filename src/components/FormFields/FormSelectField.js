@@ -4,7 +4,7 @@ import Select from 'react-select';
 
 const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
   const { value } = fieldState;
-  const { setValue, setTouched } = fieldApi;
+  const { setValue, setTouched, setError } = fieldApi;
   const { onChange, onBlur, initialValue, forwardedRef, labelField, valueField, disabled, placeholder, ...rest } = props;
 
   const borderColor = fieldApi.getError() ? '#f86c6b' : '#e4e7ea';
@@ -50,6 +50,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
         defaultValue={value || initialValue || ''}
         value={value || initialValue || ''}
         onChange={(value, action) => {
+          setError('');
           setValue(value);
           if (onChange) {
             onChange(value);
