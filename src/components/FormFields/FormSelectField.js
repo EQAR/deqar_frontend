@@ -18,12 +18,12 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
     }),
     control: (provided, state) => ({
       ...provided,
-      borderColor: borderColor,
       maxHeight: '35px',
       minHeight: '25px',
       '&:hover': {
         borderColor: 'none'
       },
+      border: state.isDisabled ? 'unset' : '1px solid #e4e7ea',
       backgroundColor: state.isDisabled ? '#FCFCFC' : '#FFFFFF'
     }),
     singleValue: (provided, state) => ({
