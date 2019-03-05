@@ -68,6 +68,15 @@ class ReportForm extends Component {
         });
         this.populateForm();
         break;
+      case 'edit':
+        this.setState({
+          readOnly: false
+        });
+        this.populateForm();
+        this.populateAgencySelect();
+        this.populateStatusSelect();
+        this.populateDecisionSelect();
+        break;
       case 'create':
         this.setState({
           readOnly: false
@@ -193,7 +202,7 @@ class ReportForm extends Component {
                   errors={formState.errors}
                   renderDisplayValue={this.renderProgrammes}
                   values={formState.values.programmes}
-                  label={'Assigned programmes'}
+                  label={'Programmes'}
                   labelShowRequired={true}
                   btnLabel={'Add Programme'}
                   validate={this.validateProgrammes}
@@ -650,10 +659,10 @@ class ReportForm extends Component {
     let language_display = languages.join(', ');
     language_display = language_display.length > 0 ? `(${language_display})` : '';
 
-    if(display_name) {
+    if (display_name) {
       return `${display_name} ${language_display}`;
     } else {
-      if(original_location) {
+      if (original_location) {
         return `${original_location} ${language_display}`;
       } else {
         return `${filename} ${language_display}`;
@@ -748,7 +757,7 @@ class ReportForm extends Component {
                             errors={formState.errors}
                             field={'institutions'}
                             validate={this.validateInstitutions}
-                            label={'Assigned institutions'}
+                            label={'Institutions'}
                             labelShowRequired={true}
                             renderDisplayValue={this.renderInstitutions}
                             values={formState.values.institutions}
@@ -838,9 +847,9 @@ class ReportForm extends Component {
                             field={'report_files'}
                             errors={formState.errors}
                             renderDisplayValue={this.renderFiles}
-                            label={'Assigned files'}
+                            label={'Files'}
                             labelShowRequired={true}
-                            btnLabel={'Add file'}
+                            btnLabel={'Add File'}
                             validate={validateRequired}
                             values={formState.values.report_files}
                             onAddButtonClick={this.toggleFileModal}
