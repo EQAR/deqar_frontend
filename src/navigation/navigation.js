@@ -27,23 +27,12 @@ const nav = {
       icon: 'fa fa-home'
     }, {
       name: 'My Reports',
-      url: '/report-data',
-      icon: 'icon-doc',
-      children: [
-        {
-          name: 'My Uploaded Reports',
-          url: '/my-reports',
-          icon: 'icon-docs'
-        }, {
-          name: 'Submit Report',
-          url: '/submit-report',
-          icon: 'fa fa-file-text-o'
-        }, {
-          name: 'Upload CSV',
-          url: '/upload-csv',
-          icon: 'icon-cloud-upload'
-        }
-      ]
+      url: '/my-reports',
+      icon: 'icon-docs',
+    }, {
+      name: 'Alerts and flags',
+      url: '#',
+      icon: 'icon-flag'
     },
     {
       title: true,
@@ -52,6 +41,21 @@ const nav = {
         element: 'span',
         attributes: {}
       },
+    },
+    {
+      name: 'Submit Reports',
+      icon: 'icon-doc',
+      children: [
+        {
+          name: 'Manual Submission',
+          url: '/submit-report',
+          icon: 'fa fa-file-text-o'
+        }, {
+          name: 'Upload CSV',
+          url: '/upload-csv',
+          icon: 'icon-cloud-upload'
+        }
+      ]
     },
     {
       name: 'Reference Data',
@@ -78,11 +82,6 @@ const nav = {
           icon: 'icon-globe-alt'
         }
       ]
-    },
-    {
-      name: 'Alerts and flags',
-      url: '#',
-      icon: 'icon-flag'
     },
     {
       name: 'Statistics',
