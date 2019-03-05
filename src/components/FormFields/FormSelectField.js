@@ -23,7 +23,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
       '&:hover': {
         borderColor: 'none'
       },
-      border: state.isDisabled ? 'unset' : '1px solid #e4e7ea',
+      border: state.isDisabled ? 'unset' : `1px solid ${borderColor}`,
       backgroundColor: state.isDisabled ? '#FCFCFC' : '#FFFFFF'
     }),
     singleValue: (provided, state) => ({
