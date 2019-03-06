@@ -28,22 +28,25 @@ class ActiveDateFilter extends Component {
       <Row>
         <Col md="12">
           <InputGroup>
-            <InputGroupAddon addonType="prepend">
+            <input
+              type="text"
+              onChange={this.handleDateChange}
+              className={style.dateYearFilter}
+              value={dateFilterValue}
+              placeholder={'YYYY'}
+            />
+            <InputGroupAddon addonType="append">
               <InputGroupText className={style.filterInputGroup}>
                 <input
                   type={'checkbox'}
                   onChange={this.handleActiveDateChange}
                   checked={activeFilterValue}
                 />
-                <Label check className={style.activeFilter}>Active</Label>
+                <Label check className={style.activeFilter}>
+                  <i className={'fa fa-clock-o'}> </i>
+                </Label>
               </InputGroupText>
             </InputGroupAddon>
-            <input
-              type="text"
-              onChange={this.handleDateChange}
-              className={style.dateYearFilter}
-              value={dateFilterValue}
-            />
           </InputGroup>
         </Col>
       </Row>
