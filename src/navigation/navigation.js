@@ -23,7 +23,7 @@ const nav = {
       icon: 'fa fa-user-o'
     }, {
       name: 'My Agencies',
-      url: '/my-agency',
+      url: '#',
       icon: 'fa fa-home'
     }, {
       name: 'My Reports',
