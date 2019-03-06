@@ -22,6 +22,7 @@ import AssignedField from '../../components/FormFieldsUncontrolled/AssignedField
 import AlternativeNameForm from './components/AlternativeNameForm';
 import LocationForm from './components/LocationForm';
 import country from '../../services/Country';
+import {Link} from "react-router-dom";
 
 
 class InstitutionForm extends Component {
@@ -112,7 +113,7 @@ class InstitutionForm extends Component {
 
   render() {
     const { readOnly, nameModalOpen, alternativeNameValue, locationModalOpen, locationValue } = this.state;
-    const { formType } = this.props;
+    const { formType, backPath } = this.props;
 
     return (
       <div className="animated fadeIn">
@@ -290,6 +291,14 @@ class InstitutionForm extends Component {
               </React.Fragment>
             )}
           </Form>
+          <CardFooter>
+            <Link to={{pathname: `${backPath}`}}>
+              <Button
+                size="sm"
+                color="primary"
+              >Close</Button>
+            </Link>
+          </CardFooter>
         </Card>
       </div>
     )
@@ -298,7 +307,8 @@ class InstitutionForm extends Component {
 
 InstitutionForm.propTypes = {
   formType: PropTypes.string.isRequired,
-  formID: PropTypes.number
+  formID: PropTypes.number,
+  backPath: PropTypes.string
 }
 
 export default InstitutionForm;
