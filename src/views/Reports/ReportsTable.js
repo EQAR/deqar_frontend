@@ -18,7 +18,7 @@ class ReportsTable extends Component {
     this.columnConfig = [
       {
         field: 'id',
-        label: 'ReportID',
+        label: 'DEQAR ID',
         width: 80,
         resizable: false,
         sortable: false,

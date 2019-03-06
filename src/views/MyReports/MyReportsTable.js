@@ -27,7 +27,7 @@ class MyReportsTable extends Component {
         filterQueryParam: 'year_created',
       }, {
         field: 'id',
-        label: 'ReportID',
+        label: 'DEQAR ID',
         width: 80,
         resizable: false,
         sortable: true,
