@@ -197,6 +197,14 @@ class DataTable extends Component {
               />;
             break;
           default:
+            columnConfig['Filter'] = ({filter, onChange}) => (
+              <input type='text'
+                     style={{width: '100%'}}
+                     placeholder={column.filterPlaceholder}
+                     value={filter ? filter.value : ''}
+                     onChange={event => onChange(event.target.value)}
+              />
+            );
             break;
         }
       }
@@ -264,6 +272,7 @@ DataTable.propTypes = {
     label: PropTypes.string,
     sortable: PropTypes.bool,
     filterable: PropTypes.bool,
+    filterPlaceholder: PropTypes.string,
     width: PropTypes.number,
     minWidth: PropTypes.number,
     maxWidth: PropTypes.number,

@@ -24,6 +24,8 @@ class MyReportsTable extends Component {
         resizable: false,
         sortable: false,
         filterable: true,
+        filterType: 'text',
+        filterPlaceholder: 'YYYY',
         filterQueryParam: 'year_created',
       }, {
         field: 'id',
