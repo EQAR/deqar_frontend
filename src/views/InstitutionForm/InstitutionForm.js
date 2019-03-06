@@ -132,38 +132,46 @@ class InstitutionForm extends Component {
                     <Col md={6} className={style.borderLeft}>
                       <Row>
                         <Col>
+                          <FormGroup>
                           <Label for="name_official" className={'required'}>Institution Name, Official</Label>
                             <FormTextField
                               field={'names[0].name_official'}
                               disabled={readOnly}
                             />
+                          </FormGroup>
                         </Col>
                       </Row>
                       <Row>
                         <Col>
+                          <FormGroup>
                           <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
                             <FormTextField
                               field={'names[0].name_official_transliterated'}
                               disabled={readOnly}
                             />
+                          </FormGroup>
                         </Col>
                       </Row>
                       <Row>
                         <Col>
+                          <FormGroup>
                           <Label for="name_english">Institution Name, English</Label>
                             <FormTextField
                               field={'names[0].name_english'}
                               disabled={readOnly}
                             />
+                          </FormGroup>
                         </Col>
                       </Row>
                       <Row>
                         <Col md={6}>
+                          <FormGroup>
                           <Label for="acronym" className={'required'}>Institution Acronym</Label>
                             <FormTextField
                               field={'names[0].acronym'}
                               disabled={readOnly}
                             />
+                          </FormGroup>
                         </Col>
                       </Row>
                       <Row>
@@ -214,56 +222,66 @@ class InstitutionForm extends Component {
                     <Col md={6}>
                       <Row>
                         <Col md={6}>
+                          <FormGroup>
                           <Label for="deqar_id">DEQARINST ID</Label>
                             <FormTextField
                               field={'deqar_id'}
                               disabled
                             />
+                          </FormGroup>
                         </Col>
-                      </Row>
-                      <Row>
                         <Col md={6}>
+                          <FormGroup>
                           <Label for="eter_id">ETER ID</Label>
                             <FormTextField
                               field={'eter_id'}
                               disabled
                             />
+                          </FormGroup>
                         </Col>
                       </Row>
                       <Row>
-                        <Col>
-                          <Label for="deqar_id">National Identifier</Label>
-                            <FormTextField
-                              field={'identifiers[0].identifier'}
-                              disabled={readOnly}
-                            />
-                        </Col>
+                          <Col>
+                            <FormGroup>
+                            <Label for="deqar_id">National Identifier</Label>
+                              <FormTextField
+                                field={'identifiers[0].identifier'}
+                                disabled={readOnly}
+                              />
+                            </FormGroup>
+                          </Col>
                       </Row>
                       <Row>
                         <Col>
+                          <FormGroup>
                           <Label for="deqar_id">Local Identifier</Label>
                             <FormTextField
                               field={'identifiers[1].identifier'}
                               disabled={readOnly}
                             />
+                          </FormGroup>
                         </Col>
                       </Row>
                       <Row>
                         <Col>
+                          <FormGroup>
                           <Label for="deqar_id">QF-EHEA Levels</Label>
                             <FormTextField
                               field={'deqar_id'}
                               disabled={readOnly}
                             />
+                          </FormGroup>
                         </Col>
                       </Row>
                       <Row>
                         <Col>
+                          <FormGroup>
                           <Label for="website_link" className={'required'}>Institution Website</Label>
                             <FormTextField
                               field={'website_link'}
                               disabled={readOnly}
                             />
+                          </FormGroup>
                         </Col>
                       </Row>
                     </Col>

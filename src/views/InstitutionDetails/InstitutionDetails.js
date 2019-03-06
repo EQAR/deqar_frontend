@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import InstitutionForm from '../InstitutionForm/InstituttionForm';
+import InstitutionForm from '../InstitutionForm/InstitutionForm';
 
 class InstitutionDetails extends Component {
 
