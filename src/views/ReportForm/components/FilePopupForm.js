@@ -8,6 +8,7 @@ import language from '../../../services/Language';
 import FormSelectField from "../../../components/FormFields/FormSelectField";
 import style from './FilePopupForm.module.css'
 
+
 class FilePopupForm extends Component {
   constructor(props) {
     super(props);
@@ -86,7 +87,7 @@ class FilePopupForm extends Component {
         )
       }
     } else {
-      return(
+      return (
         <React.Fragment>
           <Label for="file">OR Upload File</Label>
           <Text field={'filename'} hidden />
@@ -121,6 +122,20 @@ class FilePopupForm extends Component {
   };
 
   // Events
+  onUpdateFile = (fileItems) => {
+    if (fileItems.length > 0) {
+      this.setState({
+        file: fileItems.map(fileItem => fileItem.file)
+      });
+      this.formApi.setValue('filename', fileItems[0].filename)
+    } else {
+      this.setState({
+        file: null
+      });
+      this.formApi.setValue('filename', '')
+    }
+  };
+
   onFileChange = (e) => {
     if(e.target.files) {
       this.setState({
