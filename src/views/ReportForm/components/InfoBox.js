@@ -8,6 +8,7 @@ import {FormGroup, Input, ListGroup} from "reactstrap";
 import Label from "reactstrap/es/Label";
 import ListGroupItem from "reactstrap/es/ListGroupItem";
 import moment from "moment";
+import FormTextField from "../../../components/FormFields/FormTextField";
 
 class InfoBox extends Component {
   flagRender = (value) => {
@@ -93,7 +94,7 @@ class InfoBox extends Component {
   };
 
   render() {
-    const { formState } = this.props;
+    const { formState, disabled } = this.props;
 
     return (
       <div className={style.infoBoxContainer}>
@@ -113,6 +114,15 @@ class InfoBox extends Component {
             </FormGroup>
           </Col>
           <Col xs={6}>
+            <FormGroup>
+              <Label>Internal Note</Label>
+              <FormTextField
+                field={'internal_note'}
+                placeholder={'Enter note, if necessary'}
+                disabled={disabled}
+                className={disabled ? style.internalNote : ''}
+               />
+            </FormGroup>
             <FormGroup>
               <Label>Record History</Label>
               <Input
@@ -136,6 +146,7 @@ class InfoBox extends Component {
 InfoBox.propTypes = {
   id: PropTypes.string.isRequired,
   formState: PropTypes.object,
+  disabled: PropTypes.bool
 };
 
 export default InfoBox;
