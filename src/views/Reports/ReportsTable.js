@@ -75,7 +75,7 @@ class ReportsTable extends Component {
         selectFilterPopulate: agency.selectActivityType()
       }, {
         field: 'date',
-        label: 'Date',
+        label: 'Validity',
         render: dateRender,
         width: 120,
         sortable: true,
