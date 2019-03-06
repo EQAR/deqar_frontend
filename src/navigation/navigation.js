@@ -18,7 +18,7 @@ const nav = {
           icon: 'fa fa-user-o'
         }, {
           name: 'My Agencies',
-          url: '#',
+          url: '/my-agencies',
           icon: 'fa fa-home'
         }, {
           name: 'My Reports',

@@ -10,9 +10,11 @@ class Agency {
     return axios.get(GET_ALL_AGENCIES);
   };
 
-  selectMyActivity = (agencyID) => {
+  selectMyActivity = (agencyID, params=null) => {
     if(agencyID) {
       return axios.get(`${GET_MY_ACTIVITIES}${agencyID}/`);
+    } else {
+      return axios.get(`${GET_MY_ACTIVITIES}`, {params: params});
     }
   };
 
