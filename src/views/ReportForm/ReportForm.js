@@ -874,6 +874,18 @@ class ReportForm extends Component {
                           </Scope>
                         </Col>
                       </Row>
+                      <Row>
+                        <Col md={12}>
+                          <FormGroup>
+                            <Label for="link">Other comment (optional)</Label>
+                            <FormTextField
+                              field={'other_comment'}
+                              placeholder={'Enter comment, if necessary'}
+                              disabled={readOnly}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
                     </Col>
                   </Row>
                 </CardBody>
@@ -883,6 +895,7 @@ class ReportForm extends Component {
                       <InfoBox
                         id={reportID}
                         formState={formState.values}
+                        disabled={readOnly}
                       />
                     </Collapse>
                   }
