@@ -22,7 +22,7 @@ class MyReportsTable extends Component {
         render: uploadDateRender,
         width: 100,
         resizable: false,
-        sortable: true,
+        sortable: false,
         filterable: true,
         filterQueryParam: 'year_created',
       }, {

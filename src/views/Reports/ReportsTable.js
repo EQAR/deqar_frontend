@@ -21,7 +21,7 @@ class ReportsTable extends Component {
         label: 'ReportID',
         width: 80,
         resizable: false,
-        sortable: true,
+        sortable: false,
         filterable: true,
         filterQueryParam: 'id',
         style:{ 'textAlign': 'center'}
