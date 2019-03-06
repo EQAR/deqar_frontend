@@ -26,12 +26,14 @@ class MyReports extends Component {
             <MyReportsTable/>
           </CardBody>
           <CardFooter>
-            <Link to={{pathname: '/submit-report'}}>
-              <Button
-                size="sm"
-                color="primary"
-              >Submit New Report</Button>
-            </Link>
+            <div className={'pull-right'}>
+              <Link to={{pathname: '/submit-report'}}>
+                <Button
+                  size="sm"
+                  color="primary"
+                >Submit New Report</Button>
+              </Link>
+            </div>
           </CardFooter>
         </Card>
       </div>
