@@ -37,6 +37,7 @@ export const dateRender = (row) => {
 
 export const uploadDateRender = (row) => {
   let {date_created} = row.original;
-  date_created = moment(date_created, moment.ISO_8601).format("YYYY-MM-DD HH:mm")
-  return date_created;
+  const date = moment(date_created, moment.ISO_8601).format("YYYY-MM-DD");
+  const time = moment(date_created, moment.ISO_8601).format("HH:mm");
+  return (<div className={'text-center'}>{date}<br/>{time}</div>);
 };

@@ -20,11 +20,20 @@ class MyReportsTable extends Component {
         field: 'date_created',
         label: 'Uploaded',
         render: uploadDateRender,
-        width: 150,
+        width: 100,
         resizable: false,
         sortable: true,
         filterable: true,
         filterQueryParam: 'year_created',
+      }, {
+        field: 'id',
+        label: 'ReportID',
+        width: 80,
+        resizable: false,
+        sortable: true,
+        filterable: true,
+        filterQueryParam: 'id',
+        style:{ 'textAlign': 'center'}
       }, {
         field: 'institution_programme_primary',
         label: 'Institution : Programme',
@@ -63,7 +72,7 @@ class MyReportsTable extends Component {
         style:{ 'whiteSpace': 'unset'}
       }, {
         field: 'date',
-        label: 'Date',
+        label: 'Validity',
         render: dateRender,
         width: 200,
         sortable: true,
