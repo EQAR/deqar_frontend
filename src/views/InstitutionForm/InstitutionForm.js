@@ -18,7 +18,6 @@ import FormTextField from '../../components/FormFields/FormTextField';
 import institution from '../../services/Institution';
 import style from './InstitutionForm.module.css';
 import AssignedList from '../../components/FormFieldsUncontrolled/AssignedList';
-import AssignedField from '../../components/FormFieldsUncontrolled/AssignedField';
 import AlternativeNameForm from './components/AlternativeNameForm';
 import LocationForm from './components/LocationForm';
 import country from '../../services/Country';
@@ -103,6 +102,10 @@ class InstitutionForm extends Component {
     });
   }
 
+  onCountryRemove = () => {
+
+  };
+
   getAlternativeValues = (formState) => {
     return formState.values.names ? formState.values.names[0].alternative_names : null;
   }
@@ -110,6 +113,17 @@ class InstitutionForm extends Component {
   getCountry = (formState) => {
     return formState.values.countries ? formState.values.countries[0].country.name_english : null;
   }
+
+  renderAlternativeNames = (value) => {
+
+  }
+
+  renderCountries = (value) => {
+    const {city, country} = value;
+    const {name_english} = country;
+
+    return `${city} (${name_english})`
+  };
 
   render() {
     const { readOnly, nameModalOpen, alternativeNameValue, locationModalOpen, locationValue } = this.state;
@@ -191,6 +205,7 @@ class InstitutionForm extends Component {
                             label={'Alternative Names'}
                             btnLabel={'Add Alternative Name'}
                             onRemove={this.onNameRemove}
+                            renderDisplayValue={this.renderAlternativeNames}
                             onAddButtonClick={this.toggleNameModal}
                             onClick={this.onNameClick}
                             field={'alternative_names'}
@@ -207,14 +222,17 @@ class InstitutionForm extends Component {
                             formValue={locationValue}
                             disabled={readOnly}
                           />
-                          <AssignedField
-                            value={this.getCountry(formState)}
+                          <AssignedList
+                            values={formState.values.countries}
+                            errors={formState.errors}
                             label={'Geographic Location'}
                             labelShowRequired={true}
-                            btnLabel={'Add Location'}
+                            btnLabel={'Add'}
                             onAddButtonClick={this.toggleLocationModal}
                             onClick={this.onCountryClick}
-                            field={'name_english'}
+                            onRemove={this.onCountryRemove}
+                            renderDisplayValue={this.renderCountries}
+                            field={'countries'}
                             disabled={readOnly}
                           />
                         </Col>
