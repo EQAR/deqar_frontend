@@ -61,11 +61,18 @@ class InstitutionsTable extends Component {
       {
         path: 'institution/view',
         buttonText: 'View'
-      }, {
-        path: 'institution/edit',
-        buttonText: 'Edit'
       }
     ];
+
+    // const pathConfig = [
+    //   {
+    //     path: 'institution/view',
+    //     buttonText: 'View'
+    //   }, {
+    //     path: 'institution/edit',
+    //     buttonText: 'Edit'
+    //   }
+    // ];
 
     return(
       <ActionButtons
