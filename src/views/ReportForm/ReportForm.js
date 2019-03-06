@@ -204,7 +204,7 @@ class ReportForm extends Component {
                   values={formState.values.programmes}
                   label={'Programmes'}
                   labelShowRequired={true}
-                  btnLabel={'Add Programme'}
+                  btnLabel={'Add'}
                   validate={this.validateProgrammes}
                   onRemove={this.onProgrammeRemove}
                   onAddButtonClick={this.toggleProgrammeModal}
@@ -743,7 +743,7 @@ class ReportForm extends Component {
                         <Row>
                           <Col md={12}>
                             <FormGroup>
-                              <Label for="institution" className={'required'}>Add Institution</Label>
+                              <Label for="institution" className={'required'}>Institution</Label>
                               <InstitutionSelect
                                 onChange={this.onInstitutionSelected}
                               />
@@ -757,7 +757,6 @@ class ReportForm extends Component {
                             errors={formState.errors}
                             field={'institutions'}
                             validate={this.validateInstitutions}
-                            label={'Institutions'}
                             labelShowRequired={true}
                             renderDisplayValue={this.renderInstitutions}
                             values={formState.values.institutions}
@@ -849,7 +848,7 @@ class ReportForm extends Component {
                             renderDisplayValue={this.renderFiles}
                             label={'Files'}
                             labelShowRequired={true}
-                            btnLabel={'Add File'}
+                            btnLabel={'Add'}
                             validate={validateRequired}
                             values={formState.values.report_files}
                             onAddButtonClick={this.toggleFileModal}

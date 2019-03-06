@@ -1,13 +1,13 @@
 .Label {
-  margin-left: 40px;
+  margin-left: 0;
 }
 
 .ListGroup {
-  margin-left: 40px;
+  margin-left: 0;
 }
 
 .ErrorText {
-  margin-left: 40px;
+  margin-left: 0;
 }
 
 .ListGroupItem {
@@ -38,7 +38,7 @@
 }
 
 .Button {
-  margin-bottom: 10px;
+  margin-left: 10px;
 }
 
 .removeButton {

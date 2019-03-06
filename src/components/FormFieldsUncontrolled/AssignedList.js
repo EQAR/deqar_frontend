@@ -73,16 +73,19 @@ class AssignedList extends Component {
     return(
       <div>
         <Text field={field} hidden validate={this.props.validate} />
-        {btnLabel && !disabled ?
-          <Button
-            type={'button'}
-            size="sm"
-            color="secondary"
-            onClick={this.props.onAddButtonClick}
-            className={style.Button}
-          >{btnLabel}</Button> : null}
         <FormGroup>
-          <Label className={cx(labelShowRequired ? 'required' : '', style.Label)}>{label}</Label>
+          {label ?
+            <Label className={cx(labelShowRequired ? 'required' : '', style.Label)}>
+              {label}
+            </Label> : null}
+          {btnLabel && !disabled ?
+            <Button
+              type={'button'}
+              size="sm"
+              color="secondary"
+              onClick={this.props.onAddButtonClick}
+              className={style.Button}
+            >{btnLabel}</Button> : null}
           <ListGroup className={style.ListGroup}>
             {this.renderListItems(values)}
           </ListGroup>
@@ -108,7 +111,7 @@ AssignedList.propTypes = {
   onAddButtonClick: PropTypes.func,
   onRemove: PropTypes.func.isRequired,
   onClick: PropTypes.func,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   labelShowRequired: PropTypes.bool,
   btnLabel: PropTypes.string,
   disabled: PropTypes.bool
