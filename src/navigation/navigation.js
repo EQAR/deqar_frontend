@@ -9,40 +9,28 @@ const nav = {
       }
     },
     {
-      title: true,
       name: 'My Data',
-      wrapper: {
-        element: 'span',
-        attributes: {}
-      },
-      class: ''
-    },
-    {
-      name: 'My Profile',
-      url: '/my-profile',
-      icon: 'fa fa-user-o'
+      icon: 'fa fa-database',
+      children: [
+        {
+          name: 'My Profile',
+          url: '/my-profile',
+          icon: 'fa fa-user-o'
+        }, {
+          name: 'My Agencies',
+          url: '#',
+          icon: 'fa fa-home'
+        }, {
+          name: 'My Reports',
+          url: '/my-reports',
+          icon: 'icon-docs',
+        }, {
+          name: 'Alerts and flags',
+          url: '#',
+          icon: 'icon-flag'
+        }
+      ]
     }, {
-      name: 'My Agencies',
-      url: '#',
-      icon: 'fa fa-home'
-    }, {
-      name: 'My Reports',
-      url: '/my-reports',
-      icon: 'icon-docs',
-    }, {
-      name: 'Alerts and flags',
-      url: '#',
-      icon: 'icon-flag'
-    },
-    {
-      title: true,
-      name: 'Menu',
-      wrapper: {
-        element: 'span',
-        attributes: {}
-      },
-    },
-    {
       name: 'Submit Reports',
       icon: 'icon-doc',
       children: [
