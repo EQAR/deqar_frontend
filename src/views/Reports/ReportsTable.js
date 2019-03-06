@@ -17,6 +17,15 @@ class ReportsTable extends Component {
 
     this.columnConfig = [
       {
+        field: 'id',
+        label: 'ReportID',
+        width: 80,
+        resizable: false,
+        sortable: true,
+        filterable: true,
+        filterQueryParam: 'id',
+        style:{ 'textAlign': 'center'}
+      }, {
         field: 'agency',
         label: 'Agency',
         width: 150,
