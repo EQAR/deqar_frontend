@@ -69,19 +69,20 @@ class InfoBox extends Component {
     const {formState} = this.props;
 
     if (Object.entries(formState).length !== 0) {
-      const institution = formState.institutions[0];
-      if(institution) {
-        const url = `https://www.eqar.eu/qa-results/institution/?id=${institution.id}`;
-        return (
-          <ListGroupItem className={style.ListGroupItem}>
-            <a href={url} target={'new'}>{url}</a>
-          </ListGroupItem>
-        )
-      } else {
+      const institutions = formState['institutions'];
+      if(institutions) {
         return(
-          <ListGroupItem className={style.ListGroupItem}>
-            Currently there are no institutions assigned with this report...
-          </ListGroupItem>
+          <React.Fragment>
+          {institutions.map((institution, idx) => {
+            return(
+              <ListGroupItem key={idx} className={style.ListGroupItem}>
+                <a href={`https://www.eqar.eu/qa-results/institution/?id=${institution.id}`} target={'new'}>
+                  {`https://www.eqar.eu/qa-results/institution/?id=${institution.id}`}
+                </a>
+              </ListGroupItem>
+            )
+          })}
+          </React.Fragment>
         )
       }
     }
