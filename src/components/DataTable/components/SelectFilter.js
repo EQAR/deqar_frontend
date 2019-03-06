@@ -51,29 +51,28 @@ class SelectFilter extends Component {
           borderColor: 'none'
         }
       }),
-      valueContainer: (provided) => ({
-        ...provided,
-        position: 'unset'
-      }),
       placeholder: (provided) => ({
         ...provided,
-        top: '13px',
-        paddingLeft: '5px'
+        top: '10px',
       }),
       indicatorsContainer: (provided) => ({
         ...provided,
         position: 'relative',
         top: '-3px'
       }),
-      singleValue: (provided) => ({
-        ...provided,
-        paddingLeft: '5px'
-      }),
       input: (provided) => ({
         ...provided,
         '&:focus': {
           borderColor: 'none'
         }
+      }),
+      singleValue: (provided) => ({
+        ...provided,
+        top: '10px'
+      }),
+      clearIndicator: (provided) => ({
+        ...provided,
+        display: 'none'
       }),
       menu: (provided) => ({
         ...provided,
@@ -91,6 +90,7 @@ class SelectFilter extends Component {
           getOptionLabel={(option) => {return option[selectFilterLabel]}}
           getOptionValue={(option) => {return option[selectFilterValue]}}
           onChange={this.handleSelectChange}
+          classNamePrefix={'react-select'}
         />
       </div>
     )
