@@ -28,7 +28,7 @@ import ReportAlert from "./components/ReportAlert";
 import { toast } from 'react-toastify';
 import FormDatePickerField from "../../components/FormFields/FormDatePickerField";
 import PropTypes from 'prop-types';
-import {Link} from "react-router-dom";
+import {Link, Redirect, withRouter} from "react-router-dom";
 import InfoBox from "./components/InfoBox";
 import {createFormNormalizer} from "./normalizers/createFormNormalizer";
 import {updateFormNormalizer} from "./normalizers/updateFormNormalizer";
@@ -487,7 +487,7 @@ class ReportForm extends Component {
       });
     }).then(() =>{
       this.loadingToggle();
-      this.formApi.reset();
+      this.props.history.push('/my-reports');
     }).catch((error) => {
       const errors = error.response.data.errors;
       if ('non_field_errors' in errors) {
@@ -522,6 +522,7 @@ class ReportForm extends Component {
       });
     }).then(() => {
       this.loadingToggle();
+
     })
   };
 
@@ -743,7 +744,7 @@ class ReportForm extends Component {
                         <Row>
                           <Col md={12}>
                             <FormGroup>
-                              <Label for="institution" className={'required'}>Institution</Label>
+                              <Label for="institution" className={'required'}>Institutions</Label>
                               <InstitutionSelect
                                 onChange={this.onInstitutionSelected}
                               />
@@ -753,6 +754,8 @@ class ReportForm extends Component {
                       }
                       <Row>
                         <Col md={12}>
+                          { readOnly ?
+                            <Label for="institution" className={'required'}>Institutions</Label> : null}
                           <AssignedList
                             errors={formState.errors}
                             field={'institutions'}
@@ -918,4 +921,4 @@ ReportForm.propTypes = {
   backPath: PropTypes.string
 };
 
-export default ReportForm
+export default withRouter(ReportForm)
