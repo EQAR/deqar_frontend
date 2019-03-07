@@ -11,15 +11,6 @@ class MyAgenciesTable extends Component {
 
     this.columnConfig = [
       {
-        field: 'id',
-        label: 'ID',
-        width: 80,
-        resizable: false,
-        sortable: true,
-        filterable: false,
-        filterQueryParam: 'id',
-        style:{ 'textAlign': 'center'}
-      }, {
         field: 'agency',
         label: 'Agency',
         width: 150,
@@ -49,7 +40,16 @@ class MyAgenciesTable extends Component {
         selectFilterValue: 'id',
         selectFilterLabel: 'type',
         selectFilterPopulate: agency.selectActivityType()
-      }
+      }, {
+        field: 'id',
+        label: 'Activity ID',
+        width: 80,
+        resizable: false,
+        sortable: true,
+        filterable: false,
+        filterQueryParam: 'id',
+        style:{ 'textAlign': 'center'}
+      },
     ];
   }
 
