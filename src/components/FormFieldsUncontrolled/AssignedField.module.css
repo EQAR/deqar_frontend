@@ -1,0 +1,17 @@
+.FieldValue {
+  border: 1px dashed rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+  padding: 0.4rem 20px;
+  vertical-align: middle;
+  height: 35px;
+  cursor: pointer;
+}
+
+.FieldDisabled {
+  background-color: #f2f2f2;
+  color: #5c6873
+}
+
+.FieldParagraph {
+  border-bottom: 1px dotted;
+}

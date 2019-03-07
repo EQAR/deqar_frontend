@@ -1,0 +1,41 @@
+// Here you can add other styles
+.UserAvatar--dark {
+  color: #FFF
+}
+
+.main .container-fluid {
+  padding: 20px;
+}
+
+.bg-danger-cell {
+  color: #FFFFFF;
+  background-color: #c34a49;
+}
+
+label.required:after {
+  content: '*';
+  color: red;
+  padding-left: 5px;
+}
+
+// Datepicker related css
+.datepicker .react-datepicker-wrapper {
+  display: block;
+}
+
+.datepicker .react-datepicker__input-container {
+  display: block;
+}
+
+.datepicker .react-datepicker-popper {
+  z-index: 999;
+}
+
+.form-control:disabled {
+  border: unset;
+  background-color: hsl(0,0%,99%);
+}
+
+.form-control.is-invalid {
+  background: none;
+}

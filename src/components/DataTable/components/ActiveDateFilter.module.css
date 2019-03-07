@@ -1,0 +1,18 @@
+.filterInputGroup {
+  padding: 0 10px;
+}
+
+.dateYearFilter {
+  position: relative;
+  -webkit-flex: 1 1 auto;
+  flex: 1 1 auto;
+  width: 1%;
+  margin-bottom: 0;
+  height: 29px;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.activeFilter {
+  padding-left: 5px;
+}
