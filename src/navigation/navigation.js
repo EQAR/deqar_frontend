@@ -75,6 +75,11 @@ const nav = {
       name: 'Statistics',
       url: '#',
       icon: 'icon-chart'
+    }, {
+      name: 'Documentation',
+      url: 'https://docs.deqar.eu',
+      icon: 'icon-question',
+      attributes: {target: '_blank', rel: "noreferrer noopener", active: false}
     }
   ]
 };

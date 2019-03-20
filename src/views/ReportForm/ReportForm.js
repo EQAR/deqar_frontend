@@ -635,6 +635,33 @@ class ReportForm extends Component {
     }
   };
 
+  renderDocLink = () => {
+    const {formType} = this.props;
+    let url;
+
+    switch(formType) {
+      case 'view':
+        break;
+      case 'create':
+        url = 'https://docs.deqar.eu/data_submission/#data-submission-via-webform';
+        break;
+      case 'edit':
+        break;
+      default:
+        break;
+    }
+
+    if (url) {
+      return(
+        <div className="card-header-actions">
+          <a className="card-header-action btn btn-close" href={url} target={'blank'} title="Documentation">
+            <i className="icon-question"> </i>
+          </a>
+        </div>
+      )
+    }
+  };
+
   // Assigned List display values
   renderInstitutions = (value) => {
     return value['name_primary'];
@@ -682,7 +709,10 @@ class ReportForm extends Component {
         <Card>
           <CardHeader>
             <Row>
-              <Col>{formTitle}</Col>
+              <Col>
+                {formTitle}
+                {this.renderDocLink()}
+              </Col>
             </Row>
           </CardHeader>
           <Form
