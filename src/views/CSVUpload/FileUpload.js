@@ -31,10 +31,19 @@ class FileUpload extends Component {
   };
 
   render() {
+    const url = 'https://docs.deqar.eu/data_submission/#csv-upload';
+
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader>Upload CSV</CardHeader>
+          <CardHeader>
+            Upload CSV
+            <div className="card-header-actions">
+              <a className="card-header-action btn btn-close" href={url} target={'blank'} title="Documentation">
+                <i className="icon-question"> </i>
+              </a>
+            </div>
+          </CardHeader>
           <CardBody>
             <Row>
               <Col>

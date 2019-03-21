@@ -8,7 +8,8 @@ import list from "../../services/List";
 import createTableAPIParams from "../../utils/createTableAPIParams";
 import {arrayRenderer, dateRender, flagRender} from "../../utils/tableColumnRenderers";
 import DataTable from "../../components/DataTable/DataTable";
-import ActionButtons from "../../components/DataTable/components/ActionButtons";
+import Link from "react-router-dom/es/Link";
+import style from "./ReportsTable.module.css";
 
 class ReportsTable extends Component {
   constructor(props) {
@@ -16,6 +17,15 @@ class ReportsTable extends Component {
 
     this.columnConfig = [
       {
+        field: 'id',
+        label: 'DEQAR ID',
+        width: 80,
+        resizable: false,
+        sortable: false,
+        filterable: true,
+        filterQueryParam: 'id',
+        style:{ 'textAlign': 'center'}
+      }, {
         field: 'agency',
         label: 'Agency',
         width: 150,
@@ -30,10 +40,14 @@ class ReportsTable extends Component {
       }, {
         field: 'institution_programme_primary',
         label: 'Institution : Programme',
+        minWidth: 250,
+        render: this.linkRenderer,
+        resizable: true,
         sortable: true,
         sortQueryParam: 'institution_programme_sort',
         filterable: true,
         filterQueryParam: 'query',
+        style:{ 'whiteSpace': 'unset'}
       }, {
         field: 'country',
         label: 'Country',
@@ -61,9 +75,9 @@ class ReportsTable extends Component {
         selectFilterPopulate: agency.selectActivityType()
       }, {
         field: 'date',
-        label: 'Date',
+        label: 'Validity',
         render: dateRender,
-        width: 200,
+        width: 120,
         sortable: true,
         sortQueryParam: 'valid_from',
         filterable: true,
@@ -73,7 +87,7 @@ class ReportsTable extends Component {
         field: 'flag_level',
         label: 'Flag',
         render: flagRender,
-        width: 150,
+        width: 110,
         sortable: true,
         filterable: true,
         filterType: 'select',
@@ -81,10 +95,6 @@ class ReportsTable extends Component {
         selectFilterValue: 'flag',
         selectFilterLabel: 'flag',
         selectFilterPopulate: list.selectFlags()
-      },
-      {
-        render: this.actionRender,
-        width: 100
       }
     ];
   }
@@ -98,21 +108,16 @@ class ReportsTable extends Component {
     this.props.setReportsTable(state);
   };
 
-  actionRender = (row) => {
-    const pathConfig = [
-      {
-        path: 'reports/view',
-        buttonText: 'View'
-      }
-    ];
-
+  linkRenderer = (row) => {
     return(
-      <ActionButtons
-        row={row}
-        pathConfig={pathConfig}
-      />
-    )
+      <Link
+        to={{pathname: `/reports/view/${row.original.id}`}}
+        className={style.Link}
+      >
+        {row.original.institution_programme_primary}
+      </Link>)
   };
+
   render() {
     const {initialState} = this.props;
 

@@ -9,8 +9,8 @@
   width: 1%;
   margin-bottom: 0;
   height: 29px;
-  border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }
 
 .activeFilter {

@@ -7,7 +7,9 @@ import agency from "../../services/Agency";
 import country from "../../services/Country";
 import list from "../../services/List";
 import createTableAPIParams from "../../utils/createTableAPIParams";
-import { dateRender, flagRender } from "../../utils/tableColumnRenderers";
+import {arrayRenderer, dateRender, flagRender, uploadDateRender} from "../../utils/tableColumnRenderers";
+import style from "../Reports/ReportsTable.module.css";
+import {Link} from "react-router-dom";
 
 class MyReportsTable extends Component {
   constructor(props) {
@@ -15,27 +17,39 @@ class MyReportsTable extends Component {
 
     this.columnConfig = [
       {
-        field: 'agency',
-        label: 'Agency',
-        width: 150,
+        field: 'date_created',
+        label: 'Uploaded',
+        render: uploadDateRender,
+        width: 100,
+        resizable: false,
+        sortable: false,
+        filterable: true,
+        filterType: 'text',
+        filterPlaceholder: 'YYYY',
+        filterQueryParam: 'year_created',
+      }, {
+        field: 'id',
+        label: 'DEQAR ID',
+        width: 80,
         resizable: false,
         sortable: true,
         filterable: true,
-        filterType: 'select',
-        filterQueryParam: 'agency',
-        selectFilterValue: 'acronym_primary',
-        selectFilterLabel: 'acronym_primary',
-        selectFilterPopulate: agency.selectAllAgency()
+        filterQueryParam: 'id',
+        style:{ 'textAlign': 'center'}
       }, {
         field: 'institution_programme_primary',
         label: 'Institution : Programme',
+        render: this.linkRenderer,
         sortable: true,
         sortQueryParam: 'institution_programme_sort',
         filterable: true,
         filterQueryParam: 'query',
+        minWidth: 250,
+        style:{ 'whiteSpace': 'unset'}
       }, {
         field: 'country',
         label: 'Country',
+        render: arrayRenderer,
         width: 150,
         resizable: false,
         sortable: true,
@@ -44,34 +58,36 @@ class MyReportsTable extends Component {
         filterQueryParam: 'country',
         selectFilterValue: 'name_english',
         selectFilterLabel: 'name_english',
-        selectFilterPopulate: country.select()
+        selectFilterPopulate: country.getInstitutionCountries()
       }, {
-        field: 'activity_type',
+        field: 'activity',
         label: 'Activity',
         width: 150,
-        resizable: false,
+        resizable: true,
         sortable: true,
         filterable: true,
         filterType: 'select',
         filterQueryParam: 'activity_type',
         selectFilterValue: 'type',
         selectFilterLabel: 'type',
-        selectFilterPopulate: agency.selectActivityType()
+        selectFilterPopulate: agency.selectActivityType(),
+        style:{ 'whiteSpace': 'unset'}
       }, {
         field: 'date',
-        label: 'Date',
+        label: 'Validity',
         render: dateRender,
-        width: 200,
+        width: 120,
         sortable: true,
         sortQueryParam: 'valid_from',
         filterable: true,
         filterType: 'activeDate',
-        filterQueryParam: 'year'
+        filterQueryParam: 'year',
+        style:{ 'whiteSpace': 'unset'}
       }, {
         field: 'flag_level',
         label: 'Flag',
         render: flagRender,
-        width: 150,
+        width: 110,
         sortable: true,
         filterable: true,
         filterType: 'select',
@@ -92,11 +108,21 @@ class MyReportsTable extends Component {
     this.props.setMyReportsTable(state);
   };
 
+  linkRenderer = (row) => {
+    return(
+      <Link
+        to={{pathname: `/my-reports/view/${row.original.id}`}}
+        className={style.Link}
+      >
+        {row.original.institution_programme_primary}
+      </Link>)
+  };
+
   render() {
     const {initialState} = this.props;
 
     return (
-      <DataTable2
+      <DataTable
         onFetchData={this.onFetchData}
         columnConfig={this.columnConfig}
         saveState={this.saveState}

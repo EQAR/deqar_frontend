@@ -8,6 +8,7 @@ import language from '../../../services/Language';
 import FormSelectField from "../../../components/FormFields/FormSelectField";
 import style from './FilePopupForm.module.css'
 
+
 class FilePopupForm extends Component {
   constructor(props) {
     super(props);
@@ -60,7 +61,7 @@ class FilePopupForm extends Component {
 
   getFileName = () => {
     const { formValue } = this.props;
-    const filename = this.formApi.getValue('filename');
+    const filename = this.formApi.getValue('file');
 
     if( formValue ) {
       return(
@@ -86,14 +87,14 @@ class FilePopupForm extends Component {
         )
       }
     } else {
-      return(
+      return (
         <React.Fragment>
           <Label for="file">OR Upload File</Label>
           <Text field={'filename'} hidden />
           <input
             style={{display: 'block'}}
             type={'file'}
-            accept='.doc,.docx,.pdf'
+            accept='.pdf'
             onChange={this.onFileChange}
             disabled={disabled}
           />
@@ -121,24 +122,44 @@ class FilePopupForm extends Component {
   };
 
   // Events
+  onUpdateFile = (fileItems) => {
+    if (fileItems.length > 0) {
+      this.setState({
+        file: fileItems.map(fileItem => fileItem.file)
+      });
+      this.formApi.setValue('filename', fileItems[0].filename)
+    } else {
+      this.setState({
+        file: null
+      });
+      this.formApi.setValue('filename', '')
+    }
+  };
+
   onFileChange = (e) => {
-    this.setState({
-      file: e.target.files[0]
-    });
-    this.formApi.setValue('filename', e.target.files[0].name)
+    if(e.target.files) {
+      this.setState({
+        file: e.target.files[0]
+      });
+      this.formApi.setValue('filename', e.target.files[0].name)
+    }
   };
 
   // Validation
   validateOriginalLocation = (value, values) => {
     const {file} = this.state;
+    const original_file = values['file'];
+
     if(file) {
       if(value) {
         return "Please either upload a file or enter its location. (Both were entered.)"
       }
-    } else {
-      if(!value) {
-        return "Please either upload a file or enter its location. (Neither were entered.)"
-      }
+    }
+
+    if(!file && !original_file) {
+        if(!value) {
+          return "Please either upload a file or enter its location. (Neither were entered.)"
+        }
     }
 
     if(value) {

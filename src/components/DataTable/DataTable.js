@@ -197,6 +197,14 @@ class DataTable extends Component {
               />;
             break;
           default:
+            columnConfig['Filter'] = ({filter, onChange}) => (
+              <input type='text'
+                     style={{width: '100%'}}
+                     placeholder={column.filterPlaceholder}
+                     value={filter ? filter.value : ''}
+                     onChange={event => onChange(event.target.value)}
+              />
+            );
             break;
         }
       }
@@ -246,6 +254,13 @@ class DataTable extends Component {
         className="-striped -highlight"
         getTheadFilterThProps={this.setOverFlow}
         SubComponent={this.props.subComponent}
+        getTdProps={() => ({
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center'
+          }
+        })}
       />
     )
   }
@@ -257,13 +272,14 @@ DataTable.propTypes = {
     label: PropTypes.string,
     sortable: PropTypes.bool,
     filterable: PropTypes.bool,
+    filterPlaceholder: PropTypes.string,
     width: PropTypes.number,
     minWidth: PropTypes.number,
     maxWidth: PropTypes.number,
     // Defines the param name which will be passed to the API call.
     filterQueryParam: PropTypes.string,
     // Indicates the type of the filter (if nothing, it should be text).
-    filterType: PropTypes.oneOf(['select', 'activeDate']),
+    filterType: PropTypes.oneOf(['select', 'activeDate', 'text']),
     // Defines which object property should be displayed in the select dropdown from the API response.
     selectFilterLabel: PropTypes.string,
     // Defines which object property should act as the selected value and to be passed to the filter API call.

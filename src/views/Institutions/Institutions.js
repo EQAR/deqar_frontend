@@ -8,6 +8,7 @@ import {
   Row
 } from "reactstrap";
 import InstitutionsTable from './InstitutionsTable';
+import style from "./Institutions.module.css"
 
 class Institutions extends Component {
   render() {
@@ -19,7 +20,7 @@ class Institutions extends Component {
               <Col>Institutions</Col>
             </Row>
           </CardHeader>
-          <CardBody>
+          <CardBody className={style.InstitutionsCardBody}>
             <InstitutionsTable />
           </CardBody>
           <CardFooter>

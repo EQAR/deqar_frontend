@@ -1,17 +1,28 @@
+.Label {
+  margin-left: 0;
+}
+
 .ListGroup {
+  margin-left: 0;
+}
+
+.ErrorText {
+  margin-left: 0;
 }
 
 .ListGroupItem {
   border-style: dashed;
-  padding-top: 0.4em;
   vertical-align: middle;
-  padding-left: 20px;
+  padding-left: 10px;
   min-height: 35px;
-  max-height: 35px;
+  display: flex;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
 }
 
 .ListGroupItemDisabled {
-  background-color: hsl(0,0%,95%);
+  border: unset;
+  background-color: hsl(0,0%,99%);
 }
 
 .ListGroupItemHasError {
@@ -20,16 +31,22 @@
 
 .ListGroupItemName {
   color: hsl(0,0%,40%);
-  border-bottom: 1px dotted;
+  text-decoration: underline;
+  text-decoration-style: dotted;
   cursor: pointer;
+  order: 1;
 }
 
 .Button {
-  margin-top: 10px;
+  margin-left: 10px;
 }
 
 .removeButton {
   color: hsl(0,0%,80%);
+  order: 2;
+  text-align:right;
+  flex-grow: 1;
+  margin-left: 15px;
 }
 
 .removeButton:hover {

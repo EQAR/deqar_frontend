@@ -32,5 +32,10 @@ label.required:after {
 }
 
 .form-control:disabled {
-  background-color: hsl(0,0%,95%);
+  border: unset;
+  background-color: hsl(0,0%,99%);
+}
+
+.form-control.is-invalid {
+  background: none;
 }

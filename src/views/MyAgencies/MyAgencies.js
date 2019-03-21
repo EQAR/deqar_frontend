@@ -7,8 +7,8 @@ import {
   Col,
   Row
 } from "reactstrap";
-import ReportsTable from "./ReportsTable";
-import style from "./Reports.module.css";
+import style from "./MyAgencies.module.css";
+import MyAgenciesTable from "./MyAgenciesTable";
 
 class Reports extends Component {
   render() {
@@ -17,11 +17,11 @@ class Reports extends Component {
         <Card>
           <CardHeader>
             <Row>
-              <Col>Reports</Col>
+              <Col>My Agencies</Col>
             </Row>
           </CardHeader>
           <CardBody className={style.ReportsCardBody}>
-            <ReportsTable/>
+            <MyAgenciesTable/>
           </CardBody>
           <CardFooter>
           </CardFooter>

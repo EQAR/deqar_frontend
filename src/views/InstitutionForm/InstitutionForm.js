@@ -18,10 +18,10 @@ import FormTextField from '../../components/FormFields/FormTextField';
 import institution from '../../services/Institution';
 import style from './InstitutionForm.module.css';
 import AssignedList from '../../components/FormFieldsUncontrolled/AssignedList';
-import AssignedField from '../../components/FormFieldsUncontrolled/AssignedField';
 import AlternativeNameForm from './components/AlternativeNameForm';
 import LocationForm from './components/LocationForm';
 import country from '../../services/Country';
+import {Link} from "react-router-dom";
 
 
 class InstitutionForm extends Component {
@@ -116,6 +116,10 @@ class InstitutionForm extends Component {
     });
   }
 
+  onCountryRemove = () => {
+
+  }
+
   getAlternativeValues = (formState) => {
     return formState.values.names ? formState.values.names[0].alternative_names : null;
   }
@@ -131,8 +135,20 @@ class InstitutionForm extends Component {
     return formType === 'edit' && disableEdit ? disableEdit[inputField] : readOnly;
   }
 
+  renderAlternativeNames = (value) => {
+
+  }
+
+  renderCountries = (value) => {
+    const {city, country} = value;
+    const {name_english} = country;
+
+    return `${city} (${name_english})`
+  }
+
   render() {
     const { readOnly, nameModalOpen, alternativeNameValue, locationModalOpen, locationValue } = this.state;
+    const { formType, backPath } = this.props;
 
     return (
       <div className="animated fadeIn">
@@ -152,38 +168,46 @@ class InstitutionForm extends Component {
                     <Col md={6} className={style.borderLeft}>
                       <Row>
                         <Col>
+                          <FormGroup>
                           <Label for="name_official" className={'required'}>Institution Name, Official</Label>
                             <FormTextField
                               field={'names[0].name_official'}
                               disabled={this.isDisabled("name_official")}
                             />
+                          </FormGroup>
                         </Col>
                       </Row>
                       <Row>
                         <Col>
+                          <FormGroup>
                           <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
                             <FormTextField
                               field={'names[0].name_official_transliterated'}
                               disabled={this.isDisabled("name_official_transliterated")}
                             />
+                          </FormGroup>
                         </Col>
                       </Row>
                       <Row>
                         <Col>
+                          <FormGroup>
                           <Label for="name_english">Institution Name, English</Label>
                             <FormTextField
                               field={'names[0].name_english'}
                               disabled={this.isDisabled("name_english")}
                             />
+                          </FormGroup>
                         </Col>
                       </Row>
                       <Row>
                         <Col md={6}>
+                          <FormGroup>
                           <Label for="acronym" className={'required'}>Institution Acronym</Label>
                             <FormTextField
                               field={'names[0].acronym'}
                               disabled={readOnly}
                             />
+                          </FormGroup>
                         </Col>
                       </Row>
                       <Row>
@@ -202,6 +226,7 @@ class InstitutionForm extends Component {
                             label={'Alternative Names'}
                             btnLabel={'Add Alternative Name'}
                             onRemove={this.onNameRemove}
+                            renderDisplayValue={this.renderAlternativeNames}
                             onAddButtonClick={this.toggleNameModal}
                             onClick={this.onNameClick}
                             field={'alternative_names'}
@@ -218,14 +243,17 @@ class InstitutionForm extends Component {
                             formValue={locationValue}
                             disabled={readOnly}
                           />
-                          <AssignedField
-                            value={this.getCountry(formState)}
+                          <AssignedList
+                            values={formState.values.countries}
+                            errors={formState.errors}
                             label={'Geographic Location'}
                             labelShowRequired={true}
-                            btnLabel={'Add Location'}
+                            btnLabel={'Add'}
                             onAddButtonClick={this.toggleLocationModal}
                             onClick={this.onCountryClick}
-                            field={'name_english'}
+                            onRemove={this.onCountryRemove}
+                            renderDisplayValue={this.renderCountries}
+                            field={'countries'}
                             disabled={readOnly}
                           />
                         </Col>
@@ -234,56 +262,66 @@ class InstitutionForm extends Component {
                     <Col md={6}>
                       <Row>
                         <Col md={6}>
+                          <FormGroup>
                           <Label for="deqar_id">DEQARINST ID</Label>
                             <FormTextField
                               field={'deqar_id'}
                               disabled
                             />
+                          </FormGroup>
                         </Col>
-                      </Row>
-                      <Row>
                         <Col md={6}>
+                          <FormGroup>
                           <Label for="eter_id">ETER ID</Label>
                             <FormTextField
                               field={'eter_id'}
                               disabled
                             />
+                          </FormGroup>
                         </Col>
                       </Row>
                       <Row>
-                        <Col>
-                          <Label for="deqar_id">National Identifier</Label>
-                            <FormTextField
-                              field={'identifiers[0].identifier'}
-                              disabled={readOnly}
-                            />
-                        </Col>
+                          <Col>
+                            <FormGroup>
+                            <Label for="deqar_id">National Identifier</Label>
+                              <FormTextField
+                                field={'identifiers[0].identifier'}
+                                disabled={readOnly}
+                              />
+                            </FormGroup>
+                          </Col>
                       </Row>
                       <Row>
                         <Col>
+                          <FormGroup>
                           <Label for="deqar_id">Local Identifier</Label>
                             <FormTextField
                               field={'identifiers[1].identifier'}
                               disabled={readOnly}
                             />
+                          </FormGroup>
                         </Col>
                       </Row>
                       <Row>
                         <Col>
+                          <FormGroup>
                           <Label for="deqar_id">QF-EHEA Levels</Label>
                             <FormTextField
                               field={'deqar_id'}
                               disabled={readOnly}
                             />
+                          </FormGroup>
                         </Col>
                       </Row>
                       <Row>
                         <Col>
+                          <FormGroup>
                           <Label for="website_link" className={'required'}>Institution Website</Label>
                             <FormTextField
                               field={'website_link'}
                               disabled={readOnly}
                             />
+                          </FormGroup>
                         </Col>
                       </Row>
                     </Col>
@@ -292,6 +330,14 @@ class InstitutionForm extends Component {
               </React.Fragment>
             )}
           </Form>
+          <CardFooter>
+            <Link to={{pathname: `${backPath}`}}>
+              <Button
+                size="sm"
+                color="primary"
+              >Close</Button>
+            </Link>
+          </CardFooter>
         </Card>
       </div>
     )
@@ -300,7 +346,8 @@ class InstitutionForm extends Component {
 
 InstitutionForm.propTypes = {
   formType: PropTypes.string.isRequired,
-  formID: PropTypes.number
+  formID: PropTypes.number,
+  backPath: PropTypes.string
 }
 
 export default InstitutionForm;

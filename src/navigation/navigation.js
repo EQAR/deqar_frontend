@@ -9,33 +9,33 @@ const nav = {
       }
     },
     {
-      title: true,
       name: 'My Data',
-      wrapper: {
-        element: 'span',
-        attributes: {}
-      },
-      class: ''
-    },
-    {
-      name: 'My Profile',
-      url: '/my-profile',
-      icon: 'fa fa-user-o'
+      icon: 'fa fa-database',
+      children: [
+        {
+          name: 'My Profile',
+          url: '/my-profile',
+          icon: 'fa fa-user-o'
+        }, {
+          name: 'My Agencies',
+          url: '/my-agencies',
+          icon: 'fa fa-home'
+        }, {
+          name: 'My Reports',
+          url: '/my-reports',
+          icon: 'icon-docs',
+        }, {
+          name: 'Alerts and flags',
+          url: '#',
+          icon: 'icon-flag'
+        }
+      ]
     }, {
-      name: 'My Agencies',
-      url: '/my-agency',
-      icon: 'fa fa-home'
-    }, {
-      name: 'My Reports',
-      url: '/report-data',
+      name: 'Submit Reports',
       icon: 'icon-doc',
       children: [
         {
-          name: 'My Uploaded Reports',
-          url: '/my-reports',
-          icon: 'icon-docs'
-        }, {
-          name: 'Submit Report',
+          name: 'Manual Submission',
           url: '/submit-report',
           icon: 'fa fa-file-text-o'
         }, {
@@ -44,14 +44,6 @@ const nav = {
           icon: 'icon-cloud-upload'
         }
       ]
-    },
-    {
-      title: true,
-      name: 'Menu',
-      wrapper: {
-        element: 'span',
-        attributes: {}
-      },
     },
     {
       name: 'Reference Data',
@@ -80,14 +72,14 @@ const nav = {
       ]
     },
     {
-      name: 'Alerts and flags',
-      url: '#',
-      icon: 'icon-flag'
-    },
-    {
       name: 'Statistics',
       url: '#',
       icon: 'icon-chart'
+    }, {
+      name: 'Documentation',
+      url: 'https://docs.deqar.eu',
+      icon: 'icon-question',
+      attributes: {target: '_blank', rel: "noreferrer noopener", active: false}
     }
   ]
 };

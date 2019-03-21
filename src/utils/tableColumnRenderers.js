@@ -29,8 +29,15 @@ export const dateRender = (row) => {
 
   if(valid_to) {
     valid_to = moment(valid_to, moment.ISO_8601).format("YYYY-MM-DD");
-    return `${valid_from} - ${valid_to}`;
+    return (<div className={'text-center'}>{valid_from}<br/>{valid_to}</div>);
   } else {
-    return `${valid_from} - `;
+    return (<div className={'text-center'}>{valid_from}</div>);
   }
+};
+
+export const uploadDateRender = (row) => {
+  let {date_created} = row.original;
+  const date = moment(date_created, moment.ISO_8601).format("YYYY-MM-DD");
+  const time = moment(date_created, moment.ISO_8601).format("HH:mm");
+  return (<div className={'text-center'}>{date}<br/>{time}</div>);
 };

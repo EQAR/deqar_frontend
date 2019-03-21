@@ -5,7 +5,8 @@ import { connect } from "react-redux";
 import setInstitutionsTable from "./actions/setInstitutionsTable";
 import country from '../../services/Country';
 import createTableAPIParams from "../../utils/createTableAPIParams";
-import ActionButtons from "../../components/DataTable/components/ActionButtons";
+import style from "./InstitutionsTable.module.css";
+import {Link} from "react-router-dom";
 
 
 class InstitutionsTable extends Component {
@@ -15,7 +16,7 @@ class InstitutionsTable extends Component {
       {
         field: 'deqar_id',
         label: 'DEQAR ID',
-        sortable: true,
+        sortable: false,
         filterable: true,
         minWidth: 80,
         maxWidth: 150
@@ -23,7 +24,7 @@ class InstitutionsTable extends Component {
       {
         field: 'eter_id',
         label: 'ETER ID',
-        sortable: true,
+        sortable: false,
         filterable: true,
         minWidth: 80,
         maxWidth: 150
@@ -35,6 +36,7 @@ class InstitutionsTable extends Component {
         filterable: true,
         filterQueryParam: 'query',
         minWidth: 150,
+        render: this.linkRenderer
       },
       {
         field: 'country',
@@ -48,31 +50,18 @@ class InstitutionsTable extends Component {
         selectFilterValue: 'name_english',
         selectFilterLabel: 'name_english',
         selectFilterPopulate: country.getInstitutionCountries()
-      },
-      {
-        render: this.actionRender,
-        width: 100
       }
     ];
   }
 
-  actionRender = (row) => {
-    const pathConfig = [
-      {
-        path: 'institution/view',
-        buttonText: 'View'
-      }, {
-        path: 'institution/edit',
-        buttonText: 'Edit'
-      }
-    ];
-
+  linkRenderer = (row) => {
     return(
-      <ActionButtons
-        row={row}
-        pathConfig={pathConfig}
-      />
-    )
+      <Link
+        to={{pathname: `/institutions/view/${row.original.id}`}}
+        className={style.Link}
+      >
+        {row.original.name_primary}
+      </Link>)
   };
 
   onFetchData = (state) => {

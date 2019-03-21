@@ -1,3 +1,9 @@
+.infoFooter {
+    background-color: hsl(0,0%,97%);
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 .reportFormCard {
     padding-left: 5px;
 }
@@ -8,10 +14,15 @@
 
 .reportSubmitButton {
     z-index: 0;
+    margin-right: 10px;
 }
 
 .yearPlus {
     color: hsl(0,0%,40%);
     border-bottom: 1px dotted;
     cursor: pointer;
+}
+
+.InfoButton {
+    margin-left: 10px;
 }

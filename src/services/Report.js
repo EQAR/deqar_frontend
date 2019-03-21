@@ -47,8 +47,12 @@ class Report {
   };
 
   getReport = (reportID) => {
-    return axios.get(`${MANAGE_REPORT}/${reportID}/ `);
-  }
+    return axios.get(`${MANAGE_REPORT}/${reportID}/`);
+  };
+
+  updateReport = (formValues, reportID) => {
+    return axios.put(`${MANAGE_REPORT}/${reportID}/`, formValues);
+  };
 }
 
 const report = new Report();
