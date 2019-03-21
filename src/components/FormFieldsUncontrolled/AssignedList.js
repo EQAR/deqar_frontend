@@ -20,9 +20,9 @@ class AssignedList extends Component {
       </ListGroupItem>
     );
 
-    if(values.length > 0) {
+    if (values.length > 0) {
       return values.map((value, idx) => {
-        return(
+        return (
           <ListGroupItem
             className={cx(style.ListGroupItem,
               {
@@ -44,28 +44,28 @@ class AssignedList extends Component {
         )
       });
     } else {
-      return(emptyBox)
+      return emptyBox;
     }
-  };
+  }
 
   displayErrors = (errors, field) => {
-    if(errors) {
-      if(field in errors) {
+    if (errors) {
+      if (field in errors) {
         return(<small className={cx('help-block form-text text-danger', style.ErrorText)}>{errors[field]}</small>)
       } else {
-        return null
+        return null;
       }
     }
-  };
+  }
 
   fieldHasError = () => {
     const {field, errors} = this.props;
-    if(errors) {
+    if (errors) {
       return field in errors;
     } else {
       return false
     }
-  };
+  }
 
   render() {
     const {values, errors, label, btnLabel, field, labelShowRequired, disabled} = this.props;

@@ -13,6 +13,7 @@ import {
   Row
 } from "reactstrap";
 import PropTypes from 'prop-types';
+import { Link } from "react-router-dom";
 
 import FormTextField from '../../components/FormFields/FormTextField';
 import institution from '../../services/Institution';
@@ -21,7 +22,7 @@ import AssignedList from '../../components/FormFieldsUncontrolled/AssignedList';
 import AlternativeNameForm from './components/AlternativeNameForm';
 import LocationForm from './components/LocationForm';
 import country from '../../services/Country';
-import {Link} from "react-router-dom";
+import qfEHEALevel from '../../services/QFeheaLevel';
 
 
 class InstitutionForm extends Component {
@@ -33,6 +34,7 @@ class InstitutionForm extends Component {
       nameModalOpen: false,
       alternativeNameValue: null,
       locationModalOpen: false,
+      qFeheaLevels: null,
       locationValue: null
     }
   }
@@ -60,6 +62,12 @@ class InstitutionForm extends Component {
         });
       })
     }
+
+    qfEHEALevel.select().then((response, error) => {
+      this.setState({
+        qFeheaLevels: response.data
+      });
+    })
   }
 
   editableFields = () => {
@@ -128,6 +136,14 @@ class InstitutionForm extends Component {
     return formState.values.countries ? formState.values.countries[0].country.name_english : null;
   }
 
+  getQFeheaLevels = (formState) => {
+    const { qFeheaLevels } = this.state;
+
+    return formState.values.qf_ehea_levels && qFeheaLevels ?
+      formState.values.qf_ehea_levels.map(level => qFeheaLevels.filter(l =>level.qf_ehea_level === l.id)[0]) :
+      null;
+  }
+
   isDisabled = (inputField) => {
     const { formType } = this.props;
     const { disableEdit, readOnly } = this.state;
@@ -139,9 +155,13 @@ class InstitutionForm extends Component {
 
   }
 
+  renderQFeheaLevels = (value) => {
+    return value.level;
+  }
+
   renderCountries = (value) => {
-    const {city, country} = value;
-    const {name_english} = country;
+    const { city, country } = value;
+    const { name_english } = country;
 
     return `${city} (${name_english})`
   }
@@ -305,11 +325,16 @@ class InstitutionForm extends Component {
                       <Row>
                         <Col>
                           <FormGroup>
-                          <Label for="deqar_id">QF-EHEA Levels</Label>
-                            <FormTextField
-                              field={'deqar_id'}
-                              disabled={readOnly}
-                            />
+                          <AssignedList
+                            errors={formState.errors}
+                            valueFields={['level']}
+                            values={this.getQFeheaLevels(formState)}
+                            label={'QF-EHEA Levels'}
+                            onRemove={this.onNameRemove}
+                            renderDisplayValue={this.renderQFeheaLevels}
+                            field={'alternative_names'}
+                            disabled={readOnly}
+                          />
                           </FormGroup>
                         </Col>
                       </Row>
