@@ -33,18 +33,20 @@ class FilePopupForm extends Component {
     if (this.props.formIndex !== prevProps.formIndex) {
       if (formValue) {
         if ('filename' in formValue) {
-          this.setState({
-            files: [{
-              options: {
-                type: 'local',
-                file: {
-                  name: formValue.filename,
-                  size: formValue.filesize,
-                  type: 'application/pdf'
+          if (formValue.filename.length > 0) {
+            this.setState({
+              files: [{
+                options: {
+                  type: 'local',
+                  file: {
+                    name: formValue.filename,
+                    size: formValue.filesize,
+                    type: 'application/pdf'
+                  }
                 }
-              }
-            }]
-          })
+              }]
+            })
+          }
         }
       } else {
         this.setState({
