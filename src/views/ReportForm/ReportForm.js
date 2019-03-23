@@ -347,24 +347,33 @@ class ReportForm extends Component {
     const { uploadedFile } = this.state;
 
     // Insert files into state
-    if(uploadedFile) {
-      if(idx >= 0) {
-        this.setState(prevState => ({
-          files: [...prevState.files.slice(0, idx), uploadedFile, ...prevState.files.slice(idx+1)],
-        }))
-      } else {
-        this.setState(prevState=> ({
-          files: [...prevState.files, uploadedFile],
-        }))
-      }
+    if(idx >= 0) {
+      this.setState(prevState => ({
+        files: [...prevState.files.slice(0, idx), uploadedFile, ...prevState.files.slice(idx+1)],
+      }))
+    } else {
+      this.setState(prevState=> ({
+        files: [...prevState.files, uploadedFile],
+      }))
     }
+
     this.toggleFileModal();
   };
 
   onFileAdded = (file) => {
-    this.setState({
-      uploadedFile: file
-    });
+    console.log(file);
+    if(file.length > 0) {
+      if (file[0] instanceof File) {
+        console.log('add');
+        this.setState({
+          uploadedFile: file[0]
+        });
+      }
+    } else {
+      this.setState({
+        uploadedFile: null
+      })
+    }
   };
 
   onFileRemove = (idx) => {
@@ -515,14 +524,14 @@ class ReportForm extends Component {
     normalizedForm = encodeProgrammeNameData(normalizedForm);
     report.updateReport(normalizedForm, reportID).then((response) => {
       toast.success("Report record was updated.");
-      this.formApi.setValues(decodeProgrammeNameData(response.data));
       const filesResponse = response.data.report_files;
+
       filesResponse.forEach((file, idx) => {
         this.uploadFiles(file.id, idx);
       });
     }).then(() => {
       this.loadingToggle();
-
+      this.populateForm()
     })
   };
 

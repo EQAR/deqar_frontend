@@ -6,20 +6,52 @@ import FormTextField from "../../../components/FormFields/FormTextField";
 import {validateRequired, validateURL} from "../../../utils/validators";
 import language from '../../../services/Language';
 import FormSelectField from "../../../components/FormFields/FormSelectField";
+import { FilePond, registerPlugin } from 'react-filepond';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import 'filepond/dist/filepond.min.css';
+
 import style from './FilePopupForm.module.css'
 
+registerPlugin(FilePondPluginFileValidateType);
 
 class FilePopupForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      file: null,
+      files: [],
       languageOptions: [],
     }
   }
 
   componentDidMount() {
     this.populateLanguages();
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const { formValue } = this.props;
+
+    if (this.props.formIndex !== prevProps.formIndex) {
+      if (formValue) {
+        if ('filename' in formValue) {
+          this.setState({
+            files: [{
+              options: {
+                type: 'local',
+                file: {
+                  name: formValue.filename,
+                  size: formValue.filesize,
+                  type: 'application/pdf'
+                }
+              }
+            }]
+          })
+        }
+      } else {
+        this.setState({
+          files: []
+        })
+      }
+    }
   }
 
   setFormApi = (formApi) => {
@@ -59,19 +91,6 @@ class FilePopupForm extends Component {
     }
   };
 
-  getFileName = () => {
-    const { formValue } = this.props;
-    const filename = this.formApi.getValue('file');
-
-    if( formValue ) {
-      return(
-        <FormText color="muted" className={style.filenameDisplay}>
-          Currently selected: <span className={style.fileName}>{filename}</span>
-        </FormText>
-      )
-    }
-  };
-
   getFileManager = () => {
     const { disabled, formValue } = this.props;
 
@@ -89,16 +108,14 @@ class FilePopupForm extends Component {
     } else {
       return (
         <React.Fragment>
-          <Label for="file">OR Upload File</Label>
           <Text field={'filename'} hidden />
-          <input
-            style={{display: 'block'}}
-            type={'file'}
-            accept='.pdf'
-            onChange={this.onFileChange}
-            disabled={disabled}
+          <Text field={'filesize'} hidden />
+          <FilePond
+            files={this.state.files}
+            allowMultiple={false}
+            acceptedFileTypes={['application/pdf']}
+            onupdatefiles={this.onFileChange}
           />
-          {this.getFileName()}
         </React.Fragment>
       )
     }
@@ -106,9 +123,7 @@ class FilePopupForm extends Component {
 
   // Submit the form
   submitForm = () => {
-    let {file} = this.state;
-    file = file ? file : {};
-    this.props.onFormSubmitFile(file);
+    this.props.onFormSubmitFile(this.state.files);
     this.formApi.submitForm();
   };
 
@@ -122,41 +137,32 @@ class FilePopupForm extends Component {
   };
 
   // Events
-  onUpdateFile = (fileItems) => {
-    if (fileItems.length > 0) {
+  onFileChange = (fileItems) => {
+    if(fileItems.length > 0) {
       this.setState({
-        file: fileItems.map(fileItem => fileItem.file)
+        files: fileItems.map(fileItem => fileItem.file)
       });
-      this.formApi.setValue('filename', fileItems[0].filename)
+      this.formApi.setValue('filename', fileItems[0].filename);
+      this.formApi.setValue('filesize', fileItems[0].fileSize);
     } else {
       this.setState({
-        file: null
-      });
-      this.formApi.setValue('filename', '')
-    }
-  };
-
-  onFileChange = (e) => {
-    if(e.target.files) {
-      this.setState({
-        file: e.target.files[0]
-      });
-      this.formApi.setValue('filename', e.target.files[0].name)
+        files: []
+      })
     }
   };
 
   // Validation
   validateOriginalLocation = (value, values) => {
-    const {file} = this.state;
-    const original_file = values['file'];
+    const {files} = this.state;
+    const original_file = values['original_location'];
 
-    if(file) {
+    if(files.length > 0) {
       if(value) {
         return "Please either upload a file or enter its location. (Both were entered.)"
       }
     }
 
-    if(!file && !original_file) {
+    if(!(files.length > 0) && !original_file) {
         if(!value) {
           return "Please either upload a file or enter its location. (Neither were entered.)"
         }
