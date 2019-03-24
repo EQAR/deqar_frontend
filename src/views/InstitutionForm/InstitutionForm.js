@@ -359,7 +359,7 @@ class InstitutionForm extends Component {
             <Link to={{pathname: `${backPath}`}}>
               <Button
                 size="sm"
-                color="primary"
+                color="secondary"
               >Close</Button>
             </Link>
           </CardFooter>
