@@ -773,6 +773,7 @@ class ReportForm extends Component {
                               options={agencyActivityOptions}
                               labelField={'activity'}
                               valueField={'id'}
+                              includeID={true}
                               validate={validateRequired}
                               disabled={readOnly}
                             />
@@ -821,6 +822,7 @@ class ReportForm extends Component {
                               options={statusOptions}
                               labelField={'status'}
                               valueField={'id'}
+                              includeID={true}
                               validate={validateRequired}
                               disabled={readOnly}
                             />
@@ -835,6 +837,7 @@ class ReportForm extends Component {
                               options={decisionOptions}
                               labelField={'decision'}
                               valueField={'id'}
+                              includeID={true}
                               validate={validateRequired}
                               disabled={readOnly}
                             />
