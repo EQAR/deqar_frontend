@@ -34,6 +34,7 @@ label.required:after {
 .form-control:disabled {
   border: unset;
   background-color: hsl(0,0%,99%);
+  cursor: text;
 }
 
 .form-control.is-invalid {

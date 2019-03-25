@@ -1,5 +1,5 @@
 import React from 'react';
-import { asField } from 'informed';
+import { BasicText, asField } from 'informed';
 import Select from 'react-select';
 import {Badge} from "reactstrap";
 import style from './FormSelectField.module.scss';
@@ -7,9 +7,8 @@ import style from './FormSelectField.module.scss';
 const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
   const { value } = fieldState;
   const { setValue, setTouched, setError } = fieldApi;
-  const { onChange, onBlur, initialValue, forwardedRef, labelField, valueField, disabled, placeholder, ...rest } = props;
-
-  const includeID = props.includeID ? props.includeID : false;
+  const { onChange, onBlur, initialValue, forwardedRef, labelField, valueField, disabled, placeholder, includeID,
+    isMulti, ...rest } = props;
 
   const borderColor = fieldApi.getError() ? '#f86c6b' : '#e4e7ea';
 
@@ -53,38 +52,64 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
     }
   };
 
+  const getValue = () => {
+    const val = value || initialValue || '';
+
+    if(val.hasOwnProperty(labelField)) {
+      return val[labelField]
+    } else{
+      return ''
+    }
+  };
+
+  const displayTextInput = !isMulti && disabled;
+
   return (
     <React.Fragment>
-      <Select
-        {...rest}
-        styles={customStyles}
-        ref={forwardedRef}
-        defaultValue={value || initialValue || ''}
-        value={value || initialValue || ''}
-        onChange={(value, action) => {
-          setError('');
-          setValue(value);
-          if (onChange) {
-            onChange(value);
-          }
-        }}
-        onBlur={e => {
-          setTouched();
-          if (onBlur) {
-            onBlur(e);
-          }
-        }}
-        isDisabled={disabled}
-        placeholder={disabled ? "" : placeholder}
-        isClearable={true}
-        getOptionLabel={getLabel}
-        getOptionValue={(option) => {return option[valueField]}}
-      />
+      {displayTextInput ?
+        <input
+          disabled={disabled}
+          value={getValue()}
+          {...rest}
+          className={'form-control'}
+        />
+          :
+        <Select
+          {...rest}
+          isMulti={isMulti}
+          styles={customStyles}
+          ref={forwardedRef}
+          defaultValue={value || initialValue || ''}
+          value={value || initialValue || ''}
+          onChange={(value, action) => {
+            setError('');
+            setValue(value);
+            if (onChange) {
+              onChange(value);
+            }
+          }}
+          onBlur={e => {
+            setTouched();
+            if (onBlur) {
+              onBlur(e);
+            }
+          }}
+          isDisabled={disabled}
+          placeholder={disabled ? "" : placeholder}
+          isClearable={true}
+          getOptionLabel={getLabel}
+          getOptionValue={(option) => {return option[valueField]}}
+        />
+      }
       {fieldState.error ? (
         <small className="help-block form-text text-danger">{fieldState.error}</small>
       ) : null}
     </React.Fragment>
   )
 });
+
+FormSelectField.defaultProps = {
+  includeID: false
+};
 
 export default FormSelectField;
