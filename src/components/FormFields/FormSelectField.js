@@ -55,18 +55,27 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
   const getValue = () => {
     const val = value || initialValue || '';
 
-    if(val.hasOwnProperty(labelField)) {
-      return val[labelField]
-    } else{
-      return ''
+    if(isMulti) {
+      const vals =  val.map((v) => {
+        if(v.hasOwnProperty(labelField)) {
+          return v[labelField]
+        } else{
+          return ''
+        }
+      });
+      return vals.join(', ');
+    } else {
+      if(val.hasOwnProperty(labelField)) {
+        return val[labelField]
+      } else {
+        return ''
+      }
     }
   };
 
-  const displayTextInput = !isMulti && disabled;
-
   return (
     <React.Fragment>
-      {displayTextInput ?
+      {disabled ?
         <input
           disabled={disabled}
           value={getValue()}
