@@ -60,7 +60,7 @@ class ReportsTable extends Component {
         filterQueryParam: 'country',
         selectFilterValue: 'name_english',
         selectFilterLabel: 'name_english',
-        selectFilterPopulate: country.select()
+        selectFilterPopulate: country.getInstitutionCountries()
       }, {
         field: 'activity_type',
         label: 'Activity',
