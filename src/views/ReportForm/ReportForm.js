@@ -28,7 +28,7 @@ import ReportAlert from "./components/ReportAlert";
 import { toast } from 'react-toastify';
 import FormDatePickerField from "../../components/FormFields/FormDatePickerField";
 import PropTypes from 'prop-types';
-import {Link, Redirect, withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import InfoBox from "./components/InfoBox";
 import {createFormNormalizer} from "./normalizers/createFormNormalizer";
 import {updateFormNormalizer} from "./normalizers/updateFormNormalizer";

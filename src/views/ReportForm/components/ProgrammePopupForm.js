@@ -153,7 +153,7 @@ class ProgrammePopupForm extends Component {
         >
           {({ formState }) => (
             <React.Fragment>
-              <ModalHeader toggle={this.onToggle}>{titleText}</ModalHeader>
+              <ModalHeader>{titleText}</ModalHeader>
               <ModalBody>
                 <Row>
                   <Col md={12}>
@@ -238,20 +238,21 @@ class ProgrammePopupForm extends Component {
                   </Col>
                 </Row>
               </ModalBody>
-              <ModalFooter>
-                {disabled ?
-                  <Button
-                    color="primary"
-                    type={'button'}
-                    onClick={this.props.onToggle}
-                  >
-                    Close
-                  </Button>
-                  :
+              <ModalFooter className={'justify-content-between'}>
+                <Button
+                  color="secondary"
+                  type={'button'}
+                  onClick={this.props.onToggle}
+                  size="sm"
+                >
+                  Close
+                </Button>
+                { disabled ? "" :
                   <Button
                     color="primary"
                     type={'button'}
                     onClick={this.submitForm}
+                    size="sm"
                   >
                     {titleText}
                   </Button>
