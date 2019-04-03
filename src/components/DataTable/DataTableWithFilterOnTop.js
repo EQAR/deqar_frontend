@@ -12,6 +12,7 @@ class DataTableWithFilterOnTop extends Component {
       data: [],
       pages: null,
       loading: true,
+      total: 0,
       page: 0,
       pageSize: 10,
       sorted: [],
@@ -119,6 +120,7 @@ class DataTableWithFilterOnTop extends Component {
           pages: this.getPagesNumber(response.data.count),
           loading: false,
           data: response.data.results,
+          total: response.data.count
         });
         if('facet_fields' in response.data.facets) {
           this.setState({
@@ -168,7 +170,7 @@ class DataTableWithFilterOnTop extends Component {
   };
 
   render() {
-    const { page, pageSize, sorted, filtered, resized, expanded, data, facets, pages, loading } = this.state;
+    const { page, pageSize, sorted, filtered, resized, expanded, data, facets, pages, loading, total } = this.state;
     const columns = this.makeHeader();
 
     return(
@@ -177,7 +179,8 @@ class DataTableWithFilterOnTop extends Component {
           React.cloneElement(this.props.children, {
             onFilter: this.onFilteredChange,
             onFilterClick: this.onFilterClick,
-            facets: facets
+            facets: facets,
+            total: total
           })
         }
         <ReactTable

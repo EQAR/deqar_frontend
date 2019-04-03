@@ -4,7 +4,7 @@ import {Button, Col, Collapse, FormGroup, Input, Row} from "reactstrap";
 import SelectFilter from "../../components/DataTableFilters/SelectFilter";
 import ActiveDateFilter from "../../components/DataTableFilters/ActiveDateFilter";
 import {connect} from "react-redux";
-
+import cx from 'classnames';
 
 class ReportsTableFilters extends Component {
   constructor(props) {
@@ -91,9 +91,11 @@ class ReportsTableFilters extends Component {
   };
 
   render() {
-    const {filterState} = this.props;
+    const {filterState, total} = this.props;
     const {filterOpen} = filterState;
     const {query, country, agency, activity_type, flag, year, active} = this.state;
+
+    const totalText = filterState.filtered.length > 0 ? `Number of reports (filtered): ${total}` : `Number of reports (total): ${total}`;
 
     return(
       <React.Fragment>
@@ -106,11 +108,14 @@ class ReportsTableFilters extends Component {
             >
               <i className="fa fa-filter"> </i>&nbsp;Filter Table
             </Button>
+            <div className={cx(style.TotalRecords, 'pull-right')}>
+                {totalText}
+            </div>
           </Col>
         </Row>
         <Collapse isOpen={filterOpen}>
           <Row form>
-            <Col xs={9}>
+            <Col md={9}>
               <FormGroup>
                 <Input
                   value={query || ""}
@@ -119,7 +124,7 @@ class ReportsTableFilters extends Component {
                 />
               </FormGroup>
             </Col>
-            <Col xs={3}>
+            <Col md={3}>
               <FormGroup>
                 <ActiveDateFilter
                   field={'year'}
@@ -132,7 +137,7 @@ class ReportsTableFilters extends Component {
             </Col>
           </Row>
           <Row form>
-            <Col xs={3}>
+            <Col md={3}>
               <FormGroup>
                 <SelectFilter
                   field={'agency'}
@@ -144,7 +149,7 @@ class ReportsTableFilters extends Component {
                 />
               </FormGroup>
             </Col>
-            <Col xs={3}>
+            <Col md={3}>
               <FormGroup>
                 <SelectFilter
                   field={'country'}
@@ -156,7 +161,7 @@ class ReportsTableFilters extends Component {
                 />
               </FormGroup>
             </Col>
-            <Col xs={3}>
+            <Col md={3}>
               <FormGroup>
                 <SelectFilter
                   field={'activity_type'}
@@ -168,7 +173,7 @@ class ReportsTableFilters extends Component {
                 />
               </FormGroup>
             </Col>
-            <Col xs={3}>
+            <Col md={3}>
               <FormGroup>
                 <SelectFilter
                   field={'flag'}
