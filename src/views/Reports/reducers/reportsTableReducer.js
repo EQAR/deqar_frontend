@@ -4,6 +4,7 @@ const initialState = {
   pageSize: 10,
   page: 0,
   sorted: [],
+  filterOpen: false,
   filtered: []
 };
 
@@ -15,6 +16,7 @@ function reportsTableReducer(state = initialState, action) {
         pageSize: action.payload.state.pageSize,
         page: action.payload.state.page,
         sorted: action.payload.state.sorted,
+        filterOpen: action.payload.state.filterOpen,
         filtered: action.payload.state.filtered
       };
     }
