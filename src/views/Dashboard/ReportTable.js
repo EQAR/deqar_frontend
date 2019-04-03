@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import DataTable from "../../components/DataTable/DataTable";
 import report from '../../services/Report';
-import ReportDetail from "./ReportDetail";
 import {connect} from "react-redux";
 import createTableAPIParams from "../../utils/createTableAPIParams";
 import {flagRender, arrayRenderer, uploadDateRender, dateRender} from "../../utils/tableColumnRenderers";
 import setDashboardReportTable from "./actions/setDashboardReportTable";
-import country from "../../services/Country";
-import agency from "../../services/Agency";
 import list from "../../services/List";
 
 class ReportTable extends Component {

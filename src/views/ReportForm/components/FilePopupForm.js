@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Col, FormGroup, FormText, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row} from "reactstrap";
+import {Button, Col, FormGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row} from "reactstrap";
 import PropTypes from 'prop-types';
 import {Form, Text} from 'informed';
 import FormTextField from "../../../components/FormFields/FormTextField";

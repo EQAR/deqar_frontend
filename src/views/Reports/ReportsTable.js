@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import report from "../../services/Report";
 import {connect} from "react-redux";
 import setReportsTable from "./actions/setReportsTable";
-import agency from "../../services/Agency";
-import country from "../../services/Country";
 import createTableAPIParams from "../../utils/createTableAPIParams";
 import {arrayRenderer, dateRender, flagRender} from "../../utils/tableColumnRenderers";
 import DataTableWithFilterOnTop from "../../components/DataTable/DataTableWithFilterOnTop"

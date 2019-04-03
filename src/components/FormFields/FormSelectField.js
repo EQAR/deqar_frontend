@@ -1,5 +1,5 @@
 import React from 'react';
-import { BasicText, asField } from 'informed';
+import { asField } from 'informed';
 import Select from 'react-select';
 import {Badge} from "reactstrap";
 import style from './FormSelectField.module.scss';

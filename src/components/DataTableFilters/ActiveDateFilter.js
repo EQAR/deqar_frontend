@@ -16,7 +16,7 @@ class ActiveDateFilter extends Component {
   };
 
   render() {
-    const { field, onFilter, value, active, ...rest } = this.props;
+    const { value, active } = this.props;
 
     return(
       <InputGroup>
