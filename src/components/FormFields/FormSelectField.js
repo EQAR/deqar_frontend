@@ -46,7 +46,11 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
 
   const getLabel = (option) => {
     if(includeID) {
-      return (<React.Fragment>{option[labelField]} <Badge className={style.Badge}>{option['id']}</Badge></React.Fragment>)
+      if(includeID === 'back') {
+        return (<React.Fragment>{option[labelField]} - ID {option['id']}</React.Fragment>)
+      } else {
+        return (<React.Fragment>{option['id']} - {option[labelField]}</React.Fragment>)
+      }
     } else {
       return option[labelField]
     }
