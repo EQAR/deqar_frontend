@@ -77,7 +77,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
     <React.Fragment>
       {disabled ?
         <input
-          disabled={disabled}
+          readOnly={disabled}
           value={getValue()}
           {...rest}
           className={'form-control'}

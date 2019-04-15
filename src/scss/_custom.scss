@@ -37,6 +37,16 @@ label.required:after {
   cursor: text;
 }
 
+.form-control:read-only {
+  border: unset;
+  background-color: hsl(0,0%,99%);
+  cursor: text;
+}
+
+.form-control:read-only:focus {
+  box-shadow: unset;
+}
+
 .form-control.is-invalid {
   background: none;
 }
