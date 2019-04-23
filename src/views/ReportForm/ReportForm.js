@@ -477,7 +477,7 @@ class ReportForm extends Component {
     if(files[idx]) {
       if('name' in files[idx]) {
         report.submitReportFile(files[idx], reportFileID).then((response) => {
-          toast.warn(`Uploading file ${files[idx].name} was successful.`);
+          toast.success(`Uploading file ${files[idx].name} was successful.`);
         }).catch((error) => {
           toast.error(`There was a problem uploading the file: ${files[idx].name}.`)
         });
