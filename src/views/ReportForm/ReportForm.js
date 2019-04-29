@@ -583,13 +583,13 @@ class ReportForm extends Component {
         </Link>
       </React.Fragment>
     )
-  };
+  }
 
   renderEditButton = () => {
     const {backPath, reportID} = this.props;
 
-    if(backPath.includes('my-reports')) {
-      return(
+    if (backPath.includes('my-reports')) {
+      return (
         <div className={'pull-right'}>
           <Link to={{pathname: `${backPath}/edit/${reportID}`}}>
             <Button
@@ -600,12 +600,12 @@ class ReportForm extends Component {
         </div>
       )
     }
-  };
+  }
 
   renderButtons = () => {
     const {formType} = this.props;
 
-    switch(formType) {
+    switch (formType) {
       case 'view':
         return(
           <div>
@@ -633,7 +633,7 @@ class ReportForm extends Component {
       default:
         break;
     }
-  };
+  }
 
   renderDocLink = () => {
     const {formType} = this.props;
