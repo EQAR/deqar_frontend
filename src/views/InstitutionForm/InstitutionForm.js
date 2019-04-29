@@ -100,6 +100,12 @@ class InstitutionForm extends Component {
   onNameRemove = (index) => {
   }
 
+  onFormerNameRemove = (index) => {
+  }
+
+  onLocalIDRemove = (index) => {
+  }
+
   onNameClick = (index) => {
     this.setState({
       nameModalOpen: true,
@@ -113,13 +119,64 @@ class InstitutionForm extends Component {
     })
   }
 
-  getAlternativeValues = (formState) => {
-    return formState.values.names ? formState.values.names[0].alternative_names : null;
+  getAlternativeValues = formState => formState.values.names ? formState.values.names[0].alternative_names : null;
+
+  getFormerValues = formState => null;
+
+  getLocalIDValues = formState => null;
+
+  renderLocations = formState => {
+    return (
+      <Row>
+        <Col md={6}>
+          <FormGroup>
+          <Label for="country">Country</Label>
+            <FormTextField
+              field={'countries[0].country.name_english'}
+              disabled
+            />
+          </FormGroup>
+        </Col>
+        <Col md={6}>
+          <FormGroup>
+          <Label for="city">City</Label>
+            <FormTextField
+              field={'countries[0].city'}
+              disabled
+            />
+          </FormGroup>
+        </Col>
+      </Row>
+    )
+    // if (this.formApi.getValue('countries')) {
+    //   return this.formApi.getValue('countries').map((country, i) => {
+    //     return (
+    //       <Row key={i}>
+    //         <Col md={6}>
+    //           <FormGroup>
+    //           <Label for="country">Country</Label>
+    //             <FormTextField
+    //               field={'countries[i].country.name_english'}
+    //               disabled
+    //             />
+    //           </FormGroup>
+    //         </Col>
+    //         <Col md={6}>
+    //           <FormGroup>
+    //           <Label for="city">City</Label>
+    //             <FormTextField
+    //               field={'countries[i].city'}
+    //               disabled
+    //             />
+    //           </FormGroup>
+    //         </Col>
+    //       </Row>
+    //     )
+    //   });
+    // }
   }
 
-  getCountry = (formState) => {
-    return formState.values.countries ? formState.values.countries[0].country.name_english : null;
-  }
+  getCountry = formState => formState.values.countries ? formState.values.countries[0].country.name_english : null;
 
   onCountryClick = () => {
     this.setState({
@@ -153,8 +210,6 @@ class InstitutionForm extends Component {
         }
       });
     };
-
-    console.log(identifierField);
     return identifierField;
   }
 
@@ -166,14 +221,13 @@ class InstitutionForm extends Component {
       null;
   }
 
-  renderAlternativeNames = (value) => {
+  renderAlternativeNames = value => value.name;
 
-  }
+  renderFormerNames = value => null;
 
-  renderQFeheaLevels = (value) => {
-    return value.level;
-  }
+  renderLocalID = value => null;
 
+  renderQFeheaLevels = value => value.level;
 
   nameOfficialDisabled = () => {
     const { formType } = this.state;
@@ -263,17 +317,6 @@ class InstitutionForm extends Component {
                         </Col>
                       </Row>
                       <Row>
-                        <Col md={6}>
-                          <FormGroup>
-                          <Label for="acronym" className={'required'}>Institution Acronym</Label>
-                            <FormTextField
-                              field={'names[0].acronym'}
-                              disabled={this.disabled('acronym')}
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
                         <Col>
                           <AlternativeNameForm
                             modalOpen={nameModalOpen}
@@ -286,81 +329,88 @@ class InstitutionForm extends Component {
                             errors={formState.errors}
                             valueFields={['name']}
                             values={this.getAlternativeValues(formState)}
-                            label={'Alternative Names'}
+                            label={'Institution Name, Alternative'}
                             btnLabel={'Add Alternative Name'}
                             onRemove={this.onNameRemove}
                             renderDisplayValue={this.renderAlternativeNames}
                             onAddButtonClick={this.toggleNameModal}
                             onClick={this.onNameClick}
-                            field={'alternative_names'}
+                            field={'names[0].alternative_names'}
+                            disabled={readOnly}
+                          />
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col md={6}>
+                          <FormGroup>
+                          <Label for="acronym" className={'required'}>Institution Acronym</Label>
+                            <FormTextField
+                              field={'names[0].acronym'}
+                              disabled={this.disabled('acronym')}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col md={6}>
+                          <FormGroup>
+                          <Label for="website_link" className={'required'}>Institution Website</Label>
+                            <FormTextField
+                              field={'website_link'}
+                              disabled={this.disabled('website_link')}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <AssignedList
+                            errors={formState.errors}
+                            valueFields={['name']}
+                            values={this.getFormerValues(formState)}
+                            label={'Former Names'}
+                            btnLabel={'Add'}
+                            onRemove={this.onFormerNameRemove}
+                            renderDisplayValue={this.renderFormerNames}
+                            field={'names[0].alternative_names'}
                             disabled={readOnly}
                           />
                         </Col>
                       </Row>
                       <Row>
                         <Col>
-                          <LocationForm
-                            modalOpen={locationModalOpen}
-                            onToggle={this.toggleLocationModal}
-                            onFormSubmit={this.onNameSubmit}
-                            formValue={locationValue}
-                            disabled={readOnly}
-                          />
                           <AssignedList
-                            values={formState.values.countries}
                             errors={formState.errors}
-                            label={'Geographic Location'}
-                            labelShowRequired={true}
+                            valueFields={['name']}
+                            values={this.getLocalIDValues(formState)}
+                            label={'Local ID'}
                             btnLabel={'Add'}
-                            onAddButtonClick={this.toggleLocationModal}
-                            onClick={this.onCountryClick}
-                            onRemove={this.onCountryRemove}
-                            renderDisplayValue={this.renderCountries}
-                            field={'countries'}
+                            onRemove={this.onLocalIDRemove}
+                            renderDisplayValue={this.renderLocalID}
+                            field={'names[0].alternative_names'}
                             disabled={readOnly}
                           />
                         </Col>
                       </Row>
                     </Col>
                     <Col md={6}>
+                      {this.renderLocations(formState)}
                       <Row>
                         <Col md={6}>
                           <FormGroup>
-                          <Label for="deqar_id">DEQARINST ID</Label>
+                          <Label for="founding_date">Founding Year</Label>
                             <FormTextField
-                              field={'deqar_id'}
+                              field={'founding_date'}
                               disabled
                             />
                           </FormGroup>
                         </Col>
                         <Col md={6}>
                           <FormGroup>
-                          <Label for="eter_id">ETER ID</Label>
+                          <Label for="closing_date">Closing Year</Label>
                             <FormTextField
-                              field={'eter_id'}
+                              field={'closing_date'}
                               disabled
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                          <Col>
-                            <FormGroup>
-                            <Label for="national_identifier">National Identifier</Label>
-                              <FormTextField
-                                field={this.identifiersSelector('national_identifier', formState)}
-                                disabled={this.disabled()}
-                              />
-                            </FormGroup>
-                          </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                          <FormGroup>
-                          <Label for="local_identifier">Local Identifier</Label>
-                            <FormTextField
-                              field={this.identifiersSelector('local_identifier', formState)}
-                              disabled={readOnly}
                             />
                           </FormGroup>
                         </Col>
@@ -384,12 +434,42 @@ class InstitutionForm extends Component {
                       <Row>
                         <Col>
                           <FormGroup>
-                          <Label for="website_link" className={'required'}>Institution Website</Label>
+                          <Label for="comment">Other comment(optional)</Label>
                             <FormTextField
-                              field={'website_link'}
+                              field={'comment'}
                               disabled={readOnly}
                             />
                           </FormGroup>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <AssignedList
+                            errors={formState.errors}
+                            valueFields={['name']}
+                            values={this.getFormerValues(formState)}
+                            label={'Historical Link'}
+                            btnLabel={'Add'}
+                            onRemove={this.onFormerNameRemove}
+                            renderDisplayValue={this.renderFormerNames}
+                            field={'names[0].alternative_names'}
+                            disabled={readOnly}
+                          />
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <AssignedList
+                            errors={formState.errors}
+                            valueFields={['name']}
+                            values={this.getLocalIDValues(formState)}
+                            label={'Hierarchical Link'}
+                            btnLabel={'Add'}
+                            onRemove={this.onLocalIDRemove}
+                            renderDisplayValue={this.renderLocalID}
+                            field={'names[0].alternative_names'}
+                            disabled={readOnly}
+                          />
                         </Col>
                       </Row>
                     </Col>
@@ -412,6 +492,7 @@ class InstitutionForm extends Component {
               color="secondary"
               className={style.editButton}
               onClick={this.editForm}
+              disabled
             >
               Edit
             </Button>
