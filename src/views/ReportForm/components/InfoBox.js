@@ -4,11 +4,12 @@ import Col from "reactstrap/es/Col";
 import Row from "reactstrap/es/Row";
 
 import style from "./InfoBox.module.css"
-import {FormGroup, Input, ListGroup} from "reactstrap";
+import {FormGroup, ListGroup} from "reactstrap";
 import Label from "reactstrap/es/Label";
 import ListGroupItem from "reactstrap/es/ListGroupItem";
 import moment from "moment";
 import FormTextField from "../../../components/FormFields/FormTextField";
+import cx from 'classnames';
 
 class InfoBox extends Component {
   flagRender = (value) => {
@@ -126,15 +127,16 @@ class InfoBox extends Component {
             </FormGroup>
             <FormGroup>
               <Label>Record History</Label>
-              <Input
-                className={style.infoInput}
+              <input
+                className={cx(style.infoInput, 'form-control')}
                 disabled={true}
-                placeholder={`Created at ${this.renderDate(formState.created_at)} by '${formState.created_by}'`}
+                value={`Created at ${this.renderDate(formState.created_at)} by '${formState.created_by}'`}
+
               />
-              <Input
-                className={style.infoInput}
+              <input
+                className={cx(style.infoInput, 'form-control')}
                 disabled={true}
-                placeholder={`Updated at ${this.renderDate(formState.updated_at)} by '${formState.updated_by}'`}
+                value={`Updated at ${this.renderDate(formState.updated_at)} by '${formState.updated_by}'`}
               />
             </FormGroup>
           </Col>

@@ -26,7 +26,7 @@ const FormDatePickerField = asField(({ fieldState, fieldApi, ...props }) => {
         {...rest}
         dateFormat="yyyy-MM-dd"
         className={fieldState.error ? 'form-control is-invalid' : 'form-control'}
-        disabled={disabled}
+        readOnly={disabled}
         placeholderText={disabled ? '' : placeholderText}
         onSelect={(value) => {
           setError('');
