@@ -106,6 +106,12 @@ class InstitutionForm extends Component {
   onLocalIDRemove = (index) => {
   }
 
+  onHistoricalLinkRemove = (index) => {
+  }
+
+  onHierarchicalLinkRemove = (index) => {
+  }
+
   onNameClick = (index) => {
     this.setState({
       nameModalOpen: true,
@@ -124,6 +130,10 @@ class InstitutionForm extends Component {
   getFormerValues = formState => null;
 
   getLocalIDValues = formState => null;
+
+  getHistoricalLinkValues = formState => null;
+
+  getHierarchicalLinkValues = formState => null;
 
   renderLocations = formState => {
     return (
@@ -228,6 +238,10 @@ class InstitutionForm extends Component {
   renderLocalID = value => null;
 
   renderQFeheaLevels = value => value.level;
+
+  renderHistoricalLinks = value => null;
+
+  renderHierarchicalLink = value => null;
 
   nameOfficialDisabled = () => {
     const { formType } = this.state;
@@ -447,11 +461,11 @@ class InstitutionForm extends Component {
                           <AssignedList
                             errors={formState.errors}
                             valueFields={['name']}
-                            values={this.getFormerValues(formState)}
+                            values={this.getHistoricalLinkValues(formState)}
                             label={'Historical Link'}
                             btnLabel={'Add'}
-                            onRemove={this.onFormerNameRemove}
-                            renderDisplayValue={this.renderFormerNames}
+                            onRemove={this.onHistoricalLinkRemove}
+                            renderDisplayValue={this.renderHistoricalLinks}
                             field={'names[0].alternative_names'}
                             disabled={readOnly}
                           />
@@ -462,11 +476,11 @@ class InstitutionForm extends Component {
                           <AssignedList
                             errors={formState.errors}
                             valueFields={['name']}
-                            values={this.getLocalIDValues(formState)}
+                            values={this.getHierarchicalLinkValues(formState)}
                             label={'Hierarchical Link'}
                             btnLabel={'Add'}
-                            onRemove={this.onLocalIDRemove}
-                            renderDisplayValue={this.renderLocalID}
+                            onRemove={this.onHierarchicalLinkRemove}
+                            renderDisplayValue={this.renderHierarchicalLink}
                             field={'names[0].alternative_names'}
                             disabled={readOnly}
                           />
