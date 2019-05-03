@@ -20,7 +20,11 @@ export const flagRender = (row) => {
 };
 
 export const arrayRenderer = (row) => {
-  return row.value.join('; ');
+  if(row.value) {
+    return row.value.join('; ');
+  } else {
+    return null;
+  }
 };
 
 export const dateRender = (row) => {
