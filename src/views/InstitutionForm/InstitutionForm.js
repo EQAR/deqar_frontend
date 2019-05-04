@@ -16,11 +16,12 @@ import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
 
 import FormTextField from '../../components/FormFields/FormTextField';
+import FormSelectField from '../../components/FormFields/FormSelectField';
 import institution from '../../services/Institution';
 import style from './InstitutionForm.module.css';
 import AssignedList from '../../components/FormFieldsUncontrolled/AssignedList';
 import AlternativeNameForm from './components/AlternativeNameForm';
-import LocationForm from './components/LocationForm';
+import FormerNameForm from './components/FormerNameForm';
 import country from '../../services/Country';
 import qfEHEALevel from '../../services/QFeheaLevel';
 
@@ -30,12 +31,12 @@ class InstitutionForm extends Component {
     super(props);
     this.state = {
       readOnly: false,
-      nameModalOpen: false,
+      openModal: null,
       formType: null,
       alternativeNameValue: null,
-      locationModalOpen: false,
       qFeheaLevels: null,
-      locationValue: null
+      locationValue: null,
+      countries: null
     }
   }
 
@@ -49,7 +50,9 @@ class InstitutionForm extends Component {
     this.populate();
   }
 
-  isReadOnly = (formType) => formType === 'view';
+  // isReadOnly = (formType) => formType === 'view';
+
+  isReadOnly = (formType) => false;
 
   populate = () => {
     const { formID } = this.props;
@@ -64,6 +67,12 @@ class InstitutionForm extends Component {
     qfEHEALevel.select().then((response, error) => {
       this.setState({
         qFeheaLevels: response.data
+      });
+    });
+
+    country.getInstitutionCountries().then((response, error) => {
+      this.setState({
+        countries: response.data
       });
     })
   }
@@ -80,6 +89,7 @@ class InstitutionForm extends Component {
 
   formTitle() {
     const { formType } = this.state;
+
     return {
       view: 'View Institution',
       edit: 'Edit Institution',
@@ -87,9 +97,9 @@ class InstitutionForm extends Component {
     }[formType];
   }
 
-  toggleNameModal = () => {
+  toggleModal = (modal) => {
     this.setState({
-      nameModalOpen: !this.state.nameModalOpen
+      openModal: modal
     })
   }
 
@@ -119,12 +129,6 @@ class InstitutionForm extends Component {
     });
   }
 
-  toggleLocationModal = () => {
-    this.setState({
-      locationModalOpen: !this.state.locationModalOpen
-    })
-  }
-
   getAlternativeValues = formState => formState.values.names ? formState.values.names[0].alternative_names : null;
 
   getFormerValues = formState => null;
@@ -136,54 +140,36 @@ class InstitutionForm extends Component {
   getHierarchicalLinkValues = formState => null;
 
   renderLocations = formState => {
-    return (
-      <Row>
-        <Col md={6}>
-          <FormGroup>
-          <Label for="country">Country</Label>
-            <FormTextField
-              field={'countries[0].country.name_english'}
-              disabled
-            />
-          </FormGroup>
-        </Col>
-        <Col md={6}>
-          <FormGroup>
-          <Label for="city">City</Label>
-            <FormTextField
-              field={'countries[0].city'}
-              disabled
-            />
-          </FormGroup>
-        </Col>
-      </Row>
-    )
-    // if (this.formApi.getValue('countries')) {
-    //   return this.formApi.getValue('countries').map((country, i) => {
-    //     return (
-    //       <Row key={i}>
-    //         <Col md={6}>
-    //           <FormGroup>
-    //           <Label for="country">Country</Label>
-    //             <FormTextField
-    //               field={'countries[i].country.name_english'}
-    //               disabled
-    //             />
-    //           </FormGroup>
-    //         </Col>
-    //         <Col md={6}>
-    //           <FormGroup>
-    //           <Label for="city">City</Label>
-    //             <FormTextField
-    //               field={'countries[i].city'}
-    //               disabled
-    //             />
-    //           </FormGroup>
-    //         </Col>
-    //       </Row>
-    //     )
-    //   });
-    // }
+    const { countries } = this.state;
+
+    if (this.formApi.getValue('countries')) {
+      return this.formApi.getValue('countries').map((country, i) => {
+        return (
+          <Row key={i}>
+            <Col md={6}>
+              <FormGroup>
+              <Label for="country">Country</Label>
+                <FormSelectField
+                  field={`countries[${i}].country`}
+                  options={countries}
+                  placeholder={'Select country...'}
+                  labelField={'name_english'}
+                  valueField={'id'}
+                />
+              </FormGroup>
+            </Col>
+            <Col md={6}>
+              <FormGroup>
+              <Label for="city">City</Label>
+                <FormTextField
+                  field={`countries[${i}].city`}
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+        )
+      });
+    }
   }
 
   getCountry = formState => formState.values.countries ? formState.values.countries[0].country.name_english : null;
@@ -243,42 +229,42 @@ class InstitutionForm extends Component {
 
   renderHierarchicalLink = value => null;
 
-  nameOfficialDisabled = () => {
-    const { formType } = this.state;
+  // nameOfficialDisabled = () => {
+  //   const { formType } = this.state;
 
-    return formType !== 'create';
-  }
+  //   return formType !== 'create';
+  // }
 
-  disabled = (method) => {
-    const { formType } = this.state;
-    const disableMethods = {
-      name_official_transliterated: () => this.nameTransliteratedDisabled(),
-      name_english: () => this.nameEnglishDisabled(),
-      acronym: () => this.nameAcronymDisabled()
-    }
-    let isDisabled = true;
+  // disabled = (method) => {
+  //   const { formType } = this.state;
+  //   const disableMethods = {
+  //     name_official_transliterated: () => this.nameTransliteratedDisabled(),
+  //     name_english: () => this.nameEnglishDisabled(),
+  //     acronym: () => this.nameAcronymDisabled()
+  //   }
+  //   let isDisabled = true;
 
-    if (formType === 'edit') {
-      isDisabled = disableMethods[method]();
-    }
+  //   if (formType === 'edit') {
+  //     isDisabled = disableMethods[method]();
+  //   }
 
-    return isDisabled;
-  }
+  //   return isDisabled;
+  // }
 
-  nameTransliteratedDisabled = () => {
-    return this.formApi.getValue('names[0].name_official_transliterated') ? true : false;
-  }
+  // nameTransliteratedDisabled = () => {
+  //   return this.formApi.getValue('names[0].name_official_transliterated') ? true : false;
+  // }
 
-  nameEnglishDisabled = () => {
-    return this.formApi.getValue('names[0].name_english') ? true : false;
-  }
+  // nameEnglishDisabled = () => {
+  //   return this.formApi.getValue('names[0].name_english') ? true : false;
+  // }
 
-  nameAcronymDisabled = () => {
-    return this.formApi.getValue('names[0].acronym') ? true : false;
-  }
+  // nameAcronymDisabled = () => {
+  //   return this.formApi.getValue('names[0].acronym') ? true : false;
+  // }
 
   render() {
-    const { readOnly, nameModalOpen, alternativeNameValue, locationModalOpen, locationValue } = this.state;
+    const { readOnly, openModal, alternativeNameValue, locationModalOpen, locationValue } = this.state;
     const { backPath } = this.props;
 
     return (
@@ -303,7 +289,7 @@ class InstitutionForm extends Component {
                           <Label for="name_official" className={'required'}>Institution Name, Official</Label>
                             <FormTextField
                               field={'names[0].name_official'}
-                              disabled={this.nameOfficialDisabled()}
+                              disabled={false}
                             />
                           </FormGroup>
                         </Col>
@@ -314,7 +300,7 @@ class InstitutionForm extends Component {
                           <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
                             <FormTextField
                               field={'names[0].name_official_transliterated'}
-                              disabled={this.disabled('name_official_transliterated')}
+                              disabled={readOnly}
                             />
                           </FormGroup>
                         </Col>
@@ -325,7 +311,7 @@ class InstitutionForm extends Component {
                           <Label for="name_english">Institution Name, English</Label>
                             <FormTextField
                               field={'names[0].name_english'}
-                              disabled={this.disabled('name_english')}
+                              disabled={readOnly}
                             />
                           </FormGroup>
                         </Col>
@@ -333,8 +319,8 @@ class InstitutionForm extends Component {
                       <Row>
                         <Col>
                           <AlternativeNameForm
-                            modalOpen={nameModalOpen}
-                            onToggle={this.toggleNameModal}
+                            modalOpen={openModal === 'alternative-name'}
+                            onToggle={() => this.toggleModal('')}
                             onFormSubmit={this.onNameSubmit}
                             formValue={alternativeNameValue}
                             disabled={readOnly}
@@ -347,7 +333,7 @@ class InstitutionForm extends Component {
                             btnLabel={'Add Alternative Name'}
                             onRemove={this.onNameRemove}
                             renderDisplayValue={this.renderAlternativeNames}
-                            onAddButtonClick={this.toggleNameModal}
+                            onAddButtonClick={() => this.toggleModal('alternative-name')}
                             onClick={this.onNameClick}
                             field={'names[0].alternative_names'}
                             disabled={readOnly}
@@ -360,7 +346,7 @@ class InstitutionForm extends Component {
                           <Label for="acronym" className={'required'}>Institution Acronym</Label>
                             <FormTextField
                               field={'names[0].acronym'}
-                              disabled={this.disabled('acronym')}
+                              disabled={readOnly}
                             />
                           </FormGroup>
                         </Col>
@@ -371,13 +357,20 @@ class InstitutionForm extends Component {
                           <Label for="website_link" className={'required'}>Institution Website</Label>
                             <FormTextField
                               field={'website_link'}
-                              disabled={this.disabled('website_link')}
+                              disabled={readOnly}
                             />
                           </FormGroup>
                         </Col>
                       </Row>
                       <Row>
                         <Col>
+                        <FormerNameForm
+                            modalOpen={openModal === 'former-name'}
+                            onToggle={() => this.toggleModal('')}
+                            onFormSubmit={this.onNameSubmit}
+                            formValue={alternativeNameValue}
+                            disabled={readOnly}
+                          />
                           <AssignedList
                             errors={formState.errors}
                             valueFields={['name']}
@@ -385,6 +378,7 @@ class InstitutionForm extends Component {
                             label={'Former Names'}
                             btnLabel={'Add'}
                             onRemove={this.onFormerNameRemove}
+                            onAddButtonClick={() => this.toggleModal('former-name')}
                             renderDisplayValue={this.renderFormerNames}
                             field={'names[0].alternative_names'}
                             disabled={readOnly}
@@ -415,7 +409,7 @@ class InstitutionForm extends Component {
                           <Label for="founding_date">Founding Year</Label>
                             <FormTextField
                               field={'founding_date'}
-                              disabled
+                              disabled={readOnly}
                             />
                           </FormGroup>
                         </Col>
@@ -424,7 +418,7 @@ class InstitutionForm extends Component {
                           <Label for="closing_date">Closing Year</Label>
                             <FormTextField
                               field={'closing_date'}
-                              disabled
+                              disabled={readOnly}
                             />
                           </FormGroup>
                         </Col>
@@ -501,15 +495,6 @@ class InstitutionForm extends Component {
                 Close
               </Button>
             </Link>
-            <Button
-              size="sm"
-              color="secondary"
-              className={style.editButton}
-              onClick={this.editForm}
-              disabled
-            >
-              Edit
-            </Button>
           </CardFooter>
         </Card>
       </div>

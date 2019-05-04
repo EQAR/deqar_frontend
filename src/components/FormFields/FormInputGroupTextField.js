@@ -1,6 +1,6 @@
 import React from 'react';
 import { BasicText, asField } from 'informed';
-import {InputGroup, InputGroupAddon, InputGroupText} from "reactstrap";
+import { InputGroup, InputGroupAddon, InputGroupText } from "reactstrap";
 import PropTypes from 'prop-types';
 
 

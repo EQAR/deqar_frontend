@@ -2,18 +2,15 @@ import React, { Component } from 'react';
 import {
   Button,
   Col,
-  Collapse,
   FormGroup,
   Label,
   Modal,
   ModalBody,
   ModalFooter,
   ModalHeader,
-  Row} from "reactstrap";
+  Row } from "reactstrap";
 import PropTypes from 'prop-types';
-import {
-  Form,
-  Scope} from 'informed';
+import { Form } from 'informed';
 
 import FormTextField from "../../../components/FormFields/FormTextField";
 import { validateRequired } from "../../../utils/validators";
@@ -21,9 +18,6 @@ import { validateRequired } from "../../../utils/validators";
 class AlternativeNameForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-
-    }
   }
 
   setFormApi = (formApi) => {
@@ -85,6 +79,8 @@ class AlternativeNameForm extends Component {
                       />
                     </FormGroup>
                   </Col>
+                </Row>
+                <Row>
                   <Col md={12}>
                     <FormGroup>
                       <Label for="name_transliterated">Alternative Institution Name, Transliterated</Label>

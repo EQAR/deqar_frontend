@@ -1,15 +1,14 @@
 import React from 'react';
 import { asField } from 'informed';
 import Select from 'react-select';
-import {Badge} from "reactstrap";
-import style from './FormSelectField.module.scss';
+import { Badge } from "reactstrap";
+import style from './FormSelectField.module.css';
 
 const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
   const { value } = fieldState;
   const { setValue, setTouched, setError } = fieldApi;
   const { onChange, onBlur, initialValue, forwardedRef, labelField, valueField, disabled, placeholder, includeID,
     isMulti, ...rest } = props;
-
   const borderColor = fieldApi.getError() ? '#f86c6b' : '#e4e7ea';
 
   const customStyles = {
@@ -45,8 +44,8 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
   };
 
   const getLabel = (option) => {
-    if(includeID) {
-      if(includeID === 'back') {
+    if (includeID) {
+      if (includeID === 'back') {
         return (<React.Fragment>{option[labelField]} - ID {option['id']}</React.Fragment>)
       } else {
         return (<React.Fragment>{option['id']} - {option[labelField]}</React.Fragment>)
@@ -59,17 +58,17 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
   const getValue = () => {
     const val = value || initialValue || '';
 
-    if(isMulti) {
+    if (isMulti) {
       const vals =  val.map((v) => {
-        if(v.hasOwnProperty(labelField)) {
+        if (v.hasOwnProperty(labelField)) {
           return v[labelField]
-        } else{
+        } else {
           return ''
         }
       });
       return vals.join(', ');
     } else {
-      if(val.hasOwnProperty(labelField)) {
+      if (val.hasOwnProperty(labelField)) {
         return val[labelField]
       } else {
         return ''
@@ -97,13 +96,13 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
           onChange={(value, action) => {
             setError('');
             setValue(value);
-            if (onChange) {
+            if  (onChange) {
               onChange(value);
             }
           }}
           onBlur={e => {
             setTouched();
-            if (onBlur) {
+            if  (onBlur) {
               onBlur(e);
             }
           }}
@@ -111,7 +110,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
           placeholder={disabled ? "" : placeholder}
           isClearable={true}
           getOptionLabel={getLabel}
-          getOptionValue={(option) => {return option[valueField]}}
+          getOptionValue={(option) => option[valueField]}
         />
       }
       {fieldState.error ? (
