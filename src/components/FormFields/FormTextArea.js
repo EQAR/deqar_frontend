@@ -9,15 +9,16 @@ const FormTextArea = asField(({ fieldState, placeholder, disabled, className, ..
   <React.Fragment>
     <Input
       type="textarea"
-      fieldState={fieldState}
+      // fieldstate={fieldState}
       placeholder={disabled ? "" : placeholder}
-      readOnly={disabled}
-      {...props}
-      className={cx(fieldState.error ? ' form-control is-invalid' : ' form-control', className, style.Textarea)}
+      // readOnly={disabled}
+      // {...props}
+      // className={cx(fieldState.error ? ' form-control is-invalid' : ' form-control', className, style.Textarea)}
+      className={style.Textarea}
     />
-    {fieldState.error ? (
+    {/* {fieldState.error ? (
       <small className="help-block form-text text-danger">{fieldState.error}</small>
-    ) : null}
+    ) : null} */}
   </React.Fragment>
 ));
 

@@ -22,6 +22,8 @@ import style from './InstitutionForm.module.css';
 import AssignedList from '../../components/FormFieldsUncontrolled/AssignedList';
 import AlternativeNameForm from './components/AlternativeNameForm';
 import FormerNameForm from './components/FormerNameForm';
+import LocalIdForm from './components/LocalIdForm';
+import HistoricalLinkForm from './components/HistoricalLinkForm';
 import country from '../../services/Country';
 import qfEHEALevel from '../../services/QFeheaLevel';
 
@@ -387,6 +389,13 @@ class InstitutionForm extends Component {
                       </Row>
                       <Row>
                         <Col>
+                        <LocalIdForm
+                            modalOpen={openModal === 'local-id'}
+                            onToggle={() => this.toggleModal('')}
+                            onFormSubmit={this.onNameSubmit}
+                            formValue={alternativeNameValue}
+                            disabled={readOnly}
+                          />
                           <AssignedList
                             errors={formState.errors}
                             valueFields={['name']}
@@ -394,6 +403,7 @@ class InstitutionForm extends Component {
                             label={'Local ID'}
                             btnLabel={'Add'}
                             onRemove={this.onLocalIDRemove}
+                            onAddButtonClick={() => this.toggleModal('local-id')}
                             renderDisplayValue={this.renderLocalID}
                             field={'names[0].alternative_names'}
                             disabled={readOnly}
@@ -452,6 +462,13 @@ class InstitutionForm extends Component {
                       </Row>
                       <Row>
                         <Col>
+                        <HistoricalLinkForm
+                            modalOpen={openModal === 'historical-link'}
+                            onToggle={() => this.toggleModal('')}
+                            onFormSubmit={this.onNameSubmit}
+                            formValue={alternativeNameValue}
+                            disabled={readOnly}
+                          />
                           <AssignedList
                             errors={formState.errors}
                             valueFields={['name']}
@@ -459,6 +476,7 @@ class InstitutionForm extends Component {
                             label={'Historical Link'}
                             btnLabel={'Add'}
                             onRemove={this.onHistoricalLinkRemove}
+                            onAddButtonClick={() => this.toggleModal('historical-link')}
                             renderDisplayValue={this.renderHistoricalLinks}
                             field={'names[0].alternative_names'}
                             disabled={readOnly}

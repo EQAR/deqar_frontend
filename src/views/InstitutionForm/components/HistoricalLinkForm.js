@@ -12,15 +12,34 @@ import {
 import PropTypes from 'prop-types';
 import { Form } from 'informed';
 
-import FormTextField from "../../../components/FormFields/FormTextField";
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
 import FormTextArea from "../../../components/FormFields/FormTextArea";
-import { validateRequired } from "../../../utils/validators";
+import FormSelectField from '../../../components/FormFields/FormSelectField';
+import InstitutionSelect from './InstitutionSelect';
+import Institution from '../../../services/Institution';
 
-class FormerNameForm extends Component {
+
+class HistoricalLinkForm extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      institutions: null
+    }
   }
+
+  onInstitutionSelected = (value) => {
+    let institutions = this.formApi.getValue('institutions');
+
+    if (institutions) {
+      const institution_ids = institutions.map(i => i.id);
+      if (!(institution_ids.includes(value.id))) {
+        institutions.push(value)
+      }
+    } else {
+      institutions = [value]
+    }
+    this.formApi.setValue('institutions', institutions);
+  };
 
   setFormApi = (formApi) => {
     const { formValue } = this.props;
@@ -57,75 +76,48 @@ class FormerNameForm extends Component {
 
   render() {
     const { modalOpen, disabled, formIndex } = this.props;
+    const { institutions } = this.state;
 
     return(
       <Modal isOpen={modalOpen} toggle={this.onToggle}>
         <Form
           getApi={this.setFormApi}
           onSubmit={(value) => this.props.onFormSubmit(value, formIndex)}
-          id="former-name-form"
+          id="alternative-name-form"
         >
           {({ formState }) => (
             <React.Fragment>
-              <ModalHeader toggle={this.onToggle}>Add former name</ModalHeader>
+              <ModalHeader toggle={this.onToggle}>Add Historical Link</ModalHeader>
               <ModalBody>
                 <Row>
                   <Col>
                     <FormGroup>
+                    <Label for="former_name_official" className={'required'}>Relationship</Label>
+                    <FormSelectField
+                      field={`identifiers`}
+                      placeholder={'Please select'}
+                      labelField={'acronym_primary'}
+                      valueField={'id'}
+                    />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <FormGroup>
                     <Label for="former_name_official" className={'required'}>Institution Name, Official</Label>
-                      <FormTextField
-                        field={'names[0].name_official'}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <FormGroup>
-                    <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
-                      <FormTextField
-                        field={'names[0].name_official_transliterated'}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <FormGroup>
-                    <Label for="name_english">Institution Name, English</Label>
-                      <FormTextField
-                        field={'names[0].name_english'}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md={12}>
-                    <div className="pull-right">
-                      <Button
-                        type={'button'}
-                        size="sm"
-                        color="secondary"
-                      >Add More...</Button>
-                    </div>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md={6}>
-                    <FormGroup>
-                    <Label for="acronym">Institution Acronym</Label>
-                      <FormTextField
-                        field={'names[0].acronym'}
-                      />
+                    <InstitutionSelect
+                      onChange={this.onInstitutionSelected}
+                    />
                     </FormGroup>
                   </Col>
                 </Row>
                 <Row>
                   <Col md={6}>
                     <FormGroup>
-                    <Label for="valid_to" className={'required'}>Valid To</Label>
+                    <Label for="founding_date">Date</Label>
                       <FormDatePickerField
-                        field={'website_link'}
+                        field={'founding_date'}
                         placeholderText={'YYYY-MM-DD'}
                       />
                     </FormGroup>
@@ -134,9 +126,9 @@ class FormerNameForm extends Component {
                 <Row>
                   <Col>
                     <FormGroup>
-                    <Label for="name_english">Name source Note</Label>
+                    <Label for="name_english">Relationship Note</Label>
                       <FormTextArea
-                        field={'names[0].name_english'}
+                        field={'identifier'}
                       />
                     </FormGroup>
                   </Col>
@@ -159,7 +151,7 @@ class FormerNameForm extends Component {
   }
 }
 
-FormerNameForm.propTypes = {
+HistoricalLinkForm.propTypes = {
   modalOpen: PropTypes.bool.isRequired,
   formValue: PropTypes.object,
   onToggle: PropTypes.func.isRequired,
@@ -167,4 +159,4 @@ FormerNameForm.propTypes = {
   disabled: PropTypes.bool
 }
 
-export default FormerNameForm;
+export default HistoricalLinkForm;
