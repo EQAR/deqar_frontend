@@ -8,7 +8,7 @@ import {
   CardHeader,
   Col,
   FormGroup,
-  FormText,
+  Collapse,
   Label,
   Row
 } from "reactstrap";
@@ -25,6 +25,7 @@ import FormerNameForm from './components/FormerNameForm';
 import LocalIdForm from './components/LocalIdForm';
 import HistoricalLinkForm from './components/HistoricalLinkForm';
 import HierarchicalLinkForm from './components/HierarchicalLinkForm';
+import InfoBox from './components/InfoBox';
 import country from '../../services/Country';
 import qfEHEALevel from '../../services/QFeheaLevel';
 
@@ -39,7 +40,8 @@ class InstitutionForm extends Component {
       alternativeNameValue: null,
       qFeheaLevels: null,
       locationValue: null,
-      countries: null
+      countries: null,
+      infoBoxOpen: true
     }
   }
 
@@ -267,21 +269,19 @@ class InstitutionForm extends Component {
   // }
 
   render() {
-    const { readOnly, openModal, alternativeNameValue, locationModalOpen, locationValue } = this.state;
+    const { readOnly, openModal, alternativeNameValue, infoBoxOpen, locationModalOpen, locationValue } = this.state;
     const { backPath } = this.props;
 
     return (
-      <div className="animated fadeIn">
-        <Card>
-        <CardHeader>
-            <Row>
-              <Col>{this.formTitle()}</Col>
-            </Row>
-          </CardHeader>
-          <Form
-            getApi={this.setFormApi}
-          >
-            {({ formState }) => (
+      <Form className="animated fadeIn" getApi={this.setFormApi}>
+        {({ formState }) => (
+          <Card>
+            <CardHeader>
+              <Row>
+                <Col>{this.formTitle()}</Col>
+              </Row>
+            </CardHeader>
+            <CardBody>
               <React.Fragment>
                 <CardBody>
                   <Row>
@@ -511,20 +511,28 @@ class InstitutionForm extends Component {
                   </Row>
                 </CardBody>
               </React.Fragment>
-            )}
-          </Form>
-          <CardFooter>
-            <Link to={{pathname: `${backPath}`}}>
-              <Button
-                size="sm"
-                color="secondary"
-              >
-                Close
-              </Button>
-            </Link>
-          </CardFooter>
-        </Card>
-      </div>
+            </CardBody>
+            <CardFooter className={style.infoFooter}>
+              <Collapse isOpen={infoBoxOpen}>
+                <InfoBox
+                  formState={formState.values}
+                  disabled={readOnly}
+                  />
+              </Collapse>
+            </CardFooter>
+            <CardFooter>
+              <Link to={{pathname: `${backPath}`}}>
+                <Button
+                  size="sm"
+                  color="secondary"
+                  >
+                  Close
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+        )}
+      </Form>
     )
   }
 }
