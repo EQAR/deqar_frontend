@@ -24,6 +24,7 @@ import AlternativeNameForm from './components/AlternativeNameForm';
 import FormerNameForm from './components/FormerNameForm';
 import LocalIdForm from './components/LocalIdForm';
 import HistoricalLinkForm from './components/HistoricalLinkForm';
+import HierarchicalLinkForm from './components/HierarchicalLinkForm';
 import country from '../../services/Country';
 import qfEHEALevel from '../../services/QFeheaLevel';
 
@@ -480,11 +481,18 @@ class InstitutionForm extends Component {
                             renderDisplayValue={this.renderHistoricalLinks}
                             field={'names[0].alternative_names'}
                             disabled={readOnly}
-                          />
+                            />
                         </Col>
                       </Row>
                       <Row>
                         <Col>
+                        <HierarchicalLinkForm
+                            modalOpen={openModal === 'hierarchical-link'}
+                            onToggle={() => this.toggleModal('')}
+                            onFormSubmit={this.onNameSubmit}
+                            formValue={alternativeNameValue}
+                            disabled={readOnly}
+                            />
                           <AssignedList
                             errors={formState.errors}
                             valueFields={['name']}
@@ -492,6 +500,7 @@ class InstitutionForm extends Component {
                             label={'Hierarchical Link'}
                             btnLabel={'Add'}
                             onRemove={this.onHierarchicalLinkRemove}
+                            onAddButtonClick={() => this.toggleModal('hierarchical-link')}
                             renderDisplayValue={this.renderHierarchicalLink}
                             field={'names[0].alternative_names'}
                             disabled={readOnly}
