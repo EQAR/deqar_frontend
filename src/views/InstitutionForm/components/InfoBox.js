@@ -32,8 +32,6 @@ class InfoBox extends Component {
 
   renderFlags = () => {
     const { formState } = this.props;
-    console.log(formState.eter_id);
-
 
     // if (Object.entries(formState).length !== 0) {
     //   const { flags } = formState;

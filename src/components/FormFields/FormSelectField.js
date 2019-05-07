@@ -41,7 +41,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
     indicatorsContainer: (provided, state) => ({
       display: state.isDisabled ? 'none' : 'flex'
     })
-  };
+  }
 
   const getLabel = (option) => {
     if (includeID) {
@@ -53,7 +53,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
     } else {
       return option[labelField]
     }
-  };
+  }
 
   const getValue = () => {
     const val = value || initialValue || '';
@@ -74,7 +74,13 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
         return ''
       }
     }
-  };
+  }
+
+  const changeValue = (value, action) =>  {
+    setError('');
+    setValue(value);
+    onChange ? onChange(value) : setValue(value);
+  }
 
   return (
     <React.Fragment>
@@ -93,13 +99,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
           ref={forwardedRef}
           defaultValue={value || initialValue || ''}
           value={value || initialValue || ''}
-          onChange={(value, action) => {
-            setError('');
-            setValue(value);
-            if  (onChange) {
-              onChange(value);
-            }
-          }}
+          onChange={(value, action) => changeValue(value, action)}
           onBlur={e => {
             setTouched();
             if  (onBlur) {
@@ -118,10 +118,10 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
       ) : null}
     </React.Fragment>
   )
-});
+})
 
 FormSelectField.defaultProps = {
   includeID: false
-};
+}
 
 export default FormSelectField;

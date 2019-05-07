@@ -14,9 +14,11 @@ import {
 } from "reactstrap";
 import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
+import Select from 'react-select';
 
 import FormTextField from '../../components/FormFields/FormTextField';
 import FormSelectField from '../../components/FormFields/FormSelectField';
+import FormDatePickerField from "../../components/FormFields/FormDatePickerField";
 import institution from '../../services/Institution';
 import style from './InstitutionForm.module.css';
 import AssignedList from '../../components/FormFieldsUncontrolled/AssignedList';
@@ -39,7 +41,6 @@ class InstitutionForm extends Component {
       formType: null,
       alternativeNameValue: null,
       qFeheaLevels: null,
-      locationValue: null,
       countries: null,
       infoBoxOpen: true
     }
@@ -82,6 +83,15 @@ class InstitutionForm extends Component {
     })
   }
 
+  // convertQFeheaLevels = (response) => {
+  //   return response.map(level => {
+  //     return {
+  //       qf_ehea_level: level.id,
+  //       level: level.level
+  //     }
+  //   })
+  // }
+
   editForm = () => {
     this.setState({
       formType: 'edit'
@@ -119,6 +129,9 @@ class InstitutionForm extends Component {
   }
 
   onLocalIDRemove = (index) => {
+  }
+
+  onQFEheaLevelsRemove = (index) => {
   }
 
   onHistoricalLinkRemove = (index) => {
@@ -177,50 +190,32 @@ class InstitutionForm extends Component {
     }
   }
 
-  getCountry = formState => formState.values.countries ? formState.values.countries[0].country.name_english : null;
-
-  onCountryClick = () => {
-    this.setState({
-      locationModalOpen: true,
-      locationValue: this.formApi.getValue('countries')
-    });
+  changeQFEheaLvels = (level) => {
+    this.formApi.setValue('qf_ehea_levels', [...this.formApi.getValue('qf_ehea_levels'), {qf_ehea_level: level.id}]);
   }
 
-  onCountryRemove = () => {
-
-  }
-
-  renderCountries = (value) => {
-    const { city, country } = value;
-    const { name_english } = country;
-
-    return `${city} (${name_english})`
-  }
-
-  identifiersSelector = (identifierType, formState) => {
-    let identifierField = '';
-    const identifiers = this.formApi.getValue('identifiers');
-
-    if (formState.values.identifiers) {
-      identifierField = 'identifiers[0].identifier'
-      formState.values.identifiers.forEach((identifier, i) => {
-        if (identifierType === 'national_identifier' && identifier.resource !== 'local identifier') {
-          identifierField = `identifiers[${i}].identifier`;
-        } else if (identifierType === 'local_identifier' && identifier.resource === 'local identifier') {
-          identifierField = `identifiers[${i}].identifier`;
-        }
-      });
-    };
-    return identifierField;
-  }
-
-  getQFeheaLevels = (formState) => {
+  getQFEheaLevels = (formState) => {
     const { qFeheaLevels } = this.state;
 
     return formState.values.qf_ehea_levels && qFeheaLevels ?
-      formState.values.qf_ehea_levels.map(level => qFeheaLevels.filter(l =>level.qf_ehea_level === l.id)[0]) :
+      formState.values.qf_ehea_levels.map(level => qFeheaLevels.filter(l => level.qf_ehea_level === l.id)[0]) :
       null;
   }
+
+  getQFEheaOptions = (qFeheaLevels) => {
+    const formLevels = this.formApi.getValue('qf_ehea_levels');
+    if (formLevels && qFeheaLevels) {
+      formLevels.forEach(l => {
+        qFeheaLevels = qFeheaLevels.filter(level => level.id !== l.qf_ehea_level);
+      });
+    }
+
+    return qFeheaLevels;
+  }
+
+  getLabel = (option) => option.level;
+
+  getValue = (option) => option.id;
 
   renderAlternativeNames = value => value.name;
 
@@ -228,51 +223,17 @@ class InstitutionForm extends Component {
 
   renderLocalID = value => null;
 
-  renderQFeheaLevels = value => value.level;
+  renderQFEheaLevels = value => value.level;
 
   renderHistoricalLinks = value => null;
 
   renderHierarchicalLink = value => null;
 
-  // nameOfficialDisabled = () => {
-  //   const { formType } = this.state;
-
-  //   return formType !== 'create';
-  // }
-
-  // disabled = (method) => {
-  //   const { formType } = this.state;
-  //   const disableMethods = {
-  //     name_official_transliterated: () => this.nameTransliteratedDisabled(),
-  //     name_english: () => this.nameEnglishDisabled(),
-  //     acronym: () => this.nameAcronymDisabled()
-  //   }
-  //   let isDisabled = true;
-
-  //   if (formType === 'edit') {
-  //     isDisabled = disableMethods[method]();
-  //   }
-
-  //   return isDisabled;
-  // }
-
-  // nameTransliteratedDisabled = () => {
-  //   return this.formApi.getValue('names[0].name_official_transliterated') ? true : false;
-  // }
-
-  // nameEnglishDisabled = () => {
-  //   return this.formApi.getValue('names[0].name_english') ? true : false;
-  // }
-
-  // nameAcronymDisabled = () => {
-  //   return this.formApi.getValue('names[0].acronym') ? true : false;
-  // }
-
   render() {
-    const { readOnly, openModal, alternativeNameValue, infoBoxOpen, locationModalOpen, locationValue } = this.state;
+    const { readOnly, openModal, alternativeNameValue, infoBoxOpen, qFeheaLevels } = this.state;
     const { backPath } = this.props;
-
-    return (
+    // console.log(qFeheaLevels)
+    return  qFeheaLevels ? (
       <Form className="animated fadeIn" getApi={this.setFormApi}>
         {({ formState }) => (
           <Card>
@@ -418,36 +379,54 @@ class InstitutionForm extends Component {
                         <Col md={6}>
                           <FormGroup>
                           <Label for="founding_date">Founding Year</Label>
-                            <FormTextField
+                            <FormDatePickerField
                               field={'founding_date'}
-                              disabled={readOnly}
+                              placeholderText={'YYYY-MM-DD'}
                             />
                           </FormGroup>
                         </Col>
                         <Col md={6}>
                           <FormGroup>
                           <Label for="closing_date">Closing Year</Label>
-                            <FormTextField
-                              field={'closing_date'}
-                              disabled={readOnly}
+                            <FormDatePickerField
+                              field={'closure_date'}
+                              placeholderText={'YYYY-MM-DD'}
                             />
                           </FormGroup>
                         </Col>
                       </Row>
                       <Row>
                         <Col>
-                          <FormGroup>
-                          <AssignedList
-                            errors={formState.errors}
-                            valueFields={['level']}
-                            values={this.getQFeheaLevels(formState)}
-                            label={'QF-EHEA Levels'}
-                            onRemove={this.onNameRemove}
-                            renderDisplayValue={this.renderQFeheaLevels}
-                            field={'alternative_names'}
-                            disabled={readOnly}
-                          />
-                          </FormGroup>
+                            <Row>
+                              <Col>
+                                <FormGroup>
+                                  <Label for="country">QF-EHEA Levels</Label>
+                                  <Select
+                                    options={this.getQFEheaOptions(qFeheaLevels)}
+                                    onChange={this.changeQFEheaLvels}
+                                    placeholder={'Select select multiple, if necessary'}
+                                    getOptionLabel={this.getLabel}
+                                    getOptionValue={this.getValue}
+                                    value={0}
+                                  />
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col>
+                                <FormGroup>
+                                  <AssignedList
+                                    errors={formState.errors}
+                                    valueFields={['qf_ehea_level']}
+                                    values={this.getQFEheaLevels(formState)}
+                                    onRemove={this.onQFEheaLevelsRemove}
+                                    renderDisplayValue={this.renderQFEheaLevels}
+                                    field={'qf_ehea_levels'}
+                                    disabled={readOnly}
+                                  />
+                                </FormGroup>
+                              </Col>
+                            </Row>
                         </Col>
                       </Row>
                       <Row>
@@ -533,7 +512,7 @@ class InstitutionForm extends Component {
           </Card>
         )}
       </Form>
-    )
+    ) : null;
   }
 }
 
