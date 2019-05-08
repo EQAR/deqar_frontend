@@ -73,7 +73,7 @@ class LocalIdForm extends Component {
         <Form
           getApi={this.setFormApi}
           onSubmit={(value) => this.props.onFormSubmit(value, formIndex)}
-          id="alternative-name-form"
+          id="local-id-form"
         >
           {({ formState }) => (
             <React.Fragment>
@@ -82,11 +82,11 @@ class LocalIdForm extends Component {
                 <Row>
                   <Col>
                     <FormGroup>
-                    <Label for="former_name_official" className={'required'}>Agency</Label>
+                    <Label for="agency" className={'required'}>Agency</Label>
                     <FormSelectField
                       field={`identifiers`}
                       options={agencies}
-                      placeholder={'Please select...'}
+                      placeholder={'Please select'}
                       labelField={'acronym_primary'}
                       valueField={'id'}
                     />
@@ -96,9 +96,10 @@ class LocalIdForm extends Component {
                 <Row>
                   <Col>
                     <FormGroup>
-                    <Label for="name_official_transliterated">Locale Identifier</Label>
+                    <Label for="local-id">Locale Identifier</Label>
                       <FormTextField
                         field={'names[0].name_official_transliterated'}
+                        placeholder={'Enter local ID'}
                       />
                     </FormGroup>
                   </Col>
@@ -106,7 +107,7 @@ class LocalIdForm extends Component {
                 <Row>
                   <Col md={6}>
                     <FormGroup>
-                    <Label for="founding_date">Valif From</Label>
+                    <Label for="valid-from">Valid From</Label>
                       <FormDatePickerField
                         field={'founding_date'}
                         placeholderText={'YYYY-MM-DD'}
@@ -115,7 +116,7 @@ class LocalIdForm extends Component {
                   </Col>
                   <Col md={6}>
                     <FormGroup>
-                    <Label for="closing_date">Valid To</Label>
+                    <Label for="valid-to">Valid To</Label>
                       <FormDatePickerField
                         field={'closing_date'}
                         placeholderText={'YYYY-MM-DD'}
@@ -126,9 +127,10 @@ class LocalIdForm extends Component {
                 <Row>
                   <Col>
                     <FormGroup>
-                    <Label for="name_english">Identifier Note</Label>
+                    <Label for="id-note">Identifier Note</Label>
                       <FormTextArea
                         field={'identifier'}
+                        placeholder={'Enter identifier information'}
                       />
                     </FormGroup>
                   </Col>
