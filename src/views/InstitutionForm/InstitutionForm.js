@@ -83,15 +83,6 @@ class InstitutionForm extends Component {
     })
   }
 
-  // convertQFeheaLevels = (response) => {
-  //   return response.map(level => {
-  //     return {
-  //       qf_ehea_level: level.id,
-  //       level: level.level
-  //     }
-  //   })
-  // }
-
   editForm = () => {
     this.setState({
       formType: 'edit'
@@ -170,7 +161,7 @@ class InstitutionForm extends Component {
                 <FormSelectField
                   field={`countries[${i}].country`}
                   options={countries}
-                  placeholder={'Select country...'}
+                  placeholder={'Please select'}
                   labelField={'name_english'}
                   valueField={'id'}
                 />
@@ -181,6 +172,7 @@ class InstitutionForm extends Component {
               <Label for="city">City</Label>
                 <FormTextField
                   field={`countries[${i}].city`}
+                  placeholder={'Enter city name'}
                 />
               </FormGroup>
             </Col>
@@ -253,6 +245,7 @@ class InstitutionForm extends Component {
                           <Label for="name_official" className={'required'}>Institution Name, Official</Label>
                             <FormTextField
                               field={'names[0].name_official'}
+                              placeholder={'Enter official institution name'}
                               disabled={false}
                             />
                           </FormGroup>
@@ -264,6 +257,7 @@ class InstitutionForm extends Component {
                           <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
                             <FormTextField
                               field={'names[0].name_official_transliterated'}
+                              placeholder={'Enter transliterated form'}
                               disabled={readOnly}
                             />
                           </FormGroup>
@@ -275,6 +269,7 @@ class InstitutionForm extends Component {
                           <Label for="name_english">Institution Name, English</Label>
                             <FormTextField
                               field={'names[0].name_english'}
+                              placeholder={'Enter English form'}
                               disabled={readOnly}
                             />
                           </FormGroup>
@@ -310,17 +305,19 @@ class InstitutionForm extends Component {
                           <Label for="acronym" className={'required'}>Institution Acronym</Label>
                             <FormTextField
                               field={'names[0].acronym'}
+                              placeholder={'Enter acronym'}
                               disabled={readOnly}
                             />
                           </FormGroup>
                         </Col>
                       </Row>
                       <Row>
-                        <Col md={6}>
+                        <Col>
                           <FormGroup>
                           <Label for="website_link" className={'required'}>Institution Website</Label>
                             <FormTextField
                               field={'website_link'}
+                              placeholder={'Enter institution website'}
                               disabled={readOnly}
                             />
                           </FormGroup>
@@ -381,7 +378,7 @@ class InstitutionForm extends Component {
                           <Label for="founding_date">Founding Year</Label>
                             <FormDatePickerField
                               field={'founding_date'}
-                              placeholderText={'YYYY-MM-DD'}
+                              placeholderText={'Enter year'}
                             />
                           </FormGroup>
                         </Col>
@@ -390,7 +387,7 @@ class InstitutionForm extends Component {
                           <Label for="closing_date">Closing Year</Label>
                             <FormDatePickerField
                               field={'closure_date'}
-                              placeholderText={'YYYY-MM-DD'}
+                              placeholderText={'Enter year'}
                             />
                           </FormGroup>
                         </Col>
@@ -435,6 +432,7 @@ class InstitutionForm extends Component {
                           <Label for="comment">Other comment(optional)</Label>
                             <FormTextField
                               field={'comment'}
+                              placeholder={'Enter comment, if applicable'}
                               disabled={readOnly}
                             />
                           </FormGroup>
