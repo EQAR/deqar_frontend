@@ -25,6 +25,7 @@ class FormerNameForm extends Component {
   setFormApi = (formApi) => {
     const { formValue } = this.props;
     this.formApi = formApi;
+
     if (formValue) {
       this.formApi.setValues(formValue);
     }
@@ -46,7 +47,7 @@ class FormerNameForm extends Component {
     const {formIndex, disabled} = this.props;
     let action = '';
 
-    if(formIndex >= 0) {
+    if (formIndex >= 0) {
       action = disabled ? 'View' : 'Edit'
     } else {
       action = 'Add'
@@ -75,6 +76,7 @@ class FormerNameForm extends Component {
                     <Label for="former_name_official" className={'required'}>Institution Name, Official</Label>
                       <FormTextField
                         field={'names[0].name_official'}
+                        placeholder={'Enter official institution name'}
                       />
                     </FormGroup>
                   </Col>
@@ -85,6 +87,7 @@ class FormerNameForm extends Component {
                     <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
                       <FormTextField
                         field={'names[0].name_official_transliterated'}
+                        placeholder={'Enter transliterated form'}
                       />
                     </FormGroup>
                   </Col>
@@ -95,6 +98,7 @@ class FormerNameForm extends Component {
                     <Label for="name_english">Institution Name, English</Label>
                       <FormTextField
                         field={'names[0].name_english'}
+                        placeholder={'Enter english form'}
                       />
                     </FormGroup>
                   </Col>
@@ -116,6 +120,7 @@ class FormerNameForm extends Component {
                     <Label for="acronym">Institution Acronym</Label>
                       <FormTextField
                         field={'names[0].acronym'}
+                        placeholder={'Enter acronym'}
                       />
                     </FormGroup>
                   </Col>
@@ -137,6 +142,7 @@ class FormerNameForm extends Component {
                     <Label for="name_english">Name source Note</Label>
                       <FormTextArea
                         field={'names[0].name_english'}
+                        placeholder={'Enter name source information'}
                       />
                     </FormGroup>
                   </Col>
