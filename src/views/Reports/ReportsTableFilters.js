@@ -1,16 +1,15 @@
 import React, {Component} from 'react';
-import style from "./ReportsTableFilters.module.css";
-import {Button, Col, Collapse, FormGroup, Input, Row} from "reactstrap";
+import {Col, Collapse, FormGroup, Input, Row} from "reactstrap";
 import SelectFilter from "../../components/DataTableFilters/SelectFilter";
 import ActiveDateFilter from "../../components/DataTableFilters/ActiveDateFilter";
 import {connect} from "react-redux";
-import cx from 'classnames';
 
 class ReportsTableFilters extends Component {
   constructor(props) {
     super(props);
     this.state = {
       query: '',
+      id: '',
       country: undefined,
       agency: undefined,
       activity_type: undefined,
@@ -23,6 +22,7 @@ class ReportsTableFilters extends Component {
   componentDidMount() {
     this.setState({
       query: this.getFilterValue('query', 'text'),
+      id: this.getFilterValue('id', 'text'),
       country: this.getFilterValue('country', 'select'),
       agency: this.getFilterValue('agency', 'select'),
       activity_type: this.getFilterValue('activity_type', 'select'),
@@ -86,41 +86,30 @@ class ReportsTableFilters extends Component {
     this.props.onFilter(filtered);
   };
 
-  onFilterClick = () => {
-    this.props.onFilterClick();
-  };
-
   render() {
-    const {filterState, total} = this.props;
+    const {filterState} = this.props;
     const {filterOpen} = filterState;
-    const {query, country, agency, activity_type, flag, year, active} = this.state;
-
-    const totalText = filterState.filtered.length > 0 ? `Number of reports (filtered): ${total}` : `Number of reports (total): ${total}`;
+    const {query, id, country, agency, activity_type, flag, year, active} = this.state;
 
     return(
       <React.Fragment>
-        <Row className={style.FilterContainer}>
-          <Col xs={12}>
-            <Button
-              color={'secondary'}
-              size={'sm'}
-              onClick={this.onFilterClick}
-            >
-              <i className="fa fa-filter"> </i>&nbsp;Filter Table
-            </Button>
-            <div className={cx(style.TotalRecords, 'pull-right')}>
-                {totalText}
-            </div>
-          </Col>
-        </Row>
         <Collapse isOpen={filterOpen}>
           <Row form>
-            <Col md={9}>
+            <Col md={6}>
               <FormGroup>
                 <Input
                   value={query || ""}
                   onChange={(e) => this.onFilterChange(e.target.value, 'query')}
                   placeholder={'Filter by Institution / Programme'}
+                />
+              </FormGroup>
+            </Col>
+            <Col md={3}>
+              <FormGroup>
+                <Input
+                  value={id || ""}
+                  onChange={(e) => this.onFilterChange(e.target.value, 'id')}
+                  placeholder={'Filter by Report ID'}
                 />
               </FormGroup>
             </Col>
