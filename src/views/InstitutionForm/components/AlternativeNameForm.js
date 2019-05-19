@@ -54,7 +54,9 @@ class AlternativeNameForm extends Component {
   }
 
   render() {
-    const { modalOpen, disabled, formIndex } = this.props;
+    const { modalOpen, disabled, formIndex, formValue } = this.props;
+    console.log(formValue);
+
 
     return(
       <Modal isOpen={modalOpen} toggle={this.onToggle}>
