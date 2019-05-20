@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form } from 'informed';
+import { Form , withFormState} from 'informed';
 import {
   Button,
   Card,
@@ -60,7 +60,7 @@ class InstitutionForm extends Component {
 
   // isReadOnly = (formType) => formType === 'view';
 
-  isReadOnly = (formType) => true;
+  isReadOnly = (formType) => false;
 
   populate = () => {
     const { formID } = this.props;
@@ -112,11 +112,7 @@ class InstitutionForm extends Component {
   }
 
   onNameSubmit = (i) => {
-    this.setState({
-      alternativeNameValue: this.formApi.getValue('names')[0].alternative_names[i],
-      alernativeNameIndex: i
-    });
-    this.toggleModal('alternative-name');
+
   }
 
   onNameRemove = (index) => {
@@ -137,18 +133,19 @@ class InstitutionForm extends Component {
   onHierarchicalLinkRemove = (index) => {
   }
 
-  onNameClick = (index) => {
+  onNameClick = (i) => {
     this.setState({
-      nameModalOpen: true,
-      alternativeNameValue: this.formApi.getValue('names')[0].alternative_names[index]
+      alternativeNameValue: this.formApi.getValue('names_actual')[0].alternative_names[i],
+      alernativeNameIndex: i
     });
+    this.toggleModal('alternative-name');
   }
 
-  getAlternativeValues = formState => formState.values.names ? formState.values.names[0].alternative_names : null;
+  getAlternativeValues = formState => formState.values.names_actual ? formState.values.names_actual[0].alternative_names : null;
 
-  getFormerValues = formState => null;
+  getFormerValues = formState => formState.values.names_former ? formState.values.names_former : null;
 
-  getLocalIDValues = formState => null;
+  getLocalIDValues = formState => formState.values.identifiers_local ? formState.values.identifiers_local : null;
 
   getHistoricalLinkValues = formState => null;
 
@@ -219,9 +216,9 @@ class InstitutionForm extends Component {
 
   renderAlternativeNames = value => value.name;
 
-  renderFormerNames = value => null;
+  renderFormerNames = value => value.name;
 
-  renderLocalID = value => null;
+  renderLocalID = value => value.identifier;
 
   renderQFEheaLevels = value => value.level;
 
@@ -252,7 +249,7 @@ class InstitutionForm extends Component {
                           <FormGroup>
                           <Label for="name_official" className={'required'}>Institution Name, Official</Label>
                             <FormTextField
-                              field={'names[0].name_official'}
+                              field={'name_primary'}
                               placeholder={'Enter official institution name'}
                               disabled={user !== 'admin' || readOnly}
                             />
@@ -264,7 +261,7 @@ class InstitutionForm extends Component {
                           <FormGroup>
                           <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
                             <FormTextField
-                              field={'names[0].name_official_transliterated'}
+                              field={'names_actual[0].name_official_transliterated'}
                               placeholder={'Enter transliterated form'}
                               disabled={user !== 'admin' || readOnly}
                             />
@@ -276,7 +273,7 @@ class InstitutionForm extends Component {
                           <FormGroup>
                           <Label for="name_english">Institution Name, English</Label>
                             <FormTextField
-                              field={'names[0].name_english'}
+                              field={'names_actual[0].name_english'}
                               placeholder={'Enter English form'}
                               disabled={user !== 'admin' || readOnly}
                             />
@@ -302,8 +299,8 @@ class InstitutionForm extends Component {
                             onRemove={this.onNameRemove}
                             renderDisplayValue={this.renderAlternativeNames}
                             onAddButtonClick={() => this.toggleModal('alternative-name')}
-                            onClick={(i) => console.log(i)}
-                            field={'names[0].alternative_names'}
+                            onClick={this.onNameClick}
+                            field={'names_actual[0].alternative_names'}
                             disabled={user !== 'admin' || readOnly}
                             />
                         </Col>
@@ -313,7 +310,7 @@ class InstitutionForm extends Component {
                           <FormGroup>
                           <Label for="acronym" className={'required'}>Institution Acronym</Label>
                             <FormTextField
-                              field={'names[0].acronym'}
+                              field={'names_actual[0].acronym'}
                               placeholder={'Enter acronym'}
                               disabled={user !== 'admin' || readOnly}
                             />
@@ -343,7 +340,7 @@ class InstitutionForm extends Component {
                             />
                           <AssignedList
                             errors={formState.errors}
-                            valueFields={['name']}
+                            valueFields={['name_official']}
                             values={this.getFormerValues(formState)}
                             label={'Former Names'}
                             btnLabel={'Add'}
@@ -351,7 +348,7 @@ class InstitutionForm extends Component {
                             onAddButtonClick={() => this.toggleModal('former-name')}
                             onClick={() => this.toggleModal('former-name')}
                             renderDisplayValue={this.renderFormerNames}
-                            field={'names[0].alternative_names'}
+                            field={'names_former'}
                             disabled={user !== 'admin' || readOnly}
                             />
                         </Col>
@@ -367,7 +364,7 @@ class InstitutionForm extends Component {
                           />
                           <AssignedList
                             errors={formState.errors}
-                            valueFields={['name']}
+                            valueFields={['identifier']}
                             values={this.getLocalIDValues(formState)}
                             label={'Local ID'}
                             btnLabel={'Add'}
@@ -375,7 +372,7 @@ class InstitutionForm extends Component {
                             onAddButtonClick={() => this.toggleModal('local-id')}
                             onClick={() => this.toggleModal('local-id')}
                             renderDisplayValue={this.renderLocalID}
-                            field={'names[0].alternative_names'}
+                            field={'identifiers_local'}
                             disabled={readOnly}
                           />
                         </Col>
