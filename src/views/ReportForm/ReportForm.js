@@ -361,10 +361,8 @@ class ReportForm extends Component {
   };
 
   onFileAdded = (file) => {
-    console.log(file);
     if(file.length > 0) {
       if (file[0] instanceof File) {
-        console.log('add');
         this.setState({
           uploadedFile: file[0]
         });
