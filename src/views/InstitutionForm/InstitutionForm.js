@@ -41,6 +41,10 @@ class InstitutionForm extends Component {
       formType: null,
       alternativeNameValue: null,
       alernativeNameIndex: null,
+      formerNameValue: null,
+      formerNameIndex: null,
+      localIDValue: null,
+      localIDIndex: null,
       qFeheaLevels: null,
       countries: null,
       infoBoxOpen: true,
@@ -121,7 +125,13 @@ class InstitutionForm extends Component {
   onFormerNameRemove = (index) => {
   }
 
+  onFormerNameSubmit = (index) => {
+  }
+
   onLocalIDRemove = (index) => {
+  }
+
+  onLocalIDSubmit = (index) => {
   }
 
   onQFEheaLevelsRemove = (index) => {
@@ -133,12 +143,28 @@ class InstitutionForm extends Component {
   onHierarchicalLinkRemove = (index) => {
   }
 
-  onNameClick = (i) => {
+  onNameClick = (index) => {
     this.setState({
-      alternativeNameValue: this.formApi.getValue('names_actual')[0].alternative_names[i],
-      alernativeNameIndex: i
+      alternativeNameValue: this.formApi.getValue('names_actual')[0].alternative_names[index],
+      alernativeNameIndex: index
     });
     this.toggleModal('alternative-name');
+  }
+
+  onFormerNameClick = (index) => {
+    this.setState({
+      formerNameValue: this.formApi.getValue('former-name')[index],
+      formerNameIndex: index
+    });
+    this.toggleModal('local-id');
+  }
+
+  onLocalIDClick = (index) => {
+    this.setState({
+      localIDValue: this.formApi.getValue('identifiers_local')[index],
+      localIDIndex: index
+    });
+    this.toggleModal('local-id');
   }
 
   getAlternativeValues = formState => formState.values.names_actual ? formState.values.names_actual[0].alternative_names : null;
@@ -227,7 +253,16 @@ class InstitutionForm extends Component {
   renderHierarchicalLink = value => null;
 
   render() {
-    const { readOnly, openModal, alternativeNameValue, infoBoxOpen, qFeheaLevels, user, alernativeNameIndex } = this.state;
+    const {
+      readOnly,
+      openModal,
+      alternativeNameValue,
+      formerNameValue,
+      infoBoxOpen,
+      qFeheaLevels,
+      user,
+      localIDValue,
+    } = this.state;
     const { backPath } = this.props;
 
     return  qFeheaLevels ? (
@@ -287,7 +322,6 @@ class InstitutionForm extends Component {
                             onToggle={() => this.toggleModal('')}
                             onFormSubmit={this.onNameSubmit}
                             formValue={alternativeNameValue}
-                            fomrIndex={alernativeNameIndex}
                             disabled={user !== 'admin' || readOnly}
                           />
                           <AssignedList
@@ -334,8 +368,8 @@ class InstitutionForm extends Component {
                         <FormerNameForm
                             modalOpen={openModal === 'former-name'}
                             onToggle={() => this.toggleModal('')}
-                            onFormSubmit={this.onNameSubmit}
-                            formValue={alternativeNameValue}
+                            onFormSubmit={this.onFormerNameSubmit}
+                            formValue={formerNameValue}
                             disabled={user !== 'admin' || readOnly}
                             />
                           <AssignedList
@@ -346,7 +380,7 @@ class InstitutionForm extends Component {
                             btnLabel={'Add'}
                             onRemove={this.onFormerNameRemove}
                             onAddButtonClick={() => this.toggleModal('former-name')}
-                            onClick={() => this.toggleModal('former-name')}
+                            onClick={this.onFormerNameClick}
                             renderDisplayValue={this.renderFormerNames}
                             field={'names_former'}
                             disabled={user !== 'admin' || readOnly}
@@ -358,8 +392,8 @@ class InstitutionForm extends Component {
                         <LocalIdForm
                             modalOpen={openModal === 'local-id'}
                             onToggle={() => this.toggleModal('')}
-                            onFormSubmit={this.onNameSubmit}
-                            formValue={alternativeNameValue}
+                            onFormSubmit={this.onLocalIDSubmit}
+                            formValue={localIDValue}
                             disabled={readOnly}
                           />
                           <AssignedList
@@ -370,7 +404,7 @@ class InstitutionForm extends Component {
                             btnLabel={'Add'}
                             onRemove={this.onLocalIDRemove}
                             onAddButtonClick={() => this.toggleModal('local-id')}
-                            onClick={() => this.toggleModal('local-id')}
+                            onClick={this.onLocalIDClick}
                             renderDisplayValue={this.renderLocalID}
                             field={'identifiers_local'}
                             disabled={readOnly}

@@ -98,7 +98,7 @@ class LocalIdForm extends Component {
                     <FormGroup>
                     <Label for="local-id">Locale Identifier</Label>
                       <FormTextField
-                        field={'names[0].name_official_transliterated'}
+                        field={'identifier'}
                         placeholder={'Enter local ID'}
                       />
                     </FormGroup>

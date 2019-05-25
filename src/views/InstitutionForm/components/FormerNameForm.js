@@ -75,7 +75,7 @@ class FormerNameForm extends Component {
                     <FormGroup>
                     <Label for="former_name_official" className={'required'}>Institution Name, Official</Label>
                       <FormTextField
-                        field={'names[0].name_official'}
+                        field={'name_official'}
                         placeholder={'Enter official institution name'}
                       />
                     </FormGroup>
@@ -86,7 +86,7 @@ class FormerNameForm extends Component {
                     <FormGroup>
                     <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
                       <FormTextField
-                        field={'names[0].name_official_transliterated'}
+                        field={'name_official_transliterated'}
                         placeholder={'Enter transliterated form'}
                       />
                     </FormGroup>
@@ -97,7 +97,7 @@ class FormerNameForm extends Component {
                     <FormGroup>
                     <Label for="name_english">Institution Name, English</Label>
                       <FormTextField
-                        field={'names[0].name_english'}
+                        field={'name_english'}
                         placeholder={'Enter english form'}
                       />
                     </FormGroup>
@@ -119,7 +119,7 @@ class FormerNameForm extends Component {
                     <FormGroup>
                     <Label for="acronym">Institution Acronym</Label>
                       <FormTextField
-                        field={'names[0].acronym'}
+                        field={'acronym'}
                         placeholder={'Enter acronym'}
                       />
                     </FormGroup>
@@ -130,7 +130,7 @@ class FormerNameForm extends Component {
                     <FormGroup>
                     <Label for="valid_to" className={'required'}>Valid To</Label>
                       <FormDatePickerField
-                        field={'website_link'}
+                        field={'name_valid_to'}
                         placeholderText={'YYYY-MM-DD'}
                       />
                     </FormGroup>
@@ -141,7 +141,7 @@ class FormerNameForm extends Component {
                     <FormGroup>
                     <Label for="name_english">Name source Note</Label>
                       <FormTextArea
-                        field={'names[0].name_english'}
+                        field={'name_english'}
                         placeholder={'Enter name source information'}
                       />
                     </FormGroup>
