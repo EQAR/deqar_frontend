@@ -5,8 +5,11 @@ import {
   CardFooter,
   CardHeader,
   Col,
+  Button,
   Row
 } from "reactstrap";
+import {Link} from "react-router-dom";
+
 import InstitutionsTable from './InstitutionsTable';
 import style from "./Institutions.module.css"
 
@@ -24,6 +27,18 @@ class Institutions extends Component {
             <InstitutionsTable />
           </CardBody>
           <CardFooter>
+          <Button
+            size="sm"
+            color="primary"
+            className={'pull-right'}
+          >
+            <Link
+              to={{pathname: '/institutions/create'}}
+              className={style.Link}
+            >
+              Add New Institution
+            </Link>
+          </Button>
           </CardFooter>
         </Card>
       </div>
