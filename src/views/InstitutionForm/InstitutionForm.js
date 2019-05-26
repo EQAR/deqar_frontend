@@ -36,7 +36,8 @@ class InstitutionForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      readOnly: false,
+      isEdit: false,
+      adminEdit: false,
       openModal: null,
       formType: null,
       alternativeNameValue: null,
@@ -47,8 +48,7 @@ class InstitutionForm extends Component {
       localIDIndex: null,
       qFeheaLevels: null,
       countries: null,
-      infoBoxOpen: true,
-      user: 'admin'
+      infoBoxOpen: true
     }
   }
 
@@ -56,19 +56,17 @@ class InstitutionForm extends Component {
     const { formType } = this.props;
 
     this.setState({
-      readOnly: this.isReadOnly(formType),
+      adminEdit: this.notView(formType),
+      isEdit: this.notView(formType),
       formType: formType
     });
     this.populate();
   }
 
-  // isReadOnly = (formType) => formType === 'view';
-
-  isReadOnly = (formType) => false;
+  notView = (formType) => formType !== 'view'
 
   populate = () => {
-    const { formID } = this.props;
-    const { formType } = this.state;
+    const { formID, formType } = this.props;
 
     if (formType !== 'create') {
       institution.getInstitution(formID).then((response, error) => {
@@ -89,9 +87,10 @@ class InstitutionForm extends Component {
     })
   }
 
-  editForm = () => {
+  onEditForm = () => {
     this.setState({
-      formType: 'edit'
+      isEdit: true,
+      adminEdit: true
     });
   }
 
@@ -100,7 +99,9 @@ class InstitutionForm extends Component {
   }
 
   formTitle() {
-    const { formType } = this.state;
+    let { formType, isEdit } = this.state;
+
+    formType = isEdit && formType === 'view' ? 'edit' : formType;
 
     return {
       view: 'View Institution',
@@ -178,7 +179,7 @@ class InstitutionForm extends Component {
   getHierarchicalLinkValues = formState => null;
 
   renderLocations = formState => {
-    const { countries, user, readOnly } = this.state;
+    const { countries, isView, adminEdit } = this.state;
 
     if (this.formApi.getValue('countries')) {
       return this.formApi.getValue('countries').map((country, i) => {
@@ -193,7 +194,7 @@ class InstitutionForm extends Component {
                   placeholder={'Please select'}
                   labelField={'name_english'}
                   valueField={'id'}
-                  disabled={user !== 'admin' || readOnly}
+                  disabled={!adminEdit}
                   />
               </FormGroup>
             </Col>
@@ -203,7 +204,7 @@ class InstitutionForm extends Component {
                 <FormTextField
                   field={`countries[${i}].city`}
                   placeholder={'Enter city name'}
-                  disabled={user !== 'admin' || readOnly}
+                  disabled={!adminEdit}
                 />
               </FormGroup>
             </Col>
@@ -254,16 +255,17 @@ class InstitutionForm extends Component {
 
   render() {
     const {
-      readOnly,
+      isView,
       openModal,
       alternativeNameValue,
       formerNameValue,
       infoBoxOpen,
       qFeheaLevels,
-      user,
+      adminEdit,
+      isEdit,
       localIDValue,
     } = this.state;
-    const { backPath } = this.props;
+    const { backPath, formType } = this.props;
 
     return  qFeheaLevels ? (
       <Form className="animated fadeIn" getApi={this.setFormApi}>
@@ -286,7 +288,7 @@ class InstitutionForm extends Component {
                             <FormTextField
                               field={'name_primary'}
                               placeholder={'Enter official institution name'}
-                              disabled={user !== 'admin' || readOnly}
+                              disabled={!adminEdit}
                             />
                           </FormGroup>
                         </Col>
@@ -298,7 +300,7 @@ class InstitutionForm extends Component {
                             <FormTextField
                               field={'names_actual[0].name_official_transliterated'}
                               placeholder={'Enter transliterated form'}
-                              disabled={user !== 'admin' || readOnly}
+                              disabled={!adminEdit}
                             />
                           </FormGroup>
                         </Col>
@@ -310,7 +312,7 @@ class InstitutionForm extends Component {
                             <FormTextField
                               field={'names_actual[0].name_english'}
                               placeholder={'Enter English form'}
-                              disabled={user !== 'admin' || readOnly}
+                              disabled={!adminEdit}
                             />
                           </FormGroup>
                         </Col>
@@ -322,7 +324,7 @@ class InstitutionForm extends Component {
                             onToggle={() => this.toggleModal('')}
                             onFormSubmit={this.onNameSubmit}
                             formValue={alternativeNameValue}
-                            disabled={user !== 'admin' || readOnly}
+                            disabled={!adminEdit}
                           />
                           <AssignedList
                             errors={formState.errors}
@@ -335,7 +337,7 @@ class InstitutionForm extends Component {
                             onAddButtonClick={() => this.toggleModal('alternative-name')}
                             onClick={this.onNameClick}
                             field={'names_actual[0].alternative_names'}
-                            disabled={user !== 'admin' || readOnly}
+                            disabled={!adminEdit}
                             />
                         </Col>
                       </Row>
@@ -346,7 +348,7 @@ class InstitutionForm extends Component {
                             <FormTextField
                               field={'names_actual[0].acronym'}
                               placeholder={'Enter acronym'}
-                              disabled={user !== 'admin' || readOnly}
+                              disabled={!adminEdit}
                             />
                           </FormGroup>
                         </Col>
@@ -358,7 +360,7 @@ class InstitutionForm extends Component {
                             <FormTextField
                               field={'website_link'}
                               placeholder={'Enter institution website'}
-                              disabled={user !== 'admin' || readOnly}
+                              disabled={!adminEdit}
                             />
                           </FormGroup>
                         </Col>
@@ -370,7 +372,7 @@ class InstitutionForm extends Component {
                             onToggle={() => this.toggleModal('')}
                             onFormSubmit={this.onFormerNameSubmit}
                             formValue={formerNameValue}
-                            disabled={user !== 'admin' || readOnly}
+                            disabled={!adminEdit}
                             />
                           <AssignedList
                             errors={formState.errors}
@@ -383,7 +385,7 @@ class InstitutionForm extends Component {
                             onClick={this.onFormerNameClick}
                             renderDisplayValue={this.renderFormerNames}
                             field={'names_former'}
-                            disabled={user !== 'admin' || readOnly}
+                            disabled={!adminEdit}
                             />
                         </Col>
                       </Row>
@@ -394,7 +396,7 @@ class InstitutionForm extends Component {
                             onToggle={() => this.toggleModal('')}
                             onFormSubmit={this.onLocalIDSubmit}
                             formValue={localIDValue}
-                            disabled={readOnly}
+                            disabled={!isEdit}
                           />
                           <AssignedList
                             errors={formState.errors}
@@ -407,7 +409,7 @@ class InstitutionForm extends Component {
                             onClick={this.onLocalIDClick}
                             renderDisplayValue={this.renderLocalID}
                             field={'identifiers_local'}
-                            disabled={readOnly}
+                            disabled={!isEdit}
                           />
                         </Col>
                       </Row>
@@ -421,7 +423,7 @@ class InstitutionForm extends Component {
                             <FormDatePickerField
                               field={'founding_date'}
                               placeholderText={'Enter year'}
-                              disabled={user !== 'admin' || readOnly}
+                              disabled={!adminEdit}
                               />
                           </FormGroup>
                         </Col>
@@ -431,7 +433,7 @@ class InstitutionForm extends Component {
                             <FormDatePickerField
                               field={'closure_date'}
                               placeholderText={'Enter year'}
-                              disabled={user !== 'admin' || readOnly}
+                              disabled={!adminEdit}
                             />
                           </FormGroup>
                         </Col>
@@ -443,7 +445,7 @@ class InstitutionForm extends Component {
                                 <FormGroup>
                                   <Label for="country">QF-EHEA Levels</Label>
                                   <Select
-                                    className={user !== 'admin' || readOnly ? style.infoFooter : null}
+                                    className={!adminEdit ? style.hidden : null}
                                     options={this.getQFEheaOptions(qFeheaLevels)}
                                     onChange={this.changeQFEheaLvels}
                                     placeholder={'Select select multiple, if necessary'}
@@ -464,7 +466,7 @@ class InstitutionForm extends Component {
                                     onRemove={this.onQFEheaLevelsRemove}
                                     renderDisplayValue={this.renderQFEheaLevels}
                                     field={'qf_ehea_levels'}
-                                    disabled={user !== 'admin' || readOnly}
+                                    disabled={!adminEdit}
                                     />
                                 </FormGroup>
                               </Col>
@@ -478,7 +480,7 @@ class InstitutionForm extends Component {
                             <FormTextField
                               field={'comment'}
                               placeholder={'Enter comment, if applicable'}
-                              disabled={user !== 'admin' || readOnly}
+                              disabled={!adminEdit}
                               />
                           </FormGroup>
                         </Col>
@@ -490,7 +492,7 @@ class InstitutionForm extends Component {
                             onToggle={() => this.toggleModal('')}
                             onFormSubmit={this.onNameSubmit}
                             formValue={alternativeNameValue}
-                            disabled={user !== 'admin' || readOnly}
+                            disabled={!adminEdit}
                           />
                           <AssignedList
                             errors={formState.errors}
@@ -503,7 +505,7 @@ class InstitutionForm extends Component {
                             onClick={() => this.toggleModal('historical-link')}
                             renderDisplayValue={this.renderHistoricalLinks}
                             field={'names[0].alternative_names'}
-                            disabled={user !== 'admin' || readOnly}
+                            disabled={!adminEdit}
                             />
                         </Col>
                       </Row>
@@ -514,7 +516,7 @@ class InstitutionForm extends Component {
                             onToggle={() => this.toggleModal('')}
                             onFormSubmit={this.onNameSubmit}
                             formValue={alternativeNameValue}
-                            disabled={user !== 'admin' || readOnly}
+                            disabled={!adminEdit}
                             />
                           <AssignedList
                             errors={formState.errors}
@@ -527,7 +529,7 @@ class InstitutionForm extends Component {
                             onClick={() => this.toggleModal('hierarchical-link')}
                             renderDisplayValue={this.renderHierarchicalLink}
                             field={'names[0].alternative_names'}
-                            disabled={user !== 'admin' || readOnly}
+                            disabled={!adminEdit}
                           />
                         </Col>
                       </Row>
@@ -552,6 +554,17 @@ class InstitutionForm extends Component {
                   Close
                 </Button>
               </Link>
+              {formType === 'view' ?
+                <Button
+                  size="sm"
+                  color="primary"
+                  className={'pull-right'}
+                  onClick={this.onEditForm}
+                >
+                  Edit
+                </Button> :
+                null
+              }
             </CardFooter>
           </Card>
         )}

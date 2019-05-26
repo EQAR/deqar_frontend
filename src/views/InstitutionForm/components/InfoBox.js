@@ -33,57 +33,53 @@ class InfoBox extends Component {
   renderFlags = () => {
     const { formState } = this.props;
 
-    // if (Object.entries(formState).length !== 0) {
-    //   const { flags } = formState;
-    //   if (flags.length > 0) {
-    //     return flags.map((flag, idx) => {
-    //       if (flag.active) {
-    //         return(
-    //           <ListGroupItem key={idx} className={style.ListGroupItem} disabled={true}>
-    //             <Col xs={2} className={style.flagInfo}>
-    //               {this.flagRender(flag.flag)}
-    //             </Col>
-    //             <Col xs={10} className={style.flagMessage}>
-    //               <span>{flag.flag_message}</span>
-    //             </Col>
-    //           </ListGroupItem>
-    //         )
-    //       } else {
-    //         return undefined;
-    //       }
-    //     });
-    //   } else {
-    //     return (
-    //       <ListGroupItem className={style.ListGroupItem} disabled={true}>
-    //         <Col xs={2} className={style.flagInfo}>
-    //           {this.flagRender('none')}
-    //         </Col>
-    //         <Col xs={10} className={style.flagMessage}>
-    //           <span>Report record has no flag assigned</span>
-    //         </Col>
-    //       </ListGroupItem>
-    //     )
-    //   }
-    // };
+    if (formState.flags) {
+      const { flags } = formState;
+
+      if (flags.length > 0) {
+        return flags.map((flag, idx) => {
+          if (flag.active) {
+            return(
+              <ListGroupItem key={idx} className={style.ListGroupItem} disabled={true}>
+                <Col xs={2} className={style.flagInfo}>
+                  {this.flagRender(flag.flag)}
+                </Col>
+                <Col xs={10} className={style.flagMessage}>
+                  <span>{flag.flag_message}</span>
+                </Col>
+              </ListGroupItem>
+            )
+          } else {
+            return undefined;
+          }
+        });
+      } else {
+        return (
+          <ListGroupItem className={style.ListGroupItem} disabled={true}>
+            <Col xs={2} className={style.flagInfo}>
+              {this.flagRender('none')}
+            </Col>
+            <Col xs={10} className={style.flagMessage}>
+              <span>Report record has no flag assigned</span>
+            </Col>
+          </ListGroupItem>
+        )
+      }
+    };
   }
 
   renderURL = () => {
     const {formState} = this.props;
 
-    if (Object.entries(formState).length !== 0) {
-      const institutions = formState['institutions'];
-      if (institutions) {
+    if (formState['id']) {
+      const id = formState['id'];
+
+      if (id) {
         return(
           <React.Fragment>
-          {institutions.map((institution, idx) => {
-            return(
-              <ListGroupItem key={idx} className={style.ListGroupItem}>
-                <a href={`https://www.eqar.eu/qa-results/institution/?id=${institution.id}`} target={'new'}>
-                  {`https://www.eqar.eu/qa-results/institution/?id=${institution.id}`}
-                </a>
-              </ListGroupItem>
-            )
-          })}
+            <a href={`https://www.eqar.eu/qa-results/institution/?id=${id}`} target={'new'}>
+              {`https://www.eqar.eu/qa-results/institution/?id=${id}`}
+            </a>
           </React.Fragment>
         )
       }
