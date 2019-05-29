@@ -8,6 +8,7 @@ import DataTableWithFilterOnTop from "../../components/DataTable/DataTableWithFi
 import Link from "react-router-dom/es/Link";
 import style from "./ReportsTable.module.css";
 import ReportsTableFilters from "./ReportsTableFilters";
+import DataTableRedux from "../../components/DataTable/DataTableRedux";
 
 class ReportsTable extends Component {
   constructor(props) {
@@ -86,17 +87,16 @@ class ReportsTable extends Component {
   };
 
   render() {
-    const {initialState} = this.props;
-
     return (
-      <DataTableWithFilterOnTop
+      <DataTableRedux
         onFetchData={this.onFetchData}
         columnConfig={this.columnConfig}
         saveState={this.saveState}
-        initialState={initialState}
+        filterable={true}
+        storeName={'reportsTable'}
       >
         <ReportsTableFilters />
-      </DataTableWithFilterOnTop>
+      </DataTableRedux>
     )
   }
 }

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import DataTable from "../../components/DataTable/DataTable";
 import institution from "../../services/Institution";
 import { connect } from "react-redux";
 import setInstitutionsTable from "./actions/setInstitutionsTable";
@@ -7,6 +6,8 @@ import country from '../../services/Country';
 import createTableAPIParams from "../../utils/createTableAPIParams";
 import style from "./InstitutionsTable.module.css";
 import {Link} from "react-router-dom";
+import DataTableRedux from "../../components/DataTable/DataTableRedux";
+import InstitutionsTableFilters from "./InstitutionsTableFilters";
 
 
 class InstitutionsTable extends Component {
@@ -17,7 +18,6 @@ class InstitutionsTable extends Component {
         field: 'deqar_id',
         label: 'DEQAR ID',
         sortable: false,
-        filterable: true,
         minWidth: 80,
         maxWidth: 150
       },
@@ -25,7 +25,6 @@ class InstitutionsTable extends Component {
         field: 'eter_id',
         label: 'ETER ID',
         sortable: false,
-        filterable: true,
         minWidth: 80,
         maxWidth: 150
       },
@@ -33,8 +32,6 @@ class InstitutionsTable extends Component {
         field: 'name_primary',
         label: 'Institution',
         sortable: true,
-        filterable: true,
-        filterQueryParam: 'query',
         minWidth: 150,
         render: this.linkRenderer
       },
@@ -42,14 +39,8 @@ class InstitutionsTable extends Component {
         field: 'country',
         label: 'Country',
         sortable: true,
-        filterable: true,
-        filterQueryParam: 'country',
         minWidth: 100,
         maxWidth: 200,
-        filterType: 'select',
-        selectFilterValue: 'name_english',
-        selectFilterLabel: 'name_english',
-        selectFilterPopulate: country.getInstitutionCountries()
       }
     ];
   }
@@ -74,15 +65,16 @@ class InstitutionsTable extends Component {
   };
 
   render() {
-    const {initialState} = this.props;
-
     return (
-      <DataTable
+      <DataTableRedux
+        filterable={true}
         onFetchData={this.onFetchData}
         columnConfig={this.columnConfig}
         saveState={this.saveState}
-        initialState={initialState}
-      />
+        storeName={'institutionsTable'}
+      >
+        <InstitutionsTableFilters/>
+      </DataTableRedux>
     )
   }
 }
@@ -96,15 +88,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = (store) => {
-  return {
-    initialState: {
-      tableType: store.institutionsTable.tableType,
-      pageSize: store.institutionsTable.pageSize,
-      page: store.institutionsTable.page,
-      sorted: store.institutionsTable.sorted,
-      filtered: store.institutionsTable.filtered
-    }
-  }
+  return {}
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(InstitutionsTable);

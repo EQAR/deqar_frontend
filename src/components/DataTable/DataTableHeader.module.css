@@ -1,0 +1,11 @@
+.FilterButton {
+    color: inherit;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+}
+
+.Separator {
+    margin-left: 10px;
+    margin-right: 10px;
+}
