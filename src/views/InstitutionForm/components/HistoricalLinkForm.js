@@ -62,10 +62,10 @@ class HistoricalLinkForm extends Component {
   }
 
   renderActionName = () => {
-    const {formIndex, disabled} = this.props;
+    const { formIndex, disabled } = this.props;
     let action = '';
 
-    if(formIndex >= 0) {
+    if (formIndex >= 0) {
       action = disabled ? 'View' : 'Edit'
     } else {
       action = 'Add'

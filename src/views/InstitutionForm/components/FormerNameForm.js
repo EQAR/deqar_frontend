@@ -44,7 +44,7 @@ class FormerNameForm extends Component {
   }
 
   renderActionName = () => {
-    const {formIndex, disabled} = this.props;
+    const { formIndex, disabled } = this.props;
     let action = '';
 
     if (formIndex >= 0) {

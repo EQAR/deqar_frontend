@@ -10,62 +10,67 @@ import ListGroupItem from "reactstrap/es/ListGroupItem";
 import moment from "moment";
 import FormTextField from "../../../components/FormFields/FormTextField";
 import cx from 'classnames';
+import FlagForm from './FlagForm';
+import AssignedList from '../../../components/FormFieldsUncontrolled/AssignedList';
 
 class InfoBox extends Component {
-  flagRender = (value) => {
-    let className = '';
-    switch(value) {
-      case 'none':
-        className = 'badge badge-success';
-        break;
-      case 'low level':
-        className = 'badge badge-warning';
-        break;
-      case 'high level':
-        className = 'badge badge-danger';
-        break;
-      default:
-        return null;
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      openModal: false,
+      flagValue: null,
+      flagIndex: null
     }
-    return(<span className={className}>{value}</span>);
+  }
+
+  flagRender = (value) => {
+    let className = {
+      none: 'badge badge-success',
+      low_level: 'badge badge-warning',
+      high_level: 'badge badge-danger'
+    }
+
+    return <span className={className[value]}>{value}</span>;
   };
 
-  renderFlags = () => {
+  renderFlags = value => (
+    <Row>
+      <Col xs={2}>
+        <span className='badge badge-success'>none</span>
+      </Col>
+      <Col xs={10}>
+        <span>{value.explanation}</span>
+      </Col>
+    </Row>
+  )
+
+  getFlagValues = (formState) => formState.flags ? formState.flags : [{request: 'none', explanation: 'Institution has no flag assigned'}];
+
+  onFlagRemove = () => null;
+
+  onFlagClick = (index) => {
     const { formState } = this.props;
+    let { flags } =  this.props.formState.values;
 
-    if (formState.flags) {
-      const { flags } = formState;
+    flags = flags ? [{request: 'none', explanation: 'Institution has no flag assigned'}] : flags;
 
-      if (flags.length > 0) {
-        return flags.map((flag, idx) => {
-          if (flag.active) {
-            return(
-              <ListGroupItem key={idx} className={style.ListGroupItem} disabled={true}>
-                <Col xs={2} className={style.flagInfo}>
-                  {this.flagRender(flag.flag)}
-                </Col>
-                <Col xs={10} className={style.flagMessage}>
-                  <span>{flag.flag_message}</span>
-                </Col>
-              </ListGroupItem>
-            )
-          } else {
-            return undefined;
-          }
-        });
-      } else {
-        return (
-          <ListGroupItem className={style.ListGroupItem} disabled={true}>
-            <Col xs={2} className={style.flagInfo}>
-              {this.flagRender('none')}
-            </Col>
-            <Col xs={10} className={style.flagMessage}>
-              <span>Report record has no flag assigned</span>
-            </Col>
-          </ListGroupItem>
-        )
-      }
-    };
+    this.setState({
+      flagValue: flags[index],
+      flagIndex: index
+    });
+
+    this.toggleModal();
+  }
+
+  onFormSubmit = () => null;
+
+  toggleModal = () => {
+    const { openModal } = this.state;
+
+    this.setState({
+      openModal: !openModal
+    })
   }
 
   renderURL = () => {
@@ -94,6 +99,7 @@ class InfoBox extends Component {
 
   render() {
     const { formState, disabled } = this.props;
+    const { openModal, flagValue } = this.state;
 
     return (
       <div className={style.infoBoxContainer}>
@@ -127,12 +133,26 @@ class InfoBox extends Component {
             </Row>
             <Row>
               <Col>
-                <FormGroup>
-                  <Label>Current flags</Label>
-                  <ListGroup>
-                    {this.renderFlags()}
-                  </ListGroup>
-                </FormGroup>
+                <FlagForm
+                  modalOpen={openModal}
+                  onToggle={() => this.toggleModal()}
+                  onFormSubmit={this.onFormSubmit}
+                  formValue={flagValue}
+                  disabled
+                />
+                <AssignedList
+                  errors={formState.errors}
+                  valueFields={['request']}
+                  values={this.getFlagValues(formState)}
+                  label={'Flags'}
+                  btnLabel={'Add'}
+                  onRemove={this.onFlagRemove}
+                  renderDisplayValue={this.renderFlags}
+                  onAddButtonClick={() => this.toggleModal()}
+                  onClick={this.onFlagClick}
+                  field={'flags'}
+                  disabled
+                />
               </Col>
             </Row>
           </Col>
@@ -144,8 +164,7 @@ class InfoBox extends Component {
                   <FormTextField
                     field={'internal_note'}
                     placeholder={'Enter note, if necessary'}
-                    disabled={disabled}
-                    className={disabled ? style.internalNote : ''}
+                    disabled
                     />
                 </FormGroup>
               </Col>
