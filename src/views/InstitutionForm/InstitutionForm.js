@@ -253,6 +253,7 @@ class InstitutionForm extends Component {
 
   renderHierarchicalLink = value => null;
 
+
   render() {
     const {
       isView,
@@ -266,6 +267,7 @@ class InstitutionForm extends Component {
       localIDValue,
     } = this.state;
     const { backPath, formType } = this.props;
+    const InfoBoxWithFormState = withFormState(InfoBox);
 
     return  qFeheaLevels ? (
       <Form className="animated fadeIn" getApi={this.setFormApi}>
@@ -540,9 +542,7 @@ class InstitutionForm extends Component {
             </CardBody>
             <CardFooter className={style.infoFooter}>
               <Collapse isOpen={infoBoxOpen}>
-                <InfoBox
-                  formState={formState.values}
-                  />
+                <InfoBoxWithFormState />
               </Collapse>
             </CardFooter>
             <CardFooter>
