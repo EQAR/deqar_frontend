@@ -1,4 +1,4 @@
-// Function to tailer the programme_data - alternative_names for proper display
+// Function to tailor the programme_data - alternative_names for proper display
 export const decodeProgrammeNameData = (data) => {
   let {programmes} = data;
   if(programmes) {
