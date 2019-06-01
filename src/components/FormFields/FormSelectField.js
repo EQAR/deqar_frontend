@@ -1,8 +1,6 @@
 import React from 'react';
 import { asField } from 'informed';
 import Select from 'react-select';
-import {Badge} from "reactstrap";
-import style from './FormSelectField.module.scss';
 
 const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
   const { value } = fieldState;
@@ -57,9 +55,10 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
   };
 
   const getValue = () => {
-    const val = value || initialValue || '';
 
     if(isMulti) {
+      const val = value || initialValue || [];
+
       const vals =  val.map((v) => {
         if(v.hasOwnProperty(labelField)) {
           return v[labelField]
@@ -69,6 +68,8 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
       });
       return vals.join(', ');
     } else {
+      const val = value || initialValue || [];
+
       if(val.hasOwnProperty(labelField)) {
         return val[labelField]
       } else {
