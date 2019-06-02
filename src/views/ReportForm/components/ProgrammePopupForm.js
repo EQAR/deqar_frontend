@@ -27,6 +27,7 @@ class ProgrammePopupForm extends Component {
   setFormApi = (formApi) => {
     const { formValue } = this.props;
     this.formApi = formApi;
+
     if(formValue) {
       this.formApi.setValues(formValue);
       if('alternative_names' in formValue) {

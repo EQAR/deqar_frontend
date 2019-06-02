@@ -7,8 +7,7 @@ import {
   CardFooter,
   CardHeader,
   Col, Collapse,
-  FormGroup, FormText,
-  Label,
+  FormGroup, FormText, Label,
   Row
 } from "reactstrap";
 import style from './ReportForm.module.css'
@@ -54,7 +53,8 @@ class ReportForm extends Component {
       nonFieldErrors: [],
       loading: false,
       readOnly: false,
-      infoBoxOpen: true
+      infoBoxOpen: true,
+      submitMessageOpen: false
     }
   }
 
@@ -254,6 +254,7 @@ class ReportForm extends Component {
     })
   };
 
+
   // Toggle loading
   loadingToggle = () => {
     this.setState({
@@ -268,6 +269,12 @@ class ReportForm extends Component {
   };
 
   // Events
+  onSubmitClick = () => {
+    this.setState({
+      submitMessageOpen: true
+    })
+  };
+
   onAlertClose = () => {
     this.setState({
       alertVisible: false
@@ -519,6 +526,9 @@ class ReportForm extends Component {
   updateReport = (values) => {
     const { reportID } = this.props;
     let normalizedForm = updateFormNormalizer(values);
+
+    this.loadingToggle();
+
     normalizedForm = encodeProgrammeNameData(normalizedForm);
     report.updateReport(normalizedForm, reportID).then((response) => {
       toast.success("Report record was updated.");
@@ -530,12 +540,14 @@ class ReportForm extends Component {
     }).then(() => {
       this.loadingToggle();
       this.populateForm()
-    })
+    }).catch(error => {
+      this.loadingToggle();
+      console.log(error.response)
+    });
   };
 
   onSubmit = (values) => {
     const {formType} = this.props;
-    this.loadingToggle();
     switch(formType) {
       case 'create':
         this.createReport(values);
@@ -548,7 +560,36 @@ class ReportForm extends Component {
     }
   };
 
-  renderSubmitButton = () => {
+  renderEditSubmitButton = () => {
+    const {submitMessageOpen} = this.state;
+
+    if (submitMessageOpen) {
+      return (
+        <div className={'pull-right'}>
+          <LaddaButton
+            className={style.reportSubmitButton + " btn btn-primary btn-ladda btn-sm"}
+            loading={this.state.loading}
+            data-color="blue"
+            data-style={EXPAND_RIGHT}
+            onClick={() => this.formApi.submitForm()}
+          >Submit</LaddaButton>
+        </div>
+      )
+    } else {
+      return(
+        <div className={'pull-right'}>
+          <Button
+            type={'button'}
+            size="sm"
+            color="primary"
+            onClick={this.onSubmitClick}
+          >Submit</Button>
+        </div>
+      )
+    }
+  };
+
+  renderCreateSubmitButton = () => {
     return(
       <div className={'pull-right'}>
         <LaddaButton
@@ -609,6 +650,21 @@ class ReportForm extends Component {
     }
   }
 
+  renderSubmitMessage = () => {
+    const {submitMessageOpen} = this.state;
+
+    return (
+      <Collapse isOpen={submitMessageOpen}>
+        <FormGroup>
+          <FormTextField
+            field={'submit_message'}
+            placeholder={'Please enter a short description of your edit... (Optional)'}
+          />
+        </FormGroup>
+      </Collapse>
+    )
+  };
+
   renderButtons = () => {
     const {formType} = this.props;
 
@@ -625,14 +681,15 @@ class ReportForm extends Component {
         return(
             <Row>
               <Col xs={12}>
-                {this.renderSubmitButton()}
+                {this.renderCreateSubmitButton()}
               </Col>
             </Row>
         );
       case 'edit':
         return(
           <div>
-            {this.renderSubmitButton()}
+            {this.renderSubmitMessage()}
+            {this.renderEditSubmitButton()}
             {this.renderCloseButton()}
             {this.renderHideInfoButton()}
           </div>

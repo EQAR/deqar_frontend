@@ -4,7 +4,6 @@ import {connect} from "react-redux";
 import setReportsTable from "./actions/setReportsTable";
 import createTableAPIParams from "../../utils/createTableAPIParams";
 import {arrayRenderer, dateRender, flagRender} from "../../utils/tableColumnRenderers";
-import DataTableWithFilterOnTop from "../../components/DataTable/DataTableWithFilterOnTop"
 import Link from "react-router-dom/es/Link";
 import style from "./ReportsTable.module.css";
 import ReportsTableFilters from "./ReportsTableFilters";
