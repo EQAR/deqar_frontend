@@ -25,19 +25,17 @@ class InfoBox extends Component {
   }
 
   flagRender = (value) => {
-    let className = {
+    return {
       none: 'badge badge-success',
       low_level: 'badge badge-warning',
       high_level: 'badge badge-danger'
-    }
-
-    return <span className={className[value]}>{value}</span>;
-  };
+    }[value]
+  }
 
   renderFlags = value => (
     <Row>
       <Col xs={2}>
-        <span className='badge badge-success'>none</span>
+        <span className={this.flagRender(value.request)}>{value.request}</span>
       </Col>
       <Col xs={10}>
         <span>{value.explanation}</span>
@@ -45,7 +43,9 @@ class InfoBox extends Component {
     </Row>
   )
 
-  getFlagValues = (formState) => formState.flags ? formState.flags : [{request: 'none', explanation: 'Institution has no flag assigned'}];
+  getFlagValues = (values) => {
+    return !values.flags || values.flags === [] ? [{request: 'none', explanation: 'Institution has no flag assigned'}] : values.flags;
+  }
 
   onFlagRemove = () => null;
 
@@ -53,7 +53,7 @@ class InfoBox extends Component {
     const { formState } = this.props;
     let { flags } =  this.props.formState.values;
 
-    flags = flags ? [{request: 'none', explanation: 'Institution has no flag assigned'}] : flags;
+    flags = !flags || flags === [] ? [{request: 'none', explanation: 'Institution has no flag assigned'}] : flags;
 
     this.setState({
       flagValue: flags[index],
@@ -74,31 +74,32 @@ class InfoBox extends Component {
   }
 
   renderURL = () => {
-    const {formState} = this.props;
+    const { id } = this.props.formState.values;
 
-    if (formState['id']) {
-      const id = formState['id'];
-
-      if (id) {
-        return(
-          <React.Fragment>
-            <a href={`https://www.eqar.eu/qa-results/institution/?id=${id}`} target={'new'}>
-              {`https://www.eqar.eu/qa-results/institution/?id=${id}`}
-            </a>
-          </React.Fragment>
-        )
-      }
+    if (id) {
+      return (
+        <React.Fragment>
+          <a href={`https://www.eqar.eu/qa-results/institution/?id=${id}`} target={'new'}>
+            {`https://www.eqar.eu/qa-results/institution/?id=${id}`}
+          </a>
+        </React.Fragment>
+      )
     }
-  };
+  }
 
   renderDate = (date) => {
-    if(date) {
+    if (date) {
       return moment(date, moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss")
     }
-  };
+  }
 
   render() {
-    const { formState, disabled } = this.props;
+    const { formApi, disabled } = this.props;
+    console.log(formApi);
+    const formState = formApi.getState();
+    console.log(formState);
+
+    const { values } = formState;
     const { openModal, flagValue } = this.state;
 
     return (
@@ -143,7 +144,7 @@ class InfoBox extends Component {
                 <AssignedList
                   errors={formState.errors}
                   valueFields={['request']}
-                  values={this.getFlagValues(formState)}
+                  values={this.getFlagValues(values)}
                   label={'Flags'}
                   btnLabel={'Add'}
                   onRemove={this.onFlagRemove}
@@ -176,13 +177,13 @@ class InfoBox extends Component {
                     <input
                       className={cx(style.infoInput, 'form-control')}
                       disabled={true}
-                      value={`Created at ${this.renderDate(formState.created_at)} by '${formState.created_by}'`}
+                      value={`Created at ${this.renderDate(values.created_at)} by '${values.created_by}'`}
 
                     />
                     <input
                       className={cx(style.infoInput, 'form-control')}
                       disabled={true}
-                      value={`Updated at ${this.renderDate(formState.updated_at)} by '${formState.updated_by}'`}
+                      value={`Updated at ${this.renderDate(values.updated_at)} by '${values.updated_by}'`}
                     />
                   </FormGroup>
                 </Col>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form , withFormState} from 'informed';
+import { Form , withFormApi} from 'informed';
 import {
   Button,
   Card,
@@ -267,7 +267,7 @@ class InstitutionForm extends Component {
       localIDValue,
     } = this.state;
     const { backPath, formType } = this.props;
-    const InfoBoxWithFormState = withFormState(InfoBox);
+    const InfoBoxWithFormState = withFormApi(InfoBox);
 
     return  qFeheaLevels ? (
       <Form className="animated fadeIn" getApi={this.setFormApi}>

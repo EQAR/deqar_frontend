@@ -99,7 +99,7 @@ class FlagForm extends Component {
                     <FormGroup>
                     <Label for="request" className={'required'}>Request</Label>
                       <FormSelectField
-                        field={'flags'}
+                        field={'request'}
                         options={agencies}
                         placeholder={'Please select'}
                         labelField={'acronym_primary'}
@@ -113,7 +113,7 @@ class FlagForm extends Component {
                     <FormGroup>
                     <Label for="explanation" className={'required'}>Explanation</Label>
                       <FormTextArea
-                        field={'flags'}
+                        field={'explanation'}
                         placeholder={'Enter explanation, justification or description'}
                       />
                     </FormGroup>
