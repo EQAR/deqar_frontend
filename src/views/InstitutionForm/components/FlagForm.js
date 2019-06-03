@@ -12,8 +12,6 @@ import {
 import PropTypes from 'prop-types';
 import { Form } from 'informed';
 
-import FormTextField from "../../../components/FormFields/FormTextField";
-import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
 import FormTextArea from "../../../components/FormFields/FormTextArea";
 import FormSelectField from '../../../components/FormFields/FormSelectField';
 import agency from '../../../services/Agency';
@@ -34,10 +32,7 @@ class FlagForm extends Component {
   setFormApi = (formApi) => {
     const { formValue } = this.props;
     this.formApi = formApi;
-
-    if (formValue) {
-      this.formApi.setValues(formValue);
-    }
+    this.formApi.setValues(formValue);
   }
 
   submitForm = () => {
@@ -68,6 +63,8 @@ class FlagForm extends Component {
   render() {
     const { modalOpen, disabled, formIndex } = this.props;
     const { agencies } = this.state;
+    console.log(this.formApi);
+
 
     return(
       <Modal isOpen={modalOpen} toggle={this.onToggle}>
@@ -80,7 +77,7 @@ class FlagForm extends Component {
             <React.Fragment>
               <ModalHeader toggle={this.onToggle}>{this.renderActionName()}</ModalHeader>
               <ModalBody>
-                <Row>
+                {/* <Row>
                   <Col>
                     <FormGroup>
                     <Label for="agency" className={'required'}>Agency</Label>
@@ -93,17 +90,17 @@ class FlagForm extends Component {
                     />
                     </FormGroup>
                   </Col>
-                </Row>
+                </Row> */}
                 <Row>
                   <Col>
                     <FormGroup>
                     <Label for="request" className={'required'}>Request</Label>
                       <FormSelectField
-                        field={'request'}
+                        field={'flag'}
                         options={agencies}
                         placeholder={'Please select'}
                         labelField={'acronym_primary'}
-                        valueField={'id'}
+                        valueField={'flag'}
                       />
                     </FormGroup>
                   </Col>
@@ -111,9 +108,9 @@ class FlagForm extends Component {
                 <Row>
                   <Col>
                     <FormGroup>
-                    <Label for="explanation" className={'required'}>Explanation</Label>
+                    <Label for="flag_message" className={'required'}>Explanation</Label>
                       <FormTextArea
-                        field={'explanation'}
+                        field={'flag_message'}
                         placeholder={'Enter explanation, justification or description'}
                       />
                     </FormGroup>

@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Col from "reactstrap/es/Col";
 import Row from "reactstrap/es/Row";
+import { Form } from 'informed';
+
 
 import style from "./InfoBox.module.css"
-import {FormGroup, ListGroup} from "reactstrap";
+import { FormGroup, ListGroup } from "reactstrap";
 import Label from "reactstrap/es/Label";
 import ListGroupItem from "reactstrap/es/ListGroupItem";
 import moment from "moment";
@@ -35,25 +37,24 @@ class InfoBox extends Component {
   renderFlags = value => (
     <Row>
       <Col xs={2}>
-        <span className={this.flagRender(value.request)}>{value.request}</span>
+        <span className={this.flagRender(value.flag)}>{value.flag}</span>
       </Col>
       <Col xs={10}>
-        <span>{value.explanation}</span>
+        <span>{value.flag_message}</span>
       </Col>
     </Row>
   )
 
-  getFlagValues = (values) => {
-    return !values.flags || values.flags === [] ? [{request: 'none', explanation: 'Institution has no flag assigned'}] : values.flags;
+  getFlagValues = (flags) => {
+    return !flags || flags.length === 0 ? [{flag: 'none', flag_message: 'Institution has no flag assigned'}] : flags;
   }
 
   onFlagRemove = () => null;
 
   onFlagClick = (index) => {
-    const { formState } = this.props;
     let { flags } =  this.props.formState.values;
 
-    flags = !flags || flags === [] ? [{request: 'none', explanation: 'Institution has no flag assigned'}] : flags;
+    flags = flags.length === 0 ? [{flag: 'none', flag_message: 'Institution has no flag assigned'}] : flags;
 
     this.setState({
       flagValue: flags[index],
@@ -94,13 +95,9 @@ class InfoBox extends Component {
   }
 
   render() {
-    const { formApi, disabled } = this.props;
-    console.log(formApi);
-    const formState = formApi.getState();
-    console.log(formState);
-
-    const { values } = formState;
+    const { formState, disabled } = this.props;
     const { openModal, flagValue } = this.state;
+    const values = formState.values
 
     return (
       <div className={style.infoBoxContainer}>
@@ -144,7 +141,7 @@ class InfoBox extends Component {
                 <AssignedList
                   errors={formState.errors}
                   valueFields={['request']}
-                  values={this.getFlagValues(values)}
+                  values={this.getFlagValues(values.flags)}
                   label={'Flags'}
                   btnLabel={'Add'}
                   onRemove={this.onFlagRemove}
@@ -177,13 +174,13 @@ class InfoBox extends Component {
                     <input
                       className={cx(style.infoInput, 'form-control')}
                       disabled={true}
-                      value={`Created at ${this.renderDate(values.created_at)} by '${values.created_by}'`}
+                      value={`Created at ${this.renderDate(values.created_at)} by 'formState.created_by'`}
 
                     />
                     <input
                       className={cx(style.infoInput, 'form-control')}
                       disabled={true}
-                      value={`Updated at ${this.renderDate(values.updated_at)} by '${values.updated_by}'`}
+                      value={`Updated at ${this.renderDate(values)} by ''`}
                     />
                   </FormGroup>
                 </Col>
