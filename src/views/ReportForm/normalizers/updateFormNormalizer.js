@@ -16,6 +16,8 @@ export const updateFormNormalizer = (formValues) => {
             if('id' in v) {
               if(['programmes', 'report_files', 'flags'].includes(key)) {
                 normalizedForm[key].push(updateFormNormalizer(v))
+              } else if ('alternative_names' === key) {
+                normalizedForm[key].push(v);
               } else {
                 normalizedForm[key].push(v.id);
               }

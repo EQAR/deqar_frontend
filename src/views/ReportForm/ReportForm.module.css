@@ -16,6 +16,10 @@
     z-index: 0;
 }
 
+.reportDeleteButton {
+    margin-right: 10px;
+}
+
 .yearPlus {
     color: hsl(0,0%,40%);
     border-bottom: 1px dotted;

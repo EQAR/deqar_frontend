@@ -37,6 +37,7 @@ export const GET_MY_REPORTS = ADMINAPI_URL + '/browse/my-reports/';
 export const GET_REPORTS = ADMINAPI_URL + '/browse/reports/';
 
 export const MANAGE_REPORT = ADMINAPI_URL + '/reports';
+export const REMOVE_REPORT_FLAG = ADMINAPI_URL + '/reports/remove_flag';
 
 // Institution endpoints
 export const GET_INSTITUTIONS = ADMINAPI_URL + '/select/institutions/';

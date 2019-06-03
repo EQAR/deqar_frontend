@@ -23,6 +23,7 @@
 .flagMessage {
     padding: 0;
     cursor: text;
+    color: #73818f;
 }
 
 .infoInput {
@@ -31,4 +32,15 @@
 
 .internalNote {
     background-color: transparent !important;
+}
+
+.removeButton {
+    color: hsl(0,0%,80%);
+    order: 2;
+    text-align:right;
+    flex-grow: 1;
+}
+
+.removeButton:hover {
+    color: hsl(0,0%,60%);
 }

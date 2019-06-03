@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import ReportForm from "../ReportForm/ReportForm";
+import {connect} from "react-redux";
 
 
 class ReportDetails extends Component {
   render() {
     const {id, param} = this.props.match.params;
+    const {userIsAdmin} = this.props;
 
     return(
       <React.Fragment>
@@ -13,10 +15,17 @@ class ReportDetails extends Component {
           formType={param}
           reportID={id}
           backPath={'/reports'}
+          userIsAdmin={userIsAdmin}
         />
       </React.Fragment>
     )
   }
 }
 
-export default ReportDetails;
+const mapStateToProps = (store) => {
+  return {
+    userIsAdmin: store.user.is_admin
+  }
+};
+
+export default connect(mapStateToProps)(ReportDetails);

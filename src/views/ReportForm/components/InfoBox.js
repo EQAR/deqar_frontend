@@ -10,6 +10,8 @@ import moment from "moment";
 import FormTextField from "../../../components/FormFields/FormTextField";
 import cx from 'classnames';
 import PropTypes from 'prop-types';
+import confirm from "reactstrap-confirm";
+import report from "../../../services/Report";
 
 class InfoBox extends Component {
   flagRender = (value) => {
@@ -31,22 +33,40 @@ class InfoBox extends Component {
   };
 
   renderFlags = () => {
-    const { formState } = this.props;
+    const { formState, userIsAdmin } = this.props;
     if(Object.entries(formState).length !== 0) {
       const {flags} = formState;
       if(flags && flags.length > 0) {
         return flags.map((flag, idx) => {
           if(flag.active) {
-            return(
-              <ListGroupItem key={idx} className={style.ListGroupItem} disabled={true}>
-                <Col xs={2} className={style.flagInfo}>
-                  {this.flagRender(flag.flag)}
-                </Col>
-                <Col xs={10} className={style.flagMessage}>
-                  <span>{flag.flag_message}</span>
-                </Col>
-              </ListGroupItem>
-            )
+            if(userIsAdmin) {
+              return(
+                <ListGroupItem key={idx} className={style.ListGroupItem}>
+                  <Col xs={2} className={style.flagInfo}>
+                    {this.flagRender(flag.flag)}
+                  </Col>
+                  <Col xs={9} className={style.flagMessage}>
+                    <span>{flag.flag_message}</span>
+                  </Col>
+                  <Col xs={1} className={style.flagInfo}>
+                    <div className={style.removeButton + " pull-right"} onClick={() => {this.props.onRemoveFlag(flag.id)}}>
+                      <i className="fa fa-close"> </i>
+                    </div>
+                  </Col>
+                </ListGroupItem>
+              )
+            } else {
+              return(
+                <ListGroupItem key={idx} className={style.ListGroupItem}>
+                  <Col xs={2} className={style.flagInfo}>
+                    {this.flagRender(flag.flag)}
+                  </Col>
+                  <Col xs={10} className={style.flagMessage}>
+                    <span>{flag.flag_message}</span>
+                  </Col>
+                </ListGroupItem>
+              )
+            }
           } else {
             return(undefined)
           }
@@ -176,7 +196,9 @@ class InfoBox extends Component {
 InfoBox.propTypes = {
   id: PropTypes.string.isRequired,
   formState: PropTypes.object,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  userIsAdmin: PropTypes.bool.isRequired,
+  onRemoveFlag: PropTypes.func
 };
 
 export default InfoBox;

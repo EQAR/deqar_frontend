@@ -32,6 +32,8 @@ import InfoBox from "./components/InfoBox";
 import {createFormNormalizer} from "./normalizers/createFormNormalizer";
 import {updateFormNormalizer} from "./normalizers/updateFormNormalizer";
 import {decodeProgrammeNameData, encodeProgrammeNameData} from "./normalizers/programmeNameNormalizer";
+import confirm from 'reactstrap-confirm';
+
 
 class ReportForm extends Component {
   constructor(props) {
@@ -53,7 +55,7 @@ class ReportForm extends Component {
       nonFieldErrors: [],
       loading: false,
       readOnly: false,
-      infoBoxOpen: true,
+      infoBoxOpen: false,
       submitMessageOpen: false
     }
   }
@@ -542,9 +544,44 @@ class ReportForm extends Component {
       this.populateForm()
     }).catch(error => {
       this.loadingToggle();
-      console.log(error.response)
     });
   };
+
+  onDelete = () => {
+    confirm({
+      title: 'Request Deletion',
+      message: 'Are you sure you would like to mark this report as deleted?',
+      confirmColor: 'danger'
+    }).then((result) => {
+      const { reportID } = this.props;
+      if (result) {
+        report.deleteReport(reportID).then((result) => {
+          this.populateForm();
+          this.setState({
+            infoBoxOpen: true
+          })
+        });
+      }
+    });
+  };
+
+  onRemoveFlag = (flagID) => {
+    confirm({
+      title: 'Remove Flag',
+      message: 'Are you sure you would like to remove this flag from the report?',
+      confirmColor: 'danger'
+    }).then((result) => {
+      if (result) {
+        report.deleteReportFlag(flagID).then((result) => {
+          this.populateForm();
+          this.setState({
+            infoBoxOpen: true
+          })
+        });
+      }
+    });
+  };
+
 
   onSubmit = (values) => {
     const {formType} = this.props;
@@ -560,12 +597,25 @@ class ReportForm extends Component {
     }
   };
 
+  renderDeleteButton = () => {
+    return(
+      <Button
+        type={'button'}
+        size="sm"
+        color="danger"
+        className={style.reportDeleteButton}
+        onClick={this.onDelete}
+      >Request Deletion</Button>
+    )
+  };
+
   renderEditSubmitButton = () => {
     const {submitMessageOpen} = this.state;
 
     if (submitMessageOpen) {
       return (
         <div className={'pull-right'}>
+          {this.renderDeleteButton()}
           <LaddaButton
             className={style.reportSubmitButton + " btn btn-primary btn-ladda btn-sm"}
             loading={this.state.loading}
@@ -578,6 +628,7 @@ class ReportForm extends Component {
     } else {
       return(
         <div className={'pull-right'}>
+          {this.renderDeleteButton()}
           <Button
             type={'button'}
             size="sm"
@@ -634,9 +685,9 @@ class ReportForm extends Component {
   };
 
   renderEditButton = () => {
-    const {backPath, reportID} = this.props;
+    const {backPath, reportID, userIsAdmin} = this.props;
 
-    if(backPath.includes('my-reports')) {
+    if(backPath.includes('my-reports') || userIsAdmin) {
       return(
         <div className={'pull-right'}>
           <Link to={{pathname: `${backPath}/edit/${reportID}`}}>
@@ -657,7 +708,7 @@ class ReportForm extends Component {
       <Collapse isOpen={submitMessageOpen}>
         <FormGroup>
           <FormTextField
-            field={'submit_message'}
+            field={'submit_comment'}
             placeholder={'Please enter a short description of your edit... (Optional)'}
           />
         </FormGroup>
@@ -766,7 +817,7 @@ class ReportForm extends Component {
     const {agencyOptions, agencyActivityOptions, statusOptions, decisionOptions,
       fileModalOpen, fileModalValue, fileModalIndex,
       readOnly, infoBoxOpen } = this.state;
-    const {formType, formTitle, reportID} = this.props;
+    const {formType, formTitle, reportID, userIsAdmin} = this.props;
 
     return(
       <div className="animated fadeIn">
@@ -988,6 +1039,9 @@ class ReportForm extends Component {
                     </Col>
                   </Row>
                 </CardBody>
+                <CardFooter>
+                  {this.renderButtons()}
+                </CardFooter>
                 <CardFooter className={style.infoFooter}>
                   {formType === 'create' ? "" :
                     <Collapse isOpen={infoBoxOpen}>
@@ -995,12 +1049,11 @@ class ReportForm extends Component {
                         id={reportID}
                         formState={formState.values}
                         disabled={readOnly}
+                        userIsAdmin={userIsAdmin}
+                        onRemoveFlag={this.onRemoveFlag}
                       />
                     </Collapse>
                   }
-                </CardFooter>
-                <CardFooter>
-                  {this.renderButtons()}
                 </CardFooter>
               </React.Fragment>
             )}
@@ -1011,11 +1064,16 @@ class ReportForm extends Component {
   }
 }
 
+ReportForm.defaultProps = {
+  userIsAdmin: false
+};
+
 ReportForm.propTypes = {
   formTitle: PropTypes.string.isRequired,
   formType: PropTypes.oneOf(['create', 'view', 'edit']),
   reportID: PropTypes.string,
-  backPath: PropTypes.string
+  backPath: PropTypes.string,
+  userIsAdmin: PropTypes.bool
 };
 
 export default withRouter(ReportForm)
