@@ -139,7 +139,10 @@ class InstitutionForm extends Component {
 
   }
 
-  onNameRemove = (index) => {
+  onNameRemove = (i) => {
+    let alternativeNames = this.formApi.getValue('names_actual[0].alternative_names');
+    alternativeNames.splice(i, 1);
+    this.formApi.setValue('names_actual[0].alternative_names', alternativeNames);
   }
 
   onFormerNameRemove = (index) => {
