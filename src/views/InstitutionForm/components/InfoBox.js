@@ -31,15 +31,15 @@ class InfoBox extends Component {
       none: 'badge badge-success',
       low_level: 'badge badge-warning',
       high_level: 'badge badge-danger'
-    }[value]
+    }[value.replace(' ', '_')]
   }
 
   renderFlags = value => (
     <Row>
-      <Col xs={2}>
+      <Col xs={4}>
         <span className={this.flagRender(value.flag)}>{value.flag}</span>
       </Col>
-      <Col xs={10}>
+      <Col xs={8}>
         <span>{value.flag_message}</span>
       </Col>
     </Row>

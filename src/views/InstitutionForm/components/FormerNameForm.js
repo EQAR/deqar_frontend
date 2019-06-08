@@ -15,7 +15,7 @@ import { Form } from 'informed';
 import FormTextField from "../../../components/FormFields/FormTextField";
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
 import FormTextArea from "../../../components/FormFields/FormTextArea";
-import { validateRequired } from "../../../utils/validators";
+import { validateRequired, validateRequiredPastDate } from "../../../utils/validators";
 
 class FormerNameForm extends Component {
   constructor(props) {
@@ -35,10 +35,6 @@ class FormerNameForm extends Component {
     this.formApi.submitForm();
   }
 
-  onAddButtonClick = () => {
-
-  }
-
   onToggle = () => {
     this.props.onToggle();
   }
@@ -47,7 +43,7 @@ class FormerNameForm extends Component {
     const { formIndex, disabled } = this.props;
     let action = '';
 
-    if (formIndex >= 0) {
+    if (Number.isInteger(formIndex)) {
       action = disabled ? 'View' : 'Edit'
     } else {
       action = 'Add'
@@ -77,6 +73,7 @@ class FormerNameForm extends Component {
                       <FormTextField
                         field={'name_official'}
                         placeholder={'Enter official institution name'}
+                        validate={validateRequired}
                       />
                     </FormGroup>
                   </Col>
@@ -132,6 +129,7 @@ class FormerNameForm extends Component {
                       <FormDatePickerField
                         field={'name_valid_to'}
                         placeholderText={'YYYY-MM-DD'}
+                        validate={validateRequiredPastDate}
                       />
                     </FormGroup>
                   </Col>
@@ -155,6 +153,13 @@ class FormerNameForm extends Component {
                   onClick={this.props.onToggle}
                 >
                   Close
+                </Button>
+                <Button
+                  color="primary"
+                  type={'button'}
+                  onClick={this.submitForm}
+                >
+                  Add Name
                 </Button>
               </ModalFooter>
             </React.Fragment>

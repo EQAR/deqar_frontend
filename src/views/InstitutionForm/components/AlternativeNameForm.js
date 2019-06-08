@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import { Form } from 'informed';
 
 import FormTextField from "../../../components/FormFields/FormTextField";
-import { validateRequired } from "../../../utils/validators";
+
 
 class AlternativeNameForm extends Component {
   constructor(props) {
@@ -29,8 +29,6 @@ class AlternativeNameForm extends Component {
   }
 
   submitForm = () => {
-    console.log(this.formApi);
-
     this.formApi.submitForm();
   }
 
@@ -42,7 +40,7 @@ class AlternativeNameForm extends Component {
     const { formIndex, disabled } = this.props;
     let action = '';
 
-    if (formIndex >= 0) {
+    if (Number.isInteger(formIndex)) {
       action = disabled ? 'View' : 'Edit'
     } else {
       action = 'Add'

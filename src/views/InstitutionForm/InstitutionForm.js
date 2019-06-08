@@ -124,62 +124,7 @@ class InstitutionForm extends Component {
     })
   }
 
-  onNameSubmit = (value, i) => {
-    let alternativeNames = this.formApi.getValue('names_actual[0].alternative_names');
-    alternativeNames = alternativeNames ? alternativeNames : []
-
-    if (i) {
-      alternativeNames[i] = value;
-    } else {
-      alternativeNames.push(value);
-    }
-
-    this.formApi.setValue('names_actual[0].alternative_names', alternativeNames);
-    this.toggleModal('alternative-name');
-
-  }
-
-  onNameRemove = (i) => {
-    let alternativeNames = this.formApi.getValue('names_actual[0].alternative_names');
-    alternativeNames.splice(i, 1);
-    this.formApi.setValue('names_actual[0].alternative_names', alternativeNames);
-  }
-
-  onFormerNameRemove = (index) => {
-  }
-
-  onFormerNameSubmit = (index) => {
-  }
-
-  onLocalIDRemove = (i) => {
-    let localIDs = this.formApi.getValue('identifiers_local');
-    localIDs.splice(i, 1);
-    this.formApi.setValue('identifiers_local', localIDs);
-  }
-
-  onLocalIDSubmit = (value, i) => {
-    let localIDs = this.formApi.getValue('identifiers_local') || [];
-
-    if (i) {
-      localIDs[i] = value;
-    } else {
-      localIDs.push(value);
-    }
-
-    this.formApi.setValue('identifiers_local', localIDs);
-    this.toggleModal('local-id');
-  }
-
-  onQFEheaLevelsRemove = (index) => {
-  }
-
-  onHistoricalLinkRemove = (index) => {
-  }
-
-  onHierarchicalLinkRemove = (index) => {
-  }
-
-  onAddName = () => {
+  onAddAlternativeName = () => {
     this.setState({
       alternativeNameValue: null,
       alernativeNameIndex: null
@@ -187,26 +132,72 @@ class InstitutionForm extends Component {
     this.toggleModal('alternative-name');
   }
 
-  onAddLocalID = () => {
+  onAltenativeNameClick = (i) => {
     this.setState({
-      localIDIndex: null,
-      localIDValue: null
-    });
-    this.toggleModal('local-id');
-  }
-
-  onNameClick = (index) => {
-    this.setState({
-      alternativeNameValue: this.formApi.getValue('names_actual')[0].alternative_names[index],
-      alernativeNameIndex: index
+      alternativeNameValue: this.formApi.getValue('names_actual')[0].alternative_names[i],
+      alernativeNameIndex: i
     });
     this.toggleModal('alternative-name');
   }
 
-  onFormerNameClick = (index) => {
+  onAlternativeNameSubmit = (value, i) => {
+    let alternativeNames = this.formApi.getValue('names_actual[0].alternative_names') || [];
+    Number.isInteger(i) ? alternativeNames[i] = value : alternativeNames.push(value)
+    this.formApi.setValue('names_actual[0].alternative_names', alternativeNames);
+    this.toggleModal('alternative-name');
+  }
+
+  onAlternativeNameRemove = (i) => {
+    let alternativeNames = this.formApi.getValue('names_actual[0].alternative_names');
+    alternativeNames.splice(i, 1);
+    this.formApi.setValue('names_actual[0].alternative_names', alternativeNames);
+  }
+
+  getAlternativeNameValues = formState => (
+    formState.values.names_actual
+    ? formState.values.names_actual[0].alternative_names
+    : null
+  )
+
+  onAddFormerName = () => {
     this.setState({
-      formerNameValue: this.formApi.getValue('former-name')[index],
-      formerNameIndex: index
+      formerNameValue: null,
+      formerNameIndex: null
+    });
+    this.toggleModal('former-name');
+  }
+
+  onFormerNameClick = (i) => {
+    this.setState({
+      formerNameValue: this.formApi.getValue('names_former')[i],
+      formerNameIndex: i
+    });
+    this.toggleModal('former-name');
+  }
+
+  onFormerNameSubmit = (value, i) => {
+    let formerNames = this.formApi.getValue('names_former') || [];
+    Number.isInteger(i) ? formerNames[i] = value : formerNames.push(value);
+    this.formApi.setValue('names_former', formerNames);
+    this.toggleModal('former-name');
+  }
+
+  onFormerNameRemove = (i) => {
+    let formerNames = this.formApi.getValue('names_former');
+    formerNames.splice(i, 1);
+    this.formApi.setValue('names_former', formerNames);
+  }
+
+  getFormerValues = formState => (
+    formState.values.names_former
+    ? formState.values.names_former
+    : null
+  )
+
+  onAddLocalID = () => {
+    this.setState({
+      localIDIndex: null,
+      localIDValue: null
     });
     this.toggleModal('local-id');
   }
@@ -219,11 +210,33 @@ class InstitutionForm extends Component {
     this.toggleModal('local-id');
   }
 
-  getAlternativeValues = formState => formState.values.names_actual ? formState.values.names_actual[0].alternative_names : null;
+  onLocalIDSubmit = (value, i) => {
+    let localIDs = this.formApi.getValue('identifiers_local') || [];
+    Number.isInteger(i) ? localIDs[i] = value : localIDs.push(value)
+    this.formApi.setValue('identifiers_local', localIDs);
+    this.toggleModal('local-id');
+  }
 
-  getFormerValues = formState => formState.values.names_former ? formState.values.names_former : null;
+  onLocalIDRemove = (i) => {
+    let localIDs = this.formApi.getValue('identifiers_local');
+    localIDs.splice(i, 1);
+    this.formApi.setValue('identifiers_local', localIDs);
+  }
 
-  getLocalIDValues = formState => formState.values.identifiers_local ? formState.values.identifiers_local : null;
+  getLocalIDValues = formState => (
+    formState.values.identifiers_local
+    ? formState.values.identifiers_local
+    : null
+  )
+
+  onQFEheaLevelsRemove = (index) => {
+  }
+
+  onHistoricalLinkRemove = (index) => {
+  }
+
+  onHierarchicalLinkRemove = (index) => {
+  }
 
   getHistoricalLinkValues = formState => null;
 
@@ -294,7 +307,7 @@ class InstitutionForm extends Component {
 
   renderAlternativeNames = value => value.name;
 
-  renderFormerNames = value => value.name;
+  renderFormerNames = value => value.name_official;
 
   renderLocalID = value => value.identifier;
 
@@ -311,6 +324,7 @@ class InstitutionForm extends Component {
       alternativeNameValue,
       alernativeNameIndex,
       formerNameValue,
+      formerNameIndex,
       infoBoxOpen,
       qFeheaLevels,
       adminEdit,
@@ -375,7 +389,7 @@ class InstitutionForm extends Component {
                           <AlternativeNameForm
                             modalOpen={openModal === 'alternative-name'}
                             onToggle={() => this.toggleModal('')}
-                            onFormSubmit={this.onNameSubmit}
+                            onFormSubmit={this.onAlternativeNameSubmit}
                             formIndex={alernativeNameIndex}
                             formValue={alternativeNameValue}
                             disabled={!adminEdit}
@@ -383,13 +397,13 @@ class InstitutionForm extends Component {
                           <AssignedList
                             errors={formState.errors}
                             valueFields={['name']}
-                            values={this.getAlternativeValues(formState)}
+                            values={this.getAlternativeNameValues(formState)}
                             label={'Institution Name, Alternative'}
                             btnLabel={'Add Alternative Name'}
-                            onRemove={this.onNameRemove}
+                            onRemove={this.onAlternativeNameRemove}
                             renderDisplayValue={this.renderAlternativeNames}
-                            onAddButtonClick={this.onAddName}
-                            onClick={this.onNameClick}
+                            onAddButtonClick={this.onAddAlternativeName}
+                            onClick={this.onAltenativeNameClick}
                             field={'names_actual[0].alternative_names'}
                             disabled={!adminEdit}
                             />
@@ -425,6 +439,7 @@ class InstitutionForm extends Component {
                             modalOpen={openModal === 'former-name'}
                             onToggle={() => this.toggleModal('')}
                             onFormSubmit={this.onFormerNameSubmit}
+                            formIndex = {formerNameIndex}
                             formValue={formerNameValue}
                             disabled={!adminEdit}
                             />
@@ -435,7 +450,7 @@ class InstitutionForm extends Component {
                             label={'Former Names'}
                             btnLabel={'Add'}
                             onRemove={this.onFormerNameRemove}
-                            onAddButtonClick={this.onAddLocalID}
+                            onAddButtonClick={this.onAddFormerName}
                             onClick={this.onFormerNameClick}
                             renderDisplayValue={this.renderFormerNames}
                             field={'names_former'}
@@ -460,7 +475,7 @@ class InstitutionForm extends Component {
                             label={'Local ID'}
                             btnLabel={'Add'}
                             onRemove={this.onLocalIDRemove}
-                            onAddButtonClick={() => this.toggleModal('local-id')}
+                            onAddButtonClick={this.onAddLocalID}
                             onClick={this.onLocalIDClick}
                             renderDisplayValue={this.renderLocalID}
                             field={'identifiers_local'}
@@ -545,7 +560,7 @@ class InstitutionForm extends Component {
                         <HistoricalLinkForm
                             modalOpen={openModal === 'historical-link'}
                             onToggle={() => this.toggleModal('')}
-                            onFormSubmit={this.onNameSubmit}
+                            onFormSubmit={this.onAlternativeNameSubmit}
                             formValue={alternativeNameValue}
                             disabled={!adminEdit}
                           />
@@ -569,7 +584,7 @@ class InstitutionForm extends Component {
                         <HierarchicalLinkForm
                             modalOpen={openModal === 'hierarchical-link'}
                             onToggle={() => this.toggleModal('')}
-                            onFormSubmit={this.onNameSubmit}
+                            onFormSubmit={this.onAlternativeNameSubmit}
                             formValue={alternativeNameValue}
                             disabled={!adminEdit}
                             />

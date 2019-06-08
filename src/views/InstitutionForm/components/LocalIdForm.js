@@ -53,7 +53,7 @@ class LocalIdForm extends Component {
     const { formIndex, disabled } = this.props;
     let action = '';
 
-    if (formIndex >= 0) {
+    if (Number.isInteger(formIndex)) {
       action = disabled ? 'View' : 'Edit'
     } else {
       action = 'Add'
