@@ -29,11 +29,9 @@ class AlternativeNameForm extends Component {
   }
 
   submitForm = () => {
+    console.log(this.formApi);
+
     this.formApi.submitForm();
-  }
-
-  onAddButtonClick = () => {
-
   }
 
   onToggle = () => {
@@ -74,7 +72,6 @@ class AlternativeNameForm extends Component {
                       <FormTextField
                         field={'name'}
                         placeholder={'Enter alternative institution name'}
-                        validate={validateRequired}
                         disabled={disabled}
                       />
                     </FormGroup>
@@ -100,6 +97,13 @@ class AlternativeNameForm extends Component {
                   onClick={this.props.onToggle}
                 >
                   Close
+                </Button>
+                <Button
+                  color="primary"
+                  type={'button'}
+                  onClick={this.submitForm}
+                >
+                  Add Name
                 </Button>
               </ModalFooter>
             </React.Fragment>

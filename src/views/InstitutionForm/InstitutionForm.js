@@ -56,10 +56,15 @@ class InstitutionForm extends Component {
     const { formType } = this.props;
 
     this.setState({
-      adminEdit: this.notView(formType),
-      isEdit: this.notView(formType),
+      adminEdit: true,
+      isEdit: true,
       formType: formType
     });
+    // this.setState({
+    //   adminEdit: this.notView(formType),
+    //   isEdit: this.notView(formType),
+    //   formType: formType
+    // });
     this.populate();
   }
 
@@ -111,12 +116,26 @@ class InstitutionForm extends Component {
   }
 
   toggleModal = (modal) => {
+    const { openModal } = this.state;
+
+    modal = openModal === modal ? '' : modal;
     this.setState({
       openModal: modal
     })
   }
 
-  onNameSubmit = (i) => {
+  onNameSubmit = (value, i) => {
+    let alternativeNames = this.formApi.getValue('names_actual[0].alternative_names');
+    alternativeNames = alternativeNames ? alternativeNames : []
+
+    if (i) {
+      alternativeNames[i] = value;
+    } else {
+      alternativeNames.push(value);
+    }
+
+    this.formApi.setValue('names_actual[0].alternative_names', alternativeNames);
+    this.toggleModal('alternative-name');
 
   }
 
@@ -132,11 +151,11 @@ class InstitutionForm extends Component {
   onLocalIDRemove = (index) => {
   }
 
-  onLocalIDSubmit = (value, idx) => {
+  onLocalIDSubmit = (value, i) => {
     let localIDs = this.formApi.getValue('identifiers_local') || [];
 
-    if (idx >= 0) {
-      localIDs[idx] = value;
+    if (i) {
+      localIDs[i] = value;
     } else {
       localIDs.push(value);
     }
@@ -152,6 +171,22 @@ class InstitutionForm extends Component {
   }
 
   onHierarchicalLinkRemove = (index) => {
+  }
+
+  onAddName = () => {
+    this.setState({
+      alternativeNameValue: null,
+      alernativeNameIndex: null
+    });
+    this.toggleModal('alternative-name');
+  }
+
+  onAddLocalID = () => {
+    this.setState({
+      localIDIndex: null,
+      localIDValue: null
+    });
+    this.toggleModal('local-id');
   }
 
   onNameClick = (index) => {
@@ -263,12 +298,12 @@ class InstitutionForm extends Component {
 
   renderHierarchicalLink = value => null;
 
-
   render() {
     const {
       isView,
       openModal,
       alternativeNameValue,
+      alernativeNameIndex,
       formerNameValue,
       infoBoxOpen,
       qFeheaLevels,
@@ -335,6 +370,7 @@ class InstitutionForm extends Component {
                             modalOpen={openModal === 'alternative-name'}
                             onToggle={() => this.toggleModal('')}
                             onFormSubmit={this.onNameSubmit}
+                            formIndex={alernativeNameIndex}
                             formValue={alternativeNameValue}
                             disabled={!adminEdit}
                           />
@@ -346,7 +382,7 @@ class InstitutionForm extends Component {
                             btnLabel={'Add Alternative Name'}
                             onRemove={this.onNameRemove}
                             renderDisplayValue={this.renderAlternativeNames}
-                            onAddButtonClick={() => this.toggleModal('alternative-name')}
+                            onAddButtonClick={this.onAddName}
                             onClick={this.onNameClick}
                             field={'names_actual[0].alternative_names'}
                             disabled={!adminEdit}
@@ -393,7 +429,7 @@ class InstitutionForm extends Component {
                             label={'Former Names'}
                             btnLabel={'Add'}
                             onRemove={this.onFormerNameRemove}
-                            onAddButtonClick={() => this.toggleModal('former-name')}
+                            onAddButtonClick={this.onAddLocalID}
                             onClick={this.onFormerNameClick}
                             renderDisplayValue={this.renderFormerNames}
                             field={'names_former'}
