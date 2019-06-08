@@ -2,17 +2,15 @@ import * as EmailValidator from 'email-validator';
 import moment from 'moment'
 
 export const validateRequired = (value) => {
-  if(!value) {
+  if (!value) {
     return "This field is required!"
-  } else {
-    if(value.length === 0) {
-      return "This field is required!"
-    }
+  } else if (value.length === 0) {
+    return "This field is required!"
   }
-};
+}
 
 export const validateEmail = (value) => {
-  if(!EmailValidator.validate(value)) {
+  if (!EmailValidator.validate(value)) {
     return "E-mail should be properly formatted."
   }
 };
@@ -25,7 +23,7 @@ export const validateValuesMatch = (val1, val2) => {
 
 export const validateDate = (value) => {
   if (value) {
-    if(!moment(value, "YYYY-MM-DD", true).isValid()) {
+    if (!moment(value, "YYYY-MM-DD", true).isValid()) {
       return "Date format is invalid!"
     }
   }
