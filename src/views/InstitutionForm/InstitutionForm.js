@@ -151,7 +151,10 @@ class InstitutionForm extends Component {
   onFormerNameSubmit = (index) => {
   }
 
-  onLocalIDRemove = (index) => {
+  onLocalIDRemove = (i) => {
+    let localIDs = this.formApi.getValue('identifiers_local');
+    localIDs.splice(i, 1);
+    this.formApi.setValue('identifiers_local', localIDs);
   }
 
   onLocalIDSubmit = (value, i) => {
