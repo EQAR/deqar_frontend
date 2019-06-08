@@ -11,6 +11,8 @@ import {
   Row } from "reactstrap";
 import PropTypes from 'prop-types';
 import { Form } from 'informed';
+import { validateRequired } from "../../../utils/validators";
+
 
 import FormTextField from "../../../components/FormFields/FormTextField";
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
@@ -41,10 +43,6 @@ class LocalIdForm extends Component {
 
   submitForm = () => {
     this.formApi.submitForm();
-  }
-
-  onAddButtonClick = () => {
-
   }
 
   onToggle = () => {
@@ -84,11 +82,12 @@ class LocalIdForm extends Component {
                     <FormGroup>
                     <Label for="agency" className={'required'}>Agency</Label>
                     <FormSelectField
-                      field={`identifiers`}
+                      field={'agency'}
                       options={agencies}
                       placeholder={'Please select'}
                       labelField={'acronym_primary'}
                       valueField={'id'}
+                      validate={validateRequired}
                     />
                     </FormGroup>
                   </Col>
@@ -109,7 +108,7 @@ class LocalIdForm extends Component {
                     <FormGroup>
                     <Label for="valid-from">Valid From</Label>
                       <FormDatePickerField
-                        field={'founding_date'}
+                        field={'identifier_valid_from'}
                         placeholderText={'YYYY-MM-DD'}
                       />
                     </FormGroup>
@@ -118,7 +117,7 @@ class LocalIdForm extends Component {
                     <FormGroup>
                     <Label for="valid-to">Valid To</Label>
                       <FormDatePickerField
-                        field={'closing_date'}
+                        field={'identifier_valid_to'}
                         placeholderText={'YYYY-MM-DD'}
                       />
                     </FormGroup>
@@ -129,7 +128,7 @@ class LocalIdForm extends Component {
                     <FormGroup>
                     <Label for="id-note">Identifier Note</Label>
                       <FormTextArea
-                        field={'identifier'}
+                        field={'note'}
                         placeholder={'Enter identifier information'}
                       />
                     </FormGroup>
@@ -143,6 +142,13 @@ class LocalIdForm extends Component {
                   onClick={this.props.onToggle}
                 >
                   Close
+                </Button>
+                <Button
+                  color="primary"
+                  type={'button'}
+                  onClick={this.submitForm}
+                >
+                  Add ID
                 </Button>
               </ModalFooter>
             </React.Fragment>

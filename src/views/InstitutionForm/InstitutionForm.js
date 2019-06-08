@@ -132,7 +132,17 @@ class InstitutionForm extends Component {
   onLocalIDRemove = (index) => {
   }
 
-  onLocalIDSubmit = (index) => {
+  onLocalIDSubmit = (value, idx) => {
+    let localIDs = this.formApi.getValue('identifiers_local') || [];
+
+    if (idx >= 0) {
+      localIDs[idx] = value;
+    } else {
+      localIDs.push(value);
+    }
+
+    this.formApi.setValue('identifiers_local', localIDs);
+    this.toggleModal('local-id');
   }
 
   onQFEheaLevelsRemove = (index) => {
@@ -265,6 +275,7 @@ class InstitutionForm extends Component {
       adminEdit,
       isEdit,
       localIDValue,
+      localIDIndex
     } = this.state;
     const { backPath, formType } = this.props;
 
@@ -396,6 +407,7 @@ class InstitutionForm extends Component {
                             modalOpen={openModal === 'local-id'}
                             onToggle={() => this.toggleModal('')}
                             onFormSubmit={this.onLocalIDSubmit}
+                            formIndex={localIDIndex}
                             formValue={localIDValue}
                             disabled={!isEdit}
                           />
