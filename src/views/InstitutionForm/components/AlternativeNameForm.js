@@ -50,13 +50,13 @@ class AlternativeNameForm extends Component {
   }
 
   render() {
-    const { modalOpen, disabled, formIndex } = this.props;
+    const { modalOpen, disabled, formIndex, fieldName } = this.props;
 
     return(
       <Modal isOpen={modalOpen} toggle={this.onToggle}>
         <Form
           getApi={this.setFormApi}
-          onSubmit={(value) => this.props.onFormSubmit(value, formIndex)}
+          onSubmit={(value) => this.props.onFormSubmit(value, formIndex, fieldName)}
           id="alternative-name-form"
         >
           {({ formState }) => (

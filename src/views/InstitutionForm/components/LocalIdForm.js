@@ -63,14 +63,14 @@ class LocalIdForm extends Component {
   }
 
   render() {
-    const { modalOpen, disabled, formIndex } = this.props;
+    const { modalOpen, disabled, formIndex, fieldName } = this.props;
     const { agencies } = this.state;
 
     return(
       <Modal isOpen={modalOpen} toggle={this.onToggle}>
         <Form
           getApi={this.setFormApi}
-          onSubmit={(value) => this.props.onFormSubmit(value, formIndex)}
+          onSubmit={(value) => this.props.onFormSubmit(value, formIndex, fieldName)}
           id="local-id-form"
         >
           {({ formState }) => (

@@ -40,12 +40,10 @@ class InstitutionForm extends Component {
       adminEdit: false,
       openModal: null,
       formType: null,
+      formIndex: null,
       alternativeNameValue: null,
-      alernativeNameIndex: null,
       formerNameValue: null,
-      formerNameIndex: null,
       localIDValue: null,
-      localIDIndex: null,
       qFeheaLevels: null,
       countries: null,
       infoBoxOpen: true
@@ -127,7 +125,7 @@ class InstitutionForm extends Component {
   onAddAlternativeName = () => {
     this.setState({
       alternativeNameValue: null,
-      alernativeNameIndex: null
+      formIndex: null
     });
     this.toggleModal('alternative-name');
   }
@@ -135,22 +133,9 @@ class InstitutionForm extends Component {
   onAltenativeNameClick = (i) => {
     this.setState({
       alternativeNameValue: this.formApi.getValue('names_actual')[0].alternative_names[i],
-      alernativeNameIndex: i
+      formIndex: i
     });
     this.toggleModal('alternative-name');
-  }
-
-  onAlternativeNameSubmit = (value, i) => {
-    let alternativeNames = this.formApi.getValue('names_actual[0].alternative_names') || [];
-    Number.isInteger(i) ? alternativeNames[i] = value : alternativeNames.push(value)
-    this.formApi.setValue('names_actual[0].alternative_names', alternativeNames);
-    this.toggleModal('alternative-name');
-  }
-
-  onAlternativeNameRemove = (i) => {
-    let alternativeNames = this.formApi.getValue('names_actual[0].alternative_names');
-    alternativeNames.splice(i, 1);
-    this.formApi.setValue('names_actual[0].alternative_names', alternativeNames);
   }
 
   getAlternativeNameValues = formState => (
@@ -162,7 +147,7 @@ class InstitutionForm extends Component {
   onAddFormerName = () => {
     this.setState({
       formerNameValue: null,
-      formerNameIndex: null
+      formIndex: null
     });
     this.toggleModal('former-name');
   }
@@ -170,22 +155,9 @@ class InstitutionForm extends Component {
   onFormerNameClick = (i) => {
     this.setState({
       formerNameValue: this.formApi.getValue('names_former')[i],
-      formerNameIndex: i
+      formIndex: i
     });
     this.toggleModal('former-name');
-  }
-
-  onFormerNameSubmit = (value, i) => {
-    let formerNames = this.formApi.getValue('names_former') || [];
-    Number.isInteger(i) ? formerNames[i] = value : formerNames.push(value);
-    this.formApi.setValue('names_former', formerNames);
-    this.toggleModal('former-name');
-  }
-
-  onFormerNameRemove = (i) => {
-    let formerNames = this.formApi.getValue('names_former');
-    formerNames.splice(i, 1);
-    this.formApi.setValue('names_former', formerNames);
   }
 
   getFormerValues = formState => (
@@ -210,19 +182,6 @@ class InstitutionForm extends Component {
     this.toggleModal('local-id');
   }
 
-  onLocalIDSubmit = (value, i) => {
-    let localIDs = this.formApi.getValue('identifiers_local') || [];
-    Number.isInteger(i) ? localIDs[i] = value : localIDs.push(value)
-    this.formApi.setValue('identifiers_local', localIDs);
-    this.toggleModal('local-id');
-  }
-
-  onLocalIDRemove = (i) => {
-    let localIDs = this.formApi.getValue('identifiers_local');
-    localIDs.splice(i, 1);
-    this.formApi.setValue('identifiers_local', localIDs);
-  }
-
   getLocalIDValues = formState => (
     formState.values.identifiers_local
     ? formState.values.identifiers_local
@@ -241,6 +200,19 @@ class InstitutionForm extends Component {
   getHistoricalLinkValues = formState => null;
 
   getHierarchicalLinkValues = formState => null;
+
+  onFormSubmit = (value, i, field) => {
+    let values = this.formApi.getValue(field) || [];
+    Number.isInteger(i) ? values[i] = value : values.push(value)
+    this.formApi.setValue(field, values);
+    this.toggleModal('');
+  }
+
+  onRemove = (i, field) => {
+    let values = this.formApi.getValue(field);
+    values.splice(i, 1);
+    this.formApi.setValue(field, values);
+  }
 
   renderLocations = formState => {
     const { countries, isView, adminEdit } = this.state;
@@ -322,15 +294,13 @@ class InstitutionForm extends Component {
       isView,
       openModal,
       alternativeNameValue,
-      alernativeNameIndex,
       formerNameValue,
-      formerNameIndex,
       infoBoxOpen,
       qFeheaLevels,
       adminEdit,
       isEdit,
       localIDValue,
-      localIDIndex
+      formIndex
     } = this.state;
     const { backPath, formType } = this.props;
 
@@ -389,8 +359,9 @@ class InstitutionForm extends Component {
                           <AlternativeNameForm
                             modalOpen={openModal === 'alternative-name'}
                             onToggle={() => this.toggleModal('')}
-                            onFormSubmit={this.onAlternativeNameSubmit}
-                            formIndex={alernativeNameIndex}
+                            onFormSubmit={this.onFormSubmit}
+                            fieldName={'names_actual[0].alternative_names'}
+                            formIndex={formIndex}
                             formValue={alternativeNameValue}
                             disabled={!adminEdit}
                           />
@@ -400,11 +371,12 @@ class InstitutionForm extends Component {
                             values={this.getAlternativeNameValues(formState)}
                             label={'Institution Name, Alternative'}
                             btnLabel={'Add Alternative Name'}
-                            onRemove={this.onAlternativeNameRemove}
+                            onRemove={this.onRemove}
                             renderDisplayValue={this.renderAlternativeNames}
                             onAddButtonClick={this.onAddAlternativeName}
                             onClick={this.onAltenativeNameClick}
                             field={'names_actual[0].alternative_names'}
+                            fieldName={'names_actual[0].alternative_names'}
                             disabled={!adminEdit}
                             />
                         </Col>
@@ -438,8 +410,9 @@ class InstitutionForm extends Component {
                         <FormerNameForm
                             modalOpen={openModal === 'former-name'}
                             onToggle={() => this.toggleModal('')}
-                            onFormSubmit={this.onFormerNameSubmit}
-                            formIndex = {formerNameIndex}
+                            onFormSubmit={this.onFormSubmit}
+                            fieldName={'names_former'}
+                            formIndex = {formIndex}
                             formValue={formerNameValue}
                             disabled={!adminEdit}
                             />
@@ -449,11 +422,12 @@ class InstitutionForm extends Component {
                             values={this.getFormerValues(formState)}
                             label={'Former Names'}
                             btnLabel={'Add'}
-                            onRemove={this.onFormerNameRemove}
+                            onRemove={this.onRemove}
                             onAddButtonClick={this.onAddFormerName}
                             onClick={this.onFormerNameClick}
                             renderDisplayValue={this.renderFormerNames}
                             field={'names_former'}
+                            fieldName={'names_former'}
                             disabled={!adminEdit}
                             />
                         </Col>
@@ -463,8 +437,9 @@ class InstitutionForm extends Component {
                         <LocalIdForm
                             modalOpen={openModal === 'local-id'}
                             onToggle={() => this.toggleModal('')}
-                            onFormSubmit={this.onLocalIDSubmit}
-                            formIndex={localIDIndex}
+                            onFormSubmit={this.onFormSubmit}
+                            fieldName={'identifiers_local'}
+                            formIndex={formIndex}
                             formValue={localIDValue}
                             disabled={!isEdit}
                           />
@@ -474,11 +449,12 @@ class InstitutionForm extends Component {
                             values={this.getLocalIDValues(formState)}
                             label={'Local ID'}
                             btnLabel={'Add'}
-                            onRemove={this.onLocalIDRemove}
+                            onRemove={this.onRemove}
                             onAddButtonClick={this.onAddLocalID}
                             onClick={this.onLocalIDClick}
                             renderDisplayValue={this.renderLocalID}
                             field={'identifiers_local'}
+                            fieldName={'identifiers_local'}
                             disabled={!isEdit}
                           />
                         </Col>
