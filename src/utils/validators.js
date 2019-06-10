@@ -37,7 +37,6 @@ export const validateRequiredDate = (value) => validateRequired(value) || valida
 
 export const validateRequiredPastDate = (value) => (
   validateRequiredDate(value)
-  || validateDate(value)
   || validatePastDate(value)
 )
 
