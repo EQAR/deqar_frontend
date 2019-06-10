@@ -7,7 +7,7 @@ import cx from 'classnames';
 
 class AssignedList extends Component {
   renderListItems = (values) => {
-    const { disabled } = this.props;
+    const { disabled, fieldName } = this.props;
 
     values = values ? values : [];
     const emptyBox = (
@@ -36,7 +36,7 @@ class AssignedList extends Component {
               {this.props.renderDisplayValue(value)}
             </span>
             { disabled ? "" :
-              <div className={style.removeButton + " pull-right"} onClick={() => {this.props.onRemove(idx)}}>
+              <div className={style.removeButton + " pull-right"} onClick={() => {this.props.onRemove(idx, fieldName)}}>
                 <i className="fa fa-close"> </i>
               </div>
             }
