@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_INSTITUTIONS, GET_INSTITUTION } from "./config-api";
+import { GET_INSTITUTIONS, GET_INSTITUTION, GET_HISTORICAL_RELATION_TYPES } from "./config-api";
 
 
 class Institution {
@@ -29,6 +29,10 @@ class Institution {
 
   getInstitution = (id) => {
     return axios.get(`${GET_INSTITUTION}${id}`);
+  }
+
+  getHistoricalRelationTypes = () => {
+    return axios.get(GET_HISTORICAL_RELATION_TYPES);
   }
 }
 
