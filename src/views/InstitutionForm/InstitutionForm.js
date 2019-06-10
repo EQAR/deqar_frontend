@@ -45,6 +45,7 @@ class InstitutionForm extends Component {
       formerNameValue: null,
       localIDValue: null,
       qFeheaLevels: null,
+      historicalLinkValue: null,
       countries: null,
       infoBoxOpen: true
     }
@@ -73,7 +74,12 @@ class InstitutionForm extends Component {
 
     if (formType !== 'create') {
       institution.getInstitution(formID).then((response, error) => {
-        this.formApi.setValues(response.data);
+        let data = response.data
+        const historical_source = response.data.historical_source.map(s => {return {...s, direction: 'source'}})
+        const historical_target = response.data.historical_target.map(s => {return {...s, direction: 'target'}})
+        data.historical_links = [...historical_source, ...historical_target];
+        data.hierarchical_links = [...response.data.hierarchical_child, ...response.data.hierarchical_parent];
+        this.formApi.setValues(data);
       })
     }
 
@@ -144,6 +150,8 @@ class InstitutionForm extends Component {
     : null
   )
 
+  renderAlternativeNames = value => value.name;
+
   onAddFormerName = () => {
     this.setState({
       formerNameValue: null,
@@ -166,18 +174,20 @@ class InstitutionForm extends Component {
     : null
   )
 
+  renderFormerNames = value => value.name_official;
+
   onAddLocalID = () => {
     this.setState({
-      localIDIndex: null,
+      formerIndex: null,
       localIDValue: null
     });
     this.toggleModal('local-id');
   }
 
-  onLocalIDClick = (index) => {
+  onLocalIDClick = (i) => {
     this.setState({
-      localIDValue: this.formApi.getValue('identifiers_local')[index],
-      localIDIndex: index
+      localIDValue: this.formApi.getValue('identifiers_local')[i],
+      formerIndex: i
     });
     this.toggleModal('local-id');
   }
@@ -188,6 +198,32 @@ class InstitutionForm extends Component {
     : null
   )
 
+  onAddHistoricalLink = () => {
+    this.setState({
+      formIndex: null,
+      historicalLinkValue: null
+    });
+    this.toggleModal('historical-link')
+  }
+
+  onHistoricalLinkClick = (i) => {
+    this.setState({
+      formIndex: i,
+      historicalLinkValue: this.formApi.getValue('historical_links')[i]
+    });
+    this.toggleModal('historical-link')
+  }
+
+  getHistoricalLinkValues = formState => (
+    formState.values.historical_links
+    ? formState.values.historical_links
+    : null
+  )
+
+  renderHistoricalLinks = value => value.institution.name_primary
+
+  renderLocalID = value => value.identifier;
+
   onQFEheaLevelsRemove = (index) => {
   }
 
@@ -196,8 +232,6 @@ class InstitutionForm extends Component {
 
   onHierarchicalLinkRemove = (index) => {
   }
-
-  getHistoricalLinkValues = formState => null;
 
   getHierarchicalLinkValues = formState => null;
 
@@ -277,15 +311,7 @@ class InstitutionForm extends Component {
 
   getValue = (option) => option.id;
 
-  renderAlternativeNames = value => value.name;
-
-  renderFormerNames = value => value.name_official;
-
-  renderLocalID = value => value.identifier;
-
   renderQFEheaLevels = value => value.level;
-
-  renderHistoricalLinks = value => null;
 
   renderHierarchicalLink = value => null;
 
@@ -295,6 +321,7 @@ class InstitutionForm extends Component {
       openModal,
       alternativeNameValue,
       formerNameValue,
+      historicalLinkValue,
       infoBoxOpen,
       qFeheaLevels,
       adminEdit,
@@ -536,23 +563,24 @@ class InstitutionForm extends Component {
                         <HistoricalLinkForm
                             modalOpen={openModal === 'historical-link'}
                             onToggle={() => this.toggleModal('')}
-                            onFormSubmit={this.onAlternativeNameSubmit}
-                            formValue={alternativeNameValue}
+                            onFormSubmit={this.onFormSubmit}
+                            formValue={historicalLinkValue}
+                            formIndex={formIndex}
                             disabled={!adminEdit}
+                            fieldName={'historical_links'}
                           />
                           <AssignedList
                             errors={formState.errors}
-                            valueFields={['name']}
+                            valueFields={['institution.name_primary']}
                             values={this.getHistoricalLinkValues(formState)}
                             label={'Historical Link'}
                             btnLabel={'Add'}
                             onRemove={this.onHistoricalLinkRemove}
-                            onAddButtonClick={() => this.toggleModal('historical-link')}
-                            onClick={() => this.toggleModal('historical-link')}
+                            onAddButtonClick={this.onAddHistoricalLink}
+                            onClick={this.onHistoricalLinkClick}
                             renderDisplayValue={this.renderHistoricalLinks}
-                            field={'names[0].alternative_names'}
-                            disabled={!adminEdit}
-                            />
+                            field={'historical_links'}
+                          />
                         </Col>
                       </Row>
                       <Row>
@@ -560,8 +588,8 @@ class InstitutionForm extends Component {
                         <HierarchicalLinkForm
                             modalOpen={openModal === 'hierarchical-link'}
                             onToggle={() => this.toggleModal('')}
-                            onFormSubmit={this.onAlternativeNameSubmit}
-                            formValue={alternativeNameValue}
+                            onFormSubmit={this.onFormSubmit}
+                            formValue={historicalLinkValue}
                             disabled={!adminEdit}
                             />
                           <AssignedList

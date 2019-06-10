@@ -11,38 +11,45 @@ import {
   Row } from "reactstrap";
 import PropTypes from 'prop-types';
 import { Form } from 'informed';
+import Select from 'react-select';
 
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
 import FormTextArea from "../../../components/FormFields/FormTextArea";
 import FormSelectField from '../../../components/FormFields/FormSelectField';
 import InstitutionSelect from './InstitutionSelect';
-import Institution from '../../../services/Institution';
-
+import AssignedList from '../../../components/FormFieldsUncontrolled/AssignedList';
+import institution from '../../../services/Institution'
 
 class HistoricalLinkForm extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      institutions: null
+      historicalRelationTypes: null,
     }
   }
 
-  onInstitutionSelected = (value) => {
-    let institutions = this.formApi.getValue('institutions');
+  componentDidMount = () => {
+    institution.getHistoricalRelationTypes().then(response => (
+      this.setState({historicalRelationTypes: response.data}))
+    )
+  }
 
-    if (institutions) {
-      const institution_ids = institutions.map(i => i.id);
-      if (!(institution_ids.includes(value.id))) {
-        institutions.push(value)
-      }
-    } else {
-      institutions = [value]
+  onInstitutionSelected = (value) => {
+    let institution = this.formApi.getValue('institution');
+    const values = this.formApi.getState().values
+
+    institution = {
+      id: parseInt(value.id),
+      name_primary: value.name_primary
     }
-    this.formApi.setValue('institutions', institutions);
-  };
+
+    this.formApi.setValues({...values, institution: institution});
+  }
 
   setFormApi = (formApi) => {
     const { formValue } = this.props;
+
     this.formApi = formApi;
     if (formValue) {
       this.formApi.setValues(formValue);
@@ -51,10 +58,6 @@ class HistoricalLinkForm extends Component {
 
   submitForm = () => {
     this.formApi.submitForm();
-  }
-
-  onAddButtonClick = () => {
-
   }
 
   onToggle = () => {
@@ -74,15 +77,48 @@ class HistoricalLinkForm extends Component {
     return action;
   }
 
+  renderInstitutions = value => value ? value.name_primary : null;
+
+  getLabel = (option) => option.relationship;
+
+  getValue = (option) => option.relationship;
+
+  changeLinkType = (value) => {
+    const { historicalRelationTypes } = this.state;
+    const values = this.formApi.getState().values
+
+    this.formApi.setValues({
+      ...values,
+      relationship_type: {
+        type_from: historicalRelationTypes.filter(
+          t => t.relationship_type_id === value.relationship_type_id && t.institution_direction === 'source'
+        )[0].relationship,
+        type_to: historicalRelationTypes.filter(
+          t => t.relationship_type_id === value.relationship_type_id && t.institution_direction === 'target'
+        )[0].relationship,
+        id: value.relationship_type_id
+      },
+      direction: value.institution_direction
+    });
+  }
+
+  linkValue = (formState) => (
+    formState.values.direction === 'source'
+    ? {relationship: formState.values.relationship_type.type_from}
+    : {relationship: formState.values.relationship_type.type_to}
+  )
+
+  getLinkValue = (formState) => formState.values.direction ? this.linkValue(formState) : null;
+
   render() {
-    const { modalOpen, disabled, formIndex } = this.props;
-    const { institutions } = this.state;
+    const { modalOpen, disabled, formIndex, fieldName } = this.props;
+    const { historicalRelationTypes } = this.state;
 
     return(
       <Modal isOpen={modalOpen} toggle={this.onToggle}>
         <Form
           getApi={this.setFormApi}
-          onSubmit={(value) => this.props.onFormSubmit(value, formIndex)}
+          onSubmit={(value) => this.props.onFormSubmit(value, formIndex, fieldName)}
           id="alternative-name-form"
         >
           {({ formState }) => (
@@ -93,11 +129,13 @@ class HistoricalLinkForm extends Component {
                   <Col>
                     <FormGroup>
                     <Label for="former_name_official" className={'required'}>Relationship</Label>
-                    <FormSelectField
-                      field={`identifiers`}
-                      placeholder={'Please select'}
-                      labelField={'acronym_primary'}
-                      valueField={'id'}
+                    <Select
+                      options={historicalRelationTypes}
+                      onChange={this.changeLinkType}
+                      placeholder={'Select select multiple, if necessary'}
+                      getOptionLabel={this.getLabel}
+                      getOptionValue={this.getValue}
+                      value={this.getLinkValue(formState)}
                     />
                     </FormGroup>
                   </Col>
@@ -105,10 +143,26 @@ class HistoricalLinkForm extends Component {
                 <Row>
                   <Col>
                     <FormGroup>
-                    <Label for="former_name_official" className={'required'}>Institution Name, Official</Label>
-                    <InstitutionSelect
-                      onChange={this.onInstitutionSelected}
-                    />
+                      <Label for="former_name_official" className={'required'}>Institution Name, Official</Label>
+                      <InstitutionSelect
+                        onChange={this.onInstitutionSelected}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <FormGroup>
+                      <AssignedList
+                        errors={formState.errors}
+                        field={'institutions'}
+                        labelShowRequired={true}
+                        renderDisplayValue={this.renderInstitutions}
+                        values={[formState.values.institution]}
+                        onRemove={() => null}
+                        onClick={() => null}
+                        disabled
+                      />
                     </FormGroup>
                   </Col>
                 </Row>
@@ -117,7 +171,7 @@ class HistoricalLinkForm extends Component {
                     <FormGroup>
                     <Label for="founding_date">Date</Label>
                       <FormDatePickerField
-                        field={'founding_date'}
+                        field={'relationship_date'}
                         placeholderText={'YYYY-MM-DD'}
                       />
                     </FormGroup>
@@ -128,7 +182,7 @@ class HistoricalLinkForm extends Component {
                     <FormGroup>
                     <Label for="name_english">Relationship Note</Label>
                       <FormTextArea
-                        field={'identifier'}
+                        field={'relationship_note'}
                       />
                     </FormGroup>
                   </Col>
@@ -141,6 +195,13 @@ class HistoricalLinkForm extends Component {
                   onClick={this.props.onToggle}
                 >
                   Close
+                </Button>
+                <Button
+                  color="primary"
+                  type={'button'}
+                  onClick={this.submitForm}
+                >
+                  Add
                 </Button>
               </ModalFooter>
             </React.Fragment>

@@ -33,8 +33,8 @@ class InstitutionSelect extends Component {
         styles={customStyles}
         filterOption={() => true}
         loadOptions={institution.select}
-        getOptionLabel={(option) => {return option.name_select_display}}
-        getOptionValue={(option) => {return option.deqar_id[0]}}
+        getOptionLabel={(option) => option.name_select_display}
+        getOptionValue={(option) => option.deqar_id[0]}
         onChange={this.onChange}
       />
     )
