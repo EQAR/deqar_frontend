@@ -11,7 +11,7 @@ import {
   Row } from "reactstrap";
 import PropTypes from 'prop-types';
 import { Form } from 'informed';
-import { validateRequired } from "../../../utils/validators";
+import { validateRequired, validateDate } from "../../../utils/validators";
 
 
 import FormTextField from "../../../components/FormFields/FormTextField";
@@ -95,10 +95,11 @@ class LocalIdForm extends Component {
                 <Row>
                   <Col>
                     <FormGroup>
-                    <Label for="local-id">Locale Identifier</Label>
+                    <Label for="local-id" className={'required'}>Locale Identifier</Label>
                       <FormTextField
                         field={'identifier'}
                         placeholder={'Enter local ID'}
+                        validate={validateRequired}
                       />
                     </FormGroup>
                   </Col>
