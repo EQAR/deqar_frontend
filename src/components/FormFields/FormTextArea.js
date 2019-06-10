@@ -1,24 +1,23 @@
 import React from 'react';
 import { asField } from 'informed';
-import { Input } from 'reactstrap';
+import { TextArea } from 'informed';
 import cx from 'classnames';
 
 import style from './FormTextArea.module.css'
 
 const FormTextArea = asField(({ fieldState, placeholder, disabled, className, ...props }) => (
   <React.Fragment>
-    <Input
+    <TextArea
       type="textarea"
-      // fieldstate={fieldState}
+      fieldstate={fieldState}
       placeholder={disabled ? "" : placeholder}
-      // readOnly={disabled}
-      // {...props}
-      // className={cx(fieldState.error ? ' form-control is-invalid' : ' form-control', className, style.Textarea)}
-      className={style.Textarea}
+      readOnly={disabled}
+      {...props}
+      className={cx(fieldState.error ? ' form-control is-invalid' : ' form-control', className, style.Textarea)}
     />
-    {/* {fieldState.error ? (
+    {fieldState.error ? (
       <small className="help-block form-text text-danger">{fieldState.error}</small>
-    ) : null} */}
+    ) : null}
   </React.Fragment>
 ));
 
