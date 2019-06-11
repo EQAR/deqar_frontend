@@ -14,7 +14,7 @@ class ReportDetails extends Component {
           formTitle={param === 'view' ? 'View Report' : 'Edit Report'}
           formType={param}
           reportID={id}
-          backPath={'/reports'}
+          backPath={'/reference/reports'}
           userIsAdmin={userIsAdmin}
         />
       </React.Fragment>

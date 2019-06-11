@@ -48,7 +48,7 @@ class InstitutionsTable extends Component {
   linkRenderer = (row) => {
     return(
       <Link
-        to={{pathname: `/institutions/view/${row.original.id}`}}
+        to={{pathname: `/reference/institutions/view/${row.original.id}`}}
         className={style.Link}
       >
         {row.original.name_primary}

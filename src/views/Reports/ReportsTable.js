@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import setReportsTable from "./actions/setReportsTable";
 import createTableAPIParams from "../../utils/createTableAPIParams";
 import {arrayRenderer, dateRender, flagRender} from "../../utils/tableColumnRenderers";
-import Link from "react-router-dom/es/Link";
+import {Link} from "react-router-dom";
 import style from "./ReportsTable.module.css";
 import ReportsTableFilters from "./ReportsTableFilters";
 import DataTableRedux from "../../components/DataTable/DataTableRedux";
@@ -78,7 +78,7 @@ class ReportsTable extends Component {
   linkRenderer = (row) => {
     return(
       <Link
-        to={{pathname: `/reports/view/${row.original.id}`}}
+        to={{pathname: `/reference/reports/view/${row.original.id}`}}
         className={style.Link}
       >
         {row.original.institution_programme_primary}
@@ -108,16 +108,8 @@ const mapDispatchToProps = (dispatch) => {
   }
 };
 
-const mapStateToProps = (store) => {
-  return {
-    initialState: {
-      page: store.reportsTable.page,
-      pageSize: store.reportsTable.pageSize,
-      sorted: store.reportsTable.sorted,
-      filterOpen: store.reportsTable.filterOpen,
-      filtered: store.reportsTable.filtered
-    }
-  }
+const mapStateToProps = () => {
+  return {}
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportsTable);

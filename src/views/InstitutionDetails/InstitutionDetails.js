@@ -11,7 +11,7 @@ class InstitutionDetails extends Component {
         <InstitutionForm
           formType={param}
           formID={parseInt(id, 10)}
-          backPath={'/institutions'}
+          backPath={'/reference/institutions'}
         />
       </React.Fragment>
     )
