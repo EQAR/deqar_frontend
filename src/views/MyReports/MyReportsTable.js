@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import DataTable from "../../components/DataTable/DataTable";
 import report from "../../services/Report";
 import {connect} from "react-redux";
 import setMyReportsTable from "./actions/setMyReportsTable";
-import agency from "../../services/Agency";
-import country from "../../services/Country";
-import list from "../../services/List";
 import createTableAPIParams from "../../utils/createTableAPIParams";
 import {arrayRenderer, dateRender, flagRender, uploadDateRender} from "../../utils/tableColumnRenderers";
-import style from "../Reports/ReportsTable.module.css";
 import {Link} from "react-router-dom";
+import style from "../Reports/ReportsTable.module.css";
+import MyReportsTableFilters from "./MyReportsTableFilters";
+import DataTableRedux from "../../components/DataTable/DataTableRedux";
 
 class MyReportsTable extends Component {
   constructor(props) {
@@ -22,19 +20,13 @@ class MyReportsTable extends Component {
         render: uploadDateRender,
         width: 100,
         resizable: false,
-        sortable: false,
-        filterable: true,
-        filterType: 'text',
-        filterPlaceholder: 'YYYY',
-        filterQueryParam: 'year_created',
+        sortable: false
       }, {
         field: 'id',
         label: 'DEQAR ID',
         width: 80,
         resizable: false,
         sortable: true,
-        filterable: true,
-        filterQueryParam: 'id',
         style:{ 'textAlign': 'center'}
       }, {
         field: 'institution_programme_primary',
@@ -42,8 +34,6 @@ class MyReportsTable extends Component {
         render: this.linkRenderer,
         sortable: true,
         sortQueryParam: 'institution_programme_sort',
-        filterable: true,
-        filterQueryParam: 'query',
         minWidth: 250,
         style:{ 'whiteSpace': 'unset'}
       }, {
@@ -52,25 +42,13 @@ class MyReportsTable extends Component {
         render: arrayRenderer,
         width: 150,
         resizable: false,
-        sortable: true,
-        filterable: true,
-        filterType: 'select',
-        filterQueryParam: 'country',
-        selectFilterValue: 'name_english',
-        selectFilterLabel: 'name_english',
-        selectFilterPopulate: country.getInstitutionCountries()
+        sortable: true
       }, {
         field: 'activity',
         label: 'Activity',
         width: 150,
         resizable: true,
         sortable: true,
-        filterable: true,
-        filterType: 'select',
-        filterQueryParam: 'activity_type',
-        selectFilterValue: 'type',
-        selectFilterLabel: 'type',
-        selectFilterPopulate: agency.selectActivityType(),
         style:{ 'whiteSpace': 'unset'}
       }, {
         field: 'date',
@@ -79,22 +57,13 @@ class MyReportsTable extends Component {
         width: 120,
         sortable: true,
         sortQueryParam: 'valid_from',
-        filterable: true,
-        filterType: 'activeDate',
-        filterQueryParam: 'year',
         style:{ 'whiteSpace': 'unset'}
       }, {
         field: 'flag_level',
         label: 'Flag',
         render: flagRender,
         width: 110,
-        sortable: true,
-        filterable: true,
-        filterType: 'select',
-        filterQueryParam: 'flag',
-        selectFilterValue: 'flag',
-        selectFilterLabel: 'flag',
-        selectFilterPopulate: list.selectFlags()
+        sortable: true
       }
     ];
   }
@@ -119,15 +88,16 @@ class MyReportsTable extends Component {
   };
 
   render() {
-    const {initialState} = this.props;
-
     return (
-      <DataTable
+      <DataTableRedux
         onFetchData={this.onFetchData}
         columnConfig={this.columnConfig}
         saveState={this.saveState}
-        initialState={initialState}
-      />
+        filterable={true}
+        storeName={'myReportsTable'}
+      >
+        <MyReportsTableFilters />
+      </DataTableRedux>
     )
   }
 }
@@ -140,15 +110,8 @@ const mapDispatchToProps = (dispatch) => {
   }
 };
 
-const mapStateToProps = (store) => {
-  return {
-    initialState: {
-      pageSize: store.myReportsTable.pageSize,
-      page: store.myReportsTable.page,
-      sorted: store.myReportsTable.sorted,
-      filtered: store.myReportsTable.filtered
-    }
-  }
+const mapStateToProps = () => {
+  return {}
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyReportsTable);

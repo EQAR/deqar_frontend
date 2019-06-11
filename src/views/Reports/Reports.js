@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import {
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
-  Col,
-  Row
 } from "reactstrap";
 import ReportsTable from "./ReportsTable";
 import style from "./Reports.module.css";

@@ -5,22 +5,30 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  Col,
-  Row
 } from "reactstrap";
 import MyReportsTable from "./MyReportsTable";
 import style from "./MyReports.module.css";
 import {Link} from "react-router-dom";
+import DataTableHeader from "../../components/DataTable/DataTableHeader";
+import toggleMyReportsTableFilter from "./actions/toggleMyReportsTableFilter";
+import {connect} from "react-redux";
 
 class MyReports extends Component {
+  onFilterClick = () => {
+    this.props.toggleMyReportsTableFilter()
+  };
+
   render() {
     return(
       <div className="animated fadeIn">
         <Card>
           <CardHeader>
-            <Row>
-              <Col>My Uploaded Reports</Col>
-            </Row>
+            My Uploaded Reports
+            <DataTableHeader
+              storeName={'myReportsTable'}
+              filterText={'Number of reports'}
+              onFilterClick={this.onFilterClick}
+            />
           </CardHeader>
           <CardBody className={style.MyReportsCardBody}>
             <MyReportsTable/>
@@ -41,4 +49,16 @@ class MyReports extends Component {
   }
 }
 
-export default MyReports;
+const mapStateToProps = (store) => {
+  return {}
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleMyReportsTableFilter: state => {
+      dispatch(toggleMyReportsTableFilter())
+    }
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyReports);
