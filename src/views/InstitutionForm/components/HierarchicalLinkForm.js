@@ -11,38 +11,46 @@ import {
   Row } from "reactstrap";
 import PropTypes from 'prop-types';
 import { Form } from 'informed';
+import Select from 'react-select';
 
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
 import FormTextArea from "../../../components/FormFields/FormTextArea";
-import FormSelectField from '../../../components/FormFields/FormSelectField';
+import AssignedList from '../../../components/FormFieldsUncontrolled/AssignedList';
 import InstitutionSelect from './InstitutionSelect';
-import Institution from '../../../services/Institution';
-
 
 class HierarchicalLinkForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      institutions: null
+      relationShipTypes: [
+        {
+          label: 'Parent',
+          value: 'parent'
+        },
+        {
+          label: 'Child',
+          value: 'child'
+        }
+      ],
+      selectedOption: null
     }
   }
 
   onInstitutionSelected = (value) => {
-    let institutions = this.formApi.getValue('institutions');
+    let institution = this.formApi.getValue('institution');
+    const values = this.formApi.getState().values
 
-    if (institutions) {
-      const institution_ids = institutions.map(i => i.id);
-      if (!(institution_ids.includes(value.id))) {
-        institutions.push(value)
-      }
-    } else {
-      institutions = [value]
+    institution = {
+      id: parseInt(value.id),
+      name_primary: value.name_primary
     }
-    this.formApi.setValue('institutions', institutions);
-  };
+
+    this.formApi.setValues({...values, institution});
+  }
 
   setFormApi = (formApi) => {
     const { formValue } = this.props;
+
     this.formApi = formApi;
     if (formValue) {
       this.formApi.setValues(formValue);
@@ -51,10 +59,6 @@ class HierarchicalLinkForm extends Component {
 
   submitForm = () => {
     this.formApi.submitForm();
-  }
-
-  onAddButtonClick = () => {
-
   }
 
   onToggle = () => {
@@ -74,16 +78,29 @@ class HierarchicalLinkForm extends Component {
     return action;
   }
 
+  renderInstitutions = value => value ? value.name_primary : null;
+
+  changeLinkType = (value) => {
+    const values = this.formApi.getState().values
+    this.formApi.setValues({...values, position: value.value})
+  }
+
+  getLinkValue = (formState) => (
+    formState.values.position
+    ? {value: formState.values.position, label: formState.values.position.charAt(0).toUpperCase() + formState.values.position.slice(1)}
+    : null
+  )
+
   render() {
-    const { modalOpen, disabled, formIndex } = this.props;
-    const { institutions } = this.state;
+    const { modalOpen, disabled, formIndex, fieldName } = this.props;
+    const { relationShipTypes } = this.state;
 
     return(
       <Modal isOpen={modalOpen} toggle={this.onToggle}>
         <Form
           getApi={this.setFormApi}
-          onSubmit={(value) => this.props.onFormSubmit(value, formIndex)}
-          id="alternative-name-form"
+          onSubmit={(value) => this.props.onFormSubmit(value, formIndex, fieldName)}
+          id="hierarchical-link-form"
         >
           {({ formState }) => (
             <React.Fragment>
@@ -93,40 +110,57 @@ class HierarchicalLinkForm extends Component {
                   <Col>
                     <FormGroup>
                     <Label for="former_name_official" className={'required'}>Relationship</Label>
-                    <FormSelectField
-                      field={`identifiers`}
+                    <Select
+                      options={relationShipTypes}
                       placeholder={'Please select'}
+                      onChange={this.changeLinkType}
                       labelField={'acronym_primary'}
-                      valueField={'id'}
+                      value={this.getLinkValue(formState)}
                     />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                <Col>
+                    <FormGroup>
+                      <Label for="former_name_official" className={'required'}>Institution Name, Official</Label>
+                      <InstitutionSelect
+                        onChange={this.onInstitutionSelected}
+                      />
                     </FormGroup>
                   </Col>
                 </Row>
                 <Row>
                   <Col>
                     <FormGroup>
-                    <Label for="former_name_official" className={'required'}>Institution Name, Official</Label>
-                    <InstitutionSelect
-                      onChange={this.onInstitutionSelected}
-                    />
+                      <AssignedList
+                        errors={formState.errors}
+                        field={'institutions'}
+                        labelShowRequired={true}
+                        renderDisplayValue={this.renderInstitutions}
+                        values={[formState.values.institution]}
+                        onRemove={() => null}
+                        onClick={() => null}
+                        disabled
+                      />
                     </FormGroup>
                   </Col>
                 </Row>
                 <Row>
                   <Col md={6}>
                     <FormGroup>
-                    <Label for="founding_date">Valif From</Label>
+                    <Label for="valid_from">Valid From</Label>
                       <FormDatePickerField
-                        field={'founding_date'}
+                        field={'valid_from'}
                         placeholderText={'YYYY-MM-DD'}
                       />
                     </FormGroup>
                   </Col>
                   <Col md={6}>
                     <FormGroup>
-                    <Label for="closing_date">Valid To</Label>
+                    <Label for="valid_to">Valid To</Label>
                       <FormDatePickerField
-                        field={'closing_date'}
+                        field={'valid_to'}
                         placeholderText={'YYYY-MM-DD'}
                       />
                     </FormGroup>
@@ -137,7 +171,7 @@ class HierarchicalLinkForm extends Component {
                     <FormGroup>
                     <Label for="name_english">Relationship Note</Label>
                       <FormTextArea
-                        field={'identifier'}
+                        field={'relationship_note'}
                       />
                     </FormGroup>
                   </Col>
@@ -150,6 +184,13 @@ class HierarchicalLinkForm extends Component {
                   onClick={this.props.onToggle}
                 >
                   Close
+                </Button>
+                <Button
+                  color="primary"
+                  type={'button'}
+                  onClick={this.submitForm}
+                >
+                  Add
                 </Button>
               </ModalFooter>
             </React.Fragment>

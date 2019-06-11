@@ -15,7 +15,6 @@ import Select from 'react-select';
 
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
 import FormTextArea from "../../../components/FormFields/FormTextArea";
-import FormSelectField from '../../../components/FormFields/FormSelectField';
 import InstitutionSelect from './InstitutionSelect';
 import AssignedList from '../../../components/FormFieldsUncontrolled/AssignedList';
 import institution from '../../../services/Institution'
@@ -44,7 +43,7 @@ class HistoricalLinkForm extends Component {
       name_primary: value.name_primary
     }
 
-    this.formApi.setValues({...values, institution: institution});
+    this.formApi.setValues({...values, institution});
   }
 
   setFormApi = (formApi) => {
@@ -119,7 +118,7 @@ class HistoricalLinkForm extends Component {
         <Form
           getApi={this.setFormApi}
           onSubmit={(value) => this.props.onFormSubmit(value, formIndex, fieldName)}
-          id="alternative-name-form"
+          id="historical-link-form"
         >
           {({ formState }) => (
             <React.Fragment>

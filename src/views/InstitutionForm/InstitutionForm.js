@@ -46,6 +46,7 @@ class InstitutionForm extends Component {
       localIDValue: null,
       qFeheaLevels: null,
       historicalLinkValue: null,
+      hierarchicalLinkValue: null,
       countries: null,
       infoBoxOpen: true
     }
@@ -75,10 +76,12 @@ class InstitutionForm extends Component {
     if (formType !== 'create') {
       institution.getInstitution(formID).then((response, error) => {
         let data = response.data
-        const historical_source = response.data.historical_source.map(s => {return {...s, direction: 'source'}})
-        const historical_target = response.data.historical_target.map(s => {return {...s, direction: 'target'}})
+        const historical_source = response.data.historical_source.map(s => ({...s, direction: 'source'}))
+        const historical_target = response.data.historical_target.map(t => ({...t, direction: 'target'}))
+        const hierarchical_parent = response.data.hierarchical_parent.map(p => ({...p, position: 'parent'}))
+        const hierarchical_child = response.data.hierarchical_child.map(c => ({...c, position: 'child'}))
         data.historical_links = [...historical_source, ...historical_target];
-        data.hierarchical_links = [...response.data.hierarchical_child, ...response.data.hierarchical_parent];
+        data.hierarchical_links = [...hierarchical_child, ...hierarchical_parent];
         this.formApi.setValues(data);
       })
     }
@@ -198,6 +201,34 @@ class InstitutionForm extends Component {
     : null
   )
 
+  renderLocalID = value => value.identifier;
+
+  changeQFEheaLvels = (level) => {
+    this.formApi.setValue('qf_ehea_levels', [...this.formApi.getValue('qf_ehea_levels'), {qf_ehea_level: level.id}]);
+  }
+
+  getQFEheaLevels = (formState) => {
+    const { qFeheaLevels } = this.state;
+
+    return formState.values.qf_ehea_levels && qFeheaLevels ?
+      formState.values.qf_ehea_levels.map(level => qFeheaLevels.filter(l => level.qf_ehea_level === l.id)[0]) :
+      null;
+  }
+
+  getQFEheaOptions = (qFeheaLevels) => {
+    const formLevels = this.formApi.getValue('qf_ehea_levels');
+    if (formLevels && qFeheaLevels) {
+      formLevels.forEach(l => {
+        qFeheaLevels = qFeheaLevels.filter(level => level.id !== l.qf_ehea_level);
+      });
+    }
+
+    return qFeheaLevels;
+  }
+
+  onQFEheaLevelsRemove = (index) => {
+  }
+
   onAddHistoricalLink = () => {
     this.setState({
       formIndex: null,
@@ -222,22 +253,34 @@ class InstitutionForm extends Component {
 
   renderHistoricalLinks = value => value.institution.name_primary
 
-  renderLocalID = value => value.identifier;
-
-  onQFEheaLevelsRemove = (index) => {
+  onAddHierarchicallLink = () => {
+    this.setState({
+      formIndex: null,
+      hierarchicalLinkValue: null
+    });
+    this.toggleModal('hierarchical-link')
   }
 
-  onHistoricalLinkRemove = (index) => {
+  onHierarchicalLinkClick = (i) => {
+    this.setState({
+      formIndex: i,
+      hierarchicalLinkValue: this.formApi.getValue('hierarchical_links')[i]
+    });
+    this.toggleModal('hierarchical-link')
   }
 
-  onHierarchicalLinkRemove = (index) => {
-  }
+  getHierarchicalLinkValues = formState => (
+    formState.values.hierarchical_links
+    ? formState.values.hierarchical_links
+    : null
+  )
 
-  getHierarchicalLinkValues = formState => null;
+  renderHierarchicalLinks = value => value.institution.name_primary
 
   onFormSubmit = (value, i, field) => {
     let values = this.formApi.getValue(field) || [];
     Number.isInteger(i) ? values[i] = value : values.push(value)
+    console.log(field, values)
     this.formApi.setValue(field, values);
     this.toggleModal('');
   }
@@ -284,36 +327,11 @@ class InstitutionForm extends Component {
     }
   }
 
-  changeQFEheaLvels = (level) => {
-    this.formApi.setValue('qf_ehea_levels', [...this.formApi.getValue('qf_ehea_levels'), {qf_ehea_level: level.id}]);
-  }
-
-  getQFEheaLevels = (formState) => {
-    const { qFeheaLevels } = this.state;
-
-    return formState.values.qf_ehea_levels && qFeheaLevels ?
-      formState.values.qf_ehea_levels.map(level => qFeheaLevels.filter(l => level.qf_ehea_level === l.id)[0]) :
-      null;
-  }
-
-  getQFEheaOptions = (qFeheaLevels) => {
-    const formLevels = this.formApi.getValue('qf_ehea_levels');
-    if (formLevels && qFeheaLevels) {
-      formLevels.forEach(l => {
-        qFeheaLevels = qFeheaLevels.filter(level => level.id !== l.qf_ehea_level);
-      });
-    }
-
-    return qFeheaLevels;
-  }
+  renderQFEheaLevels = value => value.level;
 
   getLabel = (option) => option.level;
 
   getValue = (option) => option.id;
-
-  renderQFEheaLevels = value => value.level;
-
-  renderHierarchicalLink = value => null;
 
   render() {
     const {
@@ -322,6 +340,7 @@ class InstitutionForm extends Component {
       alternativeNameValue,
       formerNameValue,
       historicalLinkValue,
+      hierarchicalLinkValue,
       infoBoxOpen,
       qFeheaLevels,
       adminEdit,
@@ -575,7 +594,7 @@ class InstitutionForm extends Component {
                             values={this.getHistoricalLinkValues(formState)}
                             label={'Historical Link'}
                             btnLabel={'Add'}
-                            onRemove={this.onHistoricalLinkRemove}
+                            onRemove={this.onRemove}
                             onAddButtonClick={this.onAddHistoricalLink}
                             onClick={this.onHistoricalLinkClick}
                             renderDisplayValue={this.renderHistoricalLinks}
@@ -589,20 +608,22 @@ class InstitutionForm extends Component {
                             modalOpen={openModal === 'hierarchical-link'}
                             onToggle={() => this.toggleModal('')}
                             onFormSubmit={this.onFormSubmit}
-                            formValue={historicalLinkValue}
+                            formValue={hierarchicalLinkValue}
+                            formIndex={formIndex}
                             disabled={!adminEdit}
+                            fieldName={'hierarchical_links'}
                             />
                           <AssignedList
                             errors={formState.errors}
-                            valueFields={['name']}
+                            valueFields={['institution.name_primary']}
                             values={this.getHierarchicalLinkValues(formState)}
                             label={'Hierarchical Link'}
                             btnLabel={'Add'}
-                            onRemove={this.onHierarchicalLinkRemove}
-                            onAddButtonClick={() => this.toggleModal('hierarchical-link')}
-                            onClick={() => this.toggleModal('hierarchical-link')}
-                            renderDisplayValue={this.renderHierarchicalLink}
-                            field={'names[0].alternative_names'}
+                            onRemove={this.onRemove}
+                            onAddButtonClick={this.onAddHierarchicallLink}
+                            onClick={this.onHierarchicalLinkClick}
+                            renderDisplayValue={this.renderHierarchicalLinks}
+                            field={'hirarchical_links'}
                             disabled={!adminEdit}
                           />
                         </Col>
