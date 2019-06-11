@@ -9,6 +9,7 @@ import user from '../../services/User';
 import setUser from "./actions/setUser";
 import {connect} from "react-redux";
 import styles from './DefaultHeader.module.css';
+import {Link, withRouter} from "react-router-dom";
 
 const propTypes = {
   children: PropTypes.node,
@@ -49,7 +50,9 @@ class DefaultHeader extends Component {
             </DropdownToggle>
             <DropdownMenu right style={{ right: 'auto' }}>
               <DropdownItem header tag="div" className="text-center"><strong>{username}</strong></DropdownItem>
-              <DropdownItem><i className="fa fa-user"> </i> Profile</DropdownItem>
+              <DropdownItem onClick={() => this.props.history.push('my-profile')}>
+                  <i className="fa fa-user"> </i> Profile
+              </DropdownItem>
               <DropdownItem onClick={e => this.props.onLogout(e)}>
                 <i className="fa fa-lock"> </i> Logout</DropdownItem>
             </DropdownMenu>
@@ -77,4 +80,4 @@ const mapStateToProps = (store) => {
   }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DefaultHeader);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DefaultHeader));
