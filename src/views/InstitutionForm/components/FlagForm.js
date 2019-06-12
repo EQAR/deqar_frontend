@@ -30,6 +30,7 @@ class FlagForm extends Component {
   }
 
   setFormApi = (formApi) => {
+
     const { formValue } = this.props;
     this.formApi = formApi;
     this.formApi.setValues(formValue);
@@ -37,10 +38,6 @@ class FlagForm extends Component {
 
   submitForm = () => {
     this.formApi.submitForm();
-  }
-
-  onAddButtonClick = () => {
-
   }
 
   onToggle = () => {
@@ -77,7 +74,7 @@ class FlagForm extends Component {
             <React.Fragment>
               <ModalHeader toggle={this.onToggle}>{this.renderActionName()}</ModalHeader>
               <ModalBody>
-                {/* <Row>
+                <Row>
                   <Col>
                     <FormGroup>
                     <Label for="agency" className={'required'}>Agency</Label>
@@ -90,7 +87,7 @@ class FlagForm extends Component {
                     />
                     </FormGroup>
                   </Col>
-                </Row> */}
+                </Row>
                 <Row>
                   <Col>
                     <FormGroup>

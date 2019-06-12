@@ -280,7 +280,6 @@ class InstitutionForm extends Component {
   onFormSubmit = (value, i, field) => {
     let values = this.formApi.getValue(field) || [];
     Number.isInteger(i) ? values[i] = value : values.push(value)
-    console.log(field, values)
     this.formApi.setValue(field, values);
     this.toggleModal('');
   }
@@ -599,6 +598,7 @@ class InstitutionForm extends Component {
                             onClick={this.onHistoricalLinkClick}
                             renderDisplayValue={this.renderHistoricalLinks}
                             field={'historical_links'}
+                            fieldName={'historical_links'}
                           />
                         </Col>
                       </Row>
@@ -623,7 +623,8 @@ class InstitutionForm extends Component {
                             onAddButtonClick={this.onAddHierarchicallLink}
                             onClick={this.onHierarchicalLinkClick}
                             renderDisplayValue={this.renderHierarchicalLinks}
-                            field={'hirarchical_links'}
+                            field={'hierarchical_links'}
+                            fieldName={'hierarchical_links'}
                             disabled={!adminEdit}
                           />
                         </Col>

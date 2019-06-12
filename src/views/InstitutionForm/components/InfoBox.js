@@ -36,10 +36,10 @@ class InfoBox extends Component {
 
   renderFlags = value => (
     <Row>
-      <Col xs={4}>
+      <Col xs={2}>
         <span className={this.flagRender(value.flag)}>{value.flag}</span>
       </Col>
-      <Col xs={8}>
+      <Col xs={10}>
         <span>{value.flag_message}</span>
       </Col>
     </Row>
@@ -55,7 +55,6 @@ class InfoBox extends Component {
     let { flags } =  this.props.formState.values;
 
     flags = flags.length === 0 ? [{flag: 'none', flag_message: 'Institution has no flag assigned'}] : flags;
-
     this.setState({
       flagValue: flags[index],
       flagIndex: index
@@ -149,7 +148,6 @@ class InfoBox extends Component {
                   onAddButtonClick={() => this.toggleModal()}
                   onClick={this.onFlagClick}
                   field={'flags'}
-                  disabled
                 />
               </Col>
             </Row>
