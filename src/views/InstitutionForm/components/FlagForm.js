@@ -11,6 +11,7 @@ import {
   Row } from "reactstrap";
 import PropTypes from 'prop-types';
 import { Form } from 'informed';
+import Select from 'react-select';
 
 import FormTextArea from "../../../components/FormFields/FormTextArea";
 import FormSelectField from '../../../components/FormFields/FormSelectField';
@@ -21,7 +22,12 @@ class FlagForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      agencies: null
+      agencies: null,
+      flags: [
+        {label: 'none', value: 'none'},
+        {label: 'low level', value: 'low level'},
+        {label: 'high level', value: 'high level'}
+      ]
     }
   }
 
@@ -30,10 +36,15 @@ class FlagForm extends Component {
   }
 
   setFormApi = (formApi) => {
-
     const { formValue } = this.props;
+    console.log(formValue);
+    this.setState({
+      selectValue: {value: formValue.flag}
+    })
     this.formApi = formApi;
-    this.formApi.setValues(formValue);
+    if (formValue) {
+      this.formApi.setValues(formValue);
+    }
   }
 
   submitForm = () => {
@@ -43,6 +54,20 @@ class FlagForm extends Component {
   onToggle = () => {
     this.props.onToggle();
   }
+
+  onChange = (value) => {
+    const values = this.formApi.getState().values
+    this.formApi.setValues({...values, flag: value.value})
+    this.setState({
+      selectValue: value
+    })
+  }
+
+  selectValue = (formState) => (
+    formState.values.flag
+    ? {value: formState.values.flag, label: formState.values.flag}
+    : null
+  )
 
   renderActionName = () => {
     const { formIndex, disabled } = this.props;
@@ -59,9 +84,7 @@ class FlagForm extends Component {
 
   render() {
     const { modalOpen, disabled, formIndex } = this.props;
-    const { agencies } = this.state;
-    console.log(this.formApi);
-
+    const { agencies, flags } = this.state;
 
     return(
       <Modal isOpen={modalOpen} toggle={this.onToggle}>
@@ -79,7 +102,7 @@ class FlagForm extends Component {
                     <FormGroup>
                     <Label for="agency" className={'required'}>Agency</Label>
                     <FormSelectField
-                      field={'flags'}
+                      field={'agency'}
                       options={agencies}
                       placeholder={'Please select'}
                       labelField={'acronym_primary'}
@@ -92,12 +115,11 @@ class FlagForm extends Component {
                   <Col>
                     <FormGroup>
                     <Label for="request" className={'required'}>Request</Label>
-                      <FormSelectField
-                        field={'flag'}
-                        options={agencies}
+                      <Select
+                        options={flags}
                         placeholder={'Please select'}
-                        labelField={'acronym_primary'}
-                        valueField={'flag'}
+                        onChange={this.onChange}
+                        value={this.selectValue(formState)}
                       />
                     </FormGroup>
                   </Col>
@@ -121,6 +143,13 @@ class FlagForm extends Component {
                   onClick={this.props.onToggle}
                 >
                   Close
+                </Button>
+                <Button
+                  color="primary"
+                  type={'button'}
+                  onClick={this.submitForm}
+                >
+                  Add
                 </Button>
               </ModalFooter>
             </React.Fragment>

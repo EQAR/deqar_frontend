@@ -63,7 +63,14 @@ class InfoBox extends Component {
     this.toggleModal();
   }
 
-  onFormSubmit = () => null;
+  onFormSubmit = (value, i) => {
+    const { formState } = this.props;
+
+    let values = formState.values.flags || [];
+    Number.isInteger(i) ? values[i] = value : values.push(value)
+    formState.values.flags = values
+    this.toggleModal();
+  }
 
   toggleModal = () => {
     const { openModal } = this.state;
@@ -71,6 +78,14 @@ class InfoBox extends Component {
     this.setState({
       openModal: !openModal
     })
+  }
+
+  onAddFlagClick = () => {
+    this.setState({
+      flagValue: null,
+      flagIndex: null
+    });
+    this.toggleModal();
   }
 
   renderURL = () => {
@@ -95,7 +110,7 @@ class InfoBox extends Component {
 
   render() {
     const { formState, disabled } = this.props;
-    const { openModal, flagValue } = this.state;
+    const { openModal, flagValue, flagIndex } = this.state;
     const values = formState.values
 
     return (
@@ -135,6 +150,7 @@ class InfoBox extends Component {
                   onToggle={() => this.toggleModal()}
                   onFormSubmit={this.onFormSubmit}
                   formValue={flagValue}
+                  formIndex={flagIndex}
                   disabled
                 />
                 <AssignedList
@@ -145,7 +161,7 @@ class InfoBox extends Component {
                   btnLabel={'Add'}
                   onRemove={this.onFlagRemove}
                   renderDisplayValue={this.renderFlags}
-                  onAddButtonClick={() => this.toggleModal()}
+                  onAddButtonClick={this.onAddFlagClick}
                   onClick={this.onFlagClick}
                   field={'flags'}
                 />

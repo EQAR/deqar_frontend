@@ -22,6 +22,7 @@ class AlternativeNameForm extends Component {
 
   setFormApi = (formApi) => {
     const { formValue } = this.props;
+
     this.formApi = formApi;
     if (formValue) {
       this.formApi.setValues(formValue);
