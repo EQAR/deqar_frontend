@@ -51,7 +51,7 @@ class AlternativeNameForm extends Component {
   }
 
   render() {
-    const { modalOpen, disabled, formIndex, fieldName } = this.props;
+    const { modalOpen, formIndex, fieldName } = this.props;
 
     return(
       <Modal isOpen={modalOpen} toggle={this.onToggle}>
@@ -62,7 +62,7 @@ class AlternativeNameForm extends Component {
         >
           {({ formState }) => (
             <React.Fragment>
-              <ModalHeader toggle={this.onToggle}>Alternative Name</ModalHeader>
+              <ModalHeader toggle={this.onToggle}>{this.renderActionName()} Alternative Name</ModalHeader>
               <ModalBody>
                 <Row>
                   <Col md={12}>
@@ -71,7 +71,6 @@ class AlternativeNameForm extends Component {
                       <FormTextField
                         field={'name'}
                         placeholder={'Enter alternative institution name'}
-                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>
@@ -83,7 +82,6 @@ class AlternativeNameForm extends Component {
                       <FormTextField
                         field={'transliteration'}
                         placeholder={'Enter alternative institution name, transliterated'}
-                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>
@@ -91,7 +89,7 @@ class AlternativeNameForm extends Component {
               </ModalBody>
               <ModalFooter>
                 <Button
-                  color="primary"
+                  color="secondary"
                   type={'button'}
                   onClick={this.props.onToggle}
                 >

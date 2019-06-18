@@ -69,7 +69,7 @@ class HierarchicalLinkForm extends Component {
     const { formIndex, disabled } = this.props;
     let action = '';
 
-    if (formIndex >= 0) {
+    if (Number.isInteger(formIndex)) {
       action = disabled ? 'View' : 'Edit'
     } else {
       action = 'Add'
@@ -104,7 +104,7 @@ class HierarchicalLinkForm extends Component {
         >
           {({ formState }) => (
             <React.Fragment>
-              <ModalHeader toggle={this.onToggle}>Add Hierarchical Link</ModalHeader>
+              <ModalHeader toggle={this.onToggle}>{this.renderActionName()} Hierarchical Link</ModalHeader>
               <ModalBody>
                 <Row>
                   <Col>
@@ -116,6 +116,7 @@ class HierarchicalLinkForm extends Component {
                       onChange={this.changeLinkType}
                       labelField={'acronym_primary'}
                       value={this.getLinkValue(formState)}
+                      isDisabled={disabled}
                     />
                     </FormGroup>
                   </Col>
@@ -124,9 +125,11 @@ class HierarchicalLinkForm extends Component {
                 <Col>
                     <FormGroup>
                       <Label for="former_name_official" className={'required'}>Institution Name, Official</Label>
-                      <InstitutionSelect
-                        onChange={this.onInstitutionSelected}
-                      />
+                      {!disabled &&
+                        <InstitutionSelect
+                          onChange={this.onInstitutionSelected}
+                        />
+                      }
                     </FormGroup>
                   </Col>
                 </Row>
@@ -153,6 +156,7 @@ class HierarchicalLinkForm extends Component {
                       <FormDatePickerField
                         field={'valid_from'}
                         placeholderText={'YYYY-MM-DD'}
+                        disabled
                       />
                     </FormGroup>
                   </Col>
@@ -162,6 +166,7 @@ class HierarchicalLinkForm extends Component {
                       <FormDatePickerField
                         field={'valid_to'}
                         placeholderText={'YYYY-MM-DD'}
+                        disabled
                       />
                     </FormGroup>
                   </Col>
@@ -172,6 +177,7 @@ class HierarchicalLinkForm extends Component {
                     <Label for="name_english">Relationship Note</Label>
                       <FormTextArea
                         field={'relationship_note'}
+                        disabled
                       />
                     </FormGroup>
                   </Col>
@@ -179,19 +185,21 @@ class HierarchicalLinkForm extends Component {
               </ModalBody>
               <ModalFooter>
                 <Button
-                  color="primary"
+                  color="secondary"
                   type={'button'}
                   onClick={this.props.onToggle}
                 >
                   Close
                 </Button>
-                <Button
-                  color="primary"
-                  type={'button'}
-                  onClick={this.submitForm}
-                >
-                  Add
-                </Button>
+                {!disabled &&
+                  <Button
+                    color="primary"
+                    type={'button'}
+                    onClick={this.submitForm}
+                  >
+                    Add Link
+                  </Button>
+                }
               </ModalFooter>
             </React.Fragment>
           )}

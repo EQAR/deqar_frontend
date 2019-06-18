@@ -63,7 +63,7 @@ class LocalIdForm extends Component {
   }
 
   render() {
-    const { modalOpen, disabled, formIndex, fieldName } = this.props;
+    const { modalOpen, formIndex, fieldName } = this.props;
     const { agencies } = this.state;
 
     return(
@@ -75,7 +75,7 @@ class LocalIdForm extends Component {
         >
           {({ formState }) => (
             <React.Fragment>
-              <ModalHeader toggle={this.onToggle}>Add Local ID</ModalHeader>
+              <ModalHeader toggle={this.onToggle}>{this.renderActionName()} Local ID</ModalHeader>
               <ModalBody>
                 <Row>
                   <Col>
@@ -138,7 +138,7 @@ class LocalIdForm extends Component {
               </ModalBody>
               <ModalFooter>
                 <Button
-                  color="primary"
+                  color="secondary"
                   type={'button'}
                   onClick={this.props.onToggle}
                 >

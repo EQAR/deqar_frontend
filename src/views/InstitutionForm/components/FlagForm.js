@@ -37,9 +37,11 @@ class FlagForm extends Component {
 
   setFormApi = (formApi) => {
     const { formValue } = this.props;
+
     this.setState({
-      selectValue: {value: formValue.flag}
+      selectValue: formValue ? {value: formValue.flag} : null
     })
+
     this.formApi = formApi;
     if (formValue) {
       this.formApi.setValues(formValue);
@@ -72,8 +74,8 @@ class FlagForm extends Component {
     const { formIndex, disabled } = this.props;
     let action = '';
 
-    if (formIndex >= 0) {
-      action = disabled ? 'View' : 'Edit'
+    if (Number.isInteger(formIndex)) {
+      action = ''
     } else {
       action = 'Add'
     }
@@ -94,7 +96,7 @@ class FlagForm extends Component {
         >
           {({ formState }) => (
             <React.Fragment>
-              <ModalHeader toggle={this.onToggle}>{this.renderActionName()}</ModalHeader>
+              <ModalHeader toggle={this.onToggle}>{this.renderActionName()} Flag</ModalHeader>
               <ModalBody>
                 <Row>
                   <Col>
@@ -137,7 +139,7 @@ class FlagForm extends Component {
               </ModalBody>
               <ModalFooter>
                 <Button
-                  color="primary"
+                  color="secondary"
                   type={'button'}
                   onClick={this.props.onToggle}
                 >
@@ -148,7 +150,7 @@ class FlagForm extends Component {
                   type={'button'}
                   onClick={this.submitForm}
                 >
-                  Add
+                  Add Flag
                 </Button>
               </ModalFooter>
             </React.Fragment>

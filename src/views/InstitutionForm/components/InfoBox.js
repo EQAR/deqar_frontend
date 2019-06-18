@@ -36,10 +36,10 @@ class InfoBox extends Component {
 
   renderFlags = value => (
     <Row>
-      <Col xs={2}>
+      <Col xs={4}>
         <span className={this.flagRender(value.flag)}>{value.flag}</span>
       </Col>
-      <Col xs={10}>
+      <Col xs={8}>
         <span>{value.flag_message}</span>
       </Col>
     </Row>
@@ -109,7 +109,7 @@ class InfoBox extends Component {
   }
 
   render() {
-    const { formState, disabled } = this.props;
+    const { formState, isEdit } = this.props;
     const { openModal, flagValue, flagIndex } = this.state;
     const values = formState.values
 
@@ -151,7 +151,6 @@ class InfoBox extends Component {
                   onFormSubmit={this.onFormSubmit}
                   formValue={flagValue}
                   formIndex={flagIndex}
-                  disabled
                 />
                 <AssignedList
                   errors={formState.errors}

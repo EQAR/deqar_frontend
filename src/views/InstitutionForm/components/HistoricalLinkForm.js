@@ -67,7 +67,7 @@ class HistoricalLinkForm extends Component {
     const { formIndex, disabled } = this.props;
     let action = '';
 
-    if (formIndex >= 0) {
+    if (Number.isInteger(formIndex)) {
       action = disabled ? 'View' : 'Edit'
     } else {
       action = 'Add'
@@ -122,7 +122,7 @@ class HistoricalLinkForm extends Component {
         >
           {({ formState }) => (
             <React.Fragment>
-              <ModalHeader toggle={this.onToggle}>Add Historical Link</ModalHeader>
+              <ModalHeader toggle={this.onToggle}>{this.renderActionName()} Historical Link</ModalHeader>
               <ModalBody>
                 <Row>
                   <Col>
@@ -135,6 +135,7 @@ class HistoricalLinkForm extends Component {
                       getOptionLabel={this.getLabel}
                       getOptionValue={this.getValue}
                       value={this.getLinkValue(formState)}
+                      isDisabled={disabled}
                     />
                     </FormGroup>
                   </Col>
@@ -143,9 +144,11 @@ class HistoricalLinkForm extends Component {
                   <Col>
                     <FormGroup>
                       <Label for="former_name_official" className={'required'}>Institution Name, Official</Label>
-                      <InstitutionSelect
-                        onChange={this.onInstitutionSelected}
-                      />
+                      {!disabled &&
+                        <InstitutionSelect
+                          onChange={this.onInstitutionSelected}
+                        />
+                      }
                     </FormGroup>
                   </Col>
                 </Row>
@@ -172,6 +175,7 @@ class HistoricalLinkForm extends Component {
                       <FormDatePickerField
                         field={'relationship_date'}
                         placeholderText={'YYYY-MM-DD'}
+                        disabled
                       />
                     </FormGroup>
                   </Col>
@@ -182,6 +186,7 @@ class HistoricalLinkForm extends Component {
                     <Label for="name_english">Relationship Note</Label>
                       <FormTextArea
                         field={'relationship_note'}
+                        disabled
                       />
                     </FormGroup>
                   </Col>
@@ -189,19 +194,22 @@ class HistoricalLinkForm extends Component {
               </ModalBody>
               <ModalFooter>
                 <Button
-                  color="primary"
+                  color="secondary"
                   type={'button'}
                   onClick={this.props.onToggle}
                 >
                   Close
                 </Button>
-                <Button
-                  color="primary"
-                  type={'button'}
-                  onClick={this.submitForm}
-                >
-                  Add
-                </Button>
+                {!disabled ?
+                  <Button
+                    color="primary"
+                    type={'button'}
+                    onClick={this.submitForm}
+                  >
+                    Add Link
+                  </Button> :
+                  null
+                }
               </ModalFooter>
             </React.Fragment>
           )}

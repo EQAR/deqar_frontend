@@ -64,7 +64,7 @@ class FormerNameForm extends Component {
         >
           {({ formState }) => (
             <React.Fragment>
-              <ModalHeader toggle={this.onToggle}>Add former name</ModalHeader>
+              <ModalHeader toggle={this.onToggle}>{this.renderActionName()} Former Name</ModalHeader>
               <ModalBody>
                 <Row>
                   <Col>
@@ -74,6 +74,7 @@ class FormerNameForm extends Component {
                         field={'name_official'}
                         placeholder={'Enter official institution name'}
                         validate={validateRequired}
+                        disabled
                       />
                     </FormGroup>
                   </Col>
@@ -85,6 +86,7 @@ class FormerNameForm extends Component {
                       <FormTextField
                         field={'name_official_transliterated'}
                         placeholder={'Enter transliterated form'}
+                        disabled
                       />
                     </FormGroup>
                   </Col>
@@ -96,6 +98,7 @@ class FormerNameForm extends Component {
                       <FormTextField
                         field={'name_english'}
                         placeholder={'Enter english form'}
+                        disabled
                       />
                     </FormGroup>
                   </Col>
@@ -148,19 +151,22 @@ class FormerNameForm extends Component {
               </ModalBody>
               <ModalFooter>
                 <Button
-                  color="primary"
+                  color="secondary"
                   type={'button'}
                   onClick={this.props.onToggle}
                 >
                   Close
                 </Button>
-                <Button
-                  color="primary"
-                  type={'button'}
-                  onClick={this.submitForm}
-                >
-                  Add Name
-                </Button>
+                {!disabled ?
+                  <Button
+                    color="primary"
+                    type={'button'}
+                    onClick={this.submitForm}
+                  >
+                    Add Name
+                  </Button> :
+                  null
+                }
               </ModalFooter>
             </React.Fragment>
           )}
