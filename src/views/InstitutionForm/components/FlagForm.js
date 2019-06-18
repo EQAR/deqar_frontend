@@ -37,7 +37,6 @@ class FlagForm extends Component {
 
   setFormApi = (formApi) => {
     const { formValue } = this.props;
-    console.log(formValue);
     this.setState({
       selectValue: {value: formValue.flag}
     })

@@ -15,6 +15,7 @@ import {
 import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
 import Select from 'react-select';
+import { connect } from "react-redux";
 
 import FormTextField from '../../components/FormFields/FormTextField';
 import FormSelectField from '../../components/FormFields/FormSelectField';
@@ -30,6 +31,7 @@ import HierarchicalLinkForm from './components/HierarchicalLinkForm';
 import InfoBox from './components/InfoBox';
 import country from '../../services/Country';
 import qfEHEALevel from '../../services/QFeheaLevel';
+import { strictEqual } from 'assert';
 
 
 class InstitutionForm extends Component {
@@ -54,17 +56,19 @@ class InstitutionForm extends Component {
 
   componentDidMount() {
     const { formType } = this.props;
+    console.log(this.props);
+
 
     this.setState({
       adminEdit: true,
       isEdit: true,
       formType: formType
     });
-    // this.setState({
-    //   adminEdit: this.notView(formType),
-    //   isEdit: this.notView(formType),
-    //   formType: formType
-    // });
+    this.setState({
+      adminEdit: this.notView(formType),
+      isEdit: this.notView(formType),
+      formType: formType
+    });
     this.populate();
   }
 
@@ -673,4 +677,8 @@ InstitutionForm.propTypes = {
   backPath: PropTypes.string
 }
 
-export default InstitutionForm;
+const mapStateToProps = (state) => {
+  return {isAdmin: state.user.is_admin}
+}
+
+export default connect(mapStateToProps)(InstitutionForm);
