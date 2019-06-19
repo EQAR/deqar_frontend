@@ -31,6 +31,8 @@ import HierarchicalLinkForm from './components/HierarchicalLinkForm';
 import InfoBox from './components/InfoBox';
 import country from '../../services/Country';
 import qfEHEALevel from '../../services/QFeheaLevel';
+import { validateRoman, validateRequired, validateRequiredURL } from "../../utils/validators";
+
 import { strictEqual } from 'assert';
 
 
@@ -58,6 +60,11 @@ class InstitutionForm extends Component {
 
     this.setState({
       isEdit: isAdmin,
+      formType: formType
+    });
+    this.populate();
+    this.setState({
+      isEdit: true,
       formType: formType
     });
     this.populate();
@@ -280,7 +287,7 @@ class InstitutionForm extends Component {
           <Row key={i}>
             <Col md={6}>
               <FormGroup>
-              <Label for="country">Country</Label>
+              <Label for="country" className={'required'}>Country</Label>
                 <FormSelectField
                   field={`countries[${i}].country`}
                   options={countries}
@@ -288,6 +295,7 @@ class InstitutionForm extends Component {
                   labelField={'name_english'}
                   valueField={'id'}
                   disabled={!isEdit}
+                  validate={validateRequired}
                   />
               </FormGroup>
             </Col>
@@ -313,6 +321,8 @@ class InstitutionForm extends Component {
 
   getValue = (option) => option.id;
 
+  submitForm = () => this.formApi.submitForm();
+
   render() {
     const {
       openModal,
@@ -329,7 +339,11 @@ class InstitutionForm extends Component {
     const { backPath, formType } = this.props;
 
     return  qFeheaLevels ? (
-      <Form className="animated fadeIn" getApi={this.setFormApi}>
+      <Form
+        className="animated fadeIn"
+        getApi={this.setFormApi}
+        onSubmit={(v)=> console.log(v)}
+      >
         {({ formState }) => (
           <Card>
             <CardHeader>
@@ -350,6 +364,7 @@ class InstitutionForm extends Component {
                               field={'name_primary'}
                               placeholder={'Enter official institution name'}
                               disabled={!isEdit}
+                              validate={validateRequired}
                             />
                           </FormGroup>
                         </Col>
@@ -362,6 +377,7 @@ class InstitutionForm extends Component {
                               field={'names_actual[0].name_official_transliterated'}
                               placeholder={'Enter transliterated form'}
                               disabled={!isEdit}
+                              validate={validateRoman}
                             />
                           </FormGroup>
                         </Col>
@@ -411,6 +427,7 @@ class InstitutionForm extends Component {
                               field={'names_actual[0].acronym'}
                               placeholder={'Enter acronym'}
                               disabled={!isEdit}
+                              validate={validateRequired}
                             />
                           </FormGroup>
                         </Col>
@@ -423,6 +440,7 @@ class InstitutionForm extends Component {
                               field={'website_link'}
                               placeholder={'Enter institution website'}
                               disabled={!isEdit}
+                              validate={validateRequiredURL}
                             />
                           </FormGroup>
                         </Col>
@@ -633,7 +651,7 @@ class InstitutionForm extends Component {
                 size="sm"
                 color="primary"
                 className={'pull-right'}
-                onClick={() => null}
+                onClick={this.submitForm}
               >
                 Save Record
               </Button>
