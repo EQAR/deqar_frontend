@@ -18,6 +18,8 @@ import FormTextArea from "../../../components/FormFields/FormTextArea";
 import InstitutionSelect from './InstitutionSelect';
 import AssignedList from '../../../components/FormFieldsUncontrolled/AssignedList';
 import institution from '../../../services/Institution'
+import { validateRequired } from "../../../utils/validators";
+
 
 class HistoricalLinkForm extends Component {
   constructor(props) {
@@ -163,6 +165,7 @@ class HistoricalLinkForm extends Component {
                         values={[formState.values.institution]}
                         onRemove={() => null}
                         onClick={() => null}
+                        validate={validateRequired}
                         disabled
                       />
                     </FormGroup>

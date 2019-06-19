@@ -11,7 +11,7 @@ import {
   Row } from "reactstrap";
 import PropTypes from 'prop-types';
 import { Form } from 'informed';
-import { validateRequired, validateDate } from "../../../utils/validators";
+import { validateRequired } from "../../../utils/validators";
 
 
 import FormTextField from "../../../components/FormFields/FormTextField";

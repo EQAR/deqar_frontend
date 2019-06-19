@@ -16,7 +16,7 @@ import Select from 'react-select';
 import FormTextArea from "../../../components/FormFields/FormTextArea";
 import FormSelectField from '../../../components/FormFields/FormSelectField';
 import agency from '../../../services/Agency';
-
+import { validateRequired } from "../../../utils/validators";
 
 class FlagForm extends Component {
   constructor(props) {
@@ -108,6 +108,7 @@ class FlagForm extends Component {
                       placeholder={'Please select'}
                       labelField={'acronym_primary'}
                       valueField={'id'}
+                      validate={validateRequired}
                     />
                     </FormGroup>
                   </Col>
@@ -121,6 +122,7 @@ class FlagForm extends Component {
                         placeholder={'Please select'}
                         onChange={this.onChange}
                         value={this.selectValue(formState)}
+                        validate={validateRequired}
                       />
                     </FormGroup>
                   </Col>
@@ -132,6 +134,7 @@ class FlagForm extends Component {
                       <FormTextArea
                         field={'flag_message'}
                         placeholder={'Enter explanation, justification or description'}
+                        validate={validateRequired}
                       />
                     </FormGroup>
                   </Col>
