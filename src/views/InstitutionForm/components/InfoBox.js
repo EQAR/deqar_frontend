@@ -109,7 +109,7 @@ class InfoBox extends Component {
   }
 
   render() {
-    const { formState, isEdit } = this.props;
+    const { formState, disabled } = this.props;
     const { openModal, flagValue, flagIndex } = this.state;
     const values = formState.values
 
@@ -129,7 +129,7 @@ class InfoBox extends Component {
                 <Label for="eter_id">ETER ID</Label>
                   <FormTextField
                     field={'eter_id'}
-                    disabled
+                    disabled={disabled}
                   />
               </Col>
             </Row>
@@ -175,7 +175,7 @@ class InfoBox extends Component {
                   <FormTextField
                     field={'internal_note'}
                     placeholder={'Enter note, if necessary'}
-                    disabled
+                    disabled={disabled}
                     />
                 </FormGroup>
               </Col>

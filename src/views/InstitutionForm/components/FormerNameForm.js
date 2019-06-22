@@ -54,7 +54,6 @@ class FormerNameForm extends Component {
 
   render() {
     const { modalOpen, disabled, formIndex, fieldName } = this.props;
-
     return(
       <Modal isOpen={modalOpen} toggle={this.onToggle}>
         <Form
@@ -74,7 +73,7 @@ class FormerNameForm extends Component {
                         field={'name_official'}
                         placeholder={'Enter official institution name'}
                         validate={validateRequired}
-                        disabled
+                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>
@@ -86,7 +85,7 @@ class FormerNameForm extends Component {
                       <FormTextField
                         field={'name_official_transliterated'}
                         placeholder={'Enter transliterated form'}
-                        disabled
+                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>
@@ -98,7 +97,7 @@ class FormerNameForm extends Component {
                       <FormTextField
                         field={'name_english'}
                         placeholder={'Enter english form'}
-                        disabled
+                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>
@@ -121,6 +120,7 @@ class FormerNameForm extends Component {
                       <FormTextField
                         field={'acronym'}
                         placeholder={'Enter acronym'}
+                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>
@@ -133,6 +133,7 @@ class FormerNameForm extends Component {
                         field={'name_valid_to'}
                         placeholderText={'YYYY-MM-DD'}
                         validate={validateRequiredPastDate}
+                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>
@@ -144,6 +145,7 @@ class FormerNameForm extends Component {
                       <FormTextArea
                         field={'name_english'}
                         placeholder={'Enter name source information'}
+                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>

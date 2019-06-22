@@ -166,7 +166,7 @@ class HistoricalLinkForm extends Component {
                         onRemove={() => null}
                         onClick={() => null}
                         validate={validateRequired}
-                        disabled
+                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>
@@ -178,7 +178,7 @@ class HistoricalLinkForm extends Component {
                       <FormDatePickerField
                         field={'relationship_date'}
                         placeholderText={'YYYY-MM-DD'}
-                        disabled
+                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>
@@ -189,7 +189,7 @@ class HistoricalLinkForm extends Component {
                     <Label for="name_english">Relationship Note</Label>
                       <FormTextArea
                         field={'relationship_note'}
-                        disabled
+                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>

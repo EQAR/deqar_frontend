@@ -58,11 +58,11 @@ class InstitutionForm extends Component {
   componentDidMount() {
     const { formType, isAdmin } = this.props;
 
-    this.setState({
-      isEdit: isAdmin,
-      formType: formType
-    });
-    this.populate();
+    // this.setState({
+    //   isEdit: isAdmin,
+    //   formType: formType
+    // });
+    // this.populate();
     this.setState({
       isEdit: true,
       formType: formType

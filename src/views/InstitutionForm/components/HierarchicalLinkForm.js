@@ -146,7 +146,7 @@ class HierarchicalLinkForm extends Component {
                         onRemove={() => null}
                         onClick={() => null}
                         validate={validateRequired}
-                        disabled
+                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>
@@ -158,7 +158,7 @@ class HierarchicalLinkForm extends Component {
                       <FormDatePickerField
                         field={'valid_from'}
                         placeholderText={'YYYY-MM-DD'}
-                        disabled
+                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>
@@ -168,7 +168,7 @@ class HierarchicalLinkForm extends Component {
                       <FormDatePickerField
                         field={'valid_to'}
                         placeholderText={'YYYY-MM-DD'}
-                        disabled
+                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>
@@ -179,7 +179,7 @@ class HierarchicalLinkForm extends Component {
                     <Label for="name_english">Relationship Note</Label>
                       <FormTextArea
                         field={'relationship_note'}
-                        disabled
+                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>
