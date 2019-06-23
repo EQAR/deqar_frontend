@@ -9,7 +9,7 @@ import user from '../../services/User';
 import setUser from "./actions/setUser";
 import {connect} from "react-redux";
 import styles from './DefaultHeader.module.css';
-import {Link, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 
 const propTypes = {
   children: PropTypes.node,

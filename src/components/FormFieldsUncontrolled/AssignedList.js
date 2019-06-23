@@ -1,19 +1,17 @@
-import React, {Component} from "react";
+import React from "react";
 import {Button, FormGroup, Label, ListGroup, ListGroupItem} from "reactstrap";
 import PropTypes from 'prop-types';
 import style from './AssignedList.module.css';
 import {Text} from "informed";
 import cx from 'classnames';
 
-class AssignedList extends Component {
-  renderListItems = (values) => {
-    const { disabled } = this.props;
-
+const AssignedList = ({values, errors, label, btnLabel, field, labelShowRequired, disabled, ...props}) => {
+  const renderListItems = (values) => {
     values = values ? values : [];
     const emptyBox = (
       <ListGroupItem className={cx(style.ListGroupItem,
         {
-          [style.ListGroupItemHasError]: this.fieldHasError(),
+          [style.ListGroupItemHasError]: fieldHasError(),
           [style.ListGroupItemDisabled]: disabled
         })}>
         <span className={style.ListGroupItemName}> </span>
@@ -26,17 +24,17 @@ class AssignedList extends Component {
           <ListGroupItem
             className={cx(style.ListGroupItem,
               {
-                [style.ListGroupItemHasError]: this.fieldHasError(),
+                [style.ListGroupItemHasError]: fieldHasError(),
                 [style.ListGroupItemDisabled]: disabled
 
               })}
             key={idx}
           >
-            <span onClick={() => this.props.onClick(idx)} className={style.ListGroupItemName}>
-              {this.props.renderDisplayValue(value)}
+            <span onClick={() => props.onClick(idx)} className={style.ListGroupItemName}>
+              {props.renderDisplayValue(value)}
             </span>
             { disabled ? "" :
-              <div className={style.removeButton + " pull-right"} onClick={() => {this.props.onRemove(idx)}}>
+              <div className={style.removeButton + " pull-right"} onClick={() => {props.onRemove(idx)}}>
                 <i className="fa fa-close"> </i>
               </div>
             }
@@ -48,7 +46,7 @@ class AssignedList extends Component {
     }
   };
 
-  displayErrors = (errors, field) => {
+  const displayErrors = (errors, field) => {
     if(errors) {
       if(field in errors) {
         return(<small className={cx('help-block form-text text-danger', style.ErrorText)}>{errors[field]}</small>)
@@ -58,8 +56,7 @@ class AssignedList extends Component {
     }
   };
 
-  fieldHasError = () => {
-    const {field, errors} = this.props;
+  const fieldHasError = () => {
     if(errors) {
       return field in errors;
     } else {
@@ -67,35 +64,31 @@ class AssignedList extends Component {
     }
   };
 
-  render() {
-    const {values, errors, label, btnLabel, field, labelShowRequired, disabled} = this.props;
+  return(
+    <div>
+      <Text field={field} hidden validate={props.validate} />
+      <FormGroup>
+        {label ?
+          <Label className={cx(labelShowRequired ? 'required' : '', style.Label)}>
+            {label}
+          </Label> : null}
+        {btnLabel && !disabled ?
+          <Button
+            type={'button'}
+            size="sm"
+            color="secondary"
+            onClick={props.onAddButtonClick}
+            className={style.Button}
+          >{btnLabel}</Button> : null}
+        <ListGroup className={style.ListGroup}>
+          {renderListItems(values)}
+        </ListGroup>
+        {displayErrors(errors, field)}
 
-    return(
-      <div>
-        <Text field={field} hidden validate={this.props.validate} />
-        <FormGroup>
-          {label ?
-            <Label className={cx(labelShowRequired ? 'required' : '', style.Label)}>
-              {label}
-            </Label> : null}
-          {btnLabel && !disabled ?
-            <Button
-              type={'button'}
-              size="sm"
-              color="secondary"
-              onClick={this.props.onAddButtonClick}
-              className={style.Button}
-            >{btnLabel}</Button> : null}
-          <ListGroup className={style.ListGroup}>
-            {this.renderListItems(values)}
-          </ListGroup>
-          {this.displayErrors(errors, field)}
-
-        </FormGroup>
-      </div>
-    )
-  }
-}
+      </FormGroup>
+    </div>
+  )
+};
 
 AssignedList.defaultValues = {
   labelShowRequired: false,

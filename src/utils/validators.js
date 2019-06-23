@@ -45,3 +45,21 @@ export const validateURL = (value) => {
     }
   }
 };
+
+export const validateRequiredURL = (value) => {
+  return validateRequired(value) || validateURL(value);
+};
+
+export const validateDateFrom = (value, date_to) => {
+  if(!validateRequiredDate(value)) {
+    if(date_to) {
+      if(!validateRequiredDate(date_to)) {
+        if(!moment(value).isBefore(date_to)) {
+          return "Valid from is later date, then valid to"
+        }
+      }
+    }
+  } else {
+    return validateRequiredDate(value);
+  }
+};

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import report from "../../services/Report";
 import {connect} from "react-redux";
 import setReportsTable from "./actions/setReportsTable";
@@ -9,73 +9,8 @@ import style from "./ReportsTable.module.css";
 import ReportsTableFilters from "./ReportsTableFilters";
 import DataTableRedux from "../../components/DataTable/DataTableRedux";
 
-class ReportsTable extends Component {
-  constructor(props) {
-    super(props);
-
-    this.columnConfig = [
-      {
-        field: 'id',
-        label: 'DEQAR ID',
-        width: 80,
-        resizable: false,
-        sortable: false,
-        style:{ 'textAlign': 'center'}
-      }, {
-        field: 'agency',
-        label: 'Agency',
-        width: 150,
-        resizable: false,
-        sortable: true,
-      }, {
-        field: 'institution_programme_primary',
-        label: 'Institution : Programme',
-        minWidth: 250,
-        render: this.linkRenderer,
-        resizable: true,
-        sortable: true,
-        sortQueryParam: 'institution_programme_sort',
-        style:{ 'whiteSpace': 'unset'}
-      }, {
-        field: 'country',
-        label: 'Country',
-        render: arrayRenderer,
-        width: 150,
-        resizable: false,
-        sortable: true,
-      }, {
-        field: 'activity_type',
-        label: 'Activity',
-        width: 150,
-        resizable: false,
-        sortable: true
-      }, {
-        field: 'date',
-        label: 'Validity',
-        render: dateRender,
-        width: 120,
-        sortable: true,
-        sortQueryParam: 'valid_from'
-      }, {
-        field: 'flag_level',
-        label: 'Flag',
-        render: flagRender,
-        width: 110,
-        sortable: true
-      }
-    ];
-  }
-
-  onFetchData = (state) => {
-    const params = createTableAPIParams(state, this.columnConfig);
-    return report.getReports(params);
-  };
-
-  saveState = (state) => {
-    this.props.setReportsTable(state);
-  };
-
-  linkRenderer = (row) => {
+const ReportsTable = (props) => {
+  const linkRenderer = (row) => {
     return(
       <Link
         to={{pathname: `/reference/reports/view/${row.original.id}`}}
@@ -85,20 +20,79 @@ class ReportsTable extends Component {
       </Link>)
   };
 
-  render() {
-    return (
-      <DataTableRedux
-        onFetchData={this.onFetchData}
-        columnConfig={this.columnConfig}
-        saveState={this.saveState}
-        filterable={true}
-        storeName={'reportsTable'}
-      >
-        <ReportsTableFilters />
-      </DataTableRedux>
-    )
-  }
-}
+  const columnConfig = [
+    {
+      field: 'id',
+      label: 'DEQAR ID',
+      width: 80,
+      resizable: false,
+      sortable: false,
+      style:{ 'textAlign': 'center'}
+    }, {
+      field: 'agency',
+      label: 'Agency',
+      width: 150,
+      resizable: false,
+      sortable: true,
+    }, {
+      field: 'institution_programme_primary',
+      label: 'Institution : Programme',
+      minWidth: 250,
+      render: linkRenderer,
+      resizable: true,
+      sortable: true,
+      sortQueryParam: 'institution_programme_sort',
+      style:{ 'whiteSpace': 'unset'}
+    }, {
+      field: 'country',
+      label: 'Country',
+      render: arrayRenderer,
+      width: 150,
+      resizable: false,
+      sortable: true,
+    }, {
+      field: 'activity_type',
+      label: 'Activity',
+      width: 150,
+      resizable: false,
+      sortable: true
+    }, {
+      field: 'date',
+      label: 'Validity',
+      render: (row) => dateRender(row, 'valid_from', 'valid_to'),
+      width: 120,
+      sortable: true,
+      sortQueryParam: 'valid_from'
+    }, {
+      field: 'flag_level',
+      label: 'Flag',
+      render: flagRender,
+      width: 110,
+      sortable: true
+    }
+  ];
+
+  const onFetchData = (state) => {
+    const params = createTableAPIParams(state, columnConfig);
+    return report.getReports(params);
+  };
+
+  const saveState = (state) => {
+    props.setReportsTable(state);
+  };
+
+  return (
+    <DataTableRedux
+      onFetchData={onFetchData}
+      columnConfig={columnConfig}
+      saveState={saveState}
+      filterable={true}
+      storeName={'reportsTable'}
+    >
+      <ReportsTableFilters />
+    </DataTableRedux>
+  )
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {

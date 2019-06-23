@@ -10,8 +10,6 @@ import moment from "moment";
 import FormTextField from "../../../components/FormFields/FormTextField";
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import confirm from "reactstrap-confirm";
-import report from "../../../services/Report";
 
 class InfoBox extends Component {
   flagRender = (value) => {

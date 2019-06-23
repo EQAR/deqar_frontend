@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Button,
   Card,
@@ -13,41 +13,39 @@ import DataTableHeader from "../../components/DataTable/DataTableHeader";
 import toggleMyReportsTableFilter from "./actions/toggleMyReportsTableFilter";
 import {connect} from "react-redux";
 
-class MyReports extends Component {
-  onFilterClick = () => {
-    this.props.toggleMyReportsTableFilter()
+const MyReports = (props) => {
+  const onFilterClick = () => {
+    props.toggleMyReportsTableFilter()
   };
 
-  render() {
-    return(
-      <div className="animated fadeIn">
-        <Card>
-          <CardHeader>
-            My Uploaded Reports
-            <DataTableHeader
-              storeName={'myReportsTable'}
-              filterText={'Number of reports'}
-              onFilterClick={this.onFilterClick}
-            />
-          </CardHeader>
-          <CardBody className={style.MyReportsCardBody}>
-            <MyReportsTable/>
-          </CardBody>
-          <CardFooter>
-            <div className={'pull-right'}>
-              <Link to={{pathname: '/submit-report'}}>
-                <Button
-                  size="sm"
-                  color="primary"
-                >Submit New Report</Button>
-              </Link>
-            </div>
-          </CardFooter>
-        </Card>
-      </div>
-    )
-  }
-}
+  return(
+    <div className="animated fadeIn">
+      <Card>
+        <CardHeader>
+          My Uploaded Reports
+          <DataTableHeader
+            storeName={'myReportsTable'}
+            filterText={'Number of reports'}
+            onFilterClick={onFilterClick}
+          />
+        </CardHeader>
+        <CardBody className={style.MyReportsCardBody}>
+          <MyReportsTable/>
+        </CardBody>
+        <CardFooter>
+          <div className={'pull-right'}>
+            <Link to={{pathname: '/submit-report'}}>
+              <Button
+                size="sm"
+                color="primary"
+              >Submit New Report</Button>
+            </Link>
+          </div>
+        </CardFooter>
+      </Card>
+    </div>
+  )
+};
 
 const mapStateToProps = (store) => {
   return {}

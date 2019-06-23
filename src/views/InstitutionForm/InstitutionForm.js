@@ -8,7 +8,6 @@ import {
   CardHeader,
   Col,
   FormGroup,
-  FormText,
   Label,
   Row
 } from "reactstrap";
@@ -20,7 +19,6 @@ import style from './InstitutionForm.module.css';
 import AssignedList from '../../components/FormFieldsUncontrolled/AssignedList';
 import AlternativeNameForm from './components/AlternativeNameForm';
 import LocationForm from './components/LocationForm';
-import country from '../../services/Country';
 import {Link} from "react-router-dom";
 
 

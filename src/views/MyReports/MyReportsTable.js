@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import report from "../../services/Report";
 import {connect} from "react-redux";
 import setMyReportsTable from "./actions/setMyReportsTable";
@@ -9,11 +9,18 @@ import style from "../Reports/ReportsTable.module.css";
 import MyReportsTableFilters from "./MyReportsTableFilters";
 import DataTableRedux from "../../components/DataTable/DataTableRedux";
 
-class MyReportsTable extends Component {
-  constructor(props) {
-    super(props);
+const MyReportsTable = (props) => {
+  const linkRenderer = (row) => {
+    return(
+      <Link
+        to={{pathname: `/my-reports/view/${row.original.id}`}}
+        className={style.Link}
+      >
+        {row.original.institution_programme_primary}
+      </Link>)
+  };
 
-    this.columnConfig = [
+  const columnConfig = [
       {
         field: 'date_created',
         label: 'Uploaded',
@@ -31,7 +38,7 @@ class MyReportsTable extends Component {
       }, {
         field: 'institution_programme_primary',
         label: 'Institution : Programme',
-        render: this.linkRenderer,
+        render: linkRenderer,
         sortable: true,
         sortQueryParam: 'institution_programme_sort',
         minWidth: 250,
@@ -66,41 +73,28 @@ class MyReportsTable extends Component {
         sortable: true
       }
     ];
-  }
 
-  onFetchData = (state) => {
-    const params = createTableAPIParams(state, this.columnConfig);
+  const onFetchData = (state) => {
+    const params = createTableAPIParams(state, columnConfig);
     return report.getMyReports(params);
   };
 
-  saveState = (state) => {
-    this.props.setMyReportsTable(state);
+  const saveState = (state) => {
+    props.setMyReportsTable(state);
   };
 
-  linkRenderer = (row) => {
-    return(
-      <Link
-        to={{pathname: `/my-reports/view/${row.original.id}`}}
-        className={style.Link}
-      >
-        {row.original.institution_programme_primary}
-      </Link>)
-  };
-
-  render() {
-    return (
-      <DataTableRedux
-        onFetchData={this.onFetchData}
-        columnConfig={this.columnConfig}
-        saveState={this.saveState}
-        filterable={true}
-        storeName={'myReportsTable'}
-      >
-        <MyReportsTableFilters />
-      </DataTableRedux>
-    )
-  }
-}
+  return (
+    <DataTableRedux
+      onFetchData={onFetchData}
+      columnConfig={columnConfig}
+      saveState={saveState}
+      filterable={true}
+      storeName={'myReportsTable'}
+    >
+      <MyReportsTableFilters />
+    </DataTableRedux>
+  )
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {

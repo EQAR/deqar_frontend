@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {Card, CardBody, CardHeader, Col, Row} from "reactstrap";
 import PropTypes from 'prop-types';
 import style from './CSVInfo.module.css';
 
-class CSVInfo extends Component {
-  renderIntroMessage = () => {
-    const {step} = this.props;
+const CSVInfo = ({step, ...props}) => {
+  const renderIntroMessage = () => {
     let instruction = "";
     let infoTextDisplayed = true;
 
@@ -38,25 +37,23 @@ class CSVInfo extends Component {
     )
   };
 
-  render() {
-    return (
-      <div className="animated fadeIn">
-        <Card>
-          <CardHeader>
-            CSV Submission Information
-          </CardHeader>
-          <CardBody>
-            <Row>
-              <Col>
-                {this.renderIntroMessage()}
-              </Col>
-            </Row>
-          </CardBody>
-        </Card>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="animated fadeIn">
+      <Card>
+        <CardHeader>
+          CSV Submission Information
+        </CardHeader>
+        <CardBody>
+          <Row>
+            <Col>
+              {renderIntroMessage()}
+            </Col>
+          </Row>
+        </CardBody>
+      </Card>
+    </div>
+  );
+};
 
 CSVInfo.defaultProps = {
   step: 1
