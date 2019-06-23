@@ -6,10 +6,6 @@ const nav = {
       url: '/my-',
       children: [
         {
-          name: 'My Profile',
-          url: '/my-profile',
-          icon: 'fa fa-user-o'
-        }, {
           name: 'My Reports',
           url: '/my-reports',
           icon: 'icon-docs',
@@ -18,14 +14,14 @@ const nav = {
           url: '/my-agency',
           icon: 'icon-home',
         }, {
-          name: 'Alerts and flags',
-          url: '#',
-          icon: 'icon-flag'
+          name: 'My ESG Activities',
+          url: '/my-activities',
+          icon: 'icon-tag'
         }
       ]
     }, {
       name: 'Submit Reports',
-      icon: 'icon-doc',
+        icon: 'icon-doc',
       url: '/submit-',
       children: [
         {
@@ -46,12 +42,8 @@ const nav = {
       children: [
         {
           name: 'Agencies',
-          url: '#',
+          url: '/reference/agencies',
           icon: 'icon-home'
-        }, {
-          name: 'Agency Activities',
-          url: '/reference/activities',
-          icon: 'fa fa-home'
         }, {
           name: 'Reports',
           url: '/reference/reports',
@@ -60,10 +52,6 @@ const nav = {
           name: 'Institutions',
           url: '/reference/institutions',
           icon: 'icon-graduation'
-        }, {
-          name: 'Countries',
-          url: '#',
-          icon: 'icon-globe-alt'
         }
       ]
     },
@@ -74,7 +62,7 @@ const nav = {
     }, {
       name: 'Documentation',
       url: 'https://docs.deqar.eu',
-      icon: 'icon-question',
+      icon: 'icon-info',
       attributes: {target: '_blank', rel: "noreferrer noopener", active: false}
     }
   ]

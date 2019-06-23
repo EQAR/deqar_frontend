@@ -1,0 +1,46 @@
+.infoBoxContainer {
+    margin-bottom: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.ListGroupItem {
+    border-style: unset;
+    vertical-align: middle;
+    padding-left: 20px;
+    min-height: 35px;
+    display: flex;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    background-color: transparent !important;
+}
+
+.flagInfo {
+    padding: 0;
+    margin: auto;
+}
+
+.flagMessage {
+    padding: 0;
+    cursor: text;
+    color: #73818f;
+}
+
+.infoInput {
+    background-color: transparent !important;
+}
+
+.internalNote {
+    background-color: transparent !important;
+}
+
+.removeButton {
+    color: hsl(0,0%,80%);
+    order: 2;
+    text-align:right;
+    flex-grow: 1;
+}
+
+.removeButton:hover {
+    color: hsl(0,0%,60%);
+}
