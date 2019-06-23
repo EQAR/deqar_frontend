@@ -43,10 +43,6 @@ class InfoBox extends Component {
     </Row>
   )
 
-  getFlagValues = (flags) => {
-    return !flags || flags.length === 0 ? [{flag: 'none', flag_message: 'Institution has no flag assigned'}] : flags;
-  }
-
   onFlagRemove = () => null;
 
   onFlagClick = (index) => {
@@ -153,7 +149,7 @@ class InfoBox extends Component {
                 <AssignedList
                   errors={formState.errors}
                   valueFields={['request']}
-                  values={this.getFlagValues(values.flags)}
+                  values={values.flags}
                   label={'Flags'}
                   btnLabel={'Add'}
                   onRemove={this.onFlagRemove}

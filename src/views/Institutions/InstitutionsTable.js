@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import institution from "../../services/Institution";
 import { connect } from "react-redux";
 import setInstitutionsTable from "./actions/setInstitutionsTable";
-import country from '../../services/Country';
 import createTableAPIParams from "../../utils/createTableAPIParams";
 import style from "./InstitutionsTable.module.css";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import DataTableRedux from "../../components/DataTable/DataTableRedux";
 import InstitutionsTableFilters from "./InstitutionsTableFilters";
 

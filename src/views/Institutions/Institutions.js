@@ -4,9 +4,7 @@ import {
   CardBody,
   CardHeader,
   CardFooter,
-  Col,
   Button,
-  Row
 } from "reactstrap";
 import {Link} from "react-router-dom";
 

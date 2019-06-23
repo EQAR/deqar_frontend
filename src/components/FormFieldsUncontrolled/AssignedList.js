@@ -21,6 +21,7 @@ class AssignedList extends Component {
     );
 
     if (values.length > 0) {
+      const banned = values.banned ? values.banned : false;
       return values.map((value, idx) => {
         return (
           <ListGroupItem
@@ -35,7 +36,7 @@ class AssignedList extends Component {
             <span onClick={() => this.props.onClick(idx)} className={style.ListGroupItemName}>
               {this.props.renderDisplayValue(value)}
             </span>
-            { disabled ? "" :
+            { disabled || banned ? "" :
               <div className={style.removeButton + " pull-right"} onClick={() => {this.props.onRemove(idx, fieldName)}}>
                 <i className="fa fa-close"> </i>
               </div>

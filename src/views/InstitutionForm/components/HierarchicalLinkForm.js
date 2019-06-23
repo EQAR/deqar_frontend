@@ -139,7 +139,7 @@ class HierarchicalLinkForm extends Component {
                     <FormGroup>
                       <AssignedList
                         errors={formState.errors}
-                        field={'institutions'}
+                        field={'institution'}
                         labelShowRequired={true}
                         renderDisplayValue={this.renderInstitutions}
                         values={[formState.values.institution]}

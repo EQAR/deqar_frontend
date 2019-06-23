@@ -33,6 +33,8 @@ import country from '../../services/Country';
 import qfEHEALevel from '../../services/QFeheaLevel';
 import { validateRoman, validateRequired, validateRequiredURL } from "../../utils/validators";
 import agency from '../../services/Agency';
+import { toast } from 'react-toastify';
+import { createFormNormalizer } from './createFormNormalizer';
 
 
 class InstitutionForm extends Component {
@@ -84,7 +86,7 @@ class InstitutionForm extends Component {
     const values = this.formApi.getState().values
 
     if (formType !== 'create') {
-      institution.getInstitution(formID).then((response, error) => {
+      institution.getInstitution(formID).then((response) => {
         let data = response.data
         const historical_source = response.data.historical_source.map(s => ({...s, direction: 'source'}))
         const historical_target = response.data.historical_target.map(t => ({...t, direction: 'target'}))
@@ -92,27 +94,32 @@ class InstitutionForm extends Component {
         const hierarchical_child = response.data.hierarchical_child.map(c => ({...c, position: 'child'}))
         data.historical_links = [...historical_source, ...historical_target];
         data.hierarchical_links = [...hierarchical_child, ...hierarchical_parent];
+        data.flags = data.flags ? [{flag: 'none', flag_message: 'Institution has no flag assigned'}] : data.flags;
         this.formApi.setValues(data);
       });
     } else {
-      this.formApi.setValues({...values, countries: [{country: {name_english: ''}, city: ''}]})
+      this.formApi.setValues({
+        ...values,
+        countries: [{country: {name_english: ''}, city: ''}],
+        flags: [{flag: 'none', flag_message: 'Institution has no flag assigned'}]
+      })
     }
 
-    qfEHEALevel.select().then((response, error) => {
+    qfEHEALevel.select().then((response) => {
       this.setState({
         qFeheaLevels: response.data
       });
     });
 
-    country.getInstitutionCountries().then((response, error) => {
+    country.getInstitutionCountries().then((response) => {
       this.setState({
         countries: response.data
       });
     });
 
     isAdmin
-    ? agency.selectAllAgency().then((response, error) => this.setState({agencies: response.data}))
-    : agency.selectMyAgency().then((response, error) => this.setState({agencies: response.data}));
+    ? agency.selectAllAgency().then((response) => this.setState({agencies: response.data}))
+    : agency.selectMyAgency().then((response) => this.setState({agencies: response.data}));
   }
 
   setFormApi = (formApi) => {
@@ -186,9 +193,13 @@ class InstitutionForm extends Component {
   renderFormerNames = value => value.name_official;
 
   onAddLocalID = () => {
+    const localIds = this.formApi.getValue('identifiers_local');
+    const { agencies } = this.state;
+
     this.setState({
       formerIndex: null,
-      localIDValue: null
+      localIDValue: null,
+      localIDDisabled: localIds ? agencies.filter(a => localIds.filter(l => l.agency.id === a.id)) ? true : false : false
     });
     this.toggleModal('local-id');
   }
@@ -200,7 +211,7 @@ class InstitutionForm extends Component {
     this.setState({
       localIDValue: localIds[i],
       formerIndex: i,
-      localIDDisabled: agencies.find(a => localIds[i].agency.id === a.id) ? false : true
+      localIDDisabled: agencies.find(a => localIds[i].agency.id === a.id) ? true : false
     });
     this.toggleModal('local-id');
   }
@@ -339,35 +350,6 @@ class InstitutionForm extends Component {
           </Row>
         )
       });
-    } else if (countries) {
-      return (
-        <Row>
-          <Col md={6}>
-            <FormGroup>
-            <Label for="country" className={'required'}>Country</Label>
-              <FormSelectField
-                field={'countries[0].country'}
-                options={countries}
-                placeholder={'Please select'}
-                labelField={'name_english'}
-                valueField={'id'}
-                disabled={!isEdit}
-                validate={validateRequired}
-                />
-            </FormGroup>
-          </Col>
-          <Col md={6}>
-            <FormGroup>
-            <Label for="city">City</Label>
-              <FormTextField
-                field={'countries[0].city'}
-                placeholder={'Enter city name'}
-                disabled={!isEdit}
-              />
-            </FormGroup>
-          </Col>
-        </Row>
-      )
     }
   }
 
@@ -381,8 +363,17 @@ class InstitutionForm extends Component {
     this.formApi.submitForm();
   }
 
-  onFormSubmit = (value) => {
-    console.log(value)
+  createInstitution = (value) =>{
+    institution.submitInstitution(createFormNormalizer(value)).then((r) => console.log(r)).catch(error => {
+      console.log(error.response, error, error.request)
+  })
+  }
+
+  submitInstitutionForm = (value) => {
+    const { formType } = this.props;
+    formType === 'create'
+    ? this.createInstitution(value)
+    : this.updteInstitution(value)
   }
 
   render() {
@@ -405,7 +396,7 @@ class InstitutionForm extends Component {
       <Form
         className="animated fadeIn"
         getApi={this.setFormApi}
-        onSubmit={this.onFormSubmit}
+        onSubmit={this.submitInstitutionForm}
       >
         {({ formState }) => (
           <Card>
@@ -424,7 +415,7 @@ class InstitutionForm extends Component {
                           <FormGroup>
                           <Label for="name_official" className={'required'}>Institution Name, Official</Label>
                             <FormTextField
-                              field={'name_primary'}
+                              field={'names_actual[0].name_official'}
                               placeholder={'Enter official institution name'}
                               disabled={!isEdit}
                               validate={validateRequired}
@@ -629,7 +620,7 @@ class InstitutionForm extends Component {
                           <FormGroup>
                           <Label for="comment">Other comment(optional)</Label>
                             <FormTextField
-                              field={'comment'}
+                              field={'other_comment'}
                               placeholder={'Enter comment, if applicable'}
                               disabled={!isEdit}
                               />

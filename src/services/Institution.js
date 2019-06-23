@@ -1,5 +1,10 @@
 import axios from 'axios';
-import { GET_INSTITUTIONS, GET_INSTITUTION, GET_HISTORICAL_RELATION_TYPES } from "./config-api";
+import {
+  GET_INSTITUTIONS,
+  GET_INSTITUTION,
+  GET_HISTORICAL_RELATION_TYPES,
+  POST_INSTITUTION
+ } from "./config-api";
 
 
 class Institution {
@@ -34,6 +39,11 @@ class Institution {
   getHistoricalRelationTypes = () => {
     return axios.get(GET_HISTORICAL_RELATION_TYPES);
   }
+
+  submitInstitution = (formValues) => {
+    console.log(formValues)
+    return axios.post(POST_INSTITUTION, formValues);
+  };
 }
 
 const institution = new Institution();
