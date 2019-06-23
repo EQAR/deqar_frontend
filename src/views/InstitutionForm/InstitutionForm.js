@@ -32,8 +32,7 @@ import InfoBox from './components/InfoBox';
 import country from '../../services/Country';
 import qfEHEALevel from '../../services/QFeheaLevel';
 import { validateRoman, validateRequired, validateRequiredURL } from "../../utils/validators";
-
-import { strictEqual } from 'assert';
+import agency from '../../services/Agency';
 
 
 class InstitutionForm extends Component {
@@ -51,7 +50,9 @@ class InstitutionForm extends Component {
       historicalLinkValue: null,
       hierarchicalLinkValue: null,
       countries: null,
-      infoBoxOpen: true
+      infoBoxOpen: true,
+      agencies: null,
+      localIDDisabled: true
     }
   }
 
@@ -63,6 +64,7 @@ class InstitutionForm extends Component {
     //   formType: formType
     // });
     // this.populate();
+
     this.setState({
       isEdit: true,
       formType: formType
@@ -73,7 +75,7 @@ class InstitutionForm extends Component {
   notView = (formType) => formType !== 'view'
 
   populate = () => {
-    const { formID, formType } = this.props;
+    const { formID, formType, isAdmin } = this.props;
 
     if (formType !== 'create') {
       institution.getInstitution(formID).then((response, error) => {
@@ -85,7 +87,7 @@ class InstitutionForm extends Component {
         data.historical_links = [...historical_source, ...historical_target];
         data.hierarchical_links = [...hierarchical_child, ...hierarchical_parent];
         this.formApi.setValues(data);
-      })
+      });
     }
 
     qfEHEALevel.select().then((response, error) => {
@@ -98,7 +100,11 @@ class InstitutionForm extends Component {
       this.setState({
         countries: response.data
       });
-    })
+    });
+
+    isAdmin
+    ? agency.selectAllAgency().then((response, error) => this.setState({agencies: response.data}))
+    : agency.selectMyAgency().then((response, error) => this.setState({agencies: response.data}));
   }
 
   setFormApi = (formApi) => {
@@ -180,18 +186,27 @@ class InstitutionForm extends Component {
   }
 
   onLocalIDClick = (i) => {
+    const localIds = this.formApi.getValue('identifiers_local');
+    const { agencies } = this.state;
+
     this.setState({
-      localIDValue: this.formApi.getValue('identifiers_local')[i],
-      formerIndex: i
+      localIDValue: localIds[i],
+      formerIndex: i,
+      localIDDisabled: agencies.find(a => localIds[i].agency.id === a.id) ? false : true
     });
     this.toggleModal('local-id');
   }
 
-  getLocalIDValues = formState => (
-    formState.values.identifiers_local
-    ? formState.values.identifiers_local
-    : null
-  )
+  getLocalIDValues = formState => {
+    const { agencies } = this.state;
+    let { identifiers_local } = formState.values
+    if (identifiers_local) {
+      identifiers_local = identifiers_local.map(id => (
+        agencies.find(a => id.agency.id === a.id) ? {...id, banned: false }: {...id, banned: true})
+      )
+    }
+    return identifiers_local
+  }
 
   renderLocalID = value => value.identifier;
 
@@ -334,9 +349,10 @@ class InstitutionForm extends Component {
       qFeheaLevels,
       isEdit,
       localIDValue,
+      localIDDisabled,
       formIndex
     } = this.state;
-    const { backPath, formType } = this.props;
+    const { backPath } = this.props;
 
     return  qFeheaLevels ? (
       <Form
@@ -481,6 +497,7 @@ class InstitutionForm extends Component {
                             fieldName={'identifiers_local'}
                             formIndex={formIndex}
                             formValue={localIDValue}
+                            disabled={localIDDisabled}
                           />
                           <AssignedList
                             errors={formState.errors}
@@ -494,6 +511,7 @@ class InstitutionForm extends Component {
                             renderDisplayValue={this.renderLocalID}
                             field={'identifiers_local'}
                             fieldName={'identifiers_local'}
+                            validate={this.validateAgency}
                           />
                         </Col>
                       </Row>

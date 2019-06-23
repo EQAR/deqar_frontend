@@ -16,9 +16,6 @@ import FormTextField from "../../../components/FormFields/FormTextField";
 
 
 class AlternativeNameForm extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   setFormApi = (formApi) => {
     const { formValue } = this.props;

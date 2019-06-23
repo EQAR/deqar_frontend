@@ -12,7 +12,7 @@ import {
 import PropTypes from 'prop-types';
 import { Form } from 'informed';
 import { validateRequired } from "../../../utils/validators";
-
+import { connect } from "react-redux";
 
 import FormTextField from "../../../components/FormFields/FormTextField";
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
@@ -30,7 +30,10 @@ class LocalIdForm extends Component {
   }
 
   componentDidMount = () => {
-    agency.selectMyAgency().then((response, error) => this.setState({agencies: response.data}));
+    const { isAdmin } = this.props;
+    isAdmin
+    ? agency.selectAllAgency().then((response, error) => this.setState({agencies: response.data}))
+    : agency.selectMyAgency().then((response, error) => this.setState({agencies: response.data}));
   }
 
   setFormApi = (formApi) => {
@@ -63,7 +66,7 @@ class LocalIdForm extends Component {
   }
 
   render() {
-    const { modalOpen, formIndex, fieldName } = this.props;
+    const { modalOpen, formIndex, fieldName, disabled } = this.props;
     const { agencies } = this.state;
 
     return(
@@ -88,6 +91,7 @@ class LocalIdForm extends Component {
                       labelField={'acronym_primary'}
                       valueField={'id'}
                       validate={validateRequired}
+                      disabled={disabled}
                     />
                     </FormGroup>
                   </Col>
@@ -100,6 +104,7 @@ class LocalIdForm extends Component {
                         field={'identifier'}
                         placeholder={'Enter local ID'}
                         validate={validateRequired}
+                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>
@@ -111,6 +116,7 @@ class LocalIdForm extends Component {
                       <FormDatePickerField
                         field={'identifier_valid_from'}
                         placeholderText={'YYYY-MM-DD'}
+                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>
@@ -120,6 +126,7 @@ class LocalIdForm extends Component {
                       <FormDatePickerField
                         field={'identifier_valid_to'}
                         placeholderText={'YYYY-MM-DD'}
+                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>
@@ -131,6 +138,7 @@ class LocalIdForm extends Component {
                       <FormTextArea
                         field={'note'}
                         placeholder={'Enter identifier information'}
+                        disabled={disabled}
                       />
                     </FormGroup>
                   </Col>
@@ -168,4 +176,8 @@ LocalIdForm.propTypes = {
   disabled: PropTypes.bool
 }
 
-export default LocalIdForm;
+const mapStateToProps = (state) => {
+  return {isAdmin: state.user.is_admin}
+}
+
+export default connect(mapStateToProps)(LocalIdForm);

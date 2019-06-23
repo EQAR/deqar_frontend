@@ -18,9 +18,6 @@ import FormTextArea from "../../../components/FormFields/FormTextArea";
 import { validateRequired, validateRequiredPastDate } from "../../../utils/validators";
 
 class FormerNameForm extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   setFormApi = (formApi) => {
     const { formValue } = this.props;
