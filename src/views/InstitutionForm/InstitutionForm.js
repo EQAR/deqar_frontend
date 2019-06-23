@@ -38,6 +38,7 @@ import agency from '../../services/Agency';
 class InstitutionForm extends Component {
   constructor(props) {
     super(props);
+    this._isMounted = true;
     this.state = {
       isEdit: false,
       openModal: null,
@@ -46,7 +47,7 @@ class InstitutionForm extends Component {
       alternativeNameValue: null,
       formerNameValue: null,
       localIDValue: null,
-      qFeheaLevels: null,
+      qFeheaLevels: [],
       historicalLinkValue: null,
       hierarchicalLinkValue: null,
       countries: null,
@@ -59,23 +60,28 @@ class InstitutionForm extends Component {
   componentDidMount() {
     const { formType, isAdmin } = this.props;
 
-    // this.setState({
-    //   isEdit: isAdmin,
-    //   formType: formType
-    // });
-    // this.populate();
-
     this.setState({
-      isEdit: true,
+      isEdit: isAdmin || this.notView(formType),
       formType: formType
     });
     this.populate();
+
+    // this.setState({
+    //   isEdit: true,
+    //   formType: formType
+    // });
+    // this.populate();
+  }
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
   }
 
   notView = (formType) => formType !== 'view'
 
   populate = () => {
     const { formID, formType, isAdmin } = this.props;
+    const values = this.formApi.getState().values
 
     if (formType !== 'create') {
       institution.getInstitution(formID).then((response, error) => {
@@ -88,6 +94,8 @@ class InstitutionForm extends Component {
         data.hierarchical_links = [...hierarchical_child, ...hierarchical_parent];
         this.formApi.setValues(data);
       });
+    } else {
+      this.formApi.setValues({...values, countries: [{country: {name_english: ''}, city: ''}]})
     }
 
     qfEHEALevel.select().then((response, error) => {
@@ -199,7 +207,8 @@ class InstitutionForm extends Component {
 
   getLocalIDValues = formState => {
     const { agencies } = this.state;
-    let { identifiers_local } = formState.values
+    let { identifiers_local } = formState.values;
+
     if (identifiers_local) {
       identifiers_local = identifiers_local.map(id => (
         agencies.find(a => id.agency.id === a.id) ? {...id, banned: false }: {...id, banned: true})
@@ -211,7 +220,9 @@ class InstitutionForm extends Component {
   renderLocalID = value => value.identifier;
 
   changeQFEheaLvels = (level) => {
-    this.formApi.setValue('qf_ehea_levels', [...this.formApi.getValue('qf_ehea_levels'), {qf_ehea_level: level.id}]);
+    this.formApi.getValue('qf_ehea_levels')
+    ? this.formApi.setValue('qf_ehea_levels', [...this.formApi.getValue('qf_ehea_levels'), {qf_ehea_level: level.id}])
+    : this.formApi.setValue('qf_ehea_levels', [{qf_ehea_level: level.id}])
   }
 
   getQFEheaLevels = (formState) => {
@@ -223,6 +234,7 @@ class InstitutionForm extends Component {
   }
 
   getQFEheaOptions = (qFeheaLevels) => {
+
     const formLevels = this.formApi.getValue('qf_ehea_levels');
     if (formLevels && qFeheaLevels) {
       formLevels.forEach(l => {
@@ -296,7 +308,7 @@ class InstitutionForm extends Component {
   renderLocations = formState => {
     const { countries, isEdit } = this.state;
 
-    if (this.formApi.getValue('countries')) {
+    if (this.formApi.getValue('countries') && countries) {
       return this.formApi.getValue('countries').map((country, i) => {
         return (
           <Row key={i}>
@@ -327,6 +339,35 @@ class InstitutionForm extends Component {
           </Row>
         )
       });
+    } else if (countries) {
+      return (
+        <Row>
+          <Col md={6}>
+            <FormGroup>
+            <Label for="country" className={'required'}>Country</Label>
+              <FormSelectField
+                field={'countries[0].country'}
+                options={countries}
+                placeholder={'Please select'}
+                labelField={'name_english'}
+                valueField={'id'}
+                disabled={!isEdit}
+                validate={validateRequired}
+                />
+            </FormGroup>
+          </Col>
+          <Col md={6}>
+            <FormGroup>
+            <Label for="city">City</Label>
+              <FormTextField
+                field={'countries[0].city'}
+                placeholder={'Enter city name'}
+                disabled={!isEdit}
+              />
+            </FormGroup>
+          </Col>
+        </Row>
+      )
     }
   }
 
@@ -336,7 +377,13 @@ class InstitutionForm extends Component {
 
   getValue = (option) => option.id;
 
-  submitForm = () => this.formApi.submitForm();
+  submitForm = () => {
+    this.formApi.submitForm();
+  }
+
+  onFormSubmit = (value) => {
+    console.log(value)
+  }
 
   render() {
     const {
@@ -358,7 +405,7 @@ class InstitutionForm extends Component {
       <Form
         className="animated fadeIn"
         getApi={this.setFormApi}
-        onSubmit={(v)=> console.log(v)}
+        onSubmit={this.onFormSubmit}
       >
         {({ formState }) => (
           <Card>

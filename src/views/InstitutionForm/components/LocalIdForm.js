@@ -24,6 +24,8 @@ import agency from '../../../services/Agency';
 class LocalIdForm extends Component {
   constructor(props) {
     super(props);
+    this._isMounted = true;
+
     this.state = {
       agencies: null
     }
@@ -31,9 +33,14 @@ class LocalIdForm extends Component {
 
   componentDidMount = () => {
     const { isAdmin } = this.props;
+
     isAdmin
     ? agency.selectAllAgency().then((response, error) => this.setState({agencies: response.data}))
     : agency.selectMyAgency().then((response, error) => this.setState({agencies: response.data}));
+  }
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
   }
 
   setFormApi = (formApi) => {

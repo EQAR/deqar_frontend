@@ -21,6 +21,7 @@ import { validateRequired } from "../../../utils/validators";
 class FlagForm extends Component {
   constructor(props) {
     super(props);
+    this._isMounted = true;
     this.state = {
       agencies: null,
       flags: [
@@ -33,6 +34,10 @@ class FlagForm extends Component {
 
   componentDidMount = () => {
     agency.selectMyAgency().then((response, error) => this.setState({agencies: response.data}));
+  }
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
   }
 
   setFormApi = (formApi) => {

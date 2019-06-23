@@ -24,6 +24,7 @@ import { validateRequired } from "../../../utils/validators";
 class HistoricalLinkForm extends Component {
   constructor(props) {
     super(props);
+    this._isMounted = true;
 
     this.state = {
       historicalRelationTypes: null,
@@ -34,6 +35,10 @@ class HistoricalLinkForm extends Component {
     institution.getHistoricalRelationTypes().then(response => (
       this.setState({historicalRelationTypes: response.data}))
     )
+  }
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
   }
 
   onInstitutionSelected = (value) => {
