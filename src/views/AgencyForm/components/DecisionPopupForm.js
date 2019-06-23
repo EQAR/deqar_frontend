@@ -5,7 +5,6 @@ import {Form} from 'informed';
 import FormSelectField from "../../../components/FormFields/FormSelectField";
 import list from "../../../services/List";
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
-import {FilePond} from "react-filepond";
 import {validateRequired, validateRequiredDate} from "../../../utils/validators";
 
 class MembershipPopupForm extends Component {

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {Form, Scope, Text, Checkbox} from 'informed';
+import {Form, Text, Checkbox} from 'informed';
 import {
-  Button,
   Card,
   CardBody,
   CardFooter,

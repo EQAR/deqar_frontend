@@ -10,7 +10,6 @@ import {
   validateDate,
   validateDateFrom,
   validateRequired,
-  validateRequiredDate,
   validateURL
 } from "../../../utils/validators";
 

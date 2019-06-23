@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Col, FormGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row} from "reactstrap";
 import PropTypes from 'prop-types';
-import {Form, Scope, Checkbox, TextArea, Text} from 'informed';
+import {Form, Checkbox, TextArea} from 'informed';
 import FormTextField from "../../../components/FormFields/FormTextField";
 import style from './NamePopupForm.module.css';
 import FormTextArrayField from "../../../components/FormFieldsUncontrolled/FormTextArrayField";
@@ -9,9 +9,6 @@ import FormTextArrayField from "../../../components/FormFieldsUncontrolled/FormT
 class NamePopupForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      nameVersionCount: 0,
-    }
   }
 
   setFormApi = (formApi) => {
@@ -19,11 +16,6 @@ class NamePopupForm extends Component {
     this.formApi = formApi;
     if(formValue) {
       this.formApi.setValues(formValue);
-      if('agency_name_versions' in formValue) {
-        this.setState({
-          nameVersionCount: formValue['agency_name_versions'].length
-        })
-      }
     }
   };
 
@@ -51,48 +43,8 @@ class NamePopupForm extends Component {
     return action;
   };
 
-  renderNameVersions = () => {
-    const {nameVersionCount} = this.state;
-    const {disabled} = this.props;
-    const count = Array.apply(null, {length: nameVersionCount}).map(Number.call, Number);
-
-    return count.map((c, idx) => {
-      const scopeName = `agency_name_versions[${idx}]`;
-      return(
-        <React.Fragment key={idx}>
-          <Scope scope={scopeName}>
-            <Row>
-              <Col md={10}>
-                <FormGroup>
-                  <Label for="name">Agency Name # {c+1}</Label>
-                  <FormTextField
-                    field={'name'}
-                    placeholder={'Enter agency name'}
-                    disabled={disabled}
-                  />
-                </FormGroup>
-              </Col>
-              <Col md={2}>
-                <FormGroup>
-                  <Label for="name_is_primary">Primary</Label>
-                  <Checkbox
-                    field={'name_is_primary'}
-                    className={style.Checkbox}
-                    disabled={disabled}
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
-          </Scope>
-        </React.Fragment>
-      )
-    });
-  };
-
   render() {
     const {modalOpen, title, disabled, formIndex} = this.props;
-    const {nameVersionCount, nameTransliteratedCount, acronymTransliteratedCount} = this.state;
-
     const titleText = `${this.renderActionName()} ${title}`;
 
     return(
@@ -130,6 +82,48 @@ class NamePopupForm extends Component {
                             <Checkbox
                               field={'name_is_primary'}
                               className={style.Checkbox}
+                              disabled={disabled}
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col md={12}>
+                          <FormGroup>
+                            <Label for="name">Agency Name Transliteration</Label>
+                            <FormTextField
+                              field={'name_transliterated'}
+                              placeholder={'Enter agency name transliteration'}
+                              disabled={disabled}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col md={10}>
+                          <FormGroup>
+                            <Label for="name">Agency Acronym</Label>
+                            <FormTextField
+                              field={'acronym'}
+                              placeholder={'Enter agency acronym'}
+                              disabled={disabled}
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col md={2}>
+                          <FormGroup>
+                            <Label for="acronym_is_primary">Primary</Label>
+                            <Checkbox
+                              field={'acronym_is_primary'}
+                              className={style.Checkbox}
+                              disabled={disabled}
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col md={12}>
+                          <FormGroup>
+                            <Label for="name">Agency Acronym Transliteration</Label>
+                            <FormTextField
+                              field={'acronym_transliterated'}
+                              placeholder={'Enter agency acronym transliteration'}
                               disabled={disabled}
                             />
                           </FormGroup>
