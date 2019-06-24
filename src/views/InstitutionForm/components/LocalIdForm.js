@@ -72,9 +72,21 @@ class LocalIdForm extends Component {
     return action;
   }
 
+  getAgencies = () => {
+    const { localIDs } = this.props;
+    const { agencies } = this.state;
+
+    return agencies.map(agency => (
+      localIDs.find(id => (
+        id.agency.id === agency.id))
+        ? {...agency, isDisabled: true}
+        : agency
+      )
+    )
+  }
+
   render() {
     const { modalOpen, formIndex, fieldName, disabled } = this.props;
-    const { agencies } = this.state;
 
     return(
       <Modal isOpen={modalOpen} toggle={this.onToggle}>
@@ -93,7 +105,7 @@ class LocalIdForm extends Component {
                     <Label for="agency" className={'required'}>Agency</Label>
                     <FormSelectField
                       field={'agency'}
-                      options={agencies}
+                      options={this.getAgencies()}
                       placeholder={'Please select'}
                       labelField={'acronym_primary'}
                       valueField={'id'}

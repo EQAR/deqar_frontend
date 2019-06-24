@@ -199,7 +199,7 @@ class InstitutionForm extends Component {
     this.setState({
       formerIndex: null,
       localIDValue: null,
-      localIDDisabled: localIds ? agencies.filter(a => localIds.filter(l => l.agency.id === a.id)) ? true : false : false
+      localIDDisabled: localIds ? agencies.filter(a => localIds.filter(l => l.agency.id !== a.id)) ? false : true : false
     });
     this.toggleModal('local-id');
   }
@@ -211,7 +211,7 @@ class InstitutionForm extends Component {
     this.setState({
       localIDValue: localIds[i],
       formerIndex: i,
-      localIDDisabled: agencies.find(a => localIds[i].agency.id === a.id) ? true : false
+      localIDDisabled: agencies.find(a => localIds[i].agency.id === a.id) ? false : true
     });
     this.toggleModal('local-id');
   }
@@ -220,7 +220,7 @@ class InstitutionForm extends Component {
     const { agencies } = this.state;
     let { identifiers_local } = formState.values;
 
-    if (identifiers_local) {
+    if (identifiers_local && agencies) {
       identifiers_local = identifiers_local.map(id => (
         agencies.find(a => id.agency.id === a.id) ? {...id, banned: false }: {...id, banned: true})
       )
@@ -536,6 +536,7 @@ class InstitutionForm extends Component {
                             formIndex={formIndex}
                             formValue={localIDValue}
                             disabled={localIDDisabled}
+                            localIDs={formState.values.identifiers_local}
                           />
                           <AssignedList
                             errors={formState.errors}
