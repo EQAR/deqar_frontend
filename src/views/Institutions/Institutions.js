@@ -27,7 +27,7 @@ const Institutions = (props) => {
           <DataTableHeader
             storeName={'institutionsTable'}
             filterText={'Number of institutions'}
-            onFilterClick={this.onFilterClick}
+            onFilterClick={onFilterClick}
           />
         </CardHeader>
         <CardBody className={style.InstitutionsCardBody}>
@@ -40,7 +40,7 @@ const Institutions = (props) => {
           className={'pull-right'}
         >
           <Link
-            to={{pathname: '/institutions/create'}}
+            to={{pathname: '/reference/institutions/create'}}
             className={style.Link}
           >
             Add New Institution

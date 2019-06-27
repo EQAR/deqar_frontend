@@ -36,7 +36,7 @@ class LocalIdForm extends Component {
 
     isAdmin
     ? agency.selectAllAgency().then((response, error) => this.setState({agencies: response.data}))
-    : agency.selectMyAgency().then((response, error) => this.setState({agencies: response.data}));
+    : agency.selectMySubmissionAgency().then((response, error) => this.setState({agencies: response.data}));
   }
 
   componentWillUnmount = () => {

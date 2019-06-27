@@ -119,7 +119,7 @@ class InstitutionForm extends Component {
 
     isAdmin
     ? agency.selectAllAgency().then((response) => this.setState({agencies: response.data}))
-    : agency.selectMyAgency().then((response) => this.setState({agencies: response.data}));
+    : agency.selectMySubmissionAgency().then((response) => this.setState({agencies: response.data}));
   }
 
   setFormApi = (formApi) => {

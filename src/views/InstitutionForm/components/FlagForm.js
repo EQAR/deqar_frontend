@@ -32,7 +32,7 @@ class FlagForm extends Component {
   }
 
   componentDidMount = () => {
-    agency.selectMyAgency().then((response, error) => this.setState({agencies: response.data}));
+    agency.selectMySubmissionAgency().then((response, error) => this.setState({agencies: response.data}));
   }
 
   componentWillUnmount = () => {
