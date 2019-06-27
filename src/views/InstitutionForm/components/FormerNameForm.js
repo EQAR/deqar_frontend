@@ -16,7 +16,7 @@ import { Form , Scope} from 'informed';
 import FormTextField from "../../../components/FormFields/FormTextField";
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
 import FormTextArea from "../../../components/FormFields/FormTextArea";
-import { validateRequired, validateRequiredPastDate } from "../../../utils/validators";
+import { validateRequired, validateRequiredPastDate, validateRoman } from "../../../utils/validators";
 
 class FormerNameForm extends Component {
   constructor(props) {
@@ -25,7 +25,6 @@ class FormerNameForm extends Component {
       alternativeNameCount: 0,
     }
   }
-
 
   setFormApi = (formApi) => {
     const { formValue } = this.props;
@@ -42,6 +41,9 @@ class FormerNameForm extends Component {
   }
 
   submitForm = () => {
+    this.setState({
+      alternativeNameCount: 0
+    })
     this.formApi.submitForm();
   }
 
@@ -79,7 +81,6 @@ class FormerNameForm extends Component {
                   <FormTextField
                     field={'name'}
                     placeholder={'Enter alternative institution name'}
-                    validate={validateRequired}
                     disabled={disabled}
                   />
                 </FormGroup>
@@ -90,6 +91,7 @@ class FormerNameForm extends Component {
                   <FormTextField
                     field={'transliteration'}
                     placeholder={'Enter alternative institution name, transliterated'}
+                    validate={validateRoman}
                   />
                 </FormGroup>
               </Col>

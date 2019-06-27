@@ -11,14 +11,14 @@ export const createFormNormalizer = (formValues) => {
     } else if (key === 'hierarchical_links') {
       normalizedValues['hierarchical_parent'] = formValues[key].filter(link =>
         link.position === 'parent').map(l => ({
-        institution: l.institution,
+        institution: l.institution.id,
         relationship_note: l.relationship_note,
         valid_from: l.valid_from,
         valid_to: l.valid_to
       }));
       normalizedValues['hierarchical_child'] = formValues[key].filter(link =>
         link.position === 'child').map(l => ({
-        institution: l.institution,
+        institution: l.institution.id,
         relationship_note: l.relationship_note,
         valid_from: l.valid_from,
         valid_to: l.valid_to
