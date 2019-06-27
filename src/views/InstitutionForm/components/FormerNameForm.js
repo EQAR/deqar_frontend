@@ -140,7 +140,7 @@ class FormerNameForm extends Component {
                     <FormGroup>
                     <Label for="name_english">Name source Note</Label>
                       <FormTextArea
-                        field={'name_english'}
+                        field={'name_source_note'}
                         placeholder={'Enter name source information'}
                         disabled={disabled}
                       />

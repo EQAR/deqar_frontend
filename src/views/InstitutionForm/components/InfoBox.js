@@ -20,7 +20,8 @@ class InfoBox extends Component {
     this.state = {
       openModal: false,
       flagValue: null,
-      flagIndex: null
+      flagIndex: null,
+      flags: this.props.formState.values.flags
     }
   }
 
@@ -43,12 +44,24 @@ class InfoBox extends Component {
     </Row>
   )
 
-  onFlagRemove = () => null;
+  onFlagRemove = (i) => {
+    let { flags } =  this.props.formState.values;
+
+    if (flags[0].flag !== 'none') {
+      flags.splice(i, 1);
+    }
+    if (flags.length === 0) {
+      flags = [{flag: 'none', flag_message: 'Institution has no flag assigned'}];
+    }
+    this.props.formState.values.flags = flags;
+    this.setState({
+      flags: flags
+    });
+  }
 
   onFlagClick = (index) => {
     let { flags } =  this.props.formState.values;
 
-    flags = flags.length === 0 ? [{flag: 'none', flag_message: 'Institution has no flag assigned'}] : flags;
     this.setState({
       flagValue: flags[index],
       flagIndex: index
@@ -58,11 +71,14 @@ class InfoBox extends Component {
   }
 
   onFormSubmit = (value, i) => {
-    const { formState } = this.props;
+    let { flags } =  this.props.formState.values;
 
-    let values = formState.values.flags || [];
-    Number.isInteger(i) ? values[i] = value : values.push(value)
-    formState.values.flags = values
+    Number.isInteger(i) ? flags[i] = value : flags.push(value);
+    flags = flags.filter(v => v.flag !== 'none');
+    this.props.formState.values.flags = flags;
+    this.setState({
+      flags: flags
+    })
     this.toggleModal();
   }
 
@@ -104,8 +120,8 @@ class InfoBox extends Component {
 
   render() {
     const { formState, disabled } = this.props;
-    const { openModal, flagValue, flagIndex } = this.state;
-    const values = formState.values
+    const { openModal, flagValue, flagIndex, flags } = this.state;
+    const values = formState.values;
 
     return (
       <div className={style.infoBoxContainer}>
@@ -123,7 +139,7 @@ class InfoBox extends Component {
                 <Label for="eter_id">ETER ID</Label>
                   <FormTextField
                     field={'eter_id'}
-                    disabled={disabled}
+                    disabled
                   />
               </Col>
             </Row>
@@ -149,7 +165,7 @@ class InfoBox extends Component {
                 <AssignedList
                   errors={formState.errors}
                   valueFields={['request']}
-                  values={values.flags}
+                  values={flags}
                   label={'Flags'}
                   btnLabel={'Add'}
                   onRemove={this.onFlagRemove}

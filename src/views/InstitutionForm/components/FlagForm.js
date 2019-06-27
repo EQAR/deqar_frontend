@@ -25,7 +25,6 @@ class FlagForm extends Component {
     this.state = {
       agencies: null,
       flags: [
-        {label: 'none', value: 'none'},
         {label: 'low level', value: 'low level'},
         {label: 'high level', value: 'high level'}
       ]
@@ -103,7 +102,7 @@ class FlagForm extends Component {
             <React.Fragment>
               <ModalHeader toggle={this.onToggle}>{this.renderActionName()} Flag</ModalHeader>
               <ModalBody>
-                <Row>
+                {/* <Row>
                   <Col>
                     <FormGroup>
                     <Label for="agency" className={'required'}>Agency</Label>
@@ -117,7 +116,7 @@ class FlagForm extends Component {
                     />
                     </FormGroup>
                   </Col>
-                </Row>
+                </Row> */}
                 <Row>
                   <Col>
                     <FormGroup>

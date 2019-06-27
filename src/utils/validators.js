@@ -56,7 +56,7 @@ export const validateURL = (value) => {
 export const validateRequiredURL = (value) => validateRequired(value) || validateURL(value)
 
 export const validateRoman = (value) => (
-  /^[A-Za-z0-9]+$/.test(value)
+  /^[A-Za-z0-9,.'" ]+$/.test(value)
   ? null
   : 'Use roman alphabet'
 )

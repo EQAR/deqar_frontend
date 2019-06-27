@@ -76,13 +76,15 @@ class LocalIdForm extends Component {
     const { localIDs } = this.props;
     const { agencies } = this.state;
 
-    return agencies.map(agency => (
-      localIDs.find(id => (
-        id.agency.id === agency.id))
-        ? {...agency, isDisabled: true}
-        : agency
+    return localIDs
+      ? agencies.map(agency => (
+        localIDs.find(id => (
+          id.agency.id === agency.id))
+          ? {...agency, isDisabled: true}
+          : agency
+        )
       )
-    )
+      : agencies
   }
 
   render() {
