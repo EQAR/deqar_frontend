@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {Card, CardBody, CardHeader, Col, Row} from "reactstrap";
 import PropTypes from 'prop-types';
 
-class IngestInfo extends Component {
-  renderErrorMessage = () => {
-    const {clickedRowIndex, ingestResponse} = this.props;
+const IngestInfo = ({clickedRowIndex, ingestResponse, ...props}) => {
+  const renderErrorMessage = () => {
     if(ingestResponse[clickedRowIndex].submission_status === 'errors') {
       const errors = ingestResponse[clickedRowIndex].errors;
       let errorMsg = [];
@@ -25,24 +24,22 @@ class IngestInfo extends Component {
     }
   };
 
-  render() {
-    return (
-      <div className="animated fadeIn">
-        <Card>
-          <CardHeader>
-            Ingest Information
-          </CardHeader>
-          <CardBody>
-            <Row>
-              <Col>
-                {this.renderErrorMessage()}
-              </Col>
-            </Row>
-          </CardBody>
-        </Card>
-      </div>
-    );
-  }
+  return (
+    <div className="animated fadeIn">
+      <Card>
+        <CardHeader>
+          Ingest Information
+        </CardHeader>
+        <CardBody>
+          <Row>
+            <Col>
+              {renderErrorMessage()}
+            </Col>
+          </Row>
+        </CardBody>
+      </Card>
+    </div>
+  );
 }
 
 IngestInfo.propTypes = {

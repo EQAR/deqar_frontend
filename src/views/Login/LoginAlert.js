@@ -2,21 +2,17 @@ import React from 'react';
 import { Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
 
-class LoginAlert extends React.Component {
-  onDismiss = () => {
+const LoginAlert = ({visible, ...props}) => {
+  const onDismiss = () => {
     this.props.onClose();
   };
 
-  render() {
-    const {visible} = this.props;
-
-    return (
-      <Alert color="danger" isOpen={visible} toggle={this.onDismiss}>
-        The given username and password is not correct!
-      </Alert>
-    );
-  }
-}
+  return (
+    <Alert color="danger" isOpen={visible} toggle={onDismiss}>
+      The given username and password is not correct!
+    </Alert>
+  );
+};
 
 LoginAlert.defaultProps = {
   visible: false

@@ -1,4 +1,4 @@
-import React, { Component, Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { Container } from 'reactstrap';
 import auth from '../../services/Auth'
@@ -25,75 +25,72 @@ import routes from '../../navigation/routes';
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
-class DefaultLayout extends Component {
+const DefaultLayout = (props) => {
+  const loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
-  loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
-
-  signOut(e) {
+  const signOut = (e) => {
     e.preventDefault();
     auth.removeToken();
-    this.props.history.push('/login')
-  }
+    props.history.push('/login')
+  };
 
-  render() {
-    const containerStyle = {
-      zIndex: 1999
-    };
+  const containerStyle = {
+    zIndex: 1999
+  };
 
-    return (
-      <div className="app">
-        <ToastContainer
-          position="top-right"
-          autoClose={2000}
-          hideProgressBar={true}
-          draggable={false}
-          style={containerStyle}
-        />
-        <AppHeader fixed>
-          <Suspense fallback={this.loading()}>
-            <DefaultHeader onLogout={e=>this.signOut(e)}/>
+  return (
+    <div className="app">
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={true}
+        draggable={false}
+        style={containerStyle}
+      />
+      <AppHeader fixed>
+        <Suspense fallback={loading()}>
+          <DefaultHeader onLogout={e=>signOut(e)}/>
+        </Suspense>
+      </AppHeader>
+      <div className="app-body">
+        <AppSidebar fixed display="lg">
+          <AppSidebarHeader />
+          <AppSidebarForm />
+          <Suspense>
+            <AppSidebarNav navConfig={navigation} {...props} />
           </Suspense>
-        </AppHeader>
-        <div className="app-body">
-          <AppSidebar fixed display="lg">
-            <AppSidebarHeader />
-            <AppSidebarForm />
-            <Suspense>
-            <AppSidebarNav navConfig={navigation} {...this.props} />
+          <AppSidebarFooter />
+          <AppSidebarMinimizer />
+        </AppSidebar>
+        <main className="main">
+          <Container fluid>
+            <Suspense fallback={loading()}>
+              <Switch>
+                {routes.map((route, idx) => {
+                  return route.component ? (
+                    <Route
+                      key={idx}
+                      path={route.path}
+                      exact={route.exact}
+                      name={route.name}
+                      render={props => (
+                        <route.component {...props} />
+                      )} />
+                  ) : (null);
+                })}
+                <Redirect from="/" to="/my-reports" />
+              </Switch>
             </Suspense>
-            <AppSidebarFooter />
-            <AppSidebarMinimizer />
-          </AppSidebar>
-          <main className="main">
-            <Container fluid>
-              <Suspense fallback={this.loading()}>
-                <Switch>
-                  {routes.map((route, idx) => {
-                    return route.component ? (
-                      <Route
-                        key={idx}
-                        path={route.path}
-                        exact={route.exact}
-                        name={route.name}
-                        render={props => (
-                          <route.component {...props} />
-                        )} />
-                    ) : (null);
-                  })}
-                  <Redirect from="/" to="/dashboard" />
-                </Switch>
-              </Suspense>
-            </Container>
-          </main>
-        </div>
-        <AppFooter>
-          <Suspense fallback={this.loading()}>
-            <DefaultFooter />
-          </Suspense>
-        </AppFooter>
+          </Container>
+        </main>
       </div>
-    );
-  }
-}
+      <AppFooter>
+        <Suspense fallback={loading()}>
+          <DefaultFooter />
+        </Suspense>
+      </AppFooter>
+    </div>
+  );
+};
 
 export default DefaultLayout;

@@ -60,3 +60,17 @@ export const validateRoman = (value) => (
   ? null
   : 'Use roman alphabet'
 )
+
+export const validateDateFrom = (value, date_to) => {
+  if (!validateRequiredDate(value)) {
+    if (date_to) {
+      if (!validateRequiredDate(date_to)) {
+        if (!moment(value).isBefore(date_to)) {
+          return "Valid from is later date, then valid to"
+        }
+      }
+    }
+  } else {
+    return validateRequiredDate(value);
+  }
+}

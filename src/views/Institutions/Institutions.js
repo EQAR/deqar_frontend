@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Card,
   CardBody,
@@ -14,44 +14,42 @@ import toggleInstitutionsTableFilter from "./actions/toggleInstitutionsTableFilt
 import DataTableHeader from "../../components/DataTable/DataTableHeader";
 import {connect} from "react-redux";
 
-class Institutions extends Component {
-  onFilterClick = () => {
-    this.props.toggleInstitutionsTableFilter()
+const Institutions = (props) => {
+  const onFilterClick = () => {
+    props.toggleInstitutionsTableFilter()
   };
 
-  render() {
-    return(
-      <div className="animated fadeIn">
-        <Card>
-          <CardHeader>
-            Institutions
-            <DataTableHeader
-              storeName={'institutionsTable'}
-              filterText={'Number of institutions'}
-              onFilterClick={this.onFilterClick}
-            />
-          </CardHeader>
-          <CardBody className={style.InstitutionsCardBody}>
-            <InstitutionsTable/>
-          </CardBody>
-          <CardFooter>
-          <Button
-            size="sm"
-            color="primary"
-            className={'pull-right'}
+  return (
+    <div className="animated fadeIn">
+      <Card>
+        <CardHeader>
+          Institutions
+          <DataTableHeader
+            storeName={'institutionsTable'}
+            filterText={'Number of institutions'}
+            onFilterClick={this.onFilterClick}
+          />
+        </CardHeader>
+        <CardBody className={style.InstitutionsCardBody}>
+          <InstitutionsTable/>
+        </CardBody>
+        <CardFooter>
+        <Button
+          size="sm"
+          color="primary"
+          className={'pull-right'}
+        >
+          <Link
+            to={{pathname: '/institutions/create'}}
+            className={style.Link}
           >
-            <Link
-              to={{pathname: '/institutions/create'}}
-              className={style.Link}
-            >
-              Add New Institution
-            </Link>
-          </Button>
-          </CardFooter>
-        </Card>
-      </div>
-    )
-  }
+            Add New Institution
+          </Link>
+        </Button>
+        </CardFooter>
+      </Card>
+    </div>
+  )
 }
 
 const mapStateToProps = (store) => {

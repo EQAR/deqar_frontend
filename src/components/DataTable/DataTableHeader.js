@@ -1,33 +1,30 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 
 import style from './DataTableHeader.module.css';
 
-class DataTableHeader extends Component {
-  onFilterClick = () => {
-    this.props.onFilterClick();
+const DataTableHeader = ({total, filtered, filterText, filterOpen, ...props}) => {
+  const onFilterClick = () => {
+    props.onFilterClick();
   };
 
-  render() {
-    const {total, filtered, filterText, filterOpen} = this.props;
-    const totalText = filtered.length > 0 ? `${filterText} (filtered): ${total}` : `${filterText} (total): ${total}`;
+  const totalText = filtered.length > 0 ? `${filterText} (filtered): ${total}` : `${filterText} (total): ${total}`;
 
-    return(
-      <div className={'pull-right'}>
-        <span className={'a'}>
-          {totalText}
-        </span>
-        <span className={style.Separator}>|</span>
-        <span className={style.FilterButton}
-              onClick={this.onFilterClick}
-        >
-          {filterOpen ? 'Hide Table Filter' : 'Show Table Filter'}
-        </span>
-      </div>
-    )
-  }
-}
+  return(
+    <div className={'pull-right'}>
+      <span className={'a'}>
+        {totalText}
+      </span>
+      <span className={style.Separator}>|</span>
+      <span className={style.FilterButton}
+            onClick={onFilterClick}
+      >
+        {filterOpen ? 'Hide Table Filter' : 'Show Table Filter'}
+      </span>
+    </div>
+  )
+};
 
 DataTableHeader.propTypes = {
   storeName: PropTypes.string.isRequired,

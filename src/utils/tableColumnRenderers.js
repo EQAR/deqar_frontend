@@ -27,8 +27,9 @@ export const arrayRenderer = (row) => {
   }
 };
 
-export const dateRender = (row) => {
-  let {valid_from, valid_to} = row.original;
+export const dateRender = (row, valid_from_field, valid_to_field) => {
+  let valid_from = row.original[valid_from_field];
+  let valid_to = row.original[valid_to_field];
   valid_from = moment(valid_from, moment.ISO_8601).format("YYYY-MM-DD");
 
   if(valid_to) {
