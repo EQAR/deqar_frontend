@@ -8,9 +8,10 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
+  Collapse,
   Row } from "reactstrap";
 import PropTypes from 'prop-types';
-import { Form } from 'informed';
+import { Form , Scope} from 'informed';
 
 import FormTextField from "../../../components/FormFields/FormTextField";
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
@@ -18,6 +19,13 @@ import FormTextArea from "../../../components/FormFields/FormTextArea";
 import { validateRequired, validateRequiredPastDate } from "../../../utils/validators";
 
 class FormerNameForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      alternativeNameCount: 0,
+    }
+  }
+
 
   setFormApi = (formApi) => {
     const { formValue } = this.props;
@@ -25,6 +33,11 @@ class FormerNameForm extends Component {
 
     if (formValue) {
       this.formApi.setValues(formValue);
+      if ('alternative_names' in formValue) {
+        this.setState({
+          alternativeNameCount: formValue['alternative_names'].length
+        })
+      }
     }
   }
 
@@ -49,8 +62,67 @@ class FormerNameForm extends Component {
     return action;
   }
 
+  renderAlternativeNames = () => {
+    const { alternativeNameCount } = this.state;
+    const { disabled } = this.props;
+    const count = Array.apply(null, {length: alternativeNameCount}).map(Number.call, Number);
+
+    return count.map((c, idx) => {
+      const scopeName = `alternative_names[${idx}]`;
+      return(
+        <React.Fragment key={idx}>
+          <Scope scope={scopeName}>
+            <Row>
+              <Col md={12}>
+                <FormGroup>
+                  <Label for="name_alternative">Alternative Institution Name</Label>
+                  <FormTextField
+                    field={'name'}
+                    placeholder={'Enter alternative institution name'}
+                    validate={validateRequired}
+                    disabled={disabled}
+                  />
+                </FormGroup>
+              </Col>
+              <Col md={12}>
+                <FormGroup>
+                  <Label for="qualification_alternative">Alternative Institution Name, Transliterated</Label>
+                  <FormTextField
+                    field={'transliteration'}
+                    placeholder={'Enter alternative institution name, transliterated'}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+          </Scope>
+        </React.Fragment>
+      )
+    });
+  }
+
+  onAddButtonClick = () => {
+    const { alternativeNameCount } = this.state;
+    if (alternativeNameCount !== 0) {
+      let altNames = this.formApi.getValue('alternative_names');
+      altNames = altNames ? altNames : [{}];
+      const lastAltName = altNames.slice(-1).pop();
+
+      if (lastAltName) {
+        if ('name' in lastAltName) {
+          if (lastAltName.name.length > 0) {
+            this.setState({alternativeNameCount: alternativeNameCount + 1})
+          }
+        }
+      }
+    } else {
+      this.setState({alternativeNameCount: alternativeNameCount + 1})
+    }
+  }
+
   render() {
     const { modalOpen, disabled, formIndex, fieldName } = this.props;
+    const { alternativeNameCount } = this.state;
+
     return(
       <Modal isOpen={modalOpen} toggle={this.onToggle}>
         <Form
@@ -99,17 +171,23 @@ class FormerNameForm extends Component {
                     </FormGroup>
                   </Col>
                 </Row>
-                <Row>
-                  <Col md={12}>
-                    <div className="pull-right">
-                      <Button
-                        type={'button'}
-                        size="sm"
-                        color="secondary"
-                      >Add More...</Button>
-                    </div>
-                  </Col>
-                </Row>
+                  <Collapse isOpen={alternativeNameCount > 0}>
+                    {this.renderAlternativeNames()}
+                  </Collapse>
+                  {disabled ? "" :
+                    <Row>
+                      <Col md={12}>
+                        <div className="pull-right">
+                          <Button
+                            type={'button'}
+                            size="sm"
+                            color="secondary"
+                            onClick={this.onAddButtonClick}
+                          >Add More...</Button>
+                        </div>
+                      </Col>
+                    </Row>
+                  }
                 <Row>
                   <Col md={6}>
                     <FormGroup>
