@@ -41,10 +41,13 @@ class FormerNameForm extends Component {
   }
 
   submitForm = () => {
+    const { formIndex, fieldName, onFormSubmit } = this.props;
+
     this.setState({
       alternativeNameCount: 0
     })
-    this.formApi.submitForm();
+
+    onFormSubmit(this.formApi.getState().values, formIndex, fieldName)
   }
 
   onToggle = () => {
@@ -132,7 +135,7 @@ class FormerNameForm extends Component {
       <Modal isOpen={modalOpen} toggle={this.onToggle}>
         <Form
           getApi={this.setFormApi}
-          onSubmit={(value) => this.props.onFormSubmit(value, formIndex, fieldName)}
+          // onSubmit={(value) => this.props.onFormSubmit(value, formIndex, fieldName)}
           id={`former-name-form-${formIndex}`}
         >
           {({ formState }) => (
