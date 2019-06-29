@@ -156,6 +156,7 @@ class FormerNameForm extends Component {
                         field={'name_official_transliterated'}
                         placeholder={'Enter transliterated form'}
                         disabled={disabled}
+                        validate={validateRoman}
                       />
                     </FormGroup>
                   </Col>
