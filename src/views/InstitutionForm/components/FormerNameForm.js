@@ -11,7 +11,7 @@ import {
   Collapse,
   Row } from "reactstrap";
 import PropTypes from 'prop-types';
-import { Form , Scope} from 'informed';
+import { Form, Scope} from 'informed';
 
 import FormTextField from "../../../components/FormFields/FormTextField";
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
@@ -48,6 +48,9 @@ class FormerNameForm extends Component {
   }
 
   onToggle = () => {
+    this.setState({
+      alternativeNameCount: 0
+    });
     this.props.onToggle();
   }
 
@@ -71,13 +74,13 @@ class FormerNameForm extends Component {
 
     return count.map((c, idx) => {
       const scopeName = `alternative_names[${idx}]`;
-      return(
+      return (
         <React.Fragment key={idx}>
           <Scope scope={scopeName}>
             <Row>
               <Col md={12}>
                 <FormGroup>
-                  <Label for="name_alternative">Alternative Institution Name</Label>
+                  <Label for="name">Alternative Institution Name # {c+1}</Label>
                   <FormTextField
                     field={'name'}
                     placeholder={'Enter alternative institution name'}
@@ -87,7 +90,7 @@ class FormerNameForm extends Component {
               </Col>
               <Col md={12}>
                 <FormGroup>
-                  <Label for="qualification_alternative">Alternative Institution Name, Transliterated</Label>
+                  <Label for="transliteration">Alternative Institution Name, Transliterated # {c+1}</Label>
                   <FormTextField
                     field={'transliteration'}
                     placeholder={'Enter alternative institution name, transliterated'}
@@ -104,9 +107,9 @@ class FormerNameForm extends Component {
 
   onAddButtonClick = () => {
     const { alternativeNameCount } = this.state;
+
     if (alternativeNameCount !== 0) {
-      let altNames = this.formApi.getValue('alternative_names');
-      altNames = altNames ? altNames : [{}];
+      let altNames = this.formApi.getValue('alternative_names') || [{}];
       const lastAltName = altNames.slice(-1).pop();
 
       if (lastAltName) {
@@ -130,7 +133,7 @@ class FormerNameForm extends Component {
         <Form
           getApi={this.setFormApi}
           onSubmit={(value) => this.props.onFormSubmit(value, formIndex, fieldName)}
-          id="former-name-form"
+          id={`former-name-form-${formIndex}`}
         >
           {({ formState }) => (
             <React.Fragment>
@@ -185,7 +188,7 @@ class FormerNameForm extends Component {
                             size="sm"
                             color="secondary"
                             onClick={this.onAddButtonClick}
-                          >Add More...</Button>
+                          >Add Alternative Name</Button>
                         </div>
                       </Col>
                     </Row>

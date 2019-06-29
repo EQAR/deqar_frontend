@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 import { Form } from 'informed';
 
 import FormTextField from "../../../components/FormFields/FormTextField";
+import { validateRoman } from "../../../utils/validators";
 
 
 class AlternativeNameForm extends Component {
@@ -79,6 +80,7 @@ class AlternativeNameForm extends Component {
                       <FormTextField
                         field={'transliteration'}
                         placeholder={'Enter alternative institution name, transliterated'}
+                        validate={validateRoman}
                       />
                     </FormGroup>
                   </Col>

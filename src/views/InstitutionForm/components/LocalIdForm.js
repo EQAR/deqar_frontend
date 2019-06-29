@@ -11,9 +11,9 @@ import {
   Row } from "reactstrap";
 import PropTypes from 'prop-types';
 import { Form } from 'informed';
-import { validateRequired } from "../../../utils/validators";
 import { connect } from "react-redux";
 
+import { validateRequired, validateDateFrom } from "../../../utils/validators";
 import FormTextField from "../../../components/FormFields/FormTextField";
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
 import FormTextArea from "../../../components/FormFields/FormTextArea";
@@ -138,6 +138,7 @@ class LocalIdForm extends Component {
                         field={'identifier_valid_from'}
                         placeholderText={'YYYY-MM-DD'}
                         disabled={disabled}
+                        validate={(value) => validateDateFrom(value, formState.values.identifier_valid_to)}
                       />
                     </FormGroup>
                   </Col>

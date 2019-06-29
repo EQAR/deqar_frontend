@@ -17,7 +17,7 @@ import FormDatePickerField from "../../../components/FormFields/FormDatePickerFi
 import FormTextArea from "../../../components/FormFields/FormTextArea";
 import AssignedList from '../../../components/FormFieldsUncontrolled/AssignedList';
 import InstitutionSelect from './InstitutionSelect';
-import { validateRequired } from "../../../utils/validators";
+import { validateRequired, validateDateFrom } from "../../../utils/validators";
 
 class HierarchicalLinkForm extends Component {
   constructor(props) {
@@ -158,6 +158,7 @@ class HierarchicalLinkForm extends Component {
                       <FormDatePickerField
                         field={'valid_from'}
                         placeholderText={'YYYY-MM-DD'}
+                        validate={(value) => validateDateFrom(value, formState.values.valid_to)}
                         disabled={disabled}
                       />
                     </FormGroup>
