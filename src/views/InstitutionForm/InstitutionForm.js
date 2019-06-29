@@ -94,13 +94,13 @@ class InstitutionForm extends Component {
         const hierarchical_child = response.data.hierarchical_child.map(c => ({...c, position: 'child'}))
         data.historical_links = [...historical_source, ...historical_target];
         data.hierarchical_links = [...hierarchical_child, ...hierarchical_parent];
-        data.flags = data.flags ? [{flag: 'none', flag_message: 'Institution has no flag assigned'}] : data.flags;
+        data.flags = data.flags ? [{flag: 'none', flag_message: 'Institution has no flag assigned', banned: true}] : data.flags;
         this.formApi.setValues(data);
       });
     } else {
       this.formApi.setValues({
         ...values,
-        flags: [{flag: 'none', flag_message: 'Institution has no flag assigned'}]
+        flags: [{flag: 'none', flag_message: 'Institution has no flag assigned', banned: true}]
       })
     }
 

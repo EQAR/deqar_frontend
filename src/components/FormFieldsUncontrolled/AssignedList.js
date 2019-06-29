@@ -35,7 +35,7 @@ const AssignedList = ({values, errors, label, btnLabel, field, fieldName, labelS
               {props.renderDisplayValue(value)}
             </span>
             { disabled || banned ? "" :
-              <div className={style.removeButton + " pull-right"} onClick={() => {this.props.onRemove(idx, fieldName)}}>
+              <div className={style.removeButton + " pull-right"} onClick={() => {props.onRemove(idx, fieldName)}}>
                 <i className="fa fa-close"> </i>
               </div>
             }

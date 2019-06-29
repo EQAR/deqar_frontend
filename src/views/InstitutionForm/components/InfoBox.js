@@ -21,7 +21,6 @@ class InfoBox extends Component {
       openModal: false,
       flagValue: null,
       flagIndex: null,
-      flags: this.props.formState.values.flags
     }
   }
 
@@ -51,7 +50,7 @@ class InfoBox extends Component {
       flags.splice(i, 1);
     }
     if (flags.length === 0) {
-      flags = [{flag: 'none', flag_message: 'Institution has no flag assigned'}];
+      flags = [{flag: 'none', flag_message: 'Institution has no flag assigned', banned: true}];
     }
     this.props.formState.values.flags = flags;
     this.setState({
@@ -120,7 +119,7 @@ class InfoBox extends Component {
 
   render() {
     const { formState, disabled } = this.props;
-    const { openModal, flagValue, flagIndex, flags } = this.state;
+    const { openModal, flagValue, flagIndex } = this.state;
     const values = formState.values;
 
     return (
@@ -165,7 +164,7 @@ class InfoBox extends Component {
                 <AssignedList
                   errors={formState.errors}
                   valueFields={['request']}
-                  values={flags}
+                  values={values.flags}
                   label={'Flags'}
                   btnLabel={'Add'}
                   onRemove={this.onFlagRemove}
