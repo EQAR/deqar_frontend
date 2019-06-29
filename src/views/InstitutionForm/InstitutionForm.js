@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Form } from 'informed';
+import React, { Component, Fragment } from 'react';
+import { Form, Scope} from 'informed';
 import {
   Button,
   Card,
@@ -31,7 +31,7 @@ import HierarchicalLinkForm from './components/HierarchicalLinkForm';
 import InfoBox from './components/InfoBox';
 import country from '../../services/Country';
 import qfEHEALevel from '../../services/QFeheaLevel';
-import { validateRoman, validateRequired, validateRequiredURL } from "../../utils/validators";
+import { validateRoman, validateRequired, validateRequiredURL, validateDateFrom } from "../../utils/validators";
 import agency from '../../services/Agency';
 import { toast } from 'react-toastify';
 import { createFormNormalizer } from './createFormNormalizer';
@@ -100,7 +100,6 @@ class InstitutionForm extends Component {
     } else {
       this.formApi.setValues({
         ...values,
-        countries: [{country: {name_english: ''}, city: ''}],
         flags: [{flag: 'none', flag_message: 'Institution has no flag assigned'}]
       })
     }
@@ -318,36 +317,42 @@ class InstitutionForm extends Component {
 
   renderLocations = formState => {
     const { countries, isEdit } = this.state;
+    const c = this.formApi.getValue('countries') || ['']
 
-    if (this.formApi.getValue('countries') && countries) {
-      return this.formApi.getValue('countries').map((country, i) => {
+    if (countries) {
+      return c.map((country, i) => {
+        const scopeName = `countries[${i}]`;
         return (
-          <Row key={i}>
-            <Col md={6}>
-              <FormGroup>
-              <Label for="country" className={'required'}>Country</Label>
-                <FormSelectField
-                  field={`countries[${i}].country`}
-                  options={countries}
-                  placeholder={'Please select'}
-                  labelField={'name_english'}
-                  valueField={'id'}
-                  disabled={!isEdit}
-                  validate={validateRequired}
+          <Fragment key={i}>
+            <Scope scope={scopeName}>
+              <Row key={i}>
+                <Col md={6}>
+                  <FormGroup>
+                  <Label for="country" className={'required'}>Country</Label>
+                  <FormSelectField
+                    field={'country'}
+                    options={countries}
+                    placeholder={'Please select'}
+                    labelField={'name_english'}
+                    valueField={'id'}
+                    disabled={!isEdit}
+                    validate={validateRequired}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={6}>
+                  <FormGroup>
+                  <Label for="city">City</Label>
+                  <FormTextField
+                    field={'city'}
+                    placeholder={'Enter city name'}
+                    disabled={!isEdit}
                   />
-              </FormGroup>
-            </Col>
-            <Col md={6}>
-              <FormGroup>
-              <Label for="city">City</Label>
-                <FormTextField
-                  field={`countries[${i}].city`}
-                  placeholder={'Enter city name'}
-                  disabled={!isEdit}
-                />
-              </FormGroup>
-            </Col>
-          </Row>
+                  </FormGroup>
+                </Col>
+              </Row>
+            </Scope>
+          </Fragment>
         )
       });
     }
@@ -565,6 +570,7 @@ class InstitutionForm extends Component {
                               field={'founding_date'}
                               placeholderText={'Enter year'}
                               disabled={!isEdit}
+                              validate={(value) => validateDateFrom(value, formState.values.closure_date)}
                               />
                           </FormGroup>
                         </Col>
