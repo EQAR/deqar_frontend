@@ -14,7 +14,6 @@ import { Form } from 'informed';
 import Select from 'react-select';
 
 import FormTextArea from "../../../components/FormFields/FormTextArea";
-import FormSelectField from '../../../components/FormFields/FormSelectField';
 import agency from '../../../services/Agency';
 import { validateRequired } from "../../../utils/validators";
 
@@ -75,7 +74,7 @@ class FlagForm extends Component {
   )
 
   renderActionName = () => {
-    const { formIndex, disabled } = this.props;
+    const { formIndex } = this.props;
     let action = '';
 
     if (Number.isInteger(formIndex)) {
@@ -88,7 +87,7 @@ class FlagForm extends Component {
   }
 
   render() {
-    const { modalOpen, disabled, formIndex } = this.props;
+    const { modalOpen, formIndex } = this.props;
     const { agencies, flags } = this.state;
 
     return(

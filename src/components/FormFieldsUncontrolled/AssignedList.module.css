@@ -30,6 +30,7 @@
 }
 
 .ListGroupItemName {
+  width: 100%;
   color: hsl(0,0%,40%);
   text-decoration: underline;
   text-decoration-style: dotted;
