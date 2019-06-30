@@ -566,7 +566,6 @@ class InstitutionForm extends Component {
                             fieldName={'names_actual[0].alternative_names'}
                             formIndex={formIndex}
                             formValue={alternativeNameValue}
-                            disabled={!isEdit}
                           />
                           <AssignedList
                             errors={formState.errors}
@@ -580,7 +579,6 @@ class InstitutionForm extends Component {
                             onClick={this.onAltenativeNameClick}
                             field={'names_actual[0].alternative_names'}
                             fieldName={'names_actual[0].alternative_names'}
-                            disabled={!isEdit}
                             />
                         </Col>
                       </Row>
@@ -648,7 +646,6 @@ class InstitutionForm extends Component {
                             formValue={localIDValue}
                             disabled={localIDDisabled}
                             localIDs={formState.values.identifiers_local}
-                            disabled={!isEdit}
                           />
                           <AssignedList
                             errors={formState.errors}
@@ -663,7 +660,6 @@ class InstitutionForm extends Component {
                             field={'identifiers_local'}
                             fieldName={'identifiers_local'}
                             validate={this.validateAgency}
-                            disabled={!isEdit}
                           />
                         </Col>
                       </Row>
