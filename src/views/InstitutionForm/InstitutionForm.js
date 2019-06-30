@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Form, Scope} from 'informed';
 import {
-  Button,
   Card,
   CardBody,
   CardFooter,
@@ -13,9 +12,9 @@ import {
   Row
 } from "reactstrap";
 import PropTypes from 'prop-types';
-import { Link } from "react-router-dom";
 import Select from 'react-select';
 import { connect } from "react-redux";
+import {withRouter} from "react-router-dom";
 
 import FormTextField from '../../components/FormFields/FormTextField';
 import FormSelectField from '../../components/FormFields/FormSelectField';
@@ -23,6 +22,7 @@ import FormDatePickerField from "../../components/FormFields/FormDatePickerField
 import institution from '../../services/Institution';
 import style from './InstitutionForm.module.css';
 import AssignedList from '../../components/FormFieldsUncontrolled/AssignedList';
+import FormButtons from '../../components/FormFieldsUncontrolled/FormButtons';
 import AlternativeNameForm from './components/AlternativeNameForm';
 import FormerNameForm from './components/FormerNameForm';
 import LocalIdForm from './components/LocalIdForm';
@@ -35,6 +35,7 @@ import { validateRoman, validateRequired, validateRequiredURL, validateDateFrom 
 import agency from '../../services/Agency';
 import { toast } from 'react-toastify';
 import { createFormNormalizer } from './createFormNormalizer';
+import FormAlert from './components/FormAlert'
 
 
 class InstitutionForm extends Component {
@@ -55,12 +56,16 @@ class InstitutionForm extends Component {
       countries: null,
       infoBoxOpen: true,
       agencies: null,
-      localIDDisabled: true
+      localIDDisabled: true,
+      loading: false,
+      alertVisible: false,
+      nonFieldErrors: []
     }
   }
 
   componentDidMount() {
     const { formType, isAdmin } = this.props;
+    console.log(this.props)
 
     this.setState({
       isEdit: isAdmin || this.notView(formType),
@@ -124,6 +129,14 @@ class InstitutionForm extends Component {
   setFormApi = (formApi) => {
     this.formApi = formApi;
   }
+
+  toggleLoading = () => {
+    this.setState({
+      loading: !this.state.loading
+    });
+  }
+
+  toggleInfoBox = () => this.setState({ infoBoxOpen: !this.state.infoBoxOpen });
 
   formTitle() {
     let { formType } = this.state;
@@ -358,6 +371,28 @@ class InstitutionForm extends Component {
     }
   }
 
+  renderError = () => {
+    const {alertVisible, nonFieldErrors} = this.state;
+
+    return (
+      <Row>
+        <Col md={12}>
+          <FormAlert
+            visible={alertVisible}
+            onClose={this.onAlertClose}
+            errorMessage={nonFieldErrors}
+          />
+        </Col>
+      </Row>
+    )
+  }
+
+  onAlertClose = () => {
+    this.setState({
+      alertVisible: false
+    });
+  }
+
   renderQFEheaLevels = value => value.level;
 
   getLabel = (option) => option.level;
@@ -368,10 +403,38 @@ class InstitutionForm extends Component {
     this.formApi.submitForm();
   }
 
-  createInstitution = (value) =>{
-    institution.submitInstitution(createFormNormalizer(value)).then((r) => console.log(r)).catch(error => {
-      console.log(error.response, error, error.request)
-  })
+  createInstitution = (value) => {
+    this.toggleLoading();
+    institution.submitInstitution(createFormNormalizer(value)).then((r) => {
+      this.toggleLoading();
+      toast.success("Institution was created.");
+      this.props.history.push('/reference/institutions');
+    }).catch(error => {
+      console.log(error)
+      const errors = error.response.data.errors || error.response.data;
+
+      if ('non_field_errors' in errors) {
+        this.setState({
+          alertVisible: true,
+          nonFieldErrors: errors.non_field_errors
+        });
+        this.toggleLoading();
+      }
+
+      Object.keys(errors).forEach(key => {
+        if (errors[key].non_field_errors) {
+          this.setState({
+            alertVisible: true,
+            nonFieldErrors: errors[key].non_field_errors
+          });
+        } else {
+          if (this.formApi.fieldExists(key)) {
+            this.formApi.setError(key, errors[key]);
+          }
+        }
+      });
+      this.toggleLoading();
+    })
   }
 
   submitInstitutionForm = (value) => {
@@ -393,9 +456,10 @@ class InstitutionForm extends Component {
       isEdit,
       localIDValue,
       localIDDisabled,
-      formIndex
+      formIndex,
+      loading
     } = this.state;
-    const { backPath } = this.props;
+    const { backPath, isAdmin, formType } = this.props;
 
     return  qFeheaLevels ? (
       <Form
@@ -411,6 +475,7 @@ class InstitutionForm extends Component {
               </Row>
             </CardHeader>
             <CardBody>
+              {this.renderError()}
               <React.Fragment>
                 <CardBody>
                   <Row>
@@ -570,7 +635,7 @@ class InstitutionForm extends Component {
                               field={'founding_date'}
                               placeholderText={'Enter year'}
                               disabled={!isEdit}
-                              validate={(value) => validateDateFrom(value, formState.values.closure_date)}
+                              validate={(value) => formState.values.closure_date ? validateDateFrom(value, formState.values.closure_date) : null}
                               />
                           </FormGroup>
                         </Col>
@@ -693,6 +758,21 @@ class InstitutionForm extends Component {
                 </CardBody>
               </React.Fragment>
             </CardBody>
+            <CardFooter>
+              <FormButtons
+                backPath={backPath}
+                currentPath={backPath}
+                adminCondition={'institution'}
+                userIsAdmin={isAdmin}
+                buttonText={'Institution'}
+                // recordID={reportID}
+                formType={formType}
+                infoBoxOpen={infoBoxOpen}
+                infoBoxToggle={this.toggleInfoBox}
+                submitForm={this.formApi.submitForm}
+                loading={loading}
+              />
+            </CardFooter>
             <CardFooter className={style.infoFooter}>
               <Collapse isOpen={infoBoxOpen}>
                 <InfoBox
@@ -701,24 +781,7 @@ class InstitutionForm extends Component {
                 />
               </Collapse>
             </CardFooter>
-            <CardFooter>
-              <Link to={{pathname: `${backPath}`}}>
-                <Button
-                  size="sm"
-                  color="secondary"
-                  >
-                  Close
-                </Button>
-              </Link>
-              <Button
-                size="sm"
-                color="primary"
-                className={'pull-right'}
-                onClick={this.submitForm}
-              >
-                Save Record
-              </Button>
-            </CardFooter>
+            <CardFooter></CardFooter>
           </Card>
         )}
       </Form>
@@ -736,4 +799,4 @@ const mapStateToProps = (state) => {
   return {isAdmin: state.user.is_admin}
 }
 
-export default connect(mapStateToProps)(InstitutionForm);
+export default withRouter(connect(mapStateToProps)(InstitutionForm));
