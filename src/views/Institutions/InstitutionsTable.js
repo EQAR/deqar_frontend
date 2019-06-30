@@ -13,7 +13,7 @@ const InstitutionsTable = (props) => {
   const linkRenderer = (row) => {
     return(
       <Link
-        to={{pathname: `/reference/institutions/view/${row.original.id}`}}
+        to={{pathname: `/reference/institutions/edit/${row.original.id}`}}
         className={style.Link}
       >
         {row.original.name_primary}

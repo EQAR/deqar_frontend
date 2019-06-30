@@ -8,7 +8,7 @@ const InstitutionDetails = (props) => {
     <React.Fragment>
       <InstitutionForm
         formType={param}
-        formID={parseInt(id, 10)}
+        institutionID={parseInt(id, 10)}
         backPath={'/reference/institutions'}
       />
     </React.Fragment>

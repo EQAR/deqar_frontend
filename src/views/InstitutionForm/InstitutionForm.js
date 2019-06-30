@@ -68,7 +68,7 @@ class InstitutionForm extends Component {
     const { formType, isAdmin } = this.props;
 
     this.setState({
-      isEdit: isAdmin || this.notView(formType),
+      isEdit: isAdmin,
       formType: formType
     });
     this.populate();
@@ -87,11 +87,11 @@ class InstitutionForm extends Component {
   notView = (formType) => formType !== 'view'
 
   populate = () => {
-    const { formID, formType, isAdmin } = this.props;
+    const { institutionID, formType, isAdmin } = this.props;
     const values = this.formApi.getState().values
 
     if (formType !== 'create') {
-      institution.getInstitution(formID).then((response) => {
+      institution.getInstitution(institutionID).then((response) => {
         let data = response.data
         const historical_source = response.data.historical_source.map(s => ({...s, direction: 'source'}))
         const historical_target = response.data.historical_target.map(t => ({...t, direction: 'target'}))
@@ -418,7 +418,40 @@ class InstitutionForm extends Component {
       this.props.history.push('/reference/institutions');
     }).catch(error => {
       const errors = error.response.data.errors || error.response.data;
+      if ('non_field_errors' in errors) {
+        this.setState({
+          alertVisible: true,
+          nonFieldErrors: errors.non_field_errors
+        });
+        this.toggleLoading();
+      }
 
+      Object.keys(errors).forEach(key => {
+        if (errors[key].non_field_errors) {
+          this.setState({
+            alertVisible: true,
+            nonFieldErrors: errors[key].non_field_errors
+          });
+        } else {
+          if (this.formApi.fieldExists(key)) {
+            this.formApi.setError(key, errors[key]);
+          }
+        }
+      });
+      this.toggleLoading();
+    })
+  }
+
+  updteInstitution = (value) => {
+    const { institutionID } = this.props;
+
+    this.toggleLoading();
+    institution.updateInstitution(createFormNormalizer(value), institutionID).then((r) => {
+      this.toggleLoading();
+      toast.success("Institution was created.");
+      this.props.history.push('/reference/institutions');
+    }).catch(error => {
+      const errors = error.response.data.errors || error.response.data;
       if ('non_field_errors' in errors) {
         this.setState({
           alertVisible: true,
@@ -533,6 +566,7 @@ class InstitutionForm extends Component {
                             fieldName={'names_actual[0].alternative_names'}
                             formIndex={formIndex}
                             formValue={alternativeNameValue}
+                            disabled={!isEdit}
                           />
                           <AssignedList
                             errors={formState.errors}
@@ -546,6 +580,7 @@ class InstitutionForm extends Component {
                             onClick={this.onAltenativeNameClick}
                             field={'names_actual[0].alternative_names'}
                             fieldName={'names_actual[0].alternative_names'}
+                            disabled={!isEdit}
                             />
                         </Col>
                       </Row>
@@ -613,6 +648,7 @@ class InstitutionForm extends Component {
                             formValue={localIDValue}
                             disabled={localIDDisabled}
                             localIDs={formState.values.identifiers_local}
+                            disabled={!isEdit}
                           />
                           <AssignedList
                             errors={formState.errors}
@@ -627,6 +663,7 @@ class InstitutionForm extends Component {
                             field={'identifiers_local'}
                             fieldName={'identifiers_local'}
                             validate={this.validateAgency}
+                            disabled={!isEdit}
                           />
                         </Col>
                       </Row>
@@ -782,10 +819,9 @@ class InstitutionForm extends Component {
               <FormButtons
                 backPath={backPath}
                 currentPath={backPath}
-                adminCondition={'institution'}
+                adminCondition={'institutions'}
                 userIsAdmin={isAdmin}
                 buttonText={'Institution'}
-                // recordID={reportID}
                 formType={formType}
                 infoBoxOpen={infoBoxOpen}
                 infoBoxToggle={this.toggleInfoBox}

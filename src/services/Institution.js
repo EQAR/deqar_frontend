@@ -3,7 +3,7 @@ import {
   GET_INSTITUTIONS,
   GET_INSTITUTION,
   GET_HISTORICAL_RELATION_TYPES,
-  POST_INSTITUTION
+  MANAGE_INSTITUTION
  } from "./config-api";
 
 
@@ -41,9 +41,12 @@ class Institution {
   }
 
   submitInstitution = (formValues) => {
-    console.log(formValues)
-    return axios.post(POST_INSTITUTION, formValues);
-  };
+    return axios.post(MANAGE_INSTITUTION, formValues);
+  }
+
+  updateInstitution = (formValues, institutionID) => {
+    return axios.post(`${MANAGE_INSTITUTION}${institutionID}/`, formValues);
+  }
 }
 
 const institution = new Institution();

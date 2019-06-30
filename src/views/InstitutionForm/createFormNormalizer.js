@@ -1,4 +1,5 @@
 export const createFormNormalizer = (formValues) => {
+  console.log(formValues)
   let normalizedValues = {};
   const names = formValues.names_former
     ? [...formValues.names_actual, ...formValues.names_former]
@@ -53,5 +54,6 @@ export const createFormNormalizer = (formValues) => {
       normalizedValues[key] = formValues[key];
     }
   });
+  console.log(normalizedValues)
   return normalizedValues;
 }
