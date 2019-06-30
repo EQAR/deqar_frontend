@@ -82,8 +82,8 @@ class HierarchicalLinkForm extends Component {
   renderInstitutions = value => value ? value.name_primary : null;
 
   changeLinkType = (value) => {
-    const values = this.formApi.getState().values
-    this.formApi.setValues({...values, position: value.value})
+    const values = this.formApi.getState().values;
+    this.formApi.setValues({...values, position: value.value});
   }
 
   getLinkValue = (formState) => (

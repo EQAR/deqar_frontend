@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Form, Scope} from 'informed';
 import {
+  Button,
   Card,
   CardBody,
   CardFooter,
@@ -65,7 +66,6 @@ class InstitutionForm extends Component {
 
   componentDidMount() {
     const { formType, isAdmin } = this.props;
-    console.log(this.props)
 
     this.setState({
       isEdit: isAdmin || this.notView(formType),
@@ -330,7 +330,7 @@ class InstitutionForm extends Component {
 
   renderLocations = formState => {
     const { countries, isEdit } = this.state;
-    const c = this.formApi.getValue('countries') || ['']
+    const c = this.formApi.getValue('countries') || [''];
 
     if (countries) {
       return c.map((country, i) => {
@@ -369,6 +369,13 @@ class InstitutionForm extends Component {
         )
       });
     }
+  }
+
+  onAddCountryClick = () => {
+    let countries = this.formApi.getValue('countries');
+    const values = this.formApi.getState().values;
+    countries = [...countries, {country: null, city: null}];
+    this.formApi.setValues({...values, countries: countries});
   }
 
   renderError = () => {
@@ -627,6 +634,20 @@ class InstitutionForm extends Component {
                     </Col>
                     <Col md={6}>
                       {this.renderLocations(formState)}
+                      {isEdit && formState.values.countries ?
+                        <Row>
+                          <Col md={12}>
+                            <div className="pull-right">
+                              <Button
+                                type={'button'}
+                                size="sm"
+                                color="secondary"
+                                onClick={this.onAddCountryClick}
+                              >Add New Location</Button>
+                            </div>
+                          </Col>
+                        </Row> : null
+                      }
                       <Row>
                         <Col md={6}>
                           <FormGroup>
