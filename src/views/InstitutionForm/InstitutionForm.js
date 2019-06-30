@@ -417,7 +417,6 @@ class InstitutionForm extends Component {
       toast.success("Institution was created.");
       this.props.history.push('/reference/institutions');
     }).catch(error => {
-      console.log(error)
       const errors = error.response.data.errors || error.response.data;
 
       if ('non_field_errors' in errors) {
