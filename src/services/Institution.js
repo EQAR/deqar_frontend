@@ -45,7 +45,7 @@ class Institution {
   }
 
   updateInstitution = (formValues, institutionID) => {
-    return axios.post(`${MANAGE_INSTITUTION}${institutionID}/`, formValues);
+    return axios.put(`${MANAGE_INSTITUTION}${institutionID}/`, formValues);
   }
 }
 

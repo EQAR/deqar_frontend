@@ -44,7 +44,7 @@ class InstitutionForm extends Component {
     super(props);
     this._isMounted = true;
     this.state = {
-      isEdit: false,
+      isFullEdit: false,
       openModal: null,
       formType: null,
       formIndex: null,
@@ -67,17 +67,17 @@ class InstitutionForm extends Component {
   componentDidMount() {
     const { formType, isAdmin } = this.props;
 
-    this.setState({
-      isEdit: isAdmin,
-      formType: formType
-    });
-    this.populate();
-
     // this.setState({
-    //   isEdit: true,
+    //   isFullEdit: isAdmin,
     //   formType: formType
     // });
     // this.populate();
+
+    this.setState({
+      isFullEdit: true,
+      formType: formType
+    });
+    this.populate();
   }
 
   componentWillUnmount = () => {
@@ -99,7 +99,8 @@ class InstitutionForm extends Component {
         const hierarchical_child = response.data.hierarchical_child.map(c => ({...c, position: 'child'}))
         data.historical_links = [...historical_source, ...historical_target];
         data.hierarchical_links = [...hierarchical_child, ...hierarchical_parent];
-        data.flags = data.flags ? [{flag: 'none', flag_message: 'Institution has no flag assigned', banned: true}] : data.flags;
+        data.names_actual.name_official_transliterated = data.names_actual.name_official_transliterated ? data.names_actual.name_official_transliterated : null;
+        data.flags = !data.flags || data.flags.length === 0 ? [{flag: 'none', flag_message: 'Institution has no flag assigned', banned: true}] : data.flags;
         this.formApi.setValues(data);
       });
     } else {
@@ -329,7 +330,7 @@ class InstitutionForm extends Component {
   }
 
   renderLocations = formState => {
-    const { countries, isEdit } = this.state;
+    const { countries, isFullEdit } = this.state;
     const c = this.formApi.getValue('countries') || [''];
 
     if (countries) {
@@ -348,7 +349,7 @@ class InstitutionForm extends Component {
                     placeholder={'Please select'}
                     labelField={'name_english'}
                     valueField={'id'}
-                    disabled={!isEdit}
+                    disabled={!isFullEdit}
                     validate={validateRequired}
                     />
                   </FormGroup>
@@ -359,7 +360,7 @@ class InstitutionForm extends Component {
                   <FormTextField
                     field={'city'}
                     placeholder={'Enter city name'}
-                    disabled={!isEdit}
+                    disabled={!isFullEdit}
                   />
                   </FormGroup>
                 </Col>
@@ -410,77 +411,50 @@ class InstitutionForm extends Component {
     this.formApi.submitForm();
   }
 
-  createInstitution = (value) => {
-    this.toggleLoading();
-    institution.submitInstitution(createFormNormalizer(value)).then((r) => {
-      this.toggleLoading();
-      toast.success("Institution was created.");
-      this.props.history.push('/reference/institutions');
-    }).catch(error => {
-      const errors = error.response.data.errors || error.response.data;
-      if ('non_field_errors' in errors) {
-        this.setState({
-          alertVisible: true,
-          nonFieldErrors: errors.non_field_errors
-        });
-        this.toggleLoading();
-      }
+  getMethod = (value, institutionID) => {
+    const { formType } = this.props;
 
-      Object.keys(errors).forEach(key => {
-        if (errors[key].non_field_errors) {
-          this.setState({
-            alertVisible: true,
-            nonFieldErrors: errors[key].non_field_errors
-          });
-        } else {
-          if (this.formApi.fieldExists(key)) {
-            this.formApi.setError(key, errors[key]);
-          }
-        }
-      });
-      this.toggleLoading();
-    })
-  }
-
-  updteInstitution = (value) => {
-    const { institutionID } = this.props;
-
-    this.toggleLoading();
-    institution.updateInstitution(createFormNormalizer(value), institutionID).then((r) => {
-      this.toggleLoading();
-      toast.success("Institution was created.");
-      this.props.history.push('/reference/institutions');
-    }).catch(error => {
-      const errors = error.response.data.errors || error.response.data;
-      if ('non_field_errors' in errors) {
-        this.setState({
-          alertVisible: true,
-          nonFieldErrors: errors.non_field_errors
-        });
-        this.toggleLoading();
-      }
-
-      Object.keys(errors).forEach(key => {
-        if (errors[key].non_field_errors) {
-          this.setState({
-            alertVisible: true,
-            nonFieldErrors: errors[key].non_field_errors
-          });
-        } else {
-          if (this.formApi.fieldExists(key)) {
-            this.formApi.setError(key, errors[key]);
-          }
-        }
-      });
-      this.toggleLoading();
-    })
+    return formType === 'create' ?
+    institution.submitInstitution(value) :
+    institution.updateInstitution(value, institutionID)
   }
 
   submitInstitutionForm = (value) => {
-    const { formType } = this.props;
-    formType === 'create'
-    ? this.createInstitution(value)
-    : this.updteInstitution(value)
+    const { institutionID, formType } = this.props;
+    const messages = {
+      create: "Institution was created.",
+      edit: "Institution was updated."
+    }
+
+    this.toggleLoading();
+    this.getMethod(createFormNormalizer(value), institutionID).then((r) => {
+      this.toggleLoading();
+      toast.success(messages[formType]);
+      this.props.history.push('/reference/institutions');
+    }).catch(error => {
+      const errors = error.response.data.errors || error.response.data;
+      if ('non_field_errors' in errors) {
+        this.setState({
+          alertVisible: true,
+          nonFieldErrors: errors.non_field_errors
+        });
+        this.toggleLoading();
+      }
+
+      Object.keys(errors).forEach(key => {
+        if (errors[key].non_field_errors) {
+          this.setState({
+            alertVisible: true,
+            nonFieldErrors: errors[key].non_field_errors
+          });
+        } else {
+          if (this.formApi.fieldExists(key)) {
+            this.formApi.setError(key, errors[key]);
+          }
+        }
+      });
+      this.toggleLoading();
+    })
   }
 
   render() {
@@ -492,7 +466,7 @@ class InstitutionForm extends Component {
       hierarchicalLinkValue,
       infoBoxOpen,
       qFeheaLevels,
-      isEdit,
+      isFullEdit,
       localIDValue,
       localIDDisabled,
       formIndex,
@@ -526,7 +500,7 @@ class InstitutionForm extends Component {
                             <FormTextField
                               field={'names_actual[0].name_official'}
                               placeholder={'Enter official institution name'}
-                              disabled={!isEdit}
+                              disabled={!isFullEdit}
                               validate={validateRequired}
                             />
                           </FormGroup>
@@ -539,7 +513,7 @@ class InstitutionForm extends Component {
                             <FormTextField
                               field={'names_actual[0].name_official_transliterated'}
                               placeholder={'Enter transliterated form'}
-                              disabled={!isEdit}
+                              disabled={!isFullEdit}
                               validate={validateRoman}
                             />
                           </FormGroup>
@@ -552,7 +526,7 @@ class InstitutionForm extends Component {
                             <FormTextField
                               field={'names_actual[0].name_english'}
                               placeholder={'Enter English form'}
-                              disabled={!isEdit}
+                              disabled={!isFullEdit}
                             />
                           </FormGroup>
                         </Col>
@@ -585,12 +559,11 @@ class InstitutionForm extends Component {
                       <Row>
                         <Col md={6}>
                           <FormGroup>
-                          <Label for="acronym" className={'required'}>Institution Acronym</Label>
+                          <Label for="acronym">Institution Acronym</Label>
                             <FormTextField
                               field={'names_actual[0].acronym'}
                               placeholder={'Enter acronym'}
-                              disabled={!isEdit}
-                              validate={validateRequired}
+                              disabled={!isFullEdit}
                             />
                           </FormGroup>
                         </Col>
@@ -602,7 +575,7 @@ class InstitutionForm extends Component {
                             <FormTextField
                               field={'website_link'}
                               placeholder={'Enter institution website'}
-                              disabled={!isEdit}
+                              disabled={!isFullEdit}
                               validate={validateRequiredURL}
                             />
                           </FormGroup>
@@ -617,7 +590,7 @@ class InstitutionForm extends Component {
                             fieldName={'names_former'}
                             formIndex = {formIndex}
                             formValue={formerNameValue}
-                            disabled={!isEdit}
+                            disabled={!isFullEdit}
                             />
                           <AssignedList
                             errors={formState.errors}
@@ -631,7 +604,7 @@ class InstitutionForm extends Component {
                             renderDisplayValue={this.renderFormerNames}
                             field={'names_former'}
                             fieldName={'names_former'}
-                            disabled={!isEdit}
+                            disabled={!isFullEdit}
                             />
                         </Col>
                       </Row>
@@ -666,7 +639,7 @@ class InstitutionForm extends Component {
                     </Col>
                     <Col md={6}>
                       {this.renderLocations(formState)}
-                      {isEdit && formState.values.countries ?
+                      {isFullEdit && formState.values.countries ?
                         <Row>
                           <Col md={12}>
                             <div className="pull-right">
@@ -687,7 +660,7 @@ class InstitutionForm extends Component {
                             <FormDatePickerField
                               field={'founding_date'}
                               placeholderText={'Enter year'}
-                              disabled={!isEdit}
+                              disabled={!isFullEdit}
                               validate={(value) => formState.values.closure_date ? validateDateFrom(value, formState.values.closure_date) : null}
                               />
                           </FormGroup>
@@ -698,7 +671,7 @@ class InstitutionForm extends Component {
                             <FormDatePickerField
                               field={'closure_date'}
                               placeholderText={'Enter year'}
-                              disabled={!isEdit}
+                              disabled={!isFullEdit}
                             />
                           </FormGroup>
                         </Col>
@@ -710,7 +683,7 @@ class InstitutionForm extends Component {
                                 <FormGroup>
                                   <Label for="country">QF-EHEA Levels</Label>
                                   <Select
-                                    className={!isEdit ? style.hidden : null}
+                                    className={!isFullEdit ? style.hidden : null}
                                     options={this.getQFEheaOptions(qFeheaLevels)}
                                     onChange={this.changeQFEheaLvels}
                                     placeholder={'Select select multiple, if necessary'}
@@ -733,7 +706,7 @@ class InstitutionForm extends Component {
                                     field={'qf_ehea_levels'}
                                     fieldName={'qf_ehea_levels'}
                                     onRemove={this.onRemove}
-                                    disabled={!isEdit}
+                                    disabled={!isFullEdit}
                                     />
                                 </FormGroup>
                               </Col>
@@ -747,7 +720,7 @@ class InstitutionForm extends Component {
                             <FormTextField
                               field={'other_comment'}
                               placeholder={'Enter comment, if applicable'}
-                              disabled={!isEdit}
+                              disabled={!isFullEdit}
                               />
                           </FormGroup>
                         </Col>
@@ -760,7 +733,7 @@ class InstitutionForm extends Component {
                             onFormSubmit={this.onFormSubmit}
                             formValue={historicalLinkValue}
                             formIndex={formIndex}
-                            disabled={!isEdit}
+                            disabled={!isFullEdit}
                             fieldName={'historical_links'}
                           />
                           <AssignedList
@@ -775,7 +748,7 @@ class InstitutionForm extends Component {
                             renderDisplayValue={this.renderHistoricalLinks}
                             field={'historical_links'}
                             fieldName={'historical_links'}
-                            disabled={!isEdit}
+                            disabled={!isFullEdit}
                           />
                         </Col>
                       </Row>
@@ -787,7 +760,7 @@ class InstitutionForm extends Component {
                             onFormSubmit={this.onFormSubmit}
                             formValue={hierarchicalLinkValue}
                             formIndex={formIndex}
-                            disabled={!isEdit}
+                            disabled={!isFullEdit}
                             fieldName={'hierarchical_links'}
                             />
                           <AssignedList
@@ -802,7 +775,7 @@ class InstitutionForm extends Component {
                             renderDisplayValue={this.renderHierarchicalLinks}
                             field={'hierarchical_links'}
                             fieldName={'hierarchical_links'}
-                            disabled={!isEdit}
+                            disabled={!isFullEdit}
                           />
                         </Col>
                       </Row>
@@ -829,7 +802,7 @@ class InstitutionForm extends Component {
               <Collapse isOpen={infoBoxOpen}>
                 <InfoBox
                   formState={formState}
-                  disabled={!isEdit}
+                  disabled={!isFullEdit}
                 />
               </Collapse>
             </CardFooter>

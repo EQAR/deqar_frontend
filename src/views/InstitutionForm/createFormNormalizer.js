@@ -43,7 +43,7 @@ export const createFormNormalizer = (formValues) => {
     } else if (key === 'names_former') {
       normalizedValues['names'] = names;
     } else if (key === 'flags') {
-      normalizedValues['flags'] = formValues[key][0].flag !== 'none' ? formValues[key] : [];
+      normalizedValues['flags'] = formValues[key][0] && formValues[key][0].flag !== 'none' ? formValues[key] : [];
     } else if (key === 'identifiers_local') {
       normalizedValues['identifiers'] = formValues[key].map(id => ({
         ...id,
