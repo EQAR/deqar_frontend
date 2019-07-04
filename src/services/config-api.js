@@ -47,6 +47,8 @@ export const REMOVE_REPORT_FLAG = ADMINAPI_URL + '/reports/remove_flag';
 // Institution endpoints
 export const GET_INSTITUTIONS = ADMINAPI_URL + '/select/institutions/';
 export const GET_INSTITUTION = ADMINAPI_URL + '/institutions/';
+export const GET_HISTORICAL_RELATION_TYPES = ADMINAPI_URL + '/select/institution_historical_relationship_types/';
+export const MANAGE_INSTITUTION = ADMINAPI_URL + '/institutions/';
 
 // Language endpoints
 export const GET_LANGUAGES = ADMINAPI_URL + '/select/language/';

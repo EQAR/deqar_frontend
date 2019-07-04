@@ -3,7 +3,11 @@ import {
   Card,
   CardBody,
   CardHeader,
+  CardFooter,
+  Button,
 } from "reactstrap";
+import {Link} from "react-router-dom";
+
 import InstitutionsTable from './InstitutionsTable';
 import style from "./Institutions.module.css"
 import toggleInstitutionsTableFilter from "./actions/toggleInstitutionsTableFilter";
@@ -15,7 +19,7 @@ const Institutions = (props) => {
     props.toggleInstitutionsTableFilter()
   };
 
-  return(
+  return (
     <div className="animated fadeIn">
       <Card>
         <CardHeader>
@@ -29,10 +33,24 @@ const Institutions = (props) => {
         <CardBody className={style.InstitutionsCardBody}>
           <InstitutionsTable/>
         </CardBody>
+        <CardFooter>
+        <Button
+          size="sm"
+          color="primary"
+          className={'pull-right'}
+        >
+          <Link
+            to={{pathname: '/reference/institutions/create'}}
+            className={style.Link}
+          >
+            Add New Institution
+          </Link>
+        </Button>
+        </CardFooter>
       </Card>
     </div>
   )
-};
+}
 
 const mapStateToProps = (store) => {
   return {}

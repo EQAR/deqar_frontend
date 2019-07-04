@@ -7,7 +7,6 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
   const { setValue, setTouched, setError } = fieldApi;
   const { onChange, onBlur, initialValue, forwardedRef, labelField, valueField, disabled, placeholder, includeID,
     isMulti, ...rest } = props;
-
   const borderColor = fieldApi.getError() ? '#f86c6b' : '#e4e7ea';
 
   const customStyles = {
@@ -40,11 +39,11 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
     indicatorsContainer: (provided, state) => ({
       display: state.isDisabled ? 'none' : 'flex'
     })
-  };
+  }
 
   const getLabel = (option) => {
-    if(includeID) {
-      if(includeID === 'back') {
+    if (includeID) {
+      if (includeID === 'back') {
         return (<React.Fragment>{option[labelField]} - ID {option['id']}</React.Fragment>)
       } else {
         return (<React.Fragment>{option['id']} - {option[labelField]}</React.Fragment>)
@@ -52,7 +51,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
     } else {
       return option[labelField]
     }
-  };
+  }
 
   const getValue = () => {
 
@@ -60,9 +59,9 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
       const val = value || initialValue || [];
 
       const vals =  val.map((v) => {
-        if(v.hasOwnProperty(labelField)) {
+        if (v.hasOwnProperty(labelField)) {
           return v[labelField]
-        } else{
+        } else {
           return ''
         }
       });
@@ -76,7 +75,13 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
         return ''
       }
     }
-  };
+  }
+
+  const changeValue = (value, action) =>  {
+    setError('');
+    setValue(value);
+    onChange ? onChange(value) : setValue(value);
+  }
 
   return (
     <React.Fragment>
@@ -95,16 +100,10 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
           ref={forwardedRef}
           defaultValue={value || initialValue || ''}
           value={value || initialValue || ''}
-          onChange={(value, action) => {
-            setError('');
-            setValue(value);
-            if (onChange) {
-              onChange(value);
-            }
-          }}
+          onChange={(value, action) => changeValue(value, action)}
           onBlur={e => {
             setTouched();
-            if (onBlur) {
+            if  (onBlur) {
               onBlur(e);
             }
           }}
@@ -112,7 +111,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
           placeholder={disabled ? "" : placeholder}
           isClearable={true}
           getOptionLabel={getLabel}
-          getOptionValue={(option) => {return option[valueField]}}
+          getOptionValue={(option) => option[valueField]}
         />
       }
       {fieldState.error ? (
@@ -120,10 +119,10 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
       ) : null}
     </React.Fragment>
   )
-});
+})
 
 FormSelectField.defaultProps = {
   includeID: false
-};
+}
 
 export default FormSelectField;

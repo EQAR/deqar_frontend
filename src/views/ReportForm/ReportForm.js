@@ -555,7 +555,7 @@ class ReportForm extends Component {
       default:
         break;
     }
-  };
+  }
 
   renderDocLink = () => {
     const {formType} = this.props;

@@ -5,7 +5,7 @@ import style from './AssignedList.module.css';
 import {Text} from "informed";
 import cx from 'classnames';
 
-const AssignedList = ({values, errors, label, btnLabel, field, labelShowRequired, disabled, ...props}) => {
+const AssignedList = ({values, errors, label, btnLabel, field, fieldName, labelShowRequired, disabled, ...props}) => {
   const renderListItems = (values) => {
     values = values ? values : [];
     const emptyBox = (
@@ -18,9 +18,10 @@ const AssignedList = ({values, errors, label, btnLabel, field, labelShowRequired
       </ListGroupItem>
     );
 
-    if(values.length > 0) {
+    if (values.length > 0) {
+      const banned = values.banned ? values.banned : false;
       return values.map((value, idx) => {
-        return(
+        return (
           <ListGroupItem
             className={cx(style.ListGroupItem,
               {
@@ -33,8 +34,8 @@ const AssignedList = ({values, errors, label, btnLabel, field, labelShowRequired
             <span onClick={() => props.onClick(idx)} className={style.ListGroupItemName}>
               {props.renderDisplayValue(value)}
             </span>
-            { disabled ? "" :
-              <div className={style.removeButton + " pull-right"} onClick={() => {props.onRemove(idx)}}>
+            { disabled || banned ? "" :
+              <div className={style.removeButton + " pull-right"} onClick={() => {props.onRemove(idx, fieldName)}}>
                 <i className="fa fa-close"> </i>
               </div>
             }
@@ -42,27 +43,27 @@ const AssignedList = ({values, errors, label, btnLabel, field, labelShowRequired
         )
       });
     } else {
-      return(emptyBox)
+      return emptyBox;
     }
-  };
+  }
 
   const displayErrors = (errors, field) => {
-    if(errors) {
-      if(field in errors) {
+    if (errors) {
+      if (field in errors) {
         return(<small className={cx('help-block form-text text-danger', style.ErrorText)}>{errors[field]}</small>)
       } else {
-        return null
+        return null;
       }
     }
-  };
+  }
 
   const fieldHasError = () => {
-    if(errors) {
+    if (errors) {
       return field in errors;
     } else {
       return false
     }
-  };
+  }
 
   return(
     <div>

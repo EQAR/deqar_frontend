@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import setInstitutionsTable from "./actions/setInstitutionsTable";
 import createTableAPIParams from "../../utils/createTableAPIParams";
 import style from "./InstitutionsTable.module.css";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import DataTableRedux from "../../components/DataTable/DataTableRedux";
 import InstitutionsTableFilters from "./InstitutionsTableFilters";
 
@@ -13,7 +13,7 @@ const InstitutionsTable = (props) => {
   const linkRenderer = (row) => {
     return(
       <Link
-        to={{pathname: `/reference/institutions/view/${row.original.id}`}}
+        to={{pathname: `/reference/institutions/edit/${row.original.id}`}}
         className={style.Link}
       >
         {row.original.name_primary}
