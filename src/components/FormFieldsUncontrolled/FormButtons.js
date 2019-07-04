@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import LaddaButton, {EXPAND_RIGHT} from "react-ladda";
+import 'ladda/dist/ladda-themeless.min.css';
 import {Button, Col, Collapse, FormGroup, Row} from "reactstrap";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import FormTextField from "../FormFields/FormTextField";
 import PropTypes from 'prop-types';
 import style from "./FormButtons.module.css";
@@ -114,14 +115,10 @@ class FormButtons extends Component {
   };
 
   renderEditButton = () => {
-    const {currentPath, recordID, buttonText, adminCondition, userIsAdmin} = this.props;
-    let path;
+    const {buttonText, adminCondition, userIsAdmin, location} = this.props;
+    const currentPath = location.pathname;
+    const path = `${currentPath.replace("/view", "/edit")}`;
 
-    if (recordID) {
-      path = `${currentPath}/edit/${recordID}`;
-    } else {
-      path = `${currentPath}/edit/`;
-    }
 
     if((currentPath.includes(adminCondition)) || userIsAdmin) {
       return(
@@ -198,11 +195,10 @@ FormButtons.propTypes = {
   formType: PropTypes.string.isRequired,
   submitForm: PropTypes.func.isRequired,
   backPath: PropTypes.string,
-  currentPath: PropTypes.string,
   buttonText: PropTypes.string,
   infoBoxOpen: PropTypes.bool.isRequired,
   infoBoxToggle: PropTypes.func.isRequired,
   onDelete: PropTypes.func
 };
 
-export default FormButtons;
+export default withRouter(FormButtons);

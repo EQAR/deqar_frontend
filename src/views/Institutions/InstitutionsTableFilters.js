@@ -113,7 +113,7 @@ class InstitutionsTableFilters extends Component {
                   onFilter={this.onFilterChange}
                   onFilterRemove={this.onFilterRemove}
                   placeholder={'Filter by Country'}
-                  selectFilterOptions={this.getSelectFilterOptions('country')}
+                  selectFilterOptions={this.getSelectFilterOptions('country_facet')}
                   menuPlacement={'top'}
                 />
               </FormGroup>

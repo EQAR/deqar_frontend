@@ -35,7 +35,7 @@ export const MANAGE_MY_AGENCY = ADMINAPI_URL + '/my_agency/';
 export const GET_AGENCIES = ADMINAPI_URL + '/browse/agencies/';
 export const MANAGE_AGENCY = ADMINAPI_URL + '/agencies';
 
-// Report related endpoints
+// Report related endpoints 
 export const GET_STATUSES = ADMINAPI_URL + '/select/report_status/';
 export const GET_DECISIONS = ADMINAPI_URL + '/select/report_decision/';
 export const GET_MY_REPORTS = ADMINAPI_URL + '/browse/my-reports/';

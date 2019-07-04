@@ -11,7 +11,7 @@ const nav = {
           icon: 'icon-docs',
         }, {
           name: 'My Agency',
-          url: '/my-agency',
+          url: '/my-agency/view',
           icon: 'icon-home',
         }, {
           name: 'My ESG Activities',
