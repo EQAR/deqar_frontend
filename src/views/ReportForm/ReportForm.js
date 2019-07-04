@@ -10,7 +10,6 @@ import {
   Row
 } from "reactstrap";
 import style from './ReportForm.module.css'
-import 'ladda/dist/ladda-themeless.min.css';
 import FormSelectField from "../../components/FormFields/FormSelectField";
 import agency from '../../services/Agency';
 import report from '../../services/Report';
@@ -641,7 +640,6 @@ class ReportForm extends Component {
           <Form
             getApi={this.setFormApi}
             onSubmit={this.onSubmit}
-            onValueChange={this.onValueChange}
             id="report-submission-form"
           >
             {({ formState }) => (
@@ -850,7 +848,6 @@ class ReportForm extends Component {
                 <CardFooter>
                   <FormButtons
                     backPath={backPath}
-                    currentPath={backPath}
                     adminCondition={'my-reports'}
                     userIsAdmin={userIsAdmin}
                     buttonText={'Report'}
@@ -894,7 +891,6 @@ ReportForm.propTypes = {
   formType: PropTypes.oneOf(['create', 'view', 'edit']),
   reportID: PropTypes.string,
   backPath: PropTypes.string,
-  currentPath: PropTypes.string,
   userIsAdmin: PropTypes.bool
 };
 

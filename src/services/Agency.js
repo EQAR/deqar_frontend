@@ -1,9 +1,10 @@
 import axios from 'axios';
 import {
-  GET_ACTIVITY_TYPES, GET_AGENCIES,
-  GET_ALL_AGENCIES,
+  GET_ACTIVITY_TYPES,
+  GET_AGENCIES,
   GET_MY_ACTIVITIES,
-  GET_MY_SUBMISSION_AGENCIES, MANAGE_AGENCY,
+  GET_MY_SUBMISSION_AGENCIES,
+  MANAGE_AGENCY,
   MANAGE_MY_AGENCY
 } from "./config-api";
 
@@ -16,8 +17,8 @@ class Agency {
     return axios.get(MANAGE_MY_AGENCY);
   };
 
-  selectAllAgency = () => {
-    return axios.get(GET_ALL_AGENCIES);
+  updateMyAgency = (formValues) => {
+    return axios.put(MANAGE_MY_AGENCY, formValues);
   };
 
   selectMyActivity = (agencyID, params=null) => {
@@ -38,6 +39,10 @@ class Agency {
 
   getAgency = (reportID) => {
     return axios.get(`${MANAGE_AGENCY}/${reportID}/`);
+  };
+
+  updateAgency = (formValues, agencyID) => {
+    return axios.put(`${MANAGE_AGENCY}/${agencyID}/`, formValues);
   };
 }
 

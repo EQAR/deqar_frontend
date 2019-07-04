@@ -12,12 +12,15 @@ import {
   validateRequired,
   validateURL
 } from "../../../utils/validators";
+import {withRouter} from "react-router-dom";
 
 class AgencyActivityPopupForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       activityTypeOptions: [],
+      currentDecisionFiles: [],
+      extraDecisionFiles: []
     }
   }
 
@@ -49,6 +52,21 @@ class AgencyActivityPopupForm extends Component {
 
   onToggle = () => {
     this.props.onToggle();
+  };
+
+  isReadOnly = () => {
+    const {userIsAdmin, location, disabled} = this.props;
+    const path = location.pathname;
+
+    if (path.includes('my-agency')) {
+      return true
+    } else {
+      if (userIsAdmin) {
+        return disabled
+      } else {
+        return true
+      }
+    }
   };
 
   renderActionName = () => {
@@ -88,7 +106,7 @@ class AgencyActivityPopupForm extends Component {
                       <FormTextField
                         field={'activity'}
                         placeholderText={'Enter full activity name'}
-                        disabled={disabled}
+                        disabled={this.isReadOnly()}
                         validate={validateRequired}
                       />
                     </FormGroup>
@@ -104,7 +122,7 @@ class AgencyActivityPopupForm extends Component {
                         placeholder={'Please select'}
                         labelField={'type'}
                         valueField={'id'}
-                        disabled={disabled}
+                        disabled={this.isReadOnly()}
                         validate={validateRequired}
                       />
                     </FormGroup>
@@ -117,7 +135,7 @@ class AgencyActivityPopupForm extends Component {
                       <FormTextField
                         field={'activity_description'}
                         placeholderText={'Enter short display form of name'}
-                        disabled={disabled}
+                        disabled={this.isReadOnly()}
                       />
                     </FormGroup>
                   </Col>
@@ -141,7 +159,7 @@ class AgencyActivityPopupForm extends Component {
                       <FormTextField
                         field={'reports_link'}
                         placeholderText={'Enter URL'}
-                        disabled={disabled}
+                        disabled={this.isReadOnly()}
                         validate={validateURL}
                       />
                     </FormGroup>
@@ -154,7 +172,7 @@ class AgencyActivityPopupForm extends Component {
                       <FormDatePickerField
                         field={'activity_valid_from'}
                         placeholderText={'YYYY-MM-DD'}
-                        disabled={disabled}
+                        disabled={this.isReadOnly()}
                         validate={(value) => validateDateFrom(value, formState.values.activity_valid_to)}
                       />
                     </FormGroup>
@@ -165,7 +183,7 @@ class AgencyActivityPopupForm extends Component {
                       <FormDatePickerField
                         field={'activity_valid_to'}
                         placeholderText={'YYYY-MM-DD'}
-                        disabled={disabled}
+                        disabled={this.isReadOnly()}
                         validate={validateDate}
                       />
                     </FormGroup>
@@ -210,4 +228,4 @@ AgencyActivityPopupForm.propTypes = {
   disabled: PropTypes.bool
 };
 
-export default AgencyActivityPopupForm;
+export default withRouter(AgencyActivityPopupForm);

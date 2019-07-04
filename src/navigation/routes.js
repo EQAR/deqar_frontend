@@ -15,7 +15,6 @@ const Agencies = React.lazy(() => import('../views/Agencies/Agencies'));
 const AgencyDetails = React.lazy(() => import('../views/AgencyDetails/AgencyDetails'));
 
 const routes = [
-  { path: '/my-agency', exact: true, name: 'My Agency', component: MyAgency},
   { path: '/my-agency/:param', exact: true, name: 'My Agency Form', component: MyAgency},
   { path: '/my-activities', exact: true, name: 'My Agencies', component: MyAgencyActivities},
   { path: '/my-profile', exact: true, name: 'My Profile', component: MyProfile },
