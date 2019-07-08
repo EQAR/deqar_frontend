@@ -34,6 +34,7 @@
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^2.1.8",
+    "react-scroll": "^1.7.12",
     "react-select": "^2.4.1",
     "react-select-async-paginate": "^0.2.6",
     "react-table": "^6.8.6",

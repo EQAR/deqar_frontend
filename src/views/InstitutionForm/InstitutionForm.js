@@ -15,6 +15,7 @@ import {
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { connect } from "react-redux";
+import { animateScroll as scroll } from 'react-scroll';
 import {withRouter} from "react-router-dom";
 
 import FormTextField from '../../components/FormFields/FormTextField';
@@ -83,6 +84,8 @@ class InstitutionForm extends Component {
   componentWillUnmount = () => {
     this._isMounted = false;
   }
+
+  scrollToTop = () => scroll.scrollToTop();
 
   notView = (formType) => formType !== 'view'
 
@@ -420,6 +423,7 @@ class InstitutionForm extends Component {
   }
 
   submitInstitutionForm = (value) => {
+    console.log('sdfsdf')
     const { institutionID, formType } = this.props;
     const messages = {
       create: "Institution was created.",
@@ -454,6 +458,7 @@ class InstitutionForm extends Component {
         }
       });
       this.toggleLoading();
+      this.scrollToTop();
     })
   }
 
