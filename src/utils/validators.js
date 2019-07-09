@@ -9,10 +9,6 @@ export const validateRequired = (value) => {
   }
 }
 
-export const validateRequiredInstitutionName = value => {
-
-}
-
 export const validateEmail = (value) => {
   if (!EmailValidator.validate(value)) {
     return 'E-mail should be properly formatted.'
@@ -32,7 +28,7 @@ export const validateDate = (value) => (
 )
 
 export const validatePastDate = (value) => (
-  moment(new Date()), moment(value).isAfter(new Date())
+  moment(value).isAfter(new Date())
   ? 'Date should be earlier!'
   : null
 )

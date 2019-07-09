@@ -68,12 +68,6 @@ class InstitutionForm extends Component {
   componentDidMount() {
     const { formType } = this.props;
 
-    // this.setState({
-    //   isFullEdit: isAdmin,
-    //   formType: formType
-    // });
-    // this.populate();
-
     this.setState({
       isFullEdit: this.isEditable(formType),
       formType: formType
@@ -89,7 +83,7 @@ class InstitutionForm extends Component {
 
   isEditable = () => {
     const { formType, isAdmin } = this.props;
-    return isAdmin || formType === 'create';
+    return true || formType === 'create';
   }
 
   populate = () => {
@@ -426,7 +420,6 @@ class InstitutionForm extends Component {
   }
 
   submitInstitutionForm = (value) => {
-    console.log('sdfsdf')
     const { institutionID, formType } = this.props;
     const messages = {
       create: "Institution was created.",
