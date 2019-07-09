@@ -6,9 +6,11 @@ export const validateRequired = (value) => {
     return 'This field is required!'
   } else if (value.length === 0) {
     return 'This field is required!'
-  } else if (Object.keys(value).includes('name_english') && !value.name_english) {
-    return 'This field is required!'
   }
+}
+
+export const validateRequiredInstitutionName = value => {
+
 }
 
 export const validateEmail = (value) => {

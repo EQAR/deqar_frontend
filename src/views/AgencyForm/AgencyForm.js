@@ -29,6 +29,9 @@ import InfoBox from "./components/InfoBox";
 import FormButtons from "../../components/FormFieldsUncontrolled/FormButtons";
 import {validateDateFrom, validateRequired, validateRequiredDate, validateRequiredURL} from "../../utils/validators";
 import FormTextArrayField from "../../components/FormFieldsUncontrolled/FormTextArrayField";
+import {toast} from "react-toastify";
+import {updateFormNormalizer} from "./normalizers/updateFormNormalizer";
+import {withRouter} from "react-router-dom";
 
 
 class AgencyForm extends Component {
@@ -171,6 +174,14 @@ class AgencyForm extends Component {
     }
   };
 
+  // Toggle loading
+  toggleLoading = () => {
+    this.setState({
+      ...this.state,
+      loading: !this.state.loading
+    });
+  };
+
   toggleModal = (stateBaseName) => {
     this.setState({
       [`${stateBaseName}ModalOpen`]: !this.state[`${stateBaseName}ModalOpen`],
@@ -215,6 +226,73 @@ class AgencyForm extends Component {
     this.formApi = formApi;
   };
 
+  mergeNames = (values) => {
+    values['names'] = [...values['current_names'], ...values['former_names']];
+    return values;
+  };
+
+  isReadOnly = () => {
+    const {userIsAdmin, location} = this.props;
+    const {readOnly} = this.state;
+    const path = location.pathname;
+
+    if (path.includes('my-agency')) {
+      return true
+    } else {
+      if (userIsAdmin) {
+        return readOnly
+      } else {
+        return true
+      }
+    }
+  };
+
+  updateAgency = (values) => {
+    const { agencyID } = this.props;
+    values = updateFormNormalizer(values);
+    this.toggleLoading();
+    agency.updateAgency(values, agencyID).then((response) => {
+      toast.success("Agency record was updated.");
+    }).then(() => {
+      this.toggleLoading();
+      this.populateForm();
+    }).catch(error => {
+      this.toggleLoading();
+    });
+  };
+
+  updateMyAgency = (values) => {
+    this.toggleLoading();
+    values = updateFormNormalizer(values);
+    values = this.mergeNames(values);
+    agency.updateMyAgency(values).then((response) => {
+      toast.success("Agency record was updated.");
+    }).then(() => {
+      this.toggleLoading();
+      this.populateForm();
+    }).catch(error => {
+      this.toggleLoading();
+    });
+  };
+
+  onSubmit = (values) => {
+    const {agencyID, formType} = this.props;
+    switch(formType) {
+      case 'create':
+        this.createAgency(values);
+        break;
+      case 'edit':
+        if (agencyID) {
+          this.updateAgency(values);
+        } else {
+          this.updateMyAgency(values);
+        }
+        break;
+      default:
+        break;
+    }
+  };
+
   render() {
     const {readOnly, infoBoxOpen, countryOptions, loading,
       membershipModalOpen, membershipModalValue, membershipModalIndex,
@@ -224,7 +302,7 @@ class AgencyForm extends Component {
       currentNameModalOpen, currentNameModalValue, currentNameModalIndex,
       formerNameModalOpen, formerNameModalValue, formerNameModalIndex
     } = this.state;
-    const {formType, formTitle, userIsAdmin, currentPath, backPath, agencyID} = this.props;
+    const {formType, formTitle, userIsAdmin, backPath, agencyID} = this.props;
 
     return(
       <div className="animated fadeIn">
@@ -239,7 +317,6 @@ class AgencyForm extends Component {
           <Form
             getApi={this.setFormApi}
             onSubmit={this.onSubmit}
-            onValueChange={this.onValueChange}
             id="report-submission-form"
           >
             {({ formState }) => (
@@ -265,6 +342,7 @@ class AgencyForm extends Component {
                             modalOpen={currentNameModalOpen}
                             title={'Current Name / Acronym Group'}
                             onToggle={() => this.toggleModal('currentName')}
+                            nameType={'current'}
                             onFormSubmit={(idx, value) => this.onPopupFormSubmit(idx, value, 'currentName', 'current_names')}
                             formValue={currentNameModalValue}
                             formIndex={currentNameModalIndex}
@@ -281,7 +359,7 @@ class AgencyForm extends Component {
                             onAddButtonClick={() => this.toggleModal('currentName')}
                             onClick={(idx) => this.onListItemClick(idx, 'currentName', 'current_names')}
                             field={'current_names'}
-                            disabled={readOnly}
+                            disabled={this.isReadOnly()}
                           />
                         </Col>
                       </Row>
@@ -291,6 +369,7 @@ class AgencyForm extends Component {
                             modalOpen={formerNameModalOpen}
                             title={'Former Name / Acronym Group'}
                             onToggle={() => this.toggleModal('formerName')}
+                            nameType={'former'}
                             onFormSubmit={(idx, value) => this.onPopupFormSubmit(idx, value, 'formerName', 'former_names')}
                             formValue={formerNameModalValue}
                             formIndex={formerNameModalIndex}
@@ -307,7 +386,7 @@ class AgencyForm extends Component {
                             onAddButtonClick={() => this.toggleModal('formerName')}
                             onClick={(idx) => this.onListItemClick(idx, 'formerName', 'former_names')}
                             field={'former_names'}
-                            disabled={readOnly}
+                            disabled={this.isReadOnly()}
                           />
                         </Col>
                       </Row>
@@ -416,7 +495,7 @@ class AgencyForm extends Component {
                               labelField={'name_english'}
                               valueField={'id'}
                               validate={validateRequired}
-                              disabled={readOnly}
+                              disabled={this.isReadOnly()}
                             />
                           </FormGroup>
                         </Col>
@@ -430,7 +509,7 @@ class AgencyForm extends Component {
                             onFormSubmit={(idx, value) => this.onPopupFormSubmit(idx, value, 'membership', 'memberships')}
                             formValue={membershipModalValue}
                             formIndex={membershipModalIndex}
-                            disabled={readOnly}
+                            disabled={this.isReadOnly()}
                           />
                           <AssignedList
                             errors={formState.errors}
@@ -443,7 +522,7 @@ class AgencyForm extends Component {
                             onAddButtonClick={() => this.toggleModal('membership')}
                             onClick={(idx) => this.onListItemClick(idx, 'membership', 'memberships')}
                             field={'memberships'}
-                            disabled={readOnly}
+                            disabled={this.isReadOnly()}
                           />
                         </Col>
                       </Row>
@@ -458,7 +537,7 @@ class AgencyForm extends Component {
                               field={'registration_start'}
                               validate={(value) => validateDateFrom(value, formState.values.registration_valid_to)}
                               placeholderText={'YYYY-MM-DD'}
-                              disabled={readOnly}
+                              disabled={this.isReadOnly()}
                             />
                           </FormGroup>
                         </Col>
@@ -469,7 +548,7 @@ class AgencyForm extends Component {
                               field={'registration_valid_to'}
                               validate={validateRequiredDate}
                               placeholderText={'YYYY-MM-DD'}
-                              disabled={readOnly}
+                              disabled={this.isReadOnly()}
                             />
                           </FormGroup>
                         </Col>
@@ -479,7 +558,7 @@ class AgencyForm extends Component {
                             <Checkbox
                               field="is_registered"
                               className={style.Checkbox}
-                              disabled={readOnly}
+                              disabled={this.isReadOnly()}
                             />
                           </FormGroup>
                         </Col>
@@ -490,7 +569,7 @@ class AgencyForm extends Component {
                             <Label for="registration_note">Registration Note</Label>
                             <FormTextAreaFormatted
                               field={'registration_note'}
-                              disabled={readOnly}
+                              disabled={this.isReadOnly()}
                             />
                           </FormGroup>
                         </Col>
@@ -505,7 +584,7 @@ class AgencyForm extends Component {
                             onFormSubmit={(idx, value) => this.onPopupFormSubmit(idx, value, 'decision', 'decisions')}
                             formValue={decisionModalValue}
                             formIndex={decisionModalIndex}
-                            disabled={readOnly}
+                            disabled={this.isReadOnly()}
                           />
                           <AssignedList
                             errors={formState.errors}
@@ -518,7 +597,7 @@ class AgencyForm extends Component {
                             onAddButtonClick={() => this.toggleModal('decision')}
                             onClick={(idx) => this.onListItemClick(idx, 'decision', 'decisions')}
                             field={'decisions'}
-                            disabled={readOnly}
+                            disabled={this.isReadOnly()}
                           />
                         </Col>
                       </Row>
@@ -545,7 +624,7 @@ class AgencyForm extends Component {
                             onAddButtonClick={() => this.toggleModal('activity')}
                             onClick={(idx) => this.onListItemClick(idx, 'activity', 'activities')}
                             field={'activities'}
-                            disabled={readOnly}
+                            disabled={this.isReadOnly()}
                           />
                         </Col>
                       </Row>
@@ -559,7 +638,7 @@ class AgencyForm extends Component {
                             onFormSubmit={(idx, value) => this.onPopupFormSubmit(idx, value, 'focusCountry', 'focus_countries')}
                             formValue={focusCountryModalValue}
                             formIndex={focusCountryModalIndex}
-                            disabled={readOnly}
+                            disabled={this.isReadOnly()}
                           />
                           <AssignedList
                             errors={formState.errors}
@@ -572,7 +651,7 @@ class AgencyForm extends Component {
                             onAddButtonClick={() => this.toggleModal('focusCountry')}
                             onClick={(idx) => this.onListItemClick(idx, 'focusCountry', 'focus_countries')}
                             field={'focus_countries'}
-                            disabled={readOnly}
+                            disabled={this.isReadOnly()}
                           />
                         </Col>
                       </Row>
@@ -583,7 +662,7 @@ class AgencyForm extends Component {
                             <Label for="specialisation_note">Specialisation Note</Label>
                             <FormTextAreaFormatted
                               field={'specialisation_note'}
-                              disabled={readOnly}
+                              disabled={this.isReadOnly()}
                             />
                           </FormGroup>
                         </Col>
@@ -594,7 +673,7 @@ class AgencyForm extends Component {
                             <Label for="description_note" className={'required'}>Description Note</Label>
                             <FormTextAreaFormatted
                               field={'description_note'}
-                              disabled={readOnly}
+                              disabled={this.isReadOnly()}
                               validate={validateRequired}
                             />
                           </FormGroup>
@@ -606,7 +685,6 @@ class AgencyForm extends Component {
                 <CardFooter>
                   <FormButtons
                     backPath={backPath}
-                    currentPath={currentPath ? currentPath : backPath}
                     adminCondition={'my-agency'}
                     userIsAdmin={userIsAdmin}
                     buttonText={'Agency'}
@@ -650,8 +728,7 @@ AgencyForm.propTypes = {
   formType: PropTypes.oneOf(['create', 'view', 'edit']),
   agencyID: PropTypes.string,
   backPath: PropTypes.string,
-  currentPath: PropTypes.string,
   userIsAdmin: PropTypes.bool,
 };
 
-export default AgencyForm;
+export default withRouter(AgencyForm);

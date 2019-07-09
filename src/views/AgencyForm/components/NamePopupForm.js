@@ -5,6 +5,8 @@ import {Form, Checkbox, TextArea} from 'informed';
 import FormTextField from "../../../components/FormFields/FormTextField";
 import style from './NamePopupForm.module.css';
 import FormTextArrayField from "../../../components/FormFieldsUncontrolled/FormTextArrayField";
+import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
+import {validateDateFrom, validateRequiredDate} from "../../../utils/validators";
 
 class NamePopupForm extends Component {
   constructor(props) {
@@ -24,8 +26,6 @@ class NamePopupForm extends Component {
     this.formApi.submitForm();
   };
 
-  // Populate selects
-
   onToggle = () => {
     this.props.onToggle();
   };
@@ -44,7 +44,7 @@ class NamePopupForm extends Component {
   };
 
   render() {
-    const {modalOpen, title, disabled, formIndex} = this.props;
+    const {modalOpen, title, disabled, formIndex, nameType} = this.props;
     const titleText = `${this.renderActionName()} ${title}`;
 
     return(
@@ -145,6 +145,22 @@ class NamePopupForm extends Component {
                     </FormGroup>
                   </Col>
                 </Row>
+                {
+                  nameType === 'former' ?
+                    <Row>
+                      <Col md={12}>
+                        <FormGroup>
+                          <Label for="name_valid_to" className={'required'}>Valid To</Label>
+                          <FormDatePickerField
+                            field={'name_valid_to'}
+                            placeholderText={'YYYY-MM-DD'}
+                            disabled={disabled}
+                            validate={validateRequiredDate}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row> : ''
+                }
               </ModalBody>
               <ModalFooter className={'justify-content-between'}>
                 <Button
@@ -179,6 +195,7 @@ NamePopupForm.propTypes = {
   title: PropTypes.string.isRequired,
   formValue: PropTypes.object,
   formIndex: PropTypes.number,
+  nameType: PropTypes.string,
   onToggle: PropTypes.func.isRequired,
   onFormSubmit: PropTypes.func.isRequired,
   disabled: PropTypes.bool

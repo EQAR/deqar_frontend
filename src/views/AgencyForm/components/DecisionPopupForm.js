@@ -1,23 +1,61 @@
 import React, {Component} from 'react';
 import {Button, Col, FormGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row} from "reactstrap";
 import PropTypes from 'prop-types';
-import {Form} from 'informed';
+import {Form, Text} from 'informed';
 import FormSelectField from "../../../components/FormFields/FormSelectField";
 import list from "../../../services/List";
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
 import {validateRequired, validateRequiredDate} from "../../../utils/validators";
+import 'filepond/dist/filepond.min.css';
+import {FilePond} from "react-filepond";
 
 class MembershipPopupForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       decisionTypeOptions: [],
+      decisionFiles: [],
+      decisionExtraFiles: []
     }
   }
 
   componentDidMount() {
     this.populateDecisionType();
   }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.formIndex !== prevProps.formIndex) {
+      this.setFileUpload('decision_file_name', 'decision_file_size', 'decisionFiles');
+      this.setFileUpload('decision_extra_file_name', 'decision_extra_file_size', 'decisionExtraFiles')
+    }
+  }
+
+  setFileUpload = (nameField, sizeField, stateName) => {
+    const { formValue } = this.props;
+
+    if (formValue) {
+      if (nameField in formValue) {
+        if (formValue[nameField].length > 0) {
+          this.setState({
+            [stateName]: [{
+              options: {
+                type: 'local',
+                file: {
+                  name: formValue[nameField],
+                  size: formValue[sizeField],
+                  type: 'application/pdf'
+                }
+              }
+            }]
+          })
+        }
+      }
+    } else {
+      this.setState({
+        decisionFiles: []
+      })
+    }
+  };
 
   setFormApi = (formApi) => {
     const { formValue } = this.props;
@@ -45,24 +83,38 @@ class MembershipPopupForm extends Component {
     this.props.onToggle();
   };
 
-  getFileDisplay = (field, label) => {
+  getFileManager = (field, label, stateName) => {
     const { disabled, formValue } = this.props;
 
     if(disabled) {
       if(formValue) {
-        return(
-          <Row>
-            <Col md={12}>
+        if (formValue[field]) {
+          return(
+            <React.Fragment>
               <FormGroup>
                 <Label for={field}>Current {label}</Label>
                 <div>
-                  <a href={formValue[field]} target={'new'}>Check {label} file from DEQAR.</a>
+                  <a href={formValue[field]} target={'new'}>Download {label} file from DEQAR</a>
                 </div>
               </FormGroup>
-            </Col>
-          </Row>
-        )
+            </React.Fragment>
+          )
+        }
       }
+    } else {
+      return (
+        <React.Fragment>
+          <Text field={field} hidden />
+          <Text field={field} hidden />
+          <Label for={field}>Current {label}</Label>
+          <FilePond
+            files={this.state[stateName]}
+            allowMultiple={false}
+            acceptedFileTypes={['application/pdf']}
+            onupdatefiles={this.onFileChange}
+          />
+        </React.Fragment>
+      )
     }
   };
 
@@ -125,8 +177,8 @@ class MembershipPopupForm extends Component {
                     </FormGroup>
                   </Col>
                 </Row>
-                {this.getFileDisplay('decision_file', 'Decision File')}
-                {this.getFileDisplay('decision_file_extra', 'Extra File')}
+                {this.getFileManager('decision_file', 'Decision File', 'decisionFiles')}
+                {this.getFileManager('decision_file_extra', 'Decision Extra File', 'decisionExtraFiles')}
               </ModalBody>
               <ModalFooter className={'justify-content-between'}>
                 <Button
