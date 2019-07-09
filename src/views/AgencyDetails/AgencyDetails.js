@@ -2,14 +2,13 @@ import React from 'react';
 import {connect} from "react-redux";
 import AgencyForm from "../AgencyForm/AgencyForm";
 
-
 const AgencyDetails = ({userIsAdmin, ...props}) => {
   const {id, param} = props.match.params;
 
   return(
     <React.Fragment>
       <AgencyForm
-        formTitle={param === 'view' ? 'View Report' : 'Edit Report'}
+        formTitle={param === 'view' ? 'View Agency' : 'Edit Agency'}
         formType={param}
         agencyID={id}
         backPath={'/reference/agencies'}

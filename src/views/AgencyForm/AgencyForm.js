@@ -32,6 +32,8 @@ import FormTextArrayField from "../../components/FormFieldsUncontrolled/FormText
 import {toast} from "react-toastify";
 import {updateFormNormalizer} from "./normalizers/updateFormNormalizer";
 import {withRouter} from "react-router-dom";
+import FilePopupForm from "../ReportForm/ReportForm";
+import report from "../../services/Report";
 
 
 class AgencyForm extends Component {
@@ -57,6 +59,10 @@ class AgencyForm extends Component {
       focusCountryModalOpen: false,
       focusCountryModalValue: undefined,
       focusCountryModalIndex: undefined,
+      uploadedDecisionFile: null,
+      decisionFiles: [],
+      uploadedDecisionExtraFile: null,
+      decisionExtraFiles: [],
       nonFieldErrors: [],
       alertVisible: false,
       loading: false,
@@ -190,6 +196,14 @@ class AgencyForm extends Component {
     })
   };
 
+  toggleDecisionModal = () => {
+    this.setState({
+      uploadedDecisionFile: null,
+      uploadedDecisionExtraFile: null
+    });
+    this.toggleModal('decision');
+  };
+
   // Infobox toggle
   infoBoxToggle = () => {
     this.setState({ infoBoxOpen: !this.state.infoBoxOpen });
@@ -222,6 +236,45 @@ class AgencyForm extends Component {
     this.toggleModal(stateBaseName);
   };
 
+  // File actions
+  onDecisionFormSubmit = (value, idx) => {
+    this.onPopupFormSubmit(value, idx, 'decision', 'decisions');
+    const { uploadedDecisionFile, uploadedDecisionExtraFile } = this.state;
+
+    this.insertFiles(idx, uploadedDecisionFile, 'decisionFiles');
+    this.insertFiles(idx, uploadedDecisionExtraFile, 'decisionExtraFiles');
+  };
+
+  insertFiles = (idx, stateFile, stateFileArray) => {
+    // Insert files into state
+    if (stateFile) {
+      if (idx >= 0) {
+        this.setState(prevState => ({
+          [stateFileArray]: [...prevState[stateFileArray].slice(0, idx), stateFile, ...prevState[stateFileArray].slice(idx+1)],
+        }))
+      } else {
+        this.setState(prevState=> ({
+          [stateFileArray]: [...prevState[stateFileArray], stateFile],
+        }))
+      }
+    }
+  };
+
+  onDecisionFileAdded = (file, field) => {
+    const state = field === 'decision_file' ? 'uploadedDecisionFile' : 'uploadedDecisionExtraFile';
+    if(file.length > 0) {
+      if (file[0] instanceof File) {
+        this.setState({
+          [state]: file[0]
+        });
+      }
+    } else {
+      this.setState({
+        [state]: null
+      })
+    }
+  };
+
   setFormApi = (formApi) => {
     this.formApi = formApi;
   };
@@ -247,12 +300,33 @@ class AgencyForm extends Component {
     }
   };
 
+  uploadFiles = (decisionID, fileType, idx) => {
+    const stateName = fileType === 'decision' ? 'decisionFiles' : 'decisionExtraFiles';
+
+    const files = this.state[stateName];
+    if (files[idx]) {
+      if ('name' in files[idx]) {
+        agency.submitDecisionFile(files[idx], decisionID, fileType).then((response) => {
+          toast.success(`Uploading file ${files[idx].name} was successful.`);
+        }).catch((error) => {
+          toast.error(`There was a problem uploading the file: ${files[idx].name}.`)
+        });
+      }
+    }
+  };
+
   updateAgency = (values) => {
     const { agencyID } = this.props;
     values = updateFormNormalizer(values);
+    values = this.mergeNames(values);
     this.toggleLoading();
     agency.updateAgency(values, agencyID).then((response) => {
       toast.success("Agency record was updated.");
+      const decisionsResponse = response.data.decisions;
+      decisionsResponse.forEach((decision, idx) => {
+        this.uploadFiles(decision.id, 'decision', idx);
+        this.uploadFiles(decision.id, 'decision_extra', idx)
+      });
     }).then(() => {
       this.toggleLoading();
       this.populateForm();
@@ -267,6 +341,11 @@ class AgencyForm extends Component {
     values = this.mergeNames(values);
     agency.updateMyAgency(values).then((response) => {
       toast.success("Agency record was updated.");
+      const decisionsResponse = response.data.decisions;
+      decisionsResponse.forEach((decision, idx) => {
+        this.uploadFiles(decision.id, 'decision', idx);
+        this.uploadFiles(decision.id, 'decision_extra', idx)
+      });
     }).then(() => {
       this.toggleLoading();
       this.populateForm();
@@ -580,8 +659,9 @@ class AgencyForm extends Component {
                           <DecisionPopupForm
                             modalOpen={decisionModalOpen}
                             title={'EQAR Decision'}
-                            onToggle={() => this.toggleModal('decision')}
-                            onFormSubmit={(idx, value) => this.onPopupFormSubmit(idx, value, 'decision', 'decisions')}
+                            onToggle={this.toggleDecisionModal}
+                            onFormSubmit={this.onDecisionFormSubmit}
+                            onFormSubmitFile={this.onDecisionFileAdded}
                             formValue={decisionModalValue}
                             formIndex={decisionModalIndex}
                             disabled={this.isReadOnly()}
@@ -594,7 +674,7 @@ class AgencyForm extends Component {
                             labelShowRequired={true}
                             btnLabel={'Add'}
                             onRemove={(idx) => this.onListItemRemove(idx, 'decisions')}
-                            onAddButtonClick={() => this.toggleModal('decision')}
+                            onAddButtonClick={this.toggleDecisionModal}
                             onClick={(idx) => this.onListItemClick(idx, 'decision', 'decisions')}
                             field={'decisions'}
                             disabled={this.isReadOnly()}
