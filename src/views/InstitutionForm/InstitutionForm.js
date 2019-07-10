@@ -15,7 +15,7 @@ import {
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { connect } from "react-redux";
-import { animateScroll as scroll, scroller } from 'react-scroll';
+import { scroller } from 'react-scroll';
 import {withRouter} from "react-router-dom";
 
 import FormTextField from '../../components/FormFields/FormTextField';
@@ -79,12 +79,11 @@ class InstitutionForm extends Component {
     this._isMounted = false;
   }
 
-  scrollToTop = () => scroll.scrollToTop();
-
   scrollTo = () => {
     scroller.scrollTo('scroll-to-element', {
       duration: 800,
       delay: 0,
+      offset: -100,
       smooth: 'easeInOutQuart'
     })
   }
