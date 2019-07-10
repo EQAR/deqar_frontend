@@ -10,15 +10,14 @@ import {
   ModalHeader,
   Row } from "reactstrap";
 import PropTypes from 'prop-types';
-import { Form, asField } from 'informed';
-import Select from 'react-select';
+import { Form } from 'informed';
 
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
 import FormSimpleSelect from "../../../components/FormFields/FormSimpleSelect";
 import FormTextArea from "../../../components/FormFields/FormTextArea";
 import AssignedList from '../../../components/FormFieldsUncontrolled/AssignedList';
 import InstitutionSelect from './InstitutionSelect';
-import { validateRequired, validateDateFrom } from "../../../utils/validators";
+import { validateRequired, validateDateFrom, validateDate, } from "../../../utils/validators";
 
 class HierarchicalLinkForm extends Component {
   constructor(props) {
@@ -84,7 +83,6 @@ class HierarchicalLinkForm extends Component {
 
   changeLinkType = (value) => {
     const values = this.formApi.getState().values;
-    console.log(value);
 
     this.formApi.setValues({...values, position: value.value});
     this.formApi.setValue('position', value.value)
@@ -122,7 +120,6 @@ class HierarchicalLinkForm extends Component {
                       value={this.getLinkValue(formState)}
                       onChange={this.changeLinkType}
                       isDisabled={disabled}
-                      options={relationShipTypes}
                       validate={validateRequired}
                       placeholder={'Please select'}
                     />
@@ -176,6 +173,7 @@ class HierarchicalLinkForm extends Component {
                       <FormDatePickerField
                         field={'valid_to'}
                         placeholderText={'YYYY-MM-DD'}
+                        validate={validateDate}
                         disabled={disabled}
                       />
                     </FormGroup>

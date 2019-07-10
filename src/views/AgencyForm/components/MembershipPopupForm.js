@@ -5,7 +5,7 @@ import {Form} from 'informed';
 import FormSelectField from "../../../components/FormFields/FormSelectField";
 import list from "../../../services/List";
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
-import {validateDate, validateDateFrom, validateRequired} from "../../../utils/validators";
+import {validateDate, validateDateFromRequired, validateRequired} from "../../../utils/validators";
 
 class MembershipPopupForm extends Component {
   constructor(props) {
@@ -99,7 +99,7 @@ class MembershipPopupForm extends Component {
                         field={'membership_valid_from'}
                         placeholderText={'YYYY-MM-DD'}
                         disabled={disabled}
-                        validate={(value) => validateDateFrom(value, formState.values.activity_valid_to)}
+                        validate={(value) => validateDateFromRequired(value, formState.values.activity_valid_to)}
                       />
                     </FormGroup>
                   </Col>

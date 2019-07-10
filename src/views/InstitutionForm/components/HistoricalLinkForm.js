@@ -15,10 +15,11 @@ import Select from 'react-select';
 
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
 import FormTextArea from "../../../components/FormFields/FormTextArea";
+import FormSimpleSelect from "../../../components/FormFields/FormSimpleSelect";
 import InstitutionSelect from './InstitutionSelect';
 import AssignedList from '../../../components/FormFieldsUncontrolled/AssignedList';
 import institution from '../../../services/Institution'
-import { validateRequired } from "../../../utils/validators";
+import { validateRequired, validateDate } from "../../../utils/validators";
 
 
 class HistoricalLinkForm extends Component {
@@ -135,14 +136,16 @@ class HistoricalLinkForm extends Component {
                   <Col>
                     <FormGroup>
                     <Label for="former_name_official" className={'required'}>Relationship</Label>
-                    <Select
+                    <FormSimpleSelect
+                      field={'relationship_type'}
                       options={historicalRelationTypes}
+                      value={this.getLinkValue(formState)}
                       onChange={this.changeLinkType}
-                      placeholder={'Select select multiple, if necessary'}
                       getOptionLabel={this.getLabel}
                       getOptionValue={this.getValue}
-                      value={this.getLinkValue(formState)}
                       isDisabled={disabled}
+                      validate={validateRequired}
+                      placeholder={'Please select'}
                     />
                     </FormGroup>
                   </Col>
@@ -184,6 +187,7 @@ class HistoricalLinkForm extends Component {
                         field={'relationship_date'}
                         placeholderText={'YYYY-MM-DD'}
                         disabled={disabled}
+                        validate={validateDate}
                       />
                     </FormGroup>
                   </Col>

@@ -15,7 +15,7 @@ import {
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { connect } from "react-redux";
-import { animateScroll as scroll } from 'react-scroll';
+import { animateScroll as scroll, scroller } from 'react-scroll';
 import {withRouter} from "react-router-dom";
 
 import FormTextField from '../../components/FormFields/FormTextField';
@@ -33,7 +33,7 @@ import HierarchicalLinkForm from './components/HierarchicalLinkForm';
 import InfoBox from './components/InfoBox';
 import country from '../../services/Country';
 import qfEHEALevel from '../../services/QFeheaLevel';
-import { validateRoman, validateRequired, validateRequiredURL, validateDateFrom } from "../../utils/validators";
+import { validateRoman, validateRequired, validateRequiredURL, validateDateFrom, validateDate } from "../../utils/validators";
 import agency from '../../services/Agency';
 import { toast } from 'react-toastify';
 import { createFormNormalizer } from './createFormNormalizer';
@@ -80,6 +80,14 @@ class InstitutionForm extends Component {
   }
 
   scrollToTop = () => scroll.scrollToTop();
+
+  scrollTo = () => {
+    scroller.scrollTo('scroll-to-element', {
+      duration: 800,
+      delay: 0,
+      smooth: 'easeInOutQuart'
+    })
+  }
 
   isEditable = () => {
     const { formType, isAdmin } = this.props;
@@ -386,6 +394,7 @@ class InstitutionForm extends Component {
       <Row>
         <Col md={12}>
           <FormAlert
+            name="scroll-to-element"
             visible={alertVisible}
             onClose={this.onAlertClose}
             errorMessage={nonFieldErrors}
@@ -454,7 +463,7 @@ class InstitutionForm extends Component {
         }
       });
       this.toggleLoading();
-      this.scrollToTop();
+      this.scrollTo();
     })
   }
 
@@ -480,6 +489,7 @@ class InstitutionForm extends Component {
         className="animated fadeIn"
         getApi={this.setFormApi}
         onSubmit={this.submitInstitutionForm}
+        onSubmitFailure={this.scrollTo}
       >
         {({ formState }) => (
           <Card>
@@ -672,6 +682,7 @@ class InstitutionForm extends Component {
                             <FormDatePickerField
                               field={'closure_date'}
                               placeholderText={'Enter year'}
+                              validate ={validateDate}
                               disabled={!isFullEdit}
                             />
                           </FormGroup>

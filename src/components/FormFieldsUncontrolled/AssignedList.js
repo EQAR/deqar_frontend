@@ -50,7 +50,7 @@ const AssignedList = ({values, errors, label, btnLabel, field, fieldName, labelS
   const displayErrors = (errors, field) => {
     if (errors) {
       if (field in errors) {
-        return(<small className={cx('help-block form-text text-danger', style.ErrorText)}>{errors[field]}</small>)
+        return(<small name="scroll-to-element" className={cx('help-block form-text text-danger', style.ErrorText)}>{errors[field]}</small>)
       } else {
         return null;
       }
