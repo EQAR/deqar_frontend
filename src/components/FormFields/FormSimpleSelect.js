@@ -1,43 +1,12 @@
 import React from 'react';
 import { asField } from 'informed';
 import Select from 'react-select';
+import { style } from './selectStyle';
 
 const FormSimpleSelect = asField(({ fieldState, fieldApi, ...props }) => {
   const { onChange, disabled, placeholder, value, isMulti, forwardedRef, initialValue, options, ...rest } = props;
   const borderColor = fieldApi.getError() ? '#f86c6b' : '#e4e7ea';
-
-  const customStyles = {
-    container: (provided, state) => ({
-      ...provided,
-      '&:focus': {
-        borderColor: 'none'
-      },
-    }),
-    control: (provided, state) => ({
-      ...provided,
-      maxHeight: '35px',
-      minHeight: '25px',
-      '&:hover': {
-        borderColor: 'none'
-      },
-      border: state.isDisabled ? 'unset' : `1px solid ${borderColor}`,
-      backgroundColor: state.isDisabled ? '#FCFCFC' : '#FFFFFF'
-    }),
-    singleValue: (provided, state) => ({
-      ...provided,
-      color: state.isDisabled ? '#5c6873' : "#5C685C",
-    }),
-    option: (provided) => ({
-      ...provided,
-      whiteSpace: 'nowrap',
-      overFlow: 'hidden',
-      textOverFlow: 'ellipsis'
-    }),
-    indicatorsContainer: (provided, state) => ({
-      display: state.isDisabled ? 'none' : 'flex'
-    })
-  }
-
+  const customStyles = style(borderColor);
 
   const changeValue = value =>  {
     onChange(value);
@@ -61,7 +30,7 @@ const FormSimpleSelect = asField(({ fieldState, fieldApi, ...props }) => {
           ref={forwardedRef}
           defaultValue={value || initialValue || ''}
           value={value || initialValue || ''}
-          onChange={(value, action) => changeValue(value, action)}
+          onChange={(value) => changeValue(value)}
           isDisabled={disabled}
           placeholder={disabled ? "" : placeholder}
           isClearable={true}

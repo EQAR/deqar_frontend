@@ -1,6 +1,7 @@
 import React from 'react';
 import { asField } from 'informed';
 import Select from 'react-select';
+import { style } from './selectStyle';
 
 const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
   const { value } = fieldState;
@@ -8,38 +9,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
   const { onChange, onBlur, initialValue, forwardedRef, labelField, valueField, disabled, placeholder, includeID,
     isMulti, ...rest } = props;
   const borderColor = fieldApi.getError() ? '#f86c6b' : '#e4e7ea';
-
-  const customStyles = {
-    container: (provided, state) => ({
-      ...provided,
-      '&:focus': {
-        borderColor: 'none'
-      },
-    }),
-    control: (provided, state) => ({
-      ...provided,
-      maxHeight: '35px',
-      minHeight: '25px',
-      '&:hover': {
-        borderColor: 'none'
-      },
-      border: state.isDisabled ? 'unset' : `1px solid ${borderColor}`,
-      backgroundColor: state.isDisabled ? '#FCFCFC' : '#FFFFFF'
-    }),
-    singleValue: (provided, state) => ({
-      ...provided,
-      color: state.isDisabled ? '#5c6873' : "#5C685C",
-    }),
-    option: (provided) => ({
-      ...provided,
-      whiteSpace: 'nowrap',
-      overFlow: 'hidden',
-      textOverFlow: 'ellipsis'
-    }),
-    indicatorsContainer: (provided, state) => ({
-      display: state.isDisabled ? 'none' : 'flex'
-    })
-  }
+  const customStyles = style(borderColor);
 
   const getLabel = (option) => {
     if (includeID) {
