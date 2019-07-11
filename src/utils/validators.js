@@ -57,11 +57,15 @@ export const validateURL = (value) => {
 
 export const validateRequiredURL = (value) => validateRequired(value) || validateURL(value)
 
-export const validateRoman = (value) => (
-  /^[A-Za-z0-9,.'" ]+$/.test(value)
-  ? null
-  : 'Use roman alphabet'
-)
+export const validateRoman = (value) => {
+  if (value) {
+    return (
+      /^[A-Za-z0-9,.'" ]+$/.test(value)
+        ? null
+        : 'Use roman alphabet'
+    )
+  }
+};
 
 export const validateDateFrom = (value, date_to) => {
   if (!validateRequiredDate(value)) {
