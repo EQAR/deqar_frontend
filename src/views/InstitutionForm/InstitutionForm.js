@@ -56,7 +56,7 @@ class InstitutionForm extends Component {
       hierarchicalLinkValue: null,
       countries: null,
       infoBoxOpen: true,
-      agencies: null,
+      agencies: [],
       localIDDisabled: true,
       loading: false,
       alertVisible: false,
@@ -65,26 +65,23 @@ class InstitutionForm extends Component {
   }
 
   componentDidMount() {
-    const { formType, isAdmin } = this.props;
+    const { formType } = this.props;
 
     this.setState({
-      isEdit: isAdmin,
+      isEdit: this.isEditable(formType),
       formType: formType
     });
     this.populate();
-
-    // this.setState({
-    //   isEdit: true,
-    //   formType: formType
-    // });
-    // this.populate();
   }
 
   componentWillUnmount = () => {
     this._isMounted = false;
   }
 
-  notView = (formType) => formType !== 'view'
+  isEditable = () => {
+    const { formType, isAdmin } = this.props;
+    return isAdmin || formType === 'create';
+  }
 
   populate = () => {
     const { institutionID, formType, isAdmin } = this.props;

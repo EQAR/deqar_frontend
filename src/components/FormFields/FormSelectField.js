@@ -77,9 +77,8 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
     }
   }
 
-  const changeValue = (value, action) =>  {
+  const changeValue = value =>  {
     setError('');
-    setValue(value);
     onChange ? onChange(value) : setValue(value);
   }
 
