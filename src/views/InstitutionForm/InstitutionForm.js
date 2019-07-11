@@ -55,7 +55,7 @@ class InstitutionForm extends Component {
       historicalLinkValue: null,
       hierarchicalLinkValue: null,
       countries: [],
-      infoBoxOpen: true,
+      infoBoxOpen: false,
       agencies: [],
       localIDDisabled: true,
       loading: false,
