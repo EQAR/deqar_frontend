@@ -65,7 +65,7 @@ class InstitutionForm extends Component {
   }
 
   componentDidMount() {
-    const {formType, isAdmin} = this.props;
+    const { formType } = this.props;
 
     this.setState({
       isEdit: this.isEditable(formType),
