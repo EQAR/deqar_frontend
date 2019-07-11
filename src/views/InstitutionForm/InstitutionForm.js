@@ -495,13 +495,13 @@ class InstitutionForm extends Component {
       formIndex,
       loading
     } = this.state;
-    const { backPath, isAdmin, formType } = this.props;
+    const { backPath, isAdmin, formType, formTitle } = this.props;
 
     return  qFeheaLevels ? (
       <Card>
         <CardHeader>
           <Row>
-            <Col>{this.formTitle()}</Col>
+            <Col>{formTitle}</Col>
           </Row>
         </CardHeader>
         <Form
