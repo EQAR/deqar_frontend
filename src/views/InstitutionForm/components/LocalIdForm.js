@@ -35,7 +35,7 @@ class LocalIdForm extends Component {
     const { isAdmin } = this.props;
 
     isAdmin
-    ? agency.selectAllAgency().then((response, error) => this.setState({agencies: response.data}))
+    ? agency.getAgencies().then((response, error) => this.setState({agencies: response.data}))
     : agency.selectMySubmissionAgency().then((response, error) => this.setState({agencies: response.data}));
   }
 

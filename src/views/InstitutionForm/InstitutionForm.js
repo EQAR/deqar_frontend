@@ -54,9 +54,9 @@ class InstitutionForm extends Component {
       qFeheaLevels: [],
       historicalLinkValue: null,
       hierarchicalLinkValue: null,
-      countries: null,
+      countries: [],
       infoBoxOpen: true,
-      agencies: null,
+      agencies: [],
       localIDDisabled: true,
       loading: false,
       alertVisible: false,
@@ -65,26 +65,23 @@ class InstitutionForm extends Component {
   }
 
   componentDidMount() {
-    const { formType, isAdmin } = this.props;
+    const {formType, isAdmin} = this.props;
 
     this.setState({
-      isEdit: isAdmin,
+      isEdit: this.isEditable(formType),
       formType: formType
     });
     this.populate();
-
-    // this.setState({
-    //   isEdit: true,
-    //   formType: formType
-    // });
-    // this.populate();
   }
 
-  componentWillUnmount = () => {
+  componentWillUnmount() {
     this._isMounted = false;
   }
 
-  notView = (formType) => formType !== 'view'
+  isEditable = () => {
+    const { formType, isAdmin } = this.props;
+    return isAdmin || formType === 'create';
+  }
 
   populate = () => {
     const { institutionID, formType, isAdmin } = this.props;
@@ -122,7 +119,7 @@ class InstitutionForm extends Component {
     });
 
     isAdmin
-    ? agency.selectAllAgency().then((response) => this.setState({agencies: response.data}))
+    ? agency.getAgencies().then((response) => this.setState({agencies: response.data.results}))
     : agency.selectMySubmissionAgency().then((response) => this.setState({agencies: response.data}));
   }
 
@@ -501,22 +498,21 @@ class InstitutionForm extends Component {
     const { backPath, isAdmin, formType } = this.props;
 
     return  qFeheaLevels ? (
-      <Form
-        className="animated fadeIn"
-        getApi={this.setFormApi}
-        onSubmit={this.submitInstitutionForm}
-      >
-        {({ formState }) => (
-          <Card>
-            <CardHeader>
-              <Row>
-                <Col>{this.formTitle()}</Col>
-              </Row>
-            </CardHeader>
-            <CardBody>
+      <Card>
+        <CardHeader>
+          <Row>
+            <Col>{this.formTitle()}</Col>
+          </Row>
+        </CardHeader>
+        <Form
+          className="animated fadeIn"
+          getApi={this.setFormApi}
+          onSubmit={this.submitInstitutionForm}
+        >
+          {({ formState }) => (
+            <React.Fragment>
+              <CardBody>
               {this.renderError()}
-              <React.Fragment>
-                <CardBody>
                   <Row>
                     <Col md={6} className={style.borderLeft}>
                       <Row>
@@ -812,35 +808,33 @@ class InstitutionForm extends Component {
                       </Row>
                     </Col>
                   </Row>
-                </CardBody>
-              </React.Fragment>
-            </CardBody>
-            <CardFooter>
-              <FormButtons
-                backPath={backPath}
-                currentPath={backPath}
-                adminCondition={'institutions'}
-                userIsAdmin={isAdmin}
-                buttonText={'Institution'}
-                formType={formType}
-                infoBoxOpen={infoBoxOpen}
-                infoBoxToggle={this.toggleInfoBox}
-                submitForm={this.formApi.submitForm}
-                loading={loading}
-              />
-            </CardFooter>
-            <CardFooter className={style.infoFooter}>
-              <Collapse isOpen={infoBoxOpen}>
-                <InfoBox
-                  formState={formState}
-                  disabled={!isEdit}
+              </CardBody>
+              <CardFooter>
+                <FormButtons
+                  backPath={backPath}
+                  currentPath={backPath}
+                  adminCondition={'institutions'}
+                  userIsAdmin={isAdmin}
+                  buttonText={'Institution'}
+                  formType={formType}
+                  infoBoxOpen={infoBoxOpen}
+                  infoBoxToggle={this.toggleInfoBox}
+                  submitForm={this.formApi.submitForm}
+                  loading={loading}
                 />
-              </Collapse>
-            </CardFooter>
-            <CardFooter></CardFooter>
-          </Card>
-        )}
-      </Form>
+              </CardFooter>
+              <CardFooter className={style.infoFooter}>
+                <Collapse isOpen={infoBoxOpen}>
+                  <InfoBox
+                    formState={formState}
+                    disabled={!isEdit}
+                  />
+                </Collapse>
+              </CardFooter>
+            </React.Fragment>
+            )}
+        </Form>
+      </Card>
     ) : null;
   }
 }

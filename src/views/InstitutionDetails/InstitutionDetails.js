@@ -7,12 +7,13 @@ const InstitutionDetails = (props) => {
   return(
     <React.Fragment>
       <InstitutionForm
+        formTitle={param === 'view' ? 'View Institution' : 'Edit Institution'}
         formType={param}
         institutionID={parseInt(id, 10)}
         backPath={'/reference/institutions'}
       />
     </React.Fragment>
   )
-}
+};
 
 export default InstitutionDetails;
