@@ -116,7 +116,7 @@ class InfoBox extends Component {
     const {formState} = this.props;
 
     if (Object.entries(formState).length !== 0) {
-      const updateLogs = formState['update_log'];
+      const updateLogs = formState.values['update_log'];
       if(updateLogs) {
         return(
           <React.Fragment>
