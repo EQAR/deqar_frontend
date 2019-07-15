@@ -11,7 +11,6 @@ import {
   Row } from "reactstrap";
 import PropTypes from 'prop-types';
 import { Form } from 'informed';
-import Select from 'react-select';
 
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
 import FormTextArea from "../../../components/FormFields/FormTextArea";
