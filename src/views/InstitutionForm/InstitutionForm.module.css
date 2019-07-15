@@ -1,3 +1,9 @@
+.infoFooter {
+  background-color: hsl(0,0%,97%);
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 .borderLeft {
   border-right: 1px solid #CCCCCC;
 }

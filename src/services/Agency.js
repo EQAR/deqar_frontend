@@ -5,7 +5,7 @@ import {
   GET_MY_ACTIVITIES,
   GET_MY_SUBMISSION_AGENCIES,
   MANAGE_AGENCY,
-  MANAGE_MY_AGENCY
+  MANAGE_MY_AGENCY, POST_AGENCY_DECISION_EXTRA_FILE, POST_AGENCY_DECISION_FILE,
 } from "./config-api";
 
 class Agency {
@@ -43,6 +43,14 @@ class Agency {
 
   updateAgency = (formValues, agencyID) => {
     return axios.put(`${MANAGE_AGENCY}/${agencyID}/`, formValues);
+  };
+
+  submitDecisionFile = (file, decisionID, type) => {
+    if (type === 'decision') {
+      return axios.put(`${POST_AGENCY_DECISION_FILE}/${decisionID}/${file.name}`, file);
+    } else {
+      return axios.put(`${POST_AGENCY_DECISION_EXTRA_FILE}/${decisionID}/${file.name}`, file);
+    }
   };
 }
 

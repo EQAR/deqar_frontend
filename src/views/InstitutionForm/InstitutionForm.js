@@ -16,7 +16,7 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { connect } from "react-redux";
 import { scroller } from 'react-scroll';
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 import FormTextField from '../../components/FormFields/FormTextField';
 import FormSelectField from '../../components/FormFields/FormSelectField';
@@ -45,7 +45,7 @@ class InstitutionForm extends Component {
     super(props);
     this._isMounted = true;
     this.state = {
-      isFullEdit: false,
+      isEdit: false,
       openModal: null,
       formType: null,
       formIndex: null,
@@ -55,8 +55,8 @@ class InstitutionForm extends Component {
       qFeheaLevels: [],
       historicalLinkValue: null,
       hierarchicalLinkValue: null,
-      countries: null,
-      infoBoxOpen: true,
+      countries: [],
+      infoBoxOpen: false,
       agencies: [],
       localIDDisabled: true,
       loading: false,
@@ -69,13 +69,13 @@ class InstitutionForm extends Component {
     const { formType } = this.props;
 
     this.setState({
-      isFullEdit: this.isEditable(formType),
+      isEdit: this.isEditable(formType),
       formType: formType
     });
     this.populate();
   }
 
-  componentWillUnmount = () => {
+  componentWillUnmount() {
     this._isMounted = false;
   }
 
@@ -90,7 +90,7 @@ class InstitutionForm extends Component {
 
   isEditable = () => {
     const { formType, isAdmin } = this.props;
-    return true || formType === 'create';
+    return isAdmin || formType === 'create';
   }
 
   populate = () => {
@@ -130,7 +130,7 @@ class InstitutionForm extends Component {
     });
 
     isAdmin
-    ? agency.selectAllAgency().then((response) => this.setState({agencies: response.data}))
+    ? agency.getAgencies().then((response) => this.setState({agencies: response.data.results}))
     : agency.selectMySubmissionAgency().then((response) => this.setState({agencies: response.data}));
   }
 
@@ -337,7 +337,7 @@ class InstitutionForm extends Component {
   }
 
   renderLocations = formState => {
-    const { countries, isFullEdit } = this.state;
+    const { countries, isEdit } = this.state;
     const c = this.formApi.getValue('countries') || [''];
 
     if (countries) {
@@ -356,7 +356,7 @@ class InstitutionForm extends Component {
                     placeholder={'Please select'}
                     labelField={'name_english'}
                     valueField={'id'}
-                    disabled={!isFullEdit}
+                    disabled={!isEdit}
                     validate={validateRequired}
                     />
                   </FormGroup>
@@ -367,7 +367,7 @@ class InstitutionForm extends Component {
                   <FormTextField
                     field={'city'}
                     placeholder={'Enter city name'}
-                    disabled={!isFullEdit}
+                    disabled={!isEdit}
                   />
                   </FormGroup>
                 </Col>
@@ -475,32 +475,31 @@ class InstitutionForm extends Component {
       hierarchicalLinkValue,
       infoBoxOpen,
       qFeheaLevels,
-      isFullEdit,
+      isEdit,
       localIDValue,
       localIDDisabled,
       formIndex,
       loading
     } = this.state;
-    const { backPath, isAdmin, formType } = this.props;
+    const { backPath, isAdmin, formType, formTitle } = this.props;
 
     return  qFeheaLevels ? (
-      <Form
-        className="animated fadeIn"
-        getApi={this.setFormApi}
-        onSubmit={this.submitInstitutionForm}
-        onSubmitFailure={this.scrollTo}
-      >
-        {({ formState }) => (
-          <Card>
-            <CardHeader>
-              <Row>
-                <Col>{this.formTitle()}</Col>
-              </Row>
-            </CardHeader>
-            <CardBody>
+      <Card>
+        <CardHeader>
+          <Row>
+            <Col>{formTitle}</Col>
+          </Row>
+        </CardHeader>
+        <Form
+          className="animated fadeIn"
+          getApi={this.setFormApi}
+          onSubmit={this.submitInstitutionForm}
+          onSubmitFailure={this.scrollTo}
+        >
+          {({ formState }) => (
+            <React.Fragment>
+              <CardBody>
               {this.renderError()}
-              <React.Fragment>
-                <CardBody>
                   <Row>
                     <Col md={6} className={style.borderLeft}>
                       <Row>
@@ -510,7 +509,7 @@ class InstitutionForm extends Component {
                             <FormTextField
                               field={'names_actual[0].name_official'}
                               placeholder={'Enter official institution name'}
-                              disabled={!isFullEdit}
+                              disabled={!isEdit}
                               validate={validateRequired}
                             />
                           </FormGroup>
@@ -523,7 +522,7 @@ class InstitutionForm extends Component {
                             <FormTextField
                               field={'names_actual[0].name_official_transliterated'}
                               placeholder={'Enter transliterated form'}
-                              disabled={!isFullEdit}
+                              disabled={!isEdit}
                               validate={validateRoman}
                             />
                           </FormGroup>
@@ -536,7 +535,7 @@ class InstitutionForm extends Component {
                             <FormTextField
                               field={'names_actual[0].name_english'}
                               placeholder={'Enter English form'}
-                              disabled={!isFullEdit}
+                              disabled={!isEdit}
                             />
                           </FormGroup>
                         </Col>
@@ -573,7 +572,7 @@ class InstitutionForm extends Component {
                             <FormTextField
                               field={'names_actual[0].acronym'}
                               placeholder={'Enter acronym'}
-                              disabled={!isFullEdit}
+                              disabled={!isEdit}
                             />
                           </FormGroup>
                         </Col>
@@ -585,7 +584,7 @@ class InstitutionForm extends Component {
                             <FormTextField
                               field={'website_link'}
                               placeholder={'Enter institution website'}
-                              disabled={!isFullEdit}
+                              disabled={!isEdit}
                               validate={validateRequiredURL}
                             />
                           </FormGroup>
@@ -600,7 +599,7 @@ class InstitutionForm extends Component {
                             fieldName={'names_former'}
                             formIndex = {formIndex}
                             formValue={formerNameValue}
-                            disabled={!isFullEdit}
+                            disabled={!isEdit}
                             />
                           <AssignedList
                             errors={formState.errors}
@@ -614,7 +613,7 @@ class InstitutionForm extends Component {
                             renderDisplayValue={this.renderFormerNames}
                             field={'names_former'}
                             fieldName={'names_former'}
-                            disabled={!isFullEdit}
+                            disabled={!isEdit}
                             />
                         </Col>
                       </Row>
@@ -649,7 +648,7 @@ class InstitutionForm extends Component {
                     </Col>
                     <Col md={6}>
                       {this.renderLocations(formState)}
-                      {isFullEdit && formState.values.countries ?
+                      {isEdit && formState.values.countries ?
                         <Row>
                           <Col md={12}>
                             <div className="pull-right">
@@ -670,7 +669,7 @@ class InstitutionForm extends Component {
                             <FormDatePickerField
                               field={'founding_date'}
                               placeholderText={'Enter year'}
-                              disabled={!isFullEdit}
+                              disabled={!isEdit}
                               validate={(value) => formState.values.closure_date ? validateDateFrom(value, formState.values.closure_date) : null}
                               />
                           </FormGroup>
@@ -682,7 +681,7 @@ class InstitutionForm extends Component {
                               field={'closure_date'}
                               placeholderText={'Enter year'}
                               validate ={validateDate}
-                              disabled={!isFullEdit}
+                              disabled={!isEdit}
                             />
                           </FormGroup>
                         </Col>
@@ -694,7 +693,7 @@ class InstitutionForm extends Component {
                                 <FormGroup>
                                   <Label for="country">QF-EHEA Levels</Label>
                                   <Select
-                                    className={!isFullEdit ? style.hidden : null}
+                                    className={!isEdit ? style.hidden : null}
                                     options={this.getQFEheaOptions(qFeheaLevels)}
                                     onChange={this.changeQFEheaLvels}
                                     placeholder={'Select select multiple, if necessary'}
@@ -717,7 +716,7 @@ class InstitutionForm extends Component {
                                     field={'qf_ehea_levels'}
                                     fieldName={'qf_ehea_levels'}
                                     onRemove={this.onRemove}
-                                    disabled={!isFullEdit}
+                                    disabled={!isEdit}
                                     />
                                 </FormGroup>
                               </Col>
@@ -731,7 +730,7 @@ class InstitutionForm extends Component {
                             <FormTextField
                               field={'other_comment'}
                               placeholder={'Enter comment, if applicable'}
-                              disabled={!isFullEdit}
+                              disabled={!isEdit}
                               />
                           </FormGroup>
                         </Col>
@@ -744,7 +743,7 @@ class InstitutionForm extends Component {
                             onFormSubmit={this.onFormSubmit}
                             formValue={historicalLinkValue}
                             formIndex={formIndex}
-                            disabled={!isFullEdit}
+                            disabled={!isEdit}
                             fieldName={'historical_links'}
                           />
                           <AssignedList
@@ -759,7 +758,7 @@ class InstitutionForm extends Component {
                             renderDisplayValue={this.renderHistoricalLinks}
                             field={'historical_links'}
                             fieldName={'historical_links'}
-                            disabled={!isFullEdit}
+                            disabled={!isEdit}
                           />
                         </Col>
                       </Row>
@@ -771,7 +770,7 @@ class InstitutionForm extends Component {
                             onFormSubmit={this.onFormSubmit}
                             formValue={hierarchicalLinkValue}
                             formIndex={formIndex}
-                            disabled={!isFullEdit}
+                            disabled={!isEdit}
                             fieldName={'hierarchical_links'}
                             />
                           <AssignedList
@@ -786,41 +785,39 @@ class InstitutionForm extends Component {
                             renderDisplayValue={this.renderHierarchicalLinks}
                             field={'hierarchical_links'}
                             fieldName={'hierarchical_links'}
-                            disabled={!isFullEdit}
+                            disabled={!isEdit}
                           />
                         </Col>
                       </Row>
                     </Col>
                   </Row>
-                </CardBody>
-              </React.Fragment>
-            </CardBody>
-            <CardFooter>
-              <FormButtons
-                backPath={backPath}
-                currentPath={backPath}
-                adminCondition={'institutions'}
-                userIsAdmin={isAdmin}
-                buttonText={'Institution'}
-                formType={formType}
-                infoBoxOpen={infoBoxOpen}
-                infoBoxToggle={this.toggleInfoBox}
-                submitForm={this.formApi.submitForm}
-                loading={loading}
-              />
-            </CardFooter>
-            <CardFooter className={style.infoFooter}>
-              <Collapse isOpen={infoBoxOpen}>
-                <InfoBox
-                  formState={formState}
-                  disabled={!isFullEdit}
+              </CardBody>
+              <CardFooter>
+                <FormButtons
+                  backPath={backPath}
+                  currentPath={backPath}
+                  adminCondition={'institutions'}
+                  userIsAdmin={isAdmin}
+                  buttonText={'Institution'}
+                  formType={formType}
+                  infoBoxOpen={infoBoxOpen}
+                  infoBoxToggle={this.toggleInfoBox}
+                  submitForm={this.formApi.submitForm}
+                  loading={loading}
                 />
-              </Collapse>
-            </CardFooter>
-            <CardFooter></CardFooter>
-          </Card>
-        )}
-      </Form>
+              </CardFooter>
+              <CardFooter className={style.infoFooter}>
+                <Collapse isOpen={infoBoxOpen}>
+                  <InfoBox
+                    formState={formState}
+                    disabled={!isEdit}
+                  />
+                </Collapse>
+              </CardFooter>
+            </React.Fragment>
+            )}
+        </Form>
+      </Card>
     ) : null;
   }
 }

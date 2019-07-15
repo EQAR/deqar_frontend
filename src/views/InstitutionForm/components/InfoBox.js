@@ -11,6 +11,7 @@ import FormTextField from "../../../components/FormFields/FormTextField";
 import cx from 'classnames';
 import FlagForm from './FlagForm';
 import AssignedList from '../../../components/FormFieldsUncontrolled/AssignedList';
+import {Text} from "informed";
 
 
 class InfoBox extends Component {
@@ -111,6 +112,33 @@ class InfoBox extends Component {
     }
   }
 
+  renderUpdateLog = () => {
+    const {formState} = this.props;
+
+    if (Object.entries(formState).length !== 0) {
+      const updateLogs = formState.values['update_log'];
+      if(updateLogs) {
+        return(
+          <React.Fragment>
+            {updateLogs.map((updateLog, idx) => {
+              const updatedBy = updateLog.updated_by ? `by '${updateLog.updated_by}'` : '';
+              const note = updateLog.note ? `(${updateLog.note})` : '';
+
+              return(
+                <input
+                  key={idx}
+                  className={cx(style.infoInput, 'form-control')}
+                  disabled={true}
+                  value={`Updated: ${this.renderDate(updateLog.updated_at)} ${updatedBy} ${note}`}
+                />
+              )
+            })}
+          </React.Fragment>
+        )
+      }
+    }
+  };
+
   renderDate = (date) => {
     if (date) {
       return moment(date, moment.ISO_8601).format("YYYY-MM-DD HH:mm:ss")
@@ -128,18 +156,22 @@ class InfoBox extends Component {
           <Col md={6}>
             <Row>
               <Col md={6}>
-                <Label for="deqar_id">DEQARINST ID</Label>
+                <FormGroup>
+                  <Label for="deqar_id">DEQARINST ID</Label>
                   <FormTextField
                     field={'deqar_id'}
                     disabled
                   />
+                </FormGroup>
               </Col>
               <Col md={6}>
-                <Label for="eter_id">ETER ID</Label>
+                <FormGroup>
+                  <Label for="eter_id">ETER ID</Label>
                   <FormTextField
                     field={'eter_id'}
                     disabled
                   />
+                </FormGroup>
               </Col>
             </Row>
             <Row>
@@ -193,16 +225,14 @@ class InfoBox extends Component {
                 <Col>
                   <FormGroup>
                     <Label>Record History</Label>
+                    <Text field={'update_log'} hidden={true}/>
+                    {this.renderUpdateLog()}
+                    <Text field={'created_at'} hidden={true}/>
                     <input
                       className={cx(style.infoInput, 'form-control')}
                       disabled={true}
-                      value={`Created at ${this.renderDate(values.created_at)} by 'formState.created_by'`}
+                      value={`Record created: ${this.renderDate(values.created_at)}`}
 
-                    />
-                    <input
-                      className={cx(style.infoInput, 'form-control')}
-                      disabled={true}
-                      value={`Updated at ${this.renderDate(values)} by ''`}
                     />
                   </FormGroup>
                 </Col>

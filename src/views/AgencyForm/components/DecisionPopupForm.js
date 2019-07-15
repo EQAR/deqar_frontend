@@ -26,7 +26,7 @@ class MembershipPopupForm extends Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.props.formIndex !== prevProps.formIndex) {
       this.setFileUpload('decision_file_name', 'decision_file_size', 'decisionFiles');
-      this.setFileUpload('decision_extra_file_name', 'decision_extra_file_size', 'decisionExtraFiles')
+      this.setFileUpload('decision_file_extra_name', 'decision_file_extra_size', 'decisionExtraFiles')
     }
   }
 
@@ -52,7 +52,8 @@ class MembershipPopupForm extends Component {
       }
     } else {
       this.setState({
-        decisionFiles: []
+        decisionFiles: [],
+        decisionExtraFiles: []
       })
     }
   };
@@ -67,6 +68,8 @@ class MembershipPopupForm extends Component {
 
   // Submit the form
   submitForm = () => {
+    this.props.onFormSubmitFile(this.state.decisionFiles, 'decision_file');
+    this.props.onFormSubmitFile(this.state.decisionExtraFiles, 'decision_file_extra');
     this.formApi.submitForm();
   };
 
@@ -81,6 +84,21 @@ class MembershipPopupForm extends Component {
 
   onToggle = () => {
     this.props.onToggle();
+  };
+
+  // Events
+  onFileChange = (fileItems, field, state) => {
+    if(fileItems.length > 0) {
+      this.setState({
+        [state]: fileItems.map(fileItem => fileItem.file)
+      });
+      this.formApi.setValue(`${field}_name`, fileItems[0].filename);
+      this.formApi.setValue(`${field}_size`, fileItems[0].fileSize);
+    } else {
+      this.setState({
+        [state]: []
+      })
+    }
   };
 
   getFileManager = (field, label, stateName) => {
@@ -104,14 +122,14 @@ class MembershipPopupForm extends Component {
     } else {
       return (
         <React.Fragment>
-          <Text field={field} hidden />
-          <Text field={field} hidden />
+          <Text field={`${field}_name`} hidden />
+          <Text field={`${field}_size`} hidden />
           <Label for={field}>Current {label}</Label>
           <FilePond
             files={this.state[stateName]}
             allowMultiple={false}
             acceptedFileTypes={['application/pdf']}
-            onupdatefiles={this.onFileChange}
+            onupdatefiles={(fileItems) => this.onFileChange(fileItems, field, stateName)}
           />
         </React.Fragment>
       )
