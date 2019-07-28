@@ -18,7 +18,9 @@ const InstitutionsTable = (props) => {
       >
         {row.original.name_primary}
       </Link>)
-  };
+  }
+
+  const countryRenderer = (row) => row.original.country.join(', ')
 
   const columnConfig = [
     {
@@ -48,6 +50,7 @@ const InstitutionsTable = (props) => {
       sortable: true,
       minWidth: 100,
       maxWidth: 200,
+      render: countryRenderer
     }
   ];
 
