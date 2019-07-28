@@ -101,7 +101,7 @@ class InstitutionsTableFilters extends Component {
                 <Input
                   value={deqar_id || ""}
                   onChange={(e) => this.onFilterChange(e.target.value, 'deqar_id')}
-                  placeholder={'DEQAR ID'}
+                  placeholder={'DEQARINST ID'}
                 />
               </FormGroup>
             </Col>

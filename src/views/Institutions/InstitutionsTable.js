@@ -25,7 +25,7 @@ const InstitutionsTable = (props) => {
   const columnConfig = [
     {
       field: 'deqar_id',
-      label: 'DEQAR ID',
+      label: 'DEQARINST ID',
       sortable: false,
       minWidth: 80,
       maxWidth: 150
