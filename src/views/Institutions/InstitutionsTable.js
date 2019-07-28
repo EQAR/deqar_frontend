@@ -16,11 +16,11 @@ const InstitutionsTable = (props) => {
         to={{pathname: `/reference/institutions/edit/${row.original.id}`}}
         className={style.Link}
       >
-        {row.original.name_primary}
+        {row.original.name_select_display}
       </Link>)
   }
 
-  const countryRenderer = (row) => row.original.country.join(', ')
+  const countryRenderer = (row) => row.original.country ? row.original.country.join(', ') : null;
 
   const columnConfig = [
     {
@@ -51,6 +51,13 @@ const InstitutionsTable = (props) => {
       minWidth: 100,
       maxWidth: 200,
       render: countryRenderer
+    },
+    {
+      field: 'city',
+      label: 'City',
+      sortable: true,
+      minWidth: 100,
+      maxWidth: 200,
     }
   ];
 
