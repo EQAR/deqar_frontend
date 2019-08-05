@@ -81,7 +81,7 @@ class InstitutionForm extends Component {
 
   isEditable = () => {
     const { formType, isAdmin } = this.props;
-    return true || formType === 'create';
+    return isAdmin || formType === 'create';
   }
 
   populate = () => {
@@ -547,7 +547,7 @@ class InstitutionForm extends Component {
                               </Col>
                             </Row>
                           </Collapse>
-                          {!isEdit && isShowTransliteration ? "" :
+                          {!isEdit || isShowTransliteration ? "" :
                             <Row>
                               <Col md={12}>
                                 <Button
