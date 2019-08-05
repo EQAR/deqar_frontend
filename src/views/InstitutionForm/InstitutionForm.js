@@ -60,7 +60,8 @@ class InstitutionForm extends Component {
       localIDDisabled: true,
       loading: false,
       alertVisible: false,
-      nonFieldErrors: []
+      nonFieldErrors: [],
+      isShowTransliteration: false
     }
   }
 
@@ -80,7 +81,7 @@ class InstitutionForm extends Component {
 
   isEditable = () => {
     const { formType, isAdmin } = this.props;
-    return isAdmin || formType === 'create';
+    return true || formType === 'create';
   }
 
   populate = () => {
@@ -480,6 +481,8 @@ class InstitutionForm extends Component {
     : this.updteInstitution(value)
   }
 
+  toggleTransliteration = () => this.setState({isShowTransliteration: !this.state.isShowTransliteration})
+
   render() {
     const {
       openModal,
@@ -493,7 +496,8 @@ class InstitutionForm extends Component {
       localIDValue,
       localIDDisabled,
       formIndex,
-      loading
+      loading,
+      isShowTransliteration
     } = this.state;
     const { backPath, isAdmin, formType, formTitle } = this.props;
 
@@ -528,19 +532,33 @@ class InstitutionForm extends Component {
                           </FormGroup>
                         </Col>
                       </Row>
-                      <Row>
-                        <Col>
-                          <FormGroup>
-                          <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
-                            <FormTextField
-                              field={'names_actual[0].name_official_transliterated'}
-                              placeholder={'Enter transliterated form'}
-                              disabled={!isEdit}
-                              validate={validateRoman}
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
+                          <Collapse isOpen={isShowTransliteration}>
+                            <Row>
+                              <Col>
+                                <FormGroup>
+                                  <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
+                                    <FormTextField
+                                      field={'names_actual[0].name_official_transliterated'}
+                                      placeholder={'Enter transliterated form'}
+                                      disabled={!isEdit}
+                                      validate={validateRoman}
+                                    />
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                          </Collapse>
+                          {!isEdit && isShowTransliteration ? "" :
+                            <Row>
+                              <Col md={12}>
+                                <Button
+                                  type={'button'}
+                                  size="sm"
+                                  color="secondary"
+                                  onClick={this.toggleTransliteration}
+                                >Add Tranliteration</Button>
+                              </Col>
+                            </Row>
+                          }
                       <Row>
                         <Col>
                           <FormGroup>
