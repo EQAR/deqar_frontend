@@ -81,7 +81,7 @@ class InstitutionForm extends Component {
 
   isEditable = () => {
     const { formType, isAdmin } = this.props;
-    return isAdmin || formType === 'create';
+    return true || formType === 'create';
   }
 
   populate = () => {
@@ -586,9 +586,10 @@ class InstitutionForm extends Component {
                             errors={formState.errors}
                             valueFields={['name']}
                             values={this.getAlternativeNameValues(formState)}
+                            emptyHidden={true}
                             label={'Institution Name, Alternative'}
                             btnLabel={'Add Alternative Name'}
-                            onRemove={() => null}
+                            onRemove={this.onRemove}
                             renderDisplayValue={this.renderAlternativeNames}
                             onAddButtonClick={this.onAddAlternativeName}
                             onClick={this.onAltenativeNameClick}

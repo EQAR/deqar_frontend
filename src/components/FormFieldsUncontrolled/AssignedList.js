@@ -5,7 +5,9 @@ import style from './AssignedList.module.css';
 import {Text} from "informed";
 import cx from 'classnames';
 
-const AssignedList = ({values, errors, label, btnLabel, field, fieldName, labelShowRequired, disabled, ...props}) => {
+const AssignedList = ({values, errors, label, btnLabel, field, fieldName, labelShowRequired, emptyHidden, disabled, ...props}) => {
+  emptyHidden = emptyHidden || false;
+
   const renderListItems = (values) => {
     values = values ? values : [];
     const emptyBox = (
@@ -43,7 +45,7 @@ const AssignedList = ({values, errors, label, btnLabel, field, fieldName, labelS
         )
       });
     } else {
-      return emptyBox;
+      return emptyHidden ? null : emptyBox;
     }
   }
 
