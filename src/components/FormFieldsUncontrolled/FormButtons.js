@@ -150,7 +150,7 @@ class FormButtons extends Component {
   };
 
   render() {
-    const {formType} = this.props;
+    const {formType, adminCondition} = this.props;
 
     switch (formType) {
       case 'view':
@@ -172,8 +172,8 @@ class FormButtons extends Component {
       case 'edit':
         return (
           <div>
-            {this.renderSubmitMessage()}
-            {this.renderEditSubmitButton()}
+            {adminCondition !== 'institutions' ? this.renderSubmitMessage(): null}
+            {adminCondition !== 'institutions' ? this.renderEditSubmitButton(): this.renderCreateSubmitButton()}
             {this.renderCloseButton()}
             {this.renderHideInfoButton()}
           </div>

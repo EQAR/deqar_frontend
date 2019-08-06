@@ -15,7 +15,8 @@ import {
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { connect } from "react-redux";
-import {withRouter} from "react-router-dom";
+import { scroller } from 'react-scroll';
+import { withRouter } from "react-router-dom";
 
 import FormTextField from '../../components/FormFields/FormTextField';
 import FormSelectField from '../../components/FormFields/FormSelectField';
@@ -32,7 +33,7 @@ import HierarchicalLinkForm from './components/HierarchicalLinkForm';
 import InfoBox from './components/InfoBox';
 import country from '../../services/Country';
 import qfEHEALevel from '../../services/QFeheaLevel';
-import { validateRoman, validateRequired, validateRequiredURL, validateDateFrom } from "../../utils/validators";
+import { validateRoman, validateRequired, validateRequiredURL, validateDateFrom, validateDate } from "../../utils/validators";
 import agency from '../../services/Agency';
 import { toast } from 'react-toastify';
 import { createFormNormalizer } from './createFormNormalizer';
@@ -79,6 +80,15 @@ class InstitutionForm extends Component {
     this._isMounted = false;
   }
 
+  scrollTo = () => {
+    scroller.scrollTo('scroll-to-element', {
+      duration: 800,
+      delay: 0,
+      offset: -100,
+      smooth: 'easeInOutQuart'
+    })
+  }
+
   isEditable = () => {
     const { formType, isAdmin } = this.props;
     return true || formType === 'create';
@@ -97,7 +107,8 @@ class InstitutionForm extends Component {
         const hierarchical_child = response.data.hierarchical_child.map(c => ({...c, position: 'child'}))
         data.historical_links = [...historical_source, ...historical_target];
         data.hierarchical_links = [...hierarchical_child, ...hierarchical_parent];
-        data.flags = data.flags ? [{flag: 'none', flag_message: 'Institution has no flag assigned', banned: true}] : data.flags;
+        data.names_actual.name_official_transliterated = data.names_actual.name_official_transliterated ? data.names_actual.name_official_transliterated : null;
+        data.flags = !data.flags || data.flags.length === 0 ? [{flag: 'none', flag_message: 'Institution has no flag assigned', banned: true}] : data.flags;
         this.formApi.setValues(data);
       });
     } else {
@@ -383,6 +394,7 @@ class InstitutionForm extends Component {
       <Row>
         <Col md={12}>
           <FormAlert
+            name="scroll-to-element"
             visible={alertVisible}
             onClose={this.onAlertClose}
             errorMessage={nonFieldErrors}
@@ -408,45 +420,25 @@ class InstitutionForm extends Component {
     this.formApi.submitForm();
   }
 
-  createInstitution = (value) => {
-    this.toggleLoading();
-    institution.submitInstitution(createFormNormalizer(value)).then((r) => {
-      this.toggleLoading();
-      toast.success("Institution was created.");
-      this.props.history.push('/reference/institutions');
-    }).catch(error => {
-      const errors = error.response.data.errors || error.response.data;
-      if ('non_field_errors' in errors) {
-        this.setState({
-          alertVisible: true,
-          nonFieldErrors: errors.non_field_errors
-        });
-        this.toggleLoading();
-      }
+  getMethod = (value, institutionID) => {
+    const { formType } = this.props;
 
-      Object.keys(errors).forEach(key => {
-        if (errors[key].non_field_errors) {
-          this.setState({
-            alertVisible: true,
-            nonFieldErrors: errors[key].non_field_errors
-          });
-        } else {
-          if (this.formApi.fieldExists(key)) {
-            this.formApi.setError(key, errors[key]);
-          }
-        }
-      });
-      this.toggleLoading();
-    })
+    return formType === 'create' ?
+    institution.submitInstitution(value) :
+    institution.updateInstitution(value, institutionID)
   }
 
-  updteInstitution = (value) => {
-    const { institutionID } = this.props;
+  submitInstitutionForm = (value) => {
+    const { institutionID, formType } = this.props;
+    const messages = {
+      create: "Institution was created.",
+      edit: "Institution was updated."
+    }
 
     this.toggleLoading();
-    institution.updateInstitution(createFormNormalizer(value), institutionID).then((r) => {
+    this.getMethod(createFormNormalizer(value), institutionID).then((r) => {
       this.toggleLoading();
-      toast.success("Institution was created.");
+      toast.success(messages[formType]);
       this.props.history.push('/reference/institutions');
     }).catch(error => {
       const errors = error.response.data.errors || error.response.data;
@@ -471,6 +463,7 @@ class InstitutionForm extends Component {
         }
       });
       this.toggleLoading();
+      this.scrollTo();
     })
   }
 
@@ -512,6 +505,7 @@ class InstitutionForm extends Component {
           className="animated fadeIn"
           getApi={this.setFormApi}
           onSubmit={this.submitInstitutionForm}
+          onSubmitFailure={this.scrollTo}
         >
           {({ formState }) => (
             <React.Fragment>
@@ -580,7 +574,6 @@ class InstitutionForm extends Component {
                             fieldName={'names_actual[0].alternative_names'}
                             formIndex={formIndex}
                             formValue={alternativeNameValue}
-                            disabled={!isEdit}
                           />
                           <AssignedList
                             errors={formState.errors}
@@ -595,19 +588,17 @@ class InstitutionForm extends Component {
                             onClick={this.onAltenativeNameClick}
                             field={'names_actual[0].alternative_names'}
                             fieldName={'names_actual[0].alternative_names'}
-                            disabled={!isEdit}
                             />
                         </Col>
                       </Row>
                       <Row>
                         <Col md={6}>
                           <FormGroup>
-                          <Label for="acronym" className={'required'}>Institution Acronym</Label>
+                          <Label for="acronym">Institution Acronym</Label>
                             <FormTextField
                               field={'names_actual[0].acronym'}
                               placeholder={'Enter acronym'}
                               disabled={!isEdit}
-                              validate={validateRequired}
                             />
                           </FormGroup>
                         </Col>
@@ -663,7 +654,6 @@ class InstitutionForm extends Component {
                             formValue={localIDValue}
                             disabled={localIDDisabled}
                             localIDs={formState.values.identifiers_local}
-                            disabled={!isEdit}
                           />
                           <AssignedList
                             errors={formState.errors}
@@ -678,7 +668,6 @@ class InstitutionForm extends Component {
                             field={'identifiers_local'}
                             fieldName={'identifiers_local'}
                             validate={this.validateAgency}
-                            disabled={!isEdit}
                           />
                         </Col>
                       </Row>
@@ -717,6 +706,7 @@ class InstitutionForm extends Component {
                             <FormDatePickerField
                               field={'closure_date'}
                               placeholderText={'Enter year'}
+                              validate ={validateDate}
                               disabled={!isEdit}
                             />
                           </FormGroup>

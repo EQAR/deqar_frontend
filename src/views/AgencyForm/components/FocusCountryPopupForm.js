@@ -7,7 +7,7 @@ import FormDatePickerField from "../../../components/FormFields/FormDatePickerFi
 import country from "../../../services/Country";
 import style from "./FocusCountryPopupForm.module.css";
 import cx from 'classnames';
-import {validateDate, validateDateFrom, validateRequired} from "../../../utils/validators";
+import {validateDate, validateDateFromRequired, validateRequired} from "../../../utils/validators";
 
 class FocusCountryPopupForm extends Component {
   constructor(props) {
@@ -123,7 +123,7 @@ class FocusCountryPopupForm extends Component {
                         field={'country_valid_from'}
                         placeholderText={'YYYY-MM-DD'}
                         disabled={disabled}
-                        validate={(value) => validateDateFrom(value, formState.values.country_valid_to)}
+                        validate={(value) => validateDateFromRequired(value, formState.values.country_valid_to)}
                       />
                     </FormGroup>
                   </Col>

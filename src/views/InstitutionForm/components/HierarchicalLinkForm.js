@@ -11,13 +11,13 @@ import {
   Row } from "reactstrap";
 import PropTypes from 'prop-types';
 import { Form } from 'informed';
-import Select from 'react-select';
 
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
+import FormSimpleSelect from "../../../components/FormFields/FormSimpleSelect";
 import FormTextArea from "../../../components/FormFields/FormTextArea";
 import AssignedList from '../../../components/FormFieldsUncontrolled/AssignedList';
 import InstitutionSelect from './InstitutionSelect';
-import { validateRequired, validateDateFrom } from "../../../utils/validators";
+import { validateRequired, validateDateFrom, validateDate, } from "../../../utils/validators";
 
 class HierarchicalLinkForm extends Component {
   constructor(props) {
@@ -83,14 +83,17 @@ class HierarchicalLinkForm extends Component {
 
   changeLinkType = (value) => {
     const values = this.formApi.getState().values;
+
     this.formApi.setValues({...values, position: value.value});
+    this.formApi.setValue('position', value.value)
   }
 
-  getLinkValue = (formState) => (
+  getLinkValue = (formState) => {
+    return (
     formState.values.position
     ? {value: formState.values.position, label: formState.values.position.charAt(0).toUpperCase() + formState.values.position.slice(1)}
     : null
-  )
+  )}
 
   render() {
     const { modalOpen, disabled, formIndex, fieldName } = this.props;
@@ -111,13 +114,14 @@ class HierarchicalLinkForm extends Component {
                   <Col>
                     <FormGroup>
                     <Label for="former_name_official" className={'required'}>Relationship</Label>
-                    <Select
+                    <FormSimpleSelect
+                      field={'position'}
                       options={relationShipTypes}
-                      placeholder={'Please select'}
-                      onChange={this.changeLinkType}
-                      labelField={'acronym_primary'}
                       value={this.getLinkValue(formState)}
+                      onChange={this.changeLinkType}
                       isDisabled={disabled}
+                      validate={validateRequired}
+                      placeholder={'Please select'}
                     />
                     </FormGroup>
                   </Col>
@@ -169,6 +173,7 @@ class HierarchicalLinkForm extends Component {
                       <FormDatePickerField
                         field={'valid_to'}
                         placeholderText={'YYYY-MM-DD'}
+                        validate={validateDate}
                         disabled={disabled}
                       />
                     </FormGroup>

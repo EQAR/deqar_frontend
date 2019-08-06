@@ -9,10 +9,6 @@ export const validateRequired = (value) => {
   }
 }
 
-export const validateRequiredInstitutionName = value => {
-
-}
-
 export const validateEmail = (value) => {
   if (!EmailValidator.validate(value)) {
     return 'E-mail should be properly formatted.'
@@ -25,14 +21,16 @@ export const validateValuesMatch = (val1, val2) => {
   }
 }
 
-export const validateDate = (value) => (
-  !moment(value, 'YYYY-MM-DD', true).isValid()
-  ? 'Date format is invalid!'
-  : null
-)
+export const validateDate = (value) => {
+  if (value) {
+    return !moment(value, 'YYYY-MM-DD', true).isValid()
+    ? 'Date format is invalid!'
+    : null
+  }
+}
 
 export const validatePastDate = (value) => (
-  moment(new Date()), moment(value).isAfter(new Date())
+  moment(value).isAfter(new Date())
   ? 'Date should be earlier!'
   : null
 )
@@ -68,12 +66,22 @@ export const validateRoman = (value) => {
 };
 
 export const validateDateFrom = (value, date_to) => {
+  if (!validateDate(value)) {
+    if (date_to) {
+      if (!moment(value).isBefore(date_to)) {
+        return "Valid from is later date, then valid to"
+      }
+    }
+  } else {
+    return validateDate(value);
+  }
+}
+
+export const validateDateFromRequired = (value, date_to) => {
   if (!validateRequiredDate(value)) {
     if (date_to) {
       if (!validateRequiredDate(date_to)) {
-        if (!moment(value).isBefore(date_to)) {
-          return "Valid from is later date, then valid to"
-        }
+        return validateDateFrom(value, date_to) ? validateDateFrom(value, date_to) : null;
       }
     }
   } else {
