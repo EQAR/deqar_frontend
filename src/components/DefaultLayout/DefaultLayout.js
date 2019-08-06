@@ -4,7 +4,6 @@ import { Container } from 'reactstrap';
 import auth from '../../services/Auth'
 
 import {
-  AppFooter,
   AppHeader,
   AppSidebar,
   AppSidebarFooter,
@@ -22,7 +21,8 @@ import navigation from '../../navigation/navigation';
 // routes config
 import routes from '../../navigation/routes';
 
-const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
+import style from './DefaultLayout.module.css';
+
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
 const DefaultLayout = (props) => {
@@ -53,7 +53,7 @@ const DefaultLayout = (props) => {
         </Suspense>
       </AppHeader>
       <div className="app-body">
-        <AppSidebar fixed display="lg">
+        <AppSidebar fixed display="lg" width={300}>
           <AppSidebarHeader />
           <AppSidebarForm />
           <Suspense>
@@ -63,7 +63,7 @@ const DefaultLayout = (props) => {
           <AppSidebarMinimizer />
         </AppSidebar>
         <main className="main">
-          <Container fluid>
+          <Container className={style.Container}>
             <Suspense fallback={loading()}>
               <Switch>
                 {routes.map((route, idx) => {
@@ -84,11 +84,7 @@ const DefaultLayout = (props) => {
           </Container>
         </main>
       </div>
-      <AppFooter>
-        <Suspense fallback={loading()}>
-          <DefaultFooter />
-        </Suspense>
-      </AppFooter>
+
     </div>
   );
 };
