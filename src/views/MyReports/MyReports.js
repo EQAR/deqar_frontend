@@ -20,9 +20,9 @@ const MyReports = (props) => {
 
   return(
     <div className="animated fadeIn">
-      <Card>
+      <Card className={style.MyReportsCard}>
         <CardHeader>
-          My Uploaded Reports
+          My Data » My Reports
           <DataTableHeader
             storeName={'myReportsTable'}
             filterText={'Number of reports'}

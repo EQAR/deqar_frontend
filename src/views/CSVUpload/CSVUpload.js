@@ -4,6 +4,8 @@ import CSVInfo from "./CSVInfo";
 import FileUpload from "./FileUpload";
 import CSVGrid from "./CSVGrid";
 import IngestInfo from "./IngestInfo";
+import cx from 'classnames';
+import style from './CSVUpload.module.css';
 
 class CSVUpload extends Component {
   constructor(props) {
@@ -77,7 +79,7 @@ class CSVUpload extends Component {
     const {step} = this.state;
 
     return (
-      <div className="animated fadeIn">
+      <div className={cx(style.CSVUpload, 'animated fadeIn')}>
         <Row>
           <Col md={4} xs={12}>
             <FileUpload handleReadCSV={this.saveCSVData} />

@@ -9,7 +9,7 @@ const ReportDetails = ({userIsAdmin, ...props}) => {
   return(
     <React.Fragment>
       <ReportForm
-        formTitle={param === 'view' ? 'View Report' : 'Edit Report'}
+        formTitle={param === 'view' ? 'Reference Data » Reports » View' : 'Reference Data » Reports » Edit'}
         formType={param}
         reportID={id}
         backPath={'/reference/reports'}

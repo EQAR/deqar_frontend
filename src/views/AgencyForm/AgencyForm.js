@@ -32,8 +32,6 @@ import FormTextArrayField from "../../components/FormFieldsUncontrolled/FormText
 import {toast} from "react-toastify";
 import {updateFormNormalizer} from "./normalizers/updateFormNormalizer";
 import {withRouter} from "react-router-dom";
-import FilePopupForm from "../ReportForm/ReportForm";
-import report from "../../services/Report";
 
 
 class AgencyForm extends Component {
@@ -385,7 +383,7 @@ class AgencyForm extends Component {
 
     return(
       <div className="animated fadeIn">
-        <Card>
+        <Card className={style.AgencyFormCard}>
           <CardHeader>
             <Row>
               <Col>

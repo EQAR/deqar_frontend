@@ -153,7 +153,7 @@ class ReportForm extends Component {
 
   populateActivitySelect = (agencyID) => {
     if(agencyID) {
-      agency.selectMyActivity(agencyID).then((response) => {
+      agency.selectActivity(agencyID).then((response) => {
         this.setState({
           agencyActivityOptions: response.data
         })
@@ -628,7 +628,7 @@ class ReportForm extends Component {
 
     return(
       <div className="animated fadeIn">
-        <Card>
+        <Card className={style.ReportFormCard}>
           <CardHeader>
             <Row>
               <Col>

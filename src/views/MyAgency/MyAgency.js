@@ -8,7 +8,7 @@ const MyAgency = ({userIsAdmin, match, ...props}) => {
   return(
     <React.Fragment>
       <AgencyForm
-        formTitle={param === 'view' ? 'View Report' : 'Edit Report'}
+        formTitle={param === 'view' ? 'My Data » My Agency » View' : 'My Data » My Agency » Edit'}
         formType={param ? param : 'view'}
         currentPath={'my-agency'}
         userIsAdmin={userIsAdmin}

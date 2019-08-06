@@ -21,9 +21,9 @@ const Institutions = (props) => {
 
   return (
     <div className="animated fadeIn">
-      <Card>
+      <Card className={style.InstitutionsCard}>
         <CardHeader>
-          Institutions
+          Reference Data » Institutions
           <DataTableHeader
             storeName={'institutionsTable'}
             filterText={'Number of institutions'}
