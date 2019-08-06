@@ -26,7 +26,8 @@ export const POST_CSV = SUBMISSIONAPI_URL + '/submit/csv';
 
 // Agency endpoints
 export const GET_MY_SUBMISSION_AGENCIES = ADMINAPI_URL + '/select/agency/';
-export const GET_MY_ACTIVITIES = ADMINAPI_URL + '/select/agency_esg_activity/';
+export const GET_ALL_AGENCIES = ADMINAPI_URL + '/select/agency_all/';
+export const GET_ACTIVITIES = ADMINAPI_URL + '/select/agency_esg_activity/';
 export const GET_ACTIVITY_TYPES = ADMINAPI_URL + '/select/activity_type/';
 export const GET_ASSOCIATIONS = ADMINAPI_URL + '/select/association/';
 export const GET_EQAR_DECISIONS = ADMINAPI_URL + '/select/eqar_decision_type/';

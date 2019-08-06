@@ -25,14 +25,16 @@ export const validateValuesMatch = (val1, val2) => {
   }
 }
 
-export const validateDate = (value) => (
-  !moment(value, 'YYYY-MM-DD', true).isValid()
-  ? 'Date format is invalid!'
-  : null
-)
+export const validateDate = (value) => {
+  if (value) {
+    return !moment(value, 'YYYY-MM-DD', true).isValid()
+    ? 'Date format is invalid!'
+    : null
+  }
+}
 
 export const validatePastDate = (value) => (
-  moment(new Date()), moment(value).isAfter(new Date())
+  moment(value).isAfter(new Date())
   ? 'Date should be earlier!'
   : null
 )
