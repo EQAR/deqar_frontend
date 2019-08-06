@@ -191,7 +191,7 @@ class InfoBox extends Component {
                   onToggle={() => this.toggleModal()}
                   onFormSubmit={this.onFormSubmit}
                   formValue={flagValue}
-                  formIndex={flagIndex}s
+                  formIndex={flagIndex}
                 />
                 <AssignedList
                   errors={formState.errors}

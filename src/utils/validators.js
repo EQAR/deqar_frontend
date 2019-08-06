@@ -69,7 +69,7 @@ export const validateDateFrom = (value, date_to) => {
   if (!validateDate(value)) {
     if (date_to) {
       if (!moment(value).isBefore(date_to)) {
-        return "Valid from is later date, then valid to"
+        return "Founding year is later than closing year"
       }
     }
   } else {

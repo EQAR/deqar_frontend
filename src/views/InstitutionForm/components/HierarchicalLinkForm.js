@@ -18,6 +18,7 @@ import FormTextArea from "../../../components/FormFields/FormTextArea";
 import AssignedList from '../../../components/FormFieldsUncontrolled/AssignedList';
 import InstitutionSelect from './InstitutionSelect';
 import { validateRequired, validateDateFrom, validateDate, } from "../../../utils/validators";
+import FormSelectField from '../../../components/FormFields/FormSelectField';
 
 class HierarchicalLinkForm extends Component {
   constructor(props) {
@@ -83,9 +84,7 @@ class HierarchicalLinkForm extends Component {
 
   changeLinkType = (value) => {
     const values = this.formApi.getState().values;
-
     this.formApi.setValues({...values, position: value.value});
-    this.formApi.setValue('position', value.value)
   }
 
   getLinkValue = (formState) => {
@@ -114,7 +113,7 @@ class HierarchicalLinkForm extends Component {
                   <Col>
                     <FormGroup>
                     <Label for="former_name_official" className={'required'}>Relationship</Label>
-                    <FormSimpleSelect
+                    <FormSelectField
                       field={'position'}
                       options={relationShipTypes}
                       value={this.getLinkValue(formState)}
@@ -122,6 +121,8 @@ class HierarchicalLinkForm extends Component {
                       isDisabled={disabled}
                       validate={validateRequired}
                       placeholder={'Please select'}
+                      labelField={'label'}
+                      valueField={'value'}
                     />
                     </FormGroup>
                   </Col>
