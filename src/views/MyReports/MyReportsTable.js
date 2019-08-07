@@ -60,7 +60,7 @@ const MyReportsTable = (props) => {
       }, {
         field: 'date',
         label: 'Validity',
-        render: dateRender,
+        render: (row) => dateRender(row, 'valid_from', 'valid_to'),
         width: 120,
         sortable: true,
         sortQueryParam: 'valid_from',
