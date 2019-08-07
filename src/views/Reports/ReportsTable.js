@@ -16,7 +16,7 @@ const ReportsTable = (props) => {
         to={{pathname: `/reference/reports/view/${row.original.id}`}}
         className={style.Link}
       >
-        {row.original.institution_programme_primary}
+        {row.original.id}
       </Link>)
   };
 
@@ -25,8 +25,9 @@ const ReportsTable = (props) => {
       field: 'id',
       label: 'DEQAR ID',
       width: 80,
+      render: linkRenderer,
       resizable: false,
-      sortable: false,
+      sortable: true,
       style:{ 'textAlign': 'center'}
     }, {
       field: 'agency',
@@ -38,7 +39,6 @@ const ReportsTable = (props) => {
       field: 'institution_programme_primary',
       label: 'Institution : Programme',
       minWidth: 250,
-      render: linkRenderer,
       resizable: true,
       sortable: true,
       sortQueryParam: 'institution_programme_sort',
@@ -52,7 +52,7 @@ const ReportsTable = (props) => {
       sortable: true,
     }, {
       field: 'activity_type',
-      label: 'Activity',
+      label: 'Activity Type',
       width: 150,
       resizable: false,
       sortable: true

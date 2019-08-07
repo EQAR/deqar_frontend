@@ -16,7 +16,7 @@ const MyReportsTable = (props) => {
         to={{pathname: `/my-reports/view/${row.original.id}`}}
         className={style.Link}
       >
-        {row.original.institution_programme_primary}
+        {row.original.id}
       </Link>)
   };
 
@@ -32,13 +32,13 @@ const MyReportsTable = (props) => {
         field: 'id',
         label: 'DEQAR ID',
         width: 80,
+        render: linkRenderer,
         resizable: false,
         sortable: true,
         style:{ 'textAlign': 'center'}
       }, {
         field: 'institution_programme_primary',
         label: 'Institution : Programme',
-        render: linkRenderer,
         sortable: true,
         sortQueryParam: 'institution_programme_sort',
         minWidth: 250,
