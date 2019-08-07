@@ -36,7 +36,7 @@ export const dateRender = (row, valid_from_field, valid_to_field) => {
     valid_to = moment(valid_to, moment.ISO_8601).format("YYYY-MM-DD");
     return (<div className={'text-center'}>{valid_from}<br/>{valid_to}</div>);
   } else {
-    return (<div className={'text-center'}>{valid_from}</div>);
+    return (<div className={'text-center'}>{valid_from}<br/>N/A</div>);
   }
 };
 
