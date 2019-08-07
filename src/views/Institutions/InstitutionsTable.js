@@ -24,14 +24,14 @@ const InstitutionsTable = (props) => {
     {
       field: 'deqar_id',
       label: 'DEQAR ID',
-      sortable: false,
+      sortable: true,
       minWidth: 80,
       maxWidth: 150
     },
     {
       field: 'eter_id',
       label: 'ETER ID',
-      sortable: false,
+      sortable: true,
       minWidth: 80,
       maxWidth: 150
     },
@@ -45,7 +45,7 @@ const InstitutionsTable = (props) => {
     {
       field: 'country',
       label: 'Country',
-      sortable: true,
+      sortable: false,
       minWidth: 100,
       maxWidth: 200,
     }
