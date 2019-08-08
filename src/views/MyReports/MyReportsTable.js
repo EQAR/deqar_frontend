@@ -17,8 +17,11 @@ const MyReportsTable = (props) => {
         className={style.Link}
       >
         {row.original.id}
+        {row.original.local_id ? <React.Fragment><br/>{row.original.local_id[0]}</React.Fragment> : null}
       </Link>)
   };
+
+
 
   const columnConfig = [
       {
@@ -30,8 +33,8 @@ const MyReportsTable = (props) => {
         sortable: false
       }, {
         field: 'id',
-        label: 'DEQAR ID',
-        width: 80,
+        label: 'DEQAR / Local ID',
+        width: 130,
         render: linkRenderer,
         resizable: false,
         sortable: true,

@@ -10,6 +10,7 @@ class MyReportsTableFilters extends Component {
     this.state = {
       query: '',
       id: '',
+      local_id: '',
       country: undefined,
       agency: undefined,
       activity: undefined,
@@ -23,6 +24,7 @@ class MyReportsTableFilters extends Component {
     this.setState({
       query: this.getFilterValue('query', 'text'),
       id: this.getFilterValue('id', 'text'),
+      local_id: this.getFilterValue('local_id', 'text'),
       country: this.getFilterValue('country', 'select'),
       agency: this.getFilterValue('agency', 'select'),
       activity: this.getFilterValue('activity', 'select'),
@@ -89,13 +91,13 @@ class MyReportsTableFilters extends Component {
   render() {
     const {filterState} = this.props;
     const {filterOpen} = filterState;
-    const {query, id, country, agency, activity, flag, year, active} = this.state;
+    const {query, id, local_id, country, agency, activity, flag, year, active} = this.state;
 
     return(
       <React.Fragment>
         <Collapse isOpen={filterOpen}>
           <Row form>
-            <Col md={6}>
+            <Col md={5}>
               <FormGroup>
                 <Input
                   value={query || ""}
@@ -104,12 +106,21 @@ class MyReportsTableFilters extends Component {
                 />
               </FormGroup>
             </Col>
-            <Col md={3}>
+            <Col md={2}>
               <FormGroup>
                 <Input
                   value={id || ""}
                   onChange={(e) => this.onFilterChange(e.target.value, 'id')}
                   placeholder={'Filter by Report ID'}
+                />
+              </FormGroup>
+            </Col>
+            <Col md={2}>
+              <FormGroup>
+                <Input
+                  value={local_id || ""}
+                  onChange={(e) => this.onFilterChange(e.target.value, 'local_id')}
+                  placeholder={'Filter by Local ID'}
                 />
               </FormGroup>
             </Col>
