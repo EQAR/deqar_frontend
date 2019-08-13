@@ -1,8 +1,8 @@
-const nav = {
+const navAdmin = {
   items: [
     {
       name: 'Submit Reports',
-        icon: 'icon-doc',
+      icon: 'icon-doc',
       url: '/submit-',
       children: [
         {
@@ -13,21 +13,6 @@ const nav = {
           name: 'Upload CSV',
           url: '/submit-csv',
           icon: 'icon-cloud-upload'
-        }
-      ]
-    }, {
-      name: 'My Data',
-      icon: 'fa fa-database',
-      url: '/my-',
-      children: [
-        {
-          name: 'My Reports',
-          url: '/my-reports',
-          icon: 'icon-docs',
-        }, {
-          name: 'My Agency',
-          url: '/my-agency/view',
-          icon: 'icon-home',
         }
       ]
     }, {
@@ -67,4 +52,4 @@ const nav = {
   ]
 };
 
-export default nav;
+export default navAdmin;

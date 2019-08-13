@@ -16,12 +16,15 @@ import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.min.css';
 
 // sidebar nav config
-import navigation from '../../navigation/navigation';
+import navUser from '../../navigation/navigation-user';
+import navAdmin from '../../navigation/navigation-admin';
 
 // routes config
 import routes from '../../navigation/routes';
 
 import style from './DefaultLayout.module.css';
+import {connect} from "react-redux";
+import Page404 from "./Page404";
 
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
@@ -36,6 +39,37 @@ const DefaultLayout = (props) => {
 
   const containerStyle = {
     zIndex: 1999
+  };
+
+  const getRoutes = () => {
+    return props.is_admin ? routes.filter(r => r.users === 'all') : routes;
+  };
+
+  const getStartPage = () => {
+    return props.is_admin ? <Redirect from="/" exact to="/reference/reports"/> : <Redirect from="/" exact to="/my-reports" />
+  };
+
+  const generateRoutes = () => {
+    return(
+      <Suspense fallback={loading()}>
+        <Switch>
+          {getRoutes().map((route, idx) => {
+            return route.component ? (
+              <Route
+                key={idx}
+                path={route.path}
+                exact={route.exact}
+                name={route.name}
+                render={props => (
+                  <route.component {...props} />
+                )} />
+            ) : (null);
+          })}
+          {getStartPage()}
+          <Route component={Page404} />
+        </Switch>
+      </Suspense>
+    )
   };
 
   return (
@@ -57,30 +91,14 @@ const DefaultLayout = (props) => {
           <AppSidebarHeader />
           <AppSidebarForm />
           <Suspense>
-            <AppSidebarNav navConfig={navigation} {...props} />
+            <AppSidebarNav navConfig={props.is_admin ? navAdmin : navUser} {...props} />
           </Suspense>
           <AppSidebarFooter />
           <AppSidebarMinimizer />
         </AppSidebar>
         <main className="main">
           <Container className={style.Container}>
-            <Suspense fallback={loading()}>
-              <Switch>
-                {routes.map((route, idx) => {
-                  return route.component ? (
-                    <Route
-                      key={idx}
-                      path={route.path}
-                      exact={route.exact}
-                      name={route.name}
-                      render={props => (
-                        <route.component {...props} />
-                      )} />
-                  ) : (null);
-                })}
-                <Redirect from="/" to="/my-reports" />
-              </Switch>
-            </Suspense>
+            {generateRoutes()}
           </Container>
         </main>
       </div>
@@ -89,4 +107,10 @@ const DefaultLayout = (props) => {
   );
 };
 
-export default DefaultLayout;
+const mapStateToProps = (store) => {
+  return {
+    is_admin: store.user.is_admin
+  }
+};
+
+export default connect(mapStateToProps)(DefaultLayout);
