@@ -11,33 +11,21 @@ class AgenciesTableFilters extends Component {
     this.state = {
       query: '',
       country: undefined,
+      focus_country: undefined,
       year: '',
-      active: false,
-      countryOptions: []
+      active: false
     };
   }
 
   componentDidMount() {
-    this.populateCountries();
     this.setState({
       query: this.getFilterValue('query', 'text'),
       country: this.getFilterValue('country', 'select'),
+      focus_country: this.getFilterValue('focus_country', 'select'),
       year: this.getFilterValue('year', 'text'),
       active: this.getFilterValue('active', 'boolean')
     });
   }
-
-  // Populate selects
-  populateCountries = () => {
-    country.select().then((response) => {
-      const options = response.data.map(r => {
-        return {label: r.name_english, value: r.id}
-      });
-      this.setState({
-        countryOptions: options
-      })
-    })
-  };
 
   getFilterValue = (field, fieldType) => {
     const {filterState} = this.props;
@@ -50,6 +38,20 @@ class AgenciesTableFilters extends Component {
       } else {
         return filter[0].value;
       }
+    }
+  };
+
+  getSelectFilterOptions = (field) => {
+    const { facets } = this.props;
+    if (field in facets) {
+      const values = facets[field].filter(function(element, index, array) {
+        return (index % 2 === 0);
+      });
+      return values.map(v => {
+        return { value: v, label: v}
+      });
+    } else {
+      return []
     }
   };
 
@@ -82,13 +84,13 @@ class AgenciesTableFilters extends Component {
   render() {
     const {filterState} = this.props;
     const {filterOpen} = filterState;
-    const {query, country, year, active, countryOptions} = this.state;
+    const {query, country, focus_country, year, active} = this.state;
 
     return(
       <React.Fragment>
         <Collapse isOpen={filterOpen}>
           <Row form>
-            <Col md={6}>
+            <Col md={3}>
               <FormGroup>
                 <Input
                   value={query || ""}
@@ -105,7 +107,19 @@ class AgenciesTableFilters extends Component {
                   onFilter={this.onFilterChange}
                   onFilterRemove={this.onFilterRemove}
                   placeholder={'Filter by Country'}
-                  selectFilterOptions={countryOptions}
+                  selectFilterOptions={this.getSelectFilterOptions('country_facet')}
+                />
+              </FormGroup>
+            </Col>
+            <Col md={3}>
+              <FormGroup>
+                <SelectFilter
+                  field={'focus_country'}
+                  value={focus_country}
+                  onFilter={this.onFilterChange}
+                  onFilterRemove={this.onFilterRemove}
+                  placeholder={'Filter by Focus Country'}
+                  selectFilterOptions={this.getSelectFilterOptions('focus_country_facet')}
                 />
               </FormGroup>
             </Col>

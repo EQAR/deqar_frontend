@@ -11,13 +11,13 @@ import AgenciesTableFilters from "./AgenciesTableFilters";
 
 
 const AgenciesTable = (props) => {
-  const linkRenderer = (row) => {
+  const linkRenderer = (row, param) => {
     return(
       <Link
         to={{pathname: `/reference/agencies/view/${row.original.id}`}}
         className={style.Link}
       >
-        {row.original.name_primary}
+        {row.original[param]}
       </Link>)
   };
 
@@ -27,21 +27,25 @@ const AgenciesTable = (props) => {
       label: 'DEQAR ID',
       sortable: true,
       minWidth: 80,
-      maxWidth: 150
+      maxWidth: 150,
+      render: (row) => linkRenderer(row, 'id'),
+      sortQueryParam: 'deqar_id_sort'
     },
     {
-      field: 'acronym_primary',
+      field: 'acronym',
       label: 'Acronym',
       sortable: true,
       minWidth: 80,
       maxWidth: 150,
+      sortQueryParam: 'acronym_sort'
     },
     {
-      field: 'name_primary',
+      field: 'name',
       label: 'Agency',
       minWidth: 150,
       sortable: true,
-      render: linkRenderer
+      render: (row) => linkRenderer(row, 'name'),
+      sortQueryParam: 'name_sort'
     },
     {
       field: 'country',
@@ -49,15 +53,15 @@ const AgenciesTable = (props) => {
       sortable: true,
       minWidth: 100,
       maxWidth: 200,
-      sortQueryParam: 'country__name_english'
+      sortQueryParam: 'country_sort'
     },
     {
       field: 'date',
       label: 'Validity',
-      render: (row) => dateRender(row, 'registration_start', 'registration_valid_to'),
+      render: (row) => dateRender(row, 'valid_from', 'valid_to'),
       width: 120,
       sortable: true,
-      sortQueryParam: 'registration_valid_to'
+      sortQueryParam: 'valid_from'
     }
   ];
 
