@@ -25,7 +25,6 @@ import institution from '../../services/Institution';
 import style from './InstitutionForm.module.css';
 import AssignedList from '../../components/FormFieldsUncontrolled/AssignedList';
 import FormButtons from '../../components/FormFieldsUncontrolled/FormButtons';
-import AlternativeNameForm from './components/AlternativeNameForm';
 import FormerNameForm from './components/FormerNameForm';
 import LocalIdForm from './components/LocalIdForm';
 import HistoricalLinkForm from './components/HistoricalLinkForm';
@@ -49,7 +48,6 @@ class InstitutionForm extends Component {
       openModal: null,
       formType: null,
       formIndex: null,
-      alternativeNameValue: null,
       formerNameValue: null,
       localIDValue: null,
       qFeheaLevels: [],
@@ -62,7 +60,8 @@ class InstitutionForm extends Component {
       loading: false,
       alertVisible: false,
       nonFieldErrors: [],
-      isShowTransliteration: false
+      isShowTransliteration: false,
+      alternativeNameCount: 0
     }
   }
 
@@ -91,7 +90,7 @@ class InstitutionForm extends Component {
 
   isEditable = () => {
     const { formType, isAdmin } = this.props;
-    return isAdmin || formType === 'create';
+    return true || formType === 'create';
   }
 
   populate = () => {
@@ -107,9 +106,12 @@ class InstitutionForm extends Component {
         const hierarchical_child = response.data.hierarchical_child.map(c => ({...c, position: 'child'}))
         data.historical_links = [...historical_source, ...historical_target];
         data.hierarchical_links = [...hierarchical_child, ...hierarchical_parent];
-        data.names_actual.name_official_transliterated = data.names_actual.name_official_transliterated ? data.names_actual.name_official_transliterated : null;
         data.flags = !data.flags || data.flags.length === 0 ? [{flag: 'none', flag_message: 'Institution has no flag assigned', banned: true}] : data.flags;
         this.formApi.setValues(data);
+        this.setState({
+          isShowTransliteration: data.names_actual[0].name_official_transliterated ? true : false,
+          alternativeNameCount: data.names_actual ? data.names_actual[0].alternative_names.length : 0
+        })
       });
     } else {
       this.formApi.setValues({
@@ -387,6 +389,51 @@ class InstitutionForm extends Component {
     this.formApi.setValues({...values, countries: countries});
   }
 
+  renderAlternativeNames = () => {
+    const { alternativeNameCount } = this.state;
+    const count = Array.apply(null, {length: alternativeNameCount}).map(Number.call, Number);
+
+    return count.map((c, idx) => {
+      const scopeName = `names_actual[0].alternative_names[${idx}]`;
+      return (
+        <React.Fragment key={idx}>
+          <Scope scope={scopeName}>
+            <Row>
+              <Col md={12}>
+                <FormGroup>
+                  <Label for="name">Alternative Institution Name # {c+1}</Label>
+                  <FormTextField
+                    field={'name'}
+                    placeholder={'Enter alternative institution name'}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+          </Scope>
+        </React.Fragment>
+      )
+    });
+  }
+
+  onAddButtonClick = () => {
+    const { alternativeNameCount } = this.state;
+
+    if (alternativeNameCount !== 0) {
+      let altNames = this.formApi.getValue('names_actual[0].alternative_names') || [{}];
+      const lastAltName = altNames.slice(-1).pop();
+
+      if (lastAltName) {
+        if ('name' in lastAltName) {
+          if (lastAltName.name.length > 0) {
+            this.setState({alternativeNameCount: alternativeNameCount + 1})
+          }
+        }
+      }
+    } else {
+      this.setState({alternativeNameCount: alternativeNameCount + 1})
+    }
+  }
+
   renderError = () => {
     const {alertVisible, nonFieldErrors} = this.state;
 
@@ -467,19 +514,12 @@ class InstitutionForm extends Component {
     })
   }
 
-  submitInstitutionForm = (value) => {
-    const { formType } = this.props;
-    formType === 'create'
-    ? this.createInstitution(value)
-    : this.updteInstitution(value)
-  }
-
   toggleTransliteration = () => this.setState({isShowTransliteration: !this.state.isShowTransliteration})
 
   render() {
     const {
       openModal,
-      alternativeNameValue,
+      alternativeNameCount,
       formerNameValue,
       historicalLinkValue,
       hierarchicalLinkValue,
@@ -565,30 +605,19 @@ class InstitutionForm extends Component {
                           </FormGroup>
                         </Col>
                       </Row>
+                      <Collapse isOpen={alternativeNameCount > 0}>
+                        {this.renderAlternativeNames()}
+                      </Collapse>
                       <Row>
-                        <Col>
-                          <AlternativeNameForm
-                            modalOpen={openModal === 'alternative-name'}
-                            onToggle={() => this.toggleModal('')}
-                            onFormSubmit={this.onFormSubmit}
-                            fieldName={'names_actual[0].alternative_names'}
-                            formIndex={formIndex}
-                            formValue={alternativeNameValue}
-                          />
-                          <AssignedList
-                            errors={formState.errors}
-                            valueFields={['name']}
-                            values={this.getAlternativeNameValues(formState)}
-                            emptyHidden={true}
-                            label={'Institution Name, Alternative'}
-                            btnLabel={'Add Alternative Name'}
-                            onRemove={this.onRemove}
-                            renderDisplayValue={this.renderAlternativeNames}
-                            onAddButtonClick={this.onAddAlternativeName}
-                            onClick={this.onAltenativeNameClick}
-                            field={'names_actual[0].alternative_names'}
-                            fieldName={'names_actual[0].alternative_names'}
-                            />
+                        <Col md={12}>
+                          <div className="pull-right">
+                            <Button
+                              type={'button'}
+                              size="sm"
+                              color="secondary"
+                              onClick={this.onAddButtonClick}
+                            >Add Alternative Name</Button>
+                          </div>
                         </Col>
                       </Row>
                       <Row>

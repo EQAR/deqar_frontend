@@ -97,6 +97,10 @@ class HierarchicalLinkForm extends Component {
     )
   }
 
+  onRemove = (i) => {
+    this.formApi.setValue('institution', null);
+  }
+
   render() {
     const { modalOpen, disabled, formIndex, fieldName } = this.props;
     const { relationShipTypes } = this.state;
@@ -151,7 +155,7 @@ class HierarchicalLinkForm extends Component {
                         labelShowRequired={true}
                         renderDisplayValue={this.renderInstitutions}
                         values={[formState.values.institution]}
-                        onRemove={() => null}
+                        onRemove={this.onRemove}
                         onClick={() => null}
                         validate={validateRequired}
                         disabled={disabled}

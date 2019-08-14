@@ -114,6 +114,10 @@ class HistoricalLinkForm extends Component {
     : {relationship: formState.values.relationship_type.type_to}
   )
 
+  onRemove = (i) => {
+    this.formApi.setValue('institution', null);
+  }
+
   getLinkValue = (formState) => formState.values.direction ? this.linkValue(formState) : null;
 
   render() {
@@ -170,7 +174,7 @@ class HistoricalLinkForm extends Component {
                         labelShowRequired={true}
                         renderDisplayValue={this.renderInstitutions}
                         values={[formState.values.institution]}
-                        onRemove={() => null}
+                        onRemove={this.onRemove}
                         onClick={() => null}
                         validate={validateRequired}
                         disabled={disabled}
