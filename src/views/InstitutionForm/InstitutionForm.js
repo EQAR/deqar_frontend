@@ -90,7 +90,7 @@ class InstitutionForm extends Component {
 
   isEditable = () => {
     const { formType, isAdmin } = this.props;
-    return true || formType === 'create';
+    return isAdmin || formType === 'create';
   }
 
   populate = () => {
