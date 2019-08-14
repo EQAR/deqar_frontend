@@ -87,18 +87,15 @@ class HierarchicalLinkForm extends Component {
   }
 
   getLinkValue = (formState) => {
-    formState.values.position && console.log({
-      value: formState.values.position,
-      label: formState.values.position.charAt(0).toUpperCase() + formState.values.position.slice(1)
-    })
     return (
-    formState.values.position
-    ? {
-      value: formState.values.position,
-      label: formState.values.position.charAt(0).toUpperCase() + formState.values.position.slice(1)
-    }
-    : null
-  )}
+      formState.values.position
+      ? {
+        value: formState.values.position,
+        label: formState.values.position.charAt(0).toUpperCase() + formState.values.position.slice(1)
+      }
+      : null
+    )
+  }
 
   render() {
     const { modalOpen, disabled, formIndex, fieldName } = this.props;
@@ -124,7 +121,7 @@ class HierarchicalLinkForm extends Component {
                       options={relationShipTypes}
                       givenValue={this.getLinkValue(formState)}
                       onChange={this.changeLinkType}
-                      isDisabled={disabled}
+                      disabled={disabled}
                       validate={validateRequired}
                       placeholder={'Please select'}
                       labelField={'label'}
@@ -136,7 +133,7 @@ class HierarchicalLinkForm extends Component {
                 <Row>
                 <Col>
                     <FormGroup>
-                      <Label for="former_name_official" className={'required'}>Institution Name, Official</Label>
+                      <Label for="former_name_official" className={'required'}>Institution Name</Label>
                       {!disabled &&
                         <InstitutionSelect
                           onChange={this.onInstitutionSelected}

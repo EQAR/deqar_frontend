@@ -140,7 +140,7 @@ class HistoricalLinkForm extends Component {
                       options={historicalRelationTypes}
                       givenValue={this.getLinkValue(formState)}
                       onChange={this.changeLinkType}
-                      isDisabled={disabled}
+                      disabled={disabled}
                       validate={validateRequired}
                       placeholder={'Please select'}
                       labelField={'relationship'}
@@ -152,7 +152,7 @@ class HistoricalLinkForm extends Component {
                 <Row>
                   <Col>
                     <FormGroup>
-                      <Label for="former_name_official" className={'required'}>Institution Name, Official</Label>
+                      <Label for="former_name_official" className={'required'}>Institution Name</Label>
                       {!disabled &&
                         <InstitutionSelect
                           onChange={this.onInstitutionSelected}

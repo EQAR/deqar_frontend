@@ -24,8 +24,9 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
   }
 
   const getValue = () => {
-
-    if(isMulti) {
+    if (givenValue) {
+      return givenValue[labelField]
+    } else if (isMulti) {
       const val = value || initialValue || [];
 
       const vals =  val.map((v) => {
@@ -39,7 +40,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
     } else {
       const val = value || initialValue || [];
 
-      if(val.hasOwnProperty(labelField)) {
+      if (val.hasOwnProperty(labelField)) {
         return val[labelField]
       } else {
         return ''
