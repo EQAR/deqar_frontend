@@ -28,6 +28,7 @@ const ReportsTable = (props) => {
       render: linkRenderer,
       resizable: false,
       sortable: true,
+      sortQueryParam: 'id_sort',
       style:{ 'textAlign': 'center'}
     }, {
       field: 'agency',
