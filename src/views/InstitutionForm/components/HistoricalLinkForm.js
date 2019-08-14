@@ -14,11 +14,11 @@ import { Form } from 'informed';
 
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
 import FormTextArea from "../../../components/FormFields/FormTextArea";
-import FormSimpleSelect from "../../../components/FormFields/FormSimpleSelect";
 import InstitutionSelect from './InstitutionSelect';
 import AssignedList from '../../../components/FormFieldsUncontrolled/AssignedList';
 import institution from '../../../services/Institution'
 import { validateRequired, validateDate } from "../../../utils/validators";
+import FormSelectField from '../../../components/FormFields/FormSelectField';
 
 
 class HistoricalLinkForm extends Component {
@@ -135,16 +135,16 @@ class HistoricalLinkForm extends Component {
                   <Col>
                     <FormGroup>
                     <Label for="former_name_official" className={'required'}>Relationship</Label>
-                    <FormSimpleSelect
+                    <FormSelectField
                       field={'relationship_type'}
                       options={historicalRelationTypes}
-                      value={this.getLinkValue(formState)}
+                      givenValue={this.getLinkValue(formState)}
                       onChange={this.changeLinkType}
-                      getOptionLabel={this.getLabel}
-                      getOptionValue={this.getValue}
                       isDisabled={disabled}
                       validate={validateRequired}
                       placeholder={'Please select'}
+                      labelField={'relationship'}
+                      valueField={'relationship'}
                     />
                     </FormGroup>
                   </Col>

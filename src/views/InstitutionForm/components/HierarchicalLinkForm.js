@@ -13,7 +13,6 @@ import PropTypes from 'prop-types';
 import { Form } from 'informed';
 
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
-import FormSimpleSelect from "../../../components/FormFields/FormSimpleSelect";
 import FormTextArea from "../../../components/FormFields/FormTextArea";
 import AssignedList from '../../../components/FormFieldsUncontrolled/AssignedList';
 import InstitutionSelect from './InstitutionSelect';
@@ -88,9 +87,16 @@ class HierarchicalLinkForm extends Component {
   }
 
   getLinkValue = (formState) => {
+    formState.values.position && console.log({
+      value: formState.values.position,
+      label: formState.values.position.charAt(0).toUpperCase() + formState.values.position.slice(1)
+    })
     return (
     formState.values.position
-    ? {value: formState.values.position, label: formState.values.position.charAt(0).toUpperCase() + formState.values.position.slice(1)}
+    ? {
+      value: formState.values.position,
+      label: formState.values.position.charAt(0).toUpperCase() + formState.values.position.slice(1)
+    }
     : null
   )}
 
@@ -116,7 +122,7 @@ class HierarchicalLinkForm extends Component {
                     <FormSelectField
                       field={'position'}
                       options={relationShipTypes}
-                      value={this.getLinkValue(formState)}
+                      givenValue={this.getLinkValue(formState)}
                       onChange={this.changeLinkType}
                       isDisabled={disabled}
                       validate={validateRequired}

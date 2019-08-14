@@ -7,7 +7,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
   const { value } = fieldState;
   const { setValue, setTouched, setError } = fieldApi;
   const { onChange, onBlur, initialValue, forwardedRef, labelField, valueField, disabled, placeholder, includeID,
-    isMulti, ...rest } = props;
+    isMulti, givenValue, ...rest } = props;
   const borderColor = fieldApi.getError() ? '#f86c6b' : '#e4e7ea';
   const customStyles = style(borderColor);
 
@@ -68,7 +68,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
           styles={customStyles}
           ref={forwardedRef}
           defaultValue={value || initialValue || ''}
-          value={value || initialValue || ''}
+          value={givenValue || value || initialValue || ''}
           onChange={(value, action) => changeValue(value, action)}
           onBlur={e => {
             setTouched();
