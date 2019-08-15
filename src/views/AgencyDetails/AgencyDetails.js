@@ -8,7 +8,9 @@ const AgencyDetails = ({userIsAdmin, ...props}) => {
   return(
     <React.Fragment>
       <AgencyForm
-        formTitle={param === 'view' ? 'Reference Data » Agencies » View' : 'Reference Data » Agencies » Edit'}
+        formTitle={param === 'view' ?
+          `Reference Data » Agencies » View : Agency ID ${id}` :
+          `Reference Data » Agencies » Edit : Agency ID ${id}`}
         formType={param}
         agencyID={id}
         backPath={'/reference/agencies'}

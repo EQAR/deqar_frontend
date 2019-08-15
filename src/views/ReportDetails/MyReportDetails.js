@@ -7,7 +7,9 @@ const MyReportDetails = ({match}) => {
   return(
     <React.Fragment>
       <ReportForm
-        formTitle={param === 'view' ? 'My Data » My Reports » View & Edit' : 'My Data » My Reports » Edit'}
+        formTitle={param === 'view' ?
+          `My Data » My Reports » View & Edit : DEQAR ID ${id}` :
+          `My Data » My Reports » Edit : DEQAR ID ${id}`}
         formType={param}
         reportID={id}
         backPath={'/my-reports'}
