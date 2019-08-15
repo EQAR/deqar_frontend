@@ -25,6 +25,7 @@ import routes from '../../navigation/routes';
 import style from './DefaultLayout.module.css';
 import {connect} from "react-redux";
 import Page404 from "./Page404";
+import resetUser from "./actions/resetUser";
 
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
@@ -34,6 +35,7 @@ const DefaultLayout = (props) => {
   const signOut = (e) => {
     e.preventDefault();
     auth.removeToken();
+    props.resetUser();
     props.history.push('/login')
   };
 
@@ -107,10 +109,18 @@ const DefaultLayout = (props) => {
   );
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    resetUser: () => {
+      dispatch(resetUser())
+    }
+  }
+};
+
 const mapStateToProps = (store) => {
   return {
     is_admin: store.user.is_admin
   }
 };
 
-export default connect(mapStateToProps)(DefaultLayout);
+export default connect(mapStateToProps, mapDispatchToProps)(DefaultLayout);

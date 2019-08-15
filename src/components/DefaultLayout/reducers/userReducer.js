@@ -1,4 +1,4 @@
-import {SET_EMAIL, SET_USER} from "../../../store/actionTypes";
+import {RESET_USER, SET_EMAIL, SET_USER} from "../../../store/actionTypes";
 
 const initialState = {
   id: 0,
@@ -22,6 +22,11 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         email: action.payload.email
+      }
+    }
+    case RESET_USER: {
+      return {
+        ...initialState
       }
     }
     default: {
