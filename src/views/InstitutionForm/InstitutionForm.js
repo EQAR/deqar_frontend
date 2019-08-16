@@ -90,7 +90,7 @@ class InstitutionForm extends Component {
 
   isEditable = () => {
     const { formType, isAdmin } = this.props;
-    return isAdmin || formType === 'create';
+    return true || formType === 'create';
   }
 
   populate = () => {
@@ -334,9 +334,20 @@ class InstitutionForm extends Component {
   }
 
   onRemove = (i, field) => {
-    let values = this.formApi.getValue(field);
-    values.splice(i, 1);
-    this.formApi.setValue(field, values);
+    let values;
+
+    if (field === 'alternative_names') {
+      values = this.formApi.getState().values;
+      values.names_actual[0].alternative_names.splice(i, 1);
+      this.formApi.setValues(values)
+      this.setState({
+        alternativeNameCount: this.formApi.getState().values.names_actual[0].alternative_names.length
+      })
+    } else {
+      values = this.formApi.getValue(field);
+      values.splice(i, 1);
+      this.formApi.setValue(field, values);
+    }
   }
 
   renderLocations = formState => {
@@ -390,7 +401,7 @@ class InstitutionForm extends Component {
   }
 
   renderAlternativeNames = () => {
-    const { alternativeNameCount } = this.state;
+    const { alternativeNameCount, isEdit } = this.state;
     const count = Array.apply(null, {length: alternativeNameCount}).map(Number.call, Number);
 
     return count.map((c, idx) => {
@@ -400,12 +411,18 @@ class InstitutionForm extends Component {
           <Scope scope={scopeName}>
             <Row>
               <Col md={12}>
-                <FormGroup>
+                <FormGroup className={style.alternativeNameContainer}>
                   <Label for="name">Alternative Institution Name # {c+1}</Label>
                   <FormTextField
                     field={'name'}
                     placeholder={'Enter alternative institution name'}
                   />
+                  {isEdit && (
+                    <div className={style.removeButton + " pull-right"} onClick={(e) => this.onRemove(idx, 'alternative_names')}
+                    >
+                      <i className="fa fa-close"> </i>
+                    </div>
+                  )}
                 </FormGroup>
               </Col>
             </Row>

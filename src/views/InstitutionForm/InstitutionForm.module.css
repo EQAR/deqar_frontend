@@ -15,3 +15,24 @@
 .hidden {
   display: none;
 }
+
+.alternativeNameContainer {
+  position: relative;
+}
+
+.removeButton {
+  position: absolute;
+  bottom: 7px;
+  right: 0;
+  color: hsl(0,0%,80%);
+  order: 2;
+  text-align:right;
+  flex-grow: 1;
+  margin-left: 15px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.removeButton:hover {
+  color: hsl(0,0%,60%);
+}
