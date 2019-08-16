@@ -4,7 +4,6 @@ import { Container } from 'reactstrap';
 import auth from '../../services/Auth'
 
 import {
-  AppFooter,
   AppHeader,
   AppSidebar,
   AppSidebarFooter,
@@ -17,12 +16,17 @@ import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.min.css';
 
 // sidebar nav config
-import navigation from '../../navigation/navigation';
+import navUser from '../../navigation/navigation-user';
+import navAdmin from '../../navigation/navigation-admin';
 
 // routes config
 import routes from '../../navigation/routes';
 
-const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
+import style from './DefaultLayout.module.css';
+import {connect} from "react-redux";
+import Page404 from "./Page404";
+import resetUser from "./actions/resetUser";
+
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
 const DefaultLayout = (props) => {
@@ -31,11 +35,43 @@ const DefaultLayout = (props) => {
   const signOut = (e) => {
     e.preventDefault();
     auth.removeToken();
+    props.resetUser();
     props.history.push('/login')
   };
 
   const containerStyle = {
     zIndex: 1999
+  };
+
+  const getRoutes = () => {
+    return props.is_admin ? routes.filter(r => r.users === 'all') : routes;
+  };
+
+  const getStartPage = () => {
+    return props.is_admin ? <Redirect from="/" exact to="/reference/reports"/> : <Redirect from="/" exact to="/my-reports" />
+  };
+
+  const generateRoutes = () => {
+    return(
+      <Suspense fallback={loading()}>
+        <Switch>
+          {getRoutes().map((route, idx) => {
+            return route.component ? (
+              <Route
+                key={idx}
+                path={route.path}
+                exact={route.exact}
+                name={route.name}
+                render={props => (
+                  <route.component {...props} />
+                )} />
+            ) : (null);
+          })}
+          {getStartPage()}
+          <Route component={Page404} />
+        </Switch>
+      </Suspense>
+    )
   };
 
   return (
@@ -53,44 +89,38 @@ const DefaultLayout = (props) => {
         </Suspense>
       </AppHeader>
       <div className="app-body">
-        <AppSidebar fixed display="lg">
+        <AppSidebar fixed display="lg" width={300}>
           <AppSidebarHeader />
           <AppSidebarForm />
           <Suspense>
-            <AppSidebarNav navConfig={navigation} {...props} />
+            <AppSidebarNav navConfig={props.is_admin ? navAdmin : navUser} {...props} />
           </Suspense>
           <AppSidebarFooter />
           <AppSidebarMinimizer />
         </AppSidebar>
         <main className="main">
-          <Container fluid>
-            <Suspense fallback={loading()}>
-              <Switch>
-                {routes.map((route, idx) => {
-                  return route.component ? (
-                    <Route
-                      key={idx}
-                      path={route.path}
-                      exact={route.exact}
-                      name={route.name}
-                      render={props => (
-                        <route.component {...props} />
-                      )} />
-                  ) : (null);
-                })}
-                <Redirect from="/" to="/my-reports" />
-              </Switch>
-            </Suspense>
+          <Container className={style.Container}>
+            {generateRoutes()}
           </Container>
         </main>
       </div>
-      <AppFooter>
-        <Suspense fallback={loading()}>
-          <DefaultFooter />
-        </Suspense>
-      </AppFooter>
+
     </div>
   );
 };
 
-export default DefaultLayout;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    resetUser: () => {
+      dispatch(resetUser())
+    }
+  }
+};
+
+const mapStateToProps = (store) => {
+  return {
+    is_admin: store.user.is_admin
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DefaultLayout);

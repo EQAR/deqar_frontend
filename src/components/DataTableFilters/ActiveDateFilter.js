@@ -33,7 +33,7 @@ const ActiveDateFilter = ({value, active, field, ...props}) => {
             checked={active || false}
           />
           <Label check className={style.activeFilter}>
-            Active
+            Current
           </Label>
         </InputGroupText>
       </InputGroupAddon>

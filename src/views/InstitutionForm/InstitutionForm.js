@@ -484,7 +484,7 @@ class InstitutionForm extends Component {
     const { backPath, isAdmin, formType, formTitle } = this.props;
 
     return  qFeheaLevels ? (
-      <Card>
+      <Card className={style.InstitutionFormCard}>
         <CardHeader>
           <Row>
             <Col>{formTitle}</Col>
@@ -794,9 +794,9 @@ class InstitutionForm extends Component {
               </CardBody>
               <CardFooter>
                 <FormButtons
+                  deleteButton={false}
                   backPath={backPath}
                   currentPath={backPath}
-                  adminCondition={'institutions'}
                   userIsAdmin={isAdmin}
                   buttonText={'Institution'}
                   formType={formType}

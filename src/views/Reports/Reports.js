@@ -17,9 +17,9 @@ const Reports = (props) => {
 
   return(
     <div className="animated fadeIn">
-      <Card>
+      <Card className={style.ReportsCard}>
         <CardHeader>
-          Reports
+          Reference Data » Reports
           <DataTableHeader
             storeName={'reportsTable'}
             filterText={'Number of reports'}

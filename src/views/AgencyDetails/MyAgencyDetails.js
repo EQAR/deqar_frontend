@@ -2,15 +2,18 @@ import React from 'react';
 import AgencyForm from "../AgencyForm/AgencyForm";
 import {connect} from "react-redux";
 
-const MyAgency = ({userIsAdmin, match, ...props}) => {
-  const {param} = match.params;
+const MyAgency = ({userIsAdmin, match, agencies, ...props}) => {
+  const {id, param} = match.params;
 
   return(
     <React.Fragment>
       <AgencyForm
-        formTitle={param === 'view' ? 'View Report' : 'Edit Report'}
+        formTitle={param === 'view' ?
+          `My Data » My Agency » View : Agency ID ${id}` :
+          `My Data » My Agency » Edit : Agency ID ${id}`}
         formType={param ? param : 'view'}
-        currentPath={'my-agency'}
+        agencyID={id}
+        backPath={'/my-agencies'}
         userIsAdmin={userIsAdmin}
       />
     </React.Fragment>
@@ -19,7 +22,7 @@ const MyAgency = ({userIsAdmin, match, ...props}) => {
 
 const mapStateToProps = (store) => {
   return {
-    userIsAdmin: store.user.is_admin
+    userIsAdmin: store.user.is_admin,
   }
 };
 

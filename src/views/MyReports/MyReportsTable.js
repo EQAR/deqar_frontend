@@ -5,19 +5,28 @@ import setMyReportsTable from "./actions/setMyReportsTable";
 import createTableAPIParams from "../../utils/createTableAPIParams";
 import {arrayRenderer, dateRender, flagRender, uploadDateRender} from "../../utils/tableColumnRenderers";
 import {Link} from "react-router-dom";
-import style from "../Reports/ReportsTable.module.css";
+import style from "../MyReports/MyReportsTable.module.css";
 import MyReportsTableFilters from "./MyReportsTableFilters";
 import DataTableRedux from "../../components/DataTable/DataTableRedux";
+import {Col, Row} from "reactstrap";
 
 const MyReportsTable = (props) => {
   const linkRenderer = (row) => {
     return(
-      <Link
-        to={{pathname: `/my-reports/view/${row.original.id}`}}
-        className={style.Link}
-      >
-        {row.original.institution_programme_primary}
-      </Link>)
+        <Row>
+          <Col className={style.deqarID}>
+            <Link
+              to={{pathname: `/my-reports/view/${row.original.id}`}}
+              className={style.Link}
+            >
+              {row.original.id}
+            </Link>
+          </Col>
+          <Col className={style.LocalID}>
+              {row.original.local_id ? row.original.local_id[0] : null}
+          </Col>
+        </Row>
+    )
   };
 
   const columnConfig = [
@@ -30,15 +39,16 @@ const MyReportsTable = (props) => {
         sortable: false
       }, {
         field: 'id',
-        label: 'DEQAR ID',
-        width: 80,
+        label: 'DEQAR | Local ID',
+        width: 130,
+        render: linkRenderer,
         resizable: false,
         sortable: true,
+        sortQueryParam: 'id_sort',
         style:{ 'textAlign': 'center'}
       }, {
         field: 'institution_programme_primary',
         label: 'Institution : Programme',
-        render: linkRenderer,
         sortable: true,
         sortQueryParam: 'institution_programme_sort',
         minWidth: 250,
@@ -60,7 +70,7 @@ const MyReportsTable = (props) => {
       }, {
         field: 'date',
         label: 'Validity',
-        render: dateRender,
+        render: (row) => dateRender(row, 'valid_from', 'valid_to'),
         width: 120,
         sortable: true,
         sortQueryParam: 'valid_from',

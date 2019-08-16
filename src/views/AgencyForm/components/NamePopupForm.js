@@ -9,10 +9,6 @@ import FormDatePickerField from "../../../components/FormFields/FormDatePickerFi
 import { validateRequiredDate } from "../../../utils/validators";
 
 class NamePopupForm extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   setFormApi = (formApi) => {
     const { formValue } = this.props;
     this.formApi = formApi;

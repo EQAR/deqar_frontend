@@ -19,20 +19,29 @@ label.required:after {
 }
 
 // Navigation icon
+.sidebar {
+  background-color: #212528;
+}
+
 .sidebar .nav-dropdown.open {
-  background-color: #2F3539;
+  background-color: #212528;
 }
 
 .sidebar .nav-dropdown-items {
-  background-color: #212528;
+  background-color: #2F3539;
 }
 
 .sidebar .nav-dropdown-items .nav-link {
   padding-left: 30px;
 }
 
+
+.sidebar .nav-link:hover {
+  background-color: rgba(0,0,0,0.1)
+}
+
 .sidebar .nav-dropdown.open .nav-link.active {
-  background-color: #000000;
+  background-color: #20a8d8;
 }
 
 .sidebar .nav-link.active .nav-icon {
@@ -100,3 +109,4 @@ label.required:after {
 .textAreaFormatted .ck.ck-icon {
   color: #5c6873;
 }
+

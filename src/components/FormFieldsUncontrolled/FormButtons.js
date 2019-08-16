@@ -36,12 +36,12 @@ class FormButtons extends Component {
 
   renderEditSubmitButton = () => {
     const {submitMessageOpen} = this.state;
-    const {loading, adminCondition} = this.props;
+    const {loading, deleteButton, userIsAdmin} = this.props;
 
     if (submitMessageOpen) {
       return (
         <div className={'pull-right'}>
-          {adminCondition !== 'institutions' ? this.renderDeleteButton() : null}
+          {(deleteButton | userIsAdmin) ? this.renderDeleteButton() : null}
           <LaddaButton
             className={style.SubmitButton + " btn btn-primary btn-ladda btn-sm"}
             loading={loading}
@@ -54,7 +54,7 @@ class FormButtons extends Component {
     } else {
       return(
         <div className={'pull-right'}>
-          {adminCondition !== 'institutions' ? this.renderDeleteButton() : null}
+          {(deleteButton | userIsAdmin) ? this.renderDeleteButton() : null}
           <Button
             type={'button'}
             size="sm"
@@ -115,12 +115,11 @@ class FormButtons extends Component {
   };
 
   renderEditButton = () => {
-    const {buttonText, adminCondition, userIsAdmin, location} = this.props;
+    const {buttonText, editButton, userIsAdmin, location} = this.props;
     const currentPath = location.pathname;
     const path = `${currentPath.replace("/view", "/edit")}`;
 
-
-    if((currentPath.includes(adminCondition)) || userIsAdmin) {
+    if (editButton || userIsAdmin) {
       return(
         <div className={'pull-right'}>
           <Link to={{pathname: path}}>
@@ -185,13 +184,16 @@ class FormButtons extends Component {
 }
 
 FormButtons.defaultProps = {
-  userIsAdmin: false
+  userIsAdmin: false,
+  editButton: false,
+  deleteButton: false
 };
 
 FormButtons.propTypes = {
   userIsAdmin: PropTypes.bool,
+  editButton: PropTypes.bool,
+  deleteButton: PropTypes.bool,
   recordID: PropTypes.string,
-  adminCondition: PropTypes.string,
   formType: PropTypes.string.isRequired,
   submitForm: PropTypes.func.isRequired,
   backPath: PropTypes.string,
