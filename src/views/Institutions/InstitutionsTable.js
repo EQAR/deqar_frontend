@@ -16,48 +16,51 @@ const InstitutionsTable = (props) => {
         to={{pathname: `/reference/institutions/edit/${row.original.id}`}}
         className={style.Link}
       >
-        {row.original.name_select_display}
+        {row.original.name_display}
       </Link>)
   }
 
   const countryRenderer = (row) => row.original.country ? row.original.country.join(', ') : null;
+
+  const cityRenderer = (row) => row.original.city ? row.original.city.join(', ') : null;
 
   const columnConfig = [
     {
       field: 'deqar_id',
       label: 'DEQARINST ID',
       sortable: false,
-      minWidth: 80,
-      maxWidth: 150
+      minWidth: 90,
+      maxWidth: 120
     },
     {
       field: 'eter_id',
       label: 'ETER ID',
       sortable: false,
       minWidth: 80,
-      maxWidth: 150
+      maxWidth: 80
     },
     {
-      field: 'name_primary',
+      field: 'name_display',
       label: 'Institution',
       sortable: true,
-      minWidth: 150,
+      minWidth: 180,
       render: linkRenderer
     },
     {
       field: 'country',
       label: 'Country',
       sortable: true,
-      minWidth: 100,
-      maxWidth: 200,
+      minWidth: 80,
+      maxWidth: 130,
       render: countryRenderer
     },
     {
       field: 'city',
       label: 'City',
       sortable: true,
-      minWidth: 100,
-      maxWidth: 200,
+      minWidth: 80,
+      maxWidth: 130,
+      render: cityRenderer
     }
   ];
 

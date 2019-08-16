@@ -11,7 +11,8 @@ class InstitutionsTableFilters extends Component {
       query: '',
       country: undefined,
       eter_id: '',
-      deqar_id: ''
+      deqar_id: '',
+      city: ''
     };
   }
 
@@ -20,7 +21,8 @@ class InstitutionsTableFilters extends Component {
       query: this.getFilterValue('query', 'text'),
       country: this.getFilterValue('country', 'select'),
       eter_id: this.getFilterValue('eter_id', 'text'),
-      deqar_id: this.getFilterValue('deqar_id', 'text')
+      deqar_id: this.getFilterValue('deqar_id', 'text'),
+      city: this.getFilterValue('city', 'text')
     });
   }
 
@@ -81,7 +83,7 @@ class InstitutionsTableFilters extends Component {
   render() {
     const {filterState} = this.props;
     const {filterOpen} = filterState;
-    const {query, eter_id, deqar_id, country} = this.state;
+    const {query, eter_id, deqar_id, country, city} = this.state;
 
     return(
       <React.Fragment>
@@ -115,6 +117,15 @@ class InstitutionsTableFilters extends Component {
                   placeholder={'Filter by Country'}
                   selectFilterOptions={this.getSelectFilterOptions('country_facet')}
                   menuPlacement={'top'}
+                />
+              </FormGroup>
+            </Col>
+            <Col md={4}>
+              <FormGroup>
+                <Input
+                  value={city || ""}
+                  onChange={(e) => this.onFilterChange(e.target.value, 'city')}
+                  placeholder={'City'}
                 />
               </FormGroup>
             </Col>
