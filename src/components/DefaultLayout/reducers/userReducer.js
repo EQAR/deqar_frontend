@@ -4,7 +4,8 @@ const initialState = {
   id: 0,
   username: "",
   email: "",
-  is_admin: false
+  is_admin: false,
+  agencies: []
 };
 
 function userReducer(state = initialState, action) {
@@ -15,7 +16,8 @@ function userReducer(state = initialState, action) {
         id: action.payload.id,
         username: action.payload.username,
         email: action.payload.email,
-        is_admin: action.payload.is_admin
+        is_admin: action.payload.is_admin,
+        agencies: action.payload.agencies
       };
     }
     case SET_EMAIL: {
