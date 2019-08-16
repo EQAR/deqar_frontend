@@ -84,16 +84,6 @@ class FormerNameForm extends Component {
                   />
                 </FormGroup>
               </Col>
-              <Col md={12}>
-                <FormGroup>
-                  <Label for="transliteration">Alternative Institution Name, Transliterated # {c+1}</Label>
-                  <FormTextField
-                    field={'transliteration'}
-                    placeholder={'Enter alternative institution name, transliterated'}
-                    validate={validateRoman}
-                  />
-                </FormGroup>
-              </Col>
             </Row>
           </Scope>
         </React.Fragment>

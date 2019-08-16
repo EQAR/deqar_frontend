@@ -9,10 +9,6 @@ export const validateRequired = (value) => {
   }
 }
 
-export const validateRequiredInstitutionName = value => {
-
-}
-
 export const validateEmail = (value) => {
   if (!EmailValidator.validate(value)) {
     return 'E-mail should be properly formatted.'
@@ -70,12 +66,22 @@ export const validateRoman = (value) => {
 };
 
 export const validateDateFrom = (value, date_to) => {
+  if (!validateDate(value)) {
+    if (date_to) {
+      if (!moment(value).isBefore(date_to)) {
+        return "Founding year is later than closing year"
+      }
+    }
+  } else {
+    return validateDate(value);
+  }
+}
+
+export const validateDateFromRequired = (value, date_to) => {
   if (!validateRequiredDate(value)) {
     if (date_to) {
       if (!validateRequiredDate(date_to)) {
-        if (!moment(value).isBefore(date_to)) {
-          return "Valid from is later date, then valid to"
-        }
+        return validateDateFrom(value, date_to) ? validateDateFrom(value, date_to) : null;
       }
     }
   } else {

@@ -27,7 +27,7 @@ import {populateFormNormalizer} from "./normalizers/populateFormNormalizer";
 import NamePopupForm from "./components/NamePopupForm";
 import InfoBox from "./components/InfoBox";
 import FormButtons from "../../components/FormFieldsUncontrolled/FormButtons";
-import {validateDateFrom, validateRequired, validateRequiredDate, validateRequiredURL} from "../../utils/validators";
+import {validateDateFromRequired, validateRequired, validateRequiredDate, validateRequiredURL} from "../../utils/validators";
 import FormTextArrayField from "../../components/FormFieldsUncontrolled/FormTextArrayField";
 import {toast} from "react-toastify";
 import {updateFormNormalizer} from "./normalizers/updateFormNormalizer";
@@ -159,14 +159,14 @@ class AgencyForm extends Component {
 
   renderActivities = (value) => {
     const {activity_type, activity_description, activity_local_identifier, activity_valid_to} = value;
-    return `${activity_description} 
+    return `${activity_description}
        (${activity_type['type']}${activity_local_identifier ? `; ${activity_local_identifier})` : ')'}
        ${activity_valid_to ? activity_valid_to : ''}`;
   };
 
   renderFocusCountries = (value) => {
     const {country, country_is_official, country_valid_to} = value;
-    return `${country['name_english']} 
+    return `${country['name_english']}
        ${country_is_official ? `(official)` : ''}
        ${country_valid_to ? `, ${country_valid_to}` : ''}`;
   };
@@ -633,7 +633,7 @@ class AgencyForm extends Component {
                             <Label for="registration_start" className={'required'}>Valid from</Label>
                             <FormDatePickerField
                               field={'registration_start'}
-                              validate={(value) => validateDateFrom(value, formState.values.registration_valid_to)}
+                              validate={(value) => validateDateFromRequired(value, formState.values.registration_valid_to)}
                               placeholderText={'YYYY-MM-DD'}
                               disabled={this.isReadOnly()}
                             />

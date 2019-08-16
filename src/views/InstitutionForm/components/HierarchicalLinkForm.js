@@ -11,13 +11,13 @@ import {
   Row } from "reactstrap";
 import PropTypes from 'prop-types';
 import { Form } from 'informed';
-import Select from 'react-select';
 
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
 import FormTextArea from "../../../components/FormFields/FormTextArea";
 import AssignedList from '../../../components/FormFieldsUncontrolled/AssignedList';
 import InstitutionSelect from './InstitutionSelect';
-import { validateRequired, validateDateFrom } from "../../../utils/validators";
+import { validateRequired, validateDateFrom, validateDate, } from "../../../utils/validators";
+import FormSelectField from '../../../components/FormFields/FormSelectField';
 
 class HierarchicalLinkForm extends Component {
   constructor(props) {
@@ -86,11 +86,20 @@ class HierarchicalLinkForm extends Component {
     this.formApi.setValues({...values, position: value.value});
   }
 
-  getLinkValue = (formState) => (
-    formState.values.position
-    ? {value: formState.values.position, label: formState.values.position.charAt(0).toUpperCase() + formState.values.position.slice(1)}
-    : null
-  )
+  getLinkValue = (formState) => {
+    return (
+      formState.values.position
+      ? {
+        value: formState.values.position,
+        label: formState.values.position.charAt(0).toUpperCase() + formState.values.position.slice(1)
+      }
+      : null
+    )
+  }
+
+  onRemove = (i) => {
+    this.formApi.setValue('institution', null);
+  }
 
   render() {
     const { modalOpen, disabled, formIndex, fieldName } = this.props;
@@ -111,13 +120,16 @@ class HierarchicalLinkForm extends Component {
                   <Col>
                     <FormGroup>
                     <Label for="former_name_official" className={'required'}>Relationship</Label>
-                    <Select
+                    <FormSelectField
+                      field={'position'}
                       options={relationShipTypes}
-                      placeholder={'Please select'}
+                      givenValue={this.getLinkValue(formState)}
                       onChange={this.changeLinkType}
-                      labelField={'acronym_primary'}
-                      value={this.getLinkValue(formState)}
-                      isDisabled={disabled}
+                      disabled={disabled}
+                      validate={validateRequired}
+                      placeholder={'Please select'}
+                      labelField={'label'}
+                      valueField={'value'}
                     />
                     </FormGroup>
                   </Col>
@@ -125,7 +137,7 @@ class HierarchicalLinkForm extends Component {
                 <Row>
                 <Col>
                     <FormGroup>
-                      <Label for="former_name_official" className={'required'}>Institution Name, Official</Label>
+                      <Label for="former_name_official" className={'required'}>Institution Name</Label>
                       {!disabled &&
                         <InstitutionSelect
                           onChange={this.onInstitutionSelected}
@@ -143,7 +155,7 @@ class HierarchicalLinkForm extends Component {
                         labelShowRequired={true}
                         renderDisplayValue={this.renderInstitutions}
                         values={[formState.values.institution]}
-                        onRemove={() => null}
+                        onRemove={this.onRemove}
                         onClick={() => null}
                         validate={validateRequired}
                         disabled={disabled}
@@ -169,6 +181,7 @@ class HierarchicalLinkForm extends Component {
                       <FormDatePickerField
                         field={'valid_to'}
                         placeholderText={'YYYY-MM-DD'}
+                        validate={validateDate}
                         disabled={disabled}
                       />
                     </FormGroup>

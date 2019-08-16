@@ -1,45 +1,15 @@
 import React from 'react';
 import { asField } from 'informed';
 import Select from 'react-select';
+import { style } from './selectStyle';
 
 const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
   const { value } = fieldState;
   const { setValue, setTouched, setError } = fieldApi;
   const { onChange, onBlur, initialValue, forwardedRef, labelField, valueField, disabled, placeholder, includeID,
-    isMulti, ...rest } = props;
+    isMulti, givenValue, ...rest } = props;
   const borderColor = fieldApi.getError() ? '#f86c6b' : '#e4e7ea';
-
-  const customStyles = {
-    container: (provided, state) => ({
-      ...provided,
-      '&:focus': {
-        borderColor: 'none'
-      },
-    }),
-    control: (provided, state) => ({
-      ...provided,
-      maxHeight: '35px',
-      minHeight: '25px',
-      '&:hover': {
-        borderColor: 'none'
-      },
-      border: state.isDisabled ? 'unset' : `1px solid ${borderColor}`,
-      backgroundColor: state.isDisabled ? '#FCFCFC' : '#FFFFFF'
-    }),
-    singleValue: (provided, state) => ({
-      ...provided,
-      color: state.isDisabled ? '#5c6873' : "#5C685C",
-    }),
-    option: (provided) => ({
-      ...provided,
-      whiteSpace: 'nowrap',
-      overFlow: 'hidden',
-      textOverFlow: 'ellipsis'
-    }),
-    indicatorsContainer: (provided, state) => ({
-      display: state.isDisabled ? 'none' : 'flex'
-    })
-  }
+  const customStyles = style(borderColor);
 
   const getLabel = (option) => {
     if (includeID) {
@@ -54,8 +24,9 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
   }
 
   const getValue = () => {
-
-    if(isMulti) {
+    if (givenValue) {
+      return givenValue[labelField]
+    } else if (isMulti) {
       const val = value || initialValue || [];
 
       const vals =  val.map((v) => {
@@ -69,7 +40,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
     } else {
       const val = value || initialValue || [];
 
-      if(val.hasOwnProperty(labelField)) {
+      if (val.hasOwnProperty(labelField)) {
         return val[labelField]
       } else {
         return ''
@@ -101,7 +72,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
           styles={customStyles}
           ref={forwardedRef}
           defaultValue={value || initialValue || ''}
-          value={value || initialValue || ''}
+          value={givenValue || value || initialValue || ''}
           onChange={(value, action) => changeValue(value, action)}
           onBlur={e => {
             setTouched();
@@ -117,7 +88,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
         />
       }
       {fieldState.error ? (
-        <small className="help-block form-text text-danger">{fieldState.error}</small>
+        <small name="scroll-to-element" className="help-block form-text text-danger">{fieldState.error}</small>
       ) : null}
     </React.Fragment>
   )

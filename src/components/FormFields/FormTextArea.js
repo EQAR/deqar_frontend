@@ -16,7 +16,7 @@ const FormTextArea = asField(({ fieldState, placeholder, disabled, className, ..
       className={cx(fieldState.error ? ' form-control is-invalid' : ' form-control', className, style.Textarea)}
     />
     {fieldState.error ? (
-      <small className="help-block form-text text-danger">{fieldState.error}</small>
+      <small name="scroll-to-element" className="help-block form-text text-danger">{fieldState.error}</small>
     ) : null}
   </React.Fragment>
 ));

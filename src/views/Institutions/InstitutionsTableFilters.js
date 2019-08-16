@@ -11,26 +11,37 @@ class InstitutionsTableFilters extends Component {
       query: '',
       country: undefined,
       eter_id: '',
-      deqar_id: ''
+      deqar_id: '',
+      city: ''
     };
   }
 
   componentDidMount() {
-    this.setState({
-      query: this.getFilterValue('query', 'text'),
-      country: this.getFilterValue('country', 'select'),
-      eter_id: this.getFilterValue('eter_id', 'text'),
-      deqar_id: this.getFilterValue('deqar_id', 'text')
-    });
+    this.setFilters();
   }
+
+  // shouldComponentUpdate(nextProps) {
+  //   if (!this.state.query && nextProps.filterState.filtered.length > 0) {
+  //     this.setFilters();
+  //   }
+  //   return true;
+  // }
+
+  setFilters = () => this.setState({
+    query: this.getFilterValue('query', 'text'),
+    country: this.getFilterValue('country', 'select'),
+    eter_id: this.getFilterValue('eter_id', 'text'),
+    deqar_id: this.getFilterValue('deqar_id', 'text'),
+    city: this.getFilterValue('city', 'text')
+  });
 
   getFilterValue = (field, fieldType) => {
     const {filterState} = this.props;
     const {filtered} = filterState;
     const filter = filtered.filter(f => f.id === field);
 
-    if(filter.length > 0) {
-      if(fieldType === 'select') {
+    if (filter.length > 0) {
+      if (fieldType === 'select') {
         return {value: filter[0].value, label: filter[0].value}
       } else {
         return filter[0].value;
@@ -67,7 +78,7 @@ class InstitutionsTableFilters extends Component {
   onFilter = () => {
     let filtered = [];
     Object.keys(this.state).forEach((key) => {
-      if(this.state[key]) {
+      if (this.state[key]) {
         if (typeof this.state[key] === 'object') {
           filtered.push({id: key, value: this.state[key]['value']})
         } else {
@@ -81,7 +92,7 @@ class InstitutionsTableFilters extends Component {
   render() {
     const {filterState} = this.props;
     const {filterOpen} = filterState;
-    const {query, eter_id, deqar_id, country} = this.state;
+    const {query, eter_id, deqar_id, country, city} = this.state;
 
     return(
       <React.Fragment>
@@ -101,7 +112,7 @@ class InstitutionsTableFilters extends Component {
                 <Input
                   value={deqar_id || ""}
                   onChange={(e) => this.onFilterChange(e.target.value, 'deqar_id')}
-                  placeholder={'DEQAR ID'}
+                  placeholder={'DEQARINST ID'}
                 />
               </FormGroup>
             </Col>
@@ -118,12 +129,21 @@ class InstitutionsTableFilters extends Component {
                 />
               </FormGroup>
             </Col>
+            <Col md={4}>
+              <FormGroup>
+                <Input
+                  value={city || ""}
+                  onChange={(e) => this.onFilterChange(e.target.value, 'city')}
+                  placeholder={'City'}
+                />
+              </FormGroup>
+            </Col>
             <Col md={12}>
               <FormGroup>
                 <Input
                   value={query || ""}
                   onChange={(e) => this.onFilterChange(e.target.value, 'query')}
-                  placeholder={'Filter by Institution / Programme'}
+                  placeholder={'Filter by Institution'}
                 />
               </FormGroup>
             </Col>

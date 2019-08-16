@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import { Form } from 'informed';
 import { connect } from "react-redux";
 
-import { validateRequired, validateDateFrom } from "../../../utils/validators";
+import { validateRequired, validateDateFrom, validateDate } from "../../../utils/validators";
 import FormTextField from "../../../components/FormFields/FormTextField";
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
 import FormTextArea from "../../../components/FormFields/FormTextArea";
@@ -148,6 +148,7 @@ class LocalIdForm extends Component {
                       <FormDatePickerField
                         field={'identifier_valid_to'}
                         placeholderText={'YYYY-MM-DD'}
+                        validate={validateDate}
                         disabled={disabled}
                       />
                     </FormGroup>

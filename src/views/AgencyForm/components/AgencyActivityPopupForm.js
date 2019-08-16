@@ -8,7 +8,7 @@ import FormDatePickerField from "../../../components/FormFields/FormDatePickerFi
 import FormTextField from "../../../components/FormFields/FormTextField";
 import {
   validateDate,
-  validateDateFrom,
+  validateDateFromRequired,
   validateRequired,
   validateURL
 } from "../../../utils/validators";
@@ -173,7 +173,7 @@ class AgencyActivityPopupForm extends Component {
                         field={'activity_valid_from'}
                         placeholderText={'YYYY-MM-DD'}
                         disabled={this.isReadOnly()}
-                        validate={(value) => validateDateFrom(value, formState.values.activity_valid_to)}
+                        validate={(value) => validateDateFromRequired(value, formState.values.activity_valid_to)}
                       />
                     </FormGroup>
                   </Col>

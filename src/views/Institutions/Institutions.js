@@ -15,6 +15,8 @@ import DataTableHeader from "../../components/DataTable/DataTableHeader";
 import {connect} from "react-redux";
 
 const Institutions = (props) => {
+  const { isAdmin } = props;
+
   const onFilterClick = () => {
     props.toggleInstitutionsTableFilter()
   };
@@ -34,27 +36,29 @@ const Institutions = (props) => {
           <InstitutionsTable/>
         </CardBody>
         <CardFooter>
-        <Button
-          size="sm"
-          color="primary"
-          className={'pull-right'}
-        >
-          <Link
-            to={{pathname: '/reference/institutions/create'}}
-            className={style.Link}
+        {isAdmin && (
+          <Button
+            size="sm"
+            color="primary"
+            className={'pull-right'}
           >
-            Add New Institution
-          </Link>
-        </Button>
+            <Link
+              to={{pathname: '/reference/institutions/create'}}
+              className={style.Link}
+            >
+              Add New Institution
+            </Link>
+          </Button>
+        )}
         </CardFooter>
       </Card>
     </div>
   )
 }
 
-const mapStateToProps = (store) => {
-  return {}
-};
+const mapStateToProps = (state) => {
+  return {isAdmin: state.user.is_admin}
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -62,6 +66,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(toggleInstitutionsTableFilter())
     }
   }
-};
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Institutions);

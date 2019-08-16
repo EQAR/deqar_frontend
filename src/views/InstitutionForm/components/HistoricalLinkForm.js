@@ -11,14 +11,14 @@ import {
   Row } from "reactstrap";
 import PropTypes from 'prop-types';
 import { Form } from 'informed';
-import Select from 'react-select';
 
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
 import FormTextArea from "../../../components/FormFields/FormTextArea";
 import InstitutionSelect from './InstitutionSelect';
 import AssignedList from '../../../components/FormFieldsUncontrolled/AssignedList';
 import institution from '../../../services/Institution'
-import { validateRequired } from "../../../utils/validators";
+import { validateRequired, validateDate } from "../../../utils/validators";
+import FormSelectField from '../../../components/FormFields/FormSelectField';
 
 
 class HistoricalLinkForm extends Component {
@@ -114,6 +114,10 @@ class HistoricalLinkForm extends Component {
     : {relationship: formState.values.relationship_type.type_to}
   )
 
+  onRemove = (i) => {
+    this.formApi.setValue('institution', null);
+  }
+
   getLinkValue = (formState) => formState.values.direction ? this.linkValue(formState) : null;
 
   render() {
@@ -135,14 +139,16 @@ class HistoricalLinkForm extends Component {
                   <Col>
                     <FormGroup>
                     <Label for="former_name_official" className={'required'}>Relationship</Label>
-                    <Select
+                    <FormSelectField
+                      field={'relationship_type'}
                       options={historicalRelationTypes}
+                      givenValue={this.getLinkValue(formState)}
                       onChange={this.changeLinkType}
-                      placeholder={'Select select multiple, if necessary'}
-                      getOptionLabel={this.getLabel}
-                      getOptionValue={this.getValue}
-                      value={this.getLinkValue(formState)}
-                      isDisabled={disabled}
+                      disabled={disabled}
+                      validate={validateRequired}
+                      placeholder={'Please select'}
+                      labelField={'relationship'}
+                      valueField={'relationship'}
                     />
                     </FormGroup>
                   </Col>
@@ -150,7 +156,7 @@ class HistoricalLinkForm extends Component {
                 <Row>
                   <Col>
                     <FormGroup>
-                      <Label for="former_name_official" className={'required'}>Institution Name, Official</Label>
+                      <Label for="former_name_official" className={'required'}>Institution Name</Label>
                       {!disabled &&
                         <InstitutionSelect
                           onChange={this.onInstitutionSelected}
@@ -168,7 +174,7 @@ class HistoricalLinkForm extends Component {
                         labelShowRequired={true}
                         renderDisplayValue={this.renderInstitutions}
                         values={[formState.values.institution]}
-                        onRemove={() => null}
+                        onRemove={this.onRemove}
                         onClick={() => null}
                         validate={validateRequired}
                         disabled={disabled}
@@ -184,6 +190,7 @@ class HistoricalLinkForm extends Component {
                         field={'relationship_date'}
                         placeholderText={'YYYY-MM-DD'}
                         disabled={disabled}
+                        validate={validateDate}
                       />
                     </FormGroup>
                   </Col>

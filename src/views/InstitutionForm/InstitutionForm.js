@@ -15,7 +15,8 @@ import {
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { connect } from "react-redux";
-import {withRouter} from "react-router-dom";
+import { scroller } from 'react-scroll';
+import { withRouter } from "react-router-dom";
 
 import FormTextField from '../../components/FormFields/FormTextField';
 import FormSelectField from '../../components/FormFields/FormSelectField';
@@ -24,7 +25,6 @@ import institution from '../../services/Institution';
 import style from './InstitutionForm.module.css';
 import AssignedList from '../../components/FormFieldsUncontrolled/AssignedList';
 import FormButtons from '../../components/FormFieldsUncontrolled/FormButtons';
-import AlternativeNameForm from './components/AlternativeNameForm';
 import FormerNameForm from './components/FormerNameForm';
 import LocalIdForm from './components/LocalIdForm';
 import HistoricalLinkForm from './components/HistoricalLinkForm';
@@ -32,11 +32,13 @@ import HierarchicalLinkForm from './components/HierarchicalLinkForm';
 import InfoBox from './components/InfoBox';
 import country from '../../services/Country';
 import qfEHEALevel from '../../services/QFeheaLevel';
-import { validateRoman, validateRequired, validateRequiredURL, validateDateFrom } from "../../utils/validators";
+import { validateRoman, validateRequired, validateRequiredURL, validateDateFrom, validateDate } from "../../utils/validators";
 import agency from '../../services/Agency';
 import { toast } from 'react-toastify';
 import { createFormNormalizer } from './createFormNormalizer';
 import FormAlert from './components/FormAlert'
+import setInstitutionsTable from "../Institutions/actions/setInstitutionsTable";
+import toggleInstitutionsTableFilter from "../Institutions/actions/toggleInstitutionsTableFilter";
 
 
 class InstitutionForm extends Component {
@@ -48,7 +50,6 @@ class InstitutionForm extends Component {
       openModal: null,
       formType: null,
       formIndex: null,
-      alternativeNameValue: null,
       formerNameValue: null,
       localIDValue: null,
       qFeheaLevels: [],
@@ -60,7 +61,9 @@ class InstitutionForm extends Component {
       localIDDisabled: true,
       loading: false,
       alertVisible: false,
-      nonFieldErrors: []
+      nonFieldErrors: [],
+      isShowTransliteration: false,
+      alternativeNameCount: 0
     }
   }
 
@@ -78,9 +81,18 @@ class InstitutionForm extends Component {
     this._isMounted = false;
   }
 
+  scrollTo = () => {
+    scroller.scrollTo('scroll-to-element', {
+      duration: 800,
+      delay: 0,
+      offset: -100,
+      smooth: 'easeInOutQuart'
+    })
+  }
+
   isEditable = () => {
     const { formType, isAdmin } = this.props;
-    return isAdmin || formType === 'create';
+    return true || formType === 'create';
   }
 
   populate = () => {
@@ -96,8 +108,12 @@ class InstitutionForm extends Component {
         const hierarchical_child = response.data.hierarchical_child.map(c => ({...c, position: 'child'}))
         data.historical_links = [...historical_source, ...historical_target];
         data.hierarchical_links = [...hierarchical_child, ...hierarchical_parent];
-        data.flags = data.flags ? [{flag: 'none', flag_message: 'Institution has no flag assigned', banned: true}] : data.flags;
+        data.flags = !data.flags || data.flags.length === 0 ? [{flag: 'none', flag_message: 'Institution has no flag assigned', banned: true}] : data.flags;
         this.formApi.setValues(data);
+        this.setState({
+          isShowTransliteration: data.names_actual[0].name_official_transliterated ? true : false,
+          alternativeNameCount: data.names_actual ? data.names_actual[0].alternative_names.length : 0
+        })
       });
     } else {
       this.formApi.setValues({
@@ -320,9 +336,20 @@ class InstitutionForm extends Component {
   }
 
   onRemove = (i, field) => {
-    let values = this.formApi.getValue(field);
-    values.splice(i, 1);
-    this.formApi.setValue(field, values);
+    let values;
+
+    if (field === 'alternative_names') {
+      values = this.formApi.getState().values;
+      values.names_actual[0].alternative_names.splice(i, 1);
+      this.formApi.setValues(values)
+      this.setState({
+        alternativeNameCount: this.formApi.getState().values.names_actual[0].alternative_names.length
+      })
+    } else {
+      values = this.formApi.getValue(field);
+      values.splice(i, 1);
+      this.formApi.setValue(field, values);
+    }
   }
 
   renderLocations = formState => {
@@ -375,6 +402,57 @@ class InstitutionForm extends Component {
     this.formApi.setValues({...values, countries: countries});
   }
 
+  renderAlternativeNames = () => {
+    const { alternativeNameCount, isEdit } = this.state;
+    const count = Array.apply(null, {length: alternativeNameCount}).map(Number.call, Number);
+
+    return count.map((c, idx) => {
+      const scopeName = `names_actual[0].alternative_names[${idx}]`;
+      return (
+        <React.Fragment key={idx}>
+          <Scope scope={scopeName}>
+            <Row>
+              <Col md={12}>
+                <FormGroup className={style.alternativeNameContainer}>
+                  <Label for="name">Alternative Institution Name # {c+1}</Label>
+                  <FormTextField
+                    field={'name'}
+                    placeholder={'Enter alternative institution name'}
+                  />
+                  {isEdit && (
+                    <div className={style.removeButton + " pull-right"} onClick={(e) => this.onRemove(idx, 'alternative_names')}
+                    >
+                      <i className="fa fa-close"> </i>
+                    </div>
+                  )}
+                </FormGroup>
+              </Col>
+            </Row>
+          </Scope>
+        </React.Fragment>
+      )
+    });
+  }
+
+  onAddButtonClick = () => {
+    const { alternativeNameCount } = this.state;
+
+    if (alternativeNameCount !== 0) {
+      let altNames = this.formApi.getValue('names_actual[0].alternative_names') || [{}];
+      const lastAltName = altNames.slice(-1).pop();
+
+      if (lastAltName) {
+        if ('name' in lastAltName) {
+          if (lastAltName.name.length > 0) {
+            this.setState({alternativeNameCount: alternativeNameCount + 1})
+          }
+        }
+      }
+    } else {
+      this.setState({alternativeNameCount: alternativeNameCount + 1})
+    }
+  }
+
   renderError = () => {
     const {alertVisible, nonFieldErrors} = this.state;
 
@@ -382,6 +460,7 @@ class InstitutionForm extends Component {
       <Row>
         <Col md={12}>
           <FormAlert
+            name="scroll-to-element"
             visible={alertVisible}
             onClose={this.onAlertClose}
             errorMessage={nonFieldErrors}
@@ -407,83 +486,62 @@ class InstitutionForm extends Component {
     this.formApi.submitForm();
   }
 
-  createInstitution = (value) => {
-    this.toggleLoading();
-    institution.submitInstitution(createFormNormalizer(value)).then((r) => {
-      this.toggleLoading();
-      toast.success("Institution was created.");
-      this.props.history.push('/reference/institutions');
-    }).catch(error => {
-      const errors = error.response.data.errors || error.response.data;
-      if ('non_field_errors' in errors) {
-        this.setState({
-          alertVisible: true,
-          nonFieldErrors: errors.non_field_errors
-        });
-        this.toggleLoading();
-      }
+  getMethod = (value, institutionID) => {
+    const { formType } = this.props;
 
-      Object.keys(errors).forEach(key => {
-        if (errors[key].non_field_errors) {
-          this.setState({
-            alertVisible: true,
-            nonFieldErrors: errors[key].non_field_errors
-          });
-        } else {
-          if (this.formApi.fieldExists(key)) {
-            this.formApi.setError(key, errors[key]);
-          }
-        }
-      });
-      this.toggleLoading();
-    })
-  }
-
-  updteInstitution = (value) => {
-    const { institutionID } = this.props;
-
-    this.toggleLoading();
-    institution.updateInstitution(createFormNormalizer(value), institutionID).then((r) => {
-      this.toggleLoading();
-      toast.success("Institution was created.");
-      this.props.history.push('/reference/institutions');
-    }).catch(error => {
-      const errors = error.response.data.errors || error.response.data;
-      if ('non_field_errors' in errors) {
-        this.setState({
-          alertVisible: true,
-          nonFieldErrors: errors.non_field_errors
-        });
-        this.toggleLoading();
-      }
-
-      Object.keys(errors).forEach(key => {
-        if (errors[key].non_field_errors) {
-          this.setState({
-            alertVisible: true,
-            nonFieldErrors: errors[key].non_field_errors
-          });
-        } else {
-          if (this.formApi.fieldExists(key)) {
-            this.formApi.setError(key, errors[key]);
-          }
-        }
-      });
-      this.toggleLoading();
-    })
+    return formType === 'create' ?
+    institution.submitInstitution(value) :
+    institution.updateInstitution(value, institutionID)
   }
 
   submitInstitutionForm = (value) => {
-    const { formType } = this.props;
-    formType === 'create'
-    ? this.createInstitution(value)
-    : this.updteInstitution(value)
+    const { institutionID, formType , institutionTableState} = this.props;
+    const messages = {
+      create: "Institution was created.",
+      edit: "Institution was updated."
+    }
+
+    this.toggleLoading();
+    this.getMethod(createFormNormalizer(value), institutionID).then((r) => {
+      this.toggleLoading();
+      toast.success(messages[formType]);
+      this.props.history.push('/reference/institutions');
+      const tableState = {...institutionTableState, filtered: [{id: 'query', value: value.names_actual[0].name_official}]}
+      this.props.setInstitutionsTable(tableState)
+      this.props.toggleInstitutionsTableFilter()
+    }).catch(error => {
+      const errors = error.response.data.errors || error.response.data;
+      if ('non_field_errors' in errors) {
+        this.setState({
+          alertVisible: true,
+          nonFieldErrors: errors.non_field_errors
+        });
+        this.toggleLoading();
+      }
+
+      Object.keys(errors).forEach(key => {
+        if (errors[key].non_field_errors) {
+          this.setState({
+            alertVisible: true,
+            nonFieldErrors: errors[key].non_field_errors
+          });
+        } else {
+          if (this.formApi.fieldExists(key)) {
+            this.formApi.setError(key, errors[key]);
+          }
+        }
+      });
+      this.toggleLoading();
+      this.scrollTo();
+    })
   }
+
+  toggleTransliteration = () => this.setState({isShowTransliteration: !this.state.isShowTransliteration})
 
   render() {
     const {
       openModal,
-      alternativeNameValue,
+      alternativeNameCount,
       formerNameValue,
       historicalLinkValue,
       hierarchicalLinkValue,
@@ -493,7 +551,8 @@ class InstitutionForm extends Component {
       localIDValue,
       localIDDisabled,
       formIndex,
-      loading
+      loading,
+      isShowTransliteration
     } = this.state;
     const { backPath, isAdmin, formType, formTitle } = this.props;
 
@@ -508,6 +567,7 @@ class InstitutionForm extends Component {
           className="animated fadeIn"
           getApi={this.setFormApi}
           onSubmit={this.submitInstitutionForm}
+          onSubmitFailure={this.scrollTo}
         >
           {({ formState }) => (
             <React.Fragment>
@@ -528,19 +588,33 @@ class InstitutionForm extends Component {
                           </FormGroup>
                         </Col>
                       </Row>
-                      <Row>
-                        <Col>
-                          <FormGroup>
-                          <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
-                            <FormTextField
-                              field={'names_actual[0].name_official_transliterated'}
-                              placeholder={'Enter transliterated form'}
-                              disabled={!isEdit}
-                              validate={validateRoman}
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
+                          <Collapse isOpen={isShowTransliteration}>
+                            <Row>
+                              <Col>
+                                <FormGroup>
+                                  <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
+                                    <FormTextField
+                                      field={'names_actual[0].name_official_transliterated'}
+                                      placeholder={'Enter transliterated form'}
+                                      disabled={!isEdit}
+                                      validate={validateRoman}
+                                    />
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                          </Collapse>
+                          {!isEdit || isShowTransliteration ? "" :
+                            <Row>
+                              <Col md={12}>
+                                <Button
+                                  type={'button'}
+                                  size="sm"
+                                  color="secondary"
+                                  onClick={this.toggleTransliteration}
+                                >Add Tranliteration</Button>
+                              </Col>
+                            </Row>
+                          }
                       <Row>
                         <Col>
                           <FormGroup>
@@ -553,42 +627,29 @@ class InstitutionForm extends Component {
                           </FormGroup>
                         </Col>
                       </Row>
+                      <Collapse isOpen={alternativeNameCount > 0}>
+                        {this.renderAlternativeNames()}
+                      </Collapse>
                       <Row>
-                        <Col>
-                          <AlternativeNameForm
-                            modalOpen={openModal === 'alternative-name'}
-                            onToggle={() => this.toggleModal('')}
-                            onFormSubmit={this.onFormSubmit}
-                            fieldName={'names_actual[0].alternative_names'}
-                            formIndex={formIndex}
-                            formValue={alternativeNameValue}
-                            disabled={!isEdit}
-                          />
-                          <AssignedList
-                            errors={formState.errors}
-                            valueFields={['name']}
-                            values={this.getAlternativeNameValues(formState)}
-                            label={'Institution Name, Alternative'}
-                            btnLabel={'Add Alternative Name'}
-                            onRemove={() => null}
-                            renderDisplayValue={this.renderAlternativeNames}
-                            onAddButtonClick={this.onAddAlternativeName}
-                            onClick={this.onAltenativeNameClick}
-                            field={'names_actual[0].alternative_names'}
-                            fieldName={'names_actual[0].alternative_names'}
-                            disabled={!isEdit}
-                            />
+                        <Col md={12}>
+                          <div className="pull-right">
+                            <Button
+                              type={'button'}
+                              size="sm"
+                              color="secondary"
+                              onClick={this.onAddButtonClick}
+                            >Add Alternative Name</Button>
+                          </div>
                         </Col>
                       </Row>
                       <Row>
                         <Col md={6}>
                           <FormGroup>
-                          <Label for="acronym" className={'required'}>Institution Acronym</Label>
+                          <Label for="acronym">Institution Acronym</Label>
                             <FormTextField
                               field={'names_actual[0].acronym'}
                               placeholder={'Enter acronym'}
                               disabled={!isEdit}
-                              validate={validateRequired}
                             />
                           </FormGroup>
                         </Col>
@@ -644,7 +705,6 @@ class InstitutionForm extends Component {
                             formValue={localIDValue}
                             disabled={localIDDisabled}
                             localIDs={formState.values.identifiers_local}
-                            disabled={!isEdit}
                           />
                           <AssignedList
                             errors={formState.errors}
@@ -659,7 +719,6 @@ class InstitutionForm extends Component {
                             field={'identifiers_local'}
                             fieldName={'identifiers_local'}
                             validate={this.validateAgency}
-                            disabled={!isEdit}
                           />
                         </Col>
                       </Row>
@@ -698,6 +757,7 @@ class InstitutionForm extends Component {
                             <FormDatePickerField
                               field={'closure_date'}
                               placeholderText={'Enter year'}
+                              validate ={validateDate}
                               disabled={!isEdit}
                             />
                           </FormGroup>
@@ -845,8 +905,22 @@ InstitutionForm.propTypes = {
   backPath: PropTypes.string
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setInstitutionsTable: state => {
+      dispatch(setInstitutionsTable(state))
+    },
+    toggleInstitutionsTableFilter: state => {
+      dispatch(toggleInstitutionsTableFilter())
+    }
+  }
+};
+
 const mapStateToProps = (state) => {
-  return {isAdmin: state.user.is_admin}
+  return {
+    isAdmin: state.user.is_admin,
+    institutionTableState: state.institutionsTable
+  }
 }
 
-export default withRouter(connect(mapStateToProps)(InstitutionForm));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(InstitutionForm));

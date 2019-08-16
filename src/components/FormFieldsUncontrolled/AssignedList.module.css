@@ -40,6 +40,7 @@
 
 .Button {
   margin-left: 10px;
+  margin-bottom: 10px;
 }
 
 .removeButton {
@@ -48,6 +49,7 @@
   text-align:right;
   flex-grow: 1;
   margin-left: 15px;
+  cursor: pointer;
 }
 
 .removeButton:hover {

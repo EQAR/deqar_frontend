@@ -192,7 +192,6 @@ class InfoBox extends Component {
                   onFormSubmit={this.onFormSubmit}
                   formValue={flagValue}
                   formIndex={flagIndex}
-                  disabled={disabled}
                 />
                 <AssignedList
                   errors={formState.errors}
@@ -205,7 +204,6 @@ class InfoBox extends Component {
                   onAddButtonClick={this.onAddFlagClick}
                   onClick={this.onFlagClick}
                   field={'flags'}
-                  disabled={disabled}
                 />
               </Col>
             </Row>
