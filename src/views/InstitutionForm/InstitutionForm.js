@@ -811,9 +811,9 @@ class InstitutionForm extends Component {
               </CardBody>
               <CardFooter>
                 <FormButtons
+                  deleteButton={false}
                   backPath={backPath}
                   currentPath={backPath}
-                  adminCondition={'institutions'}
                   userIsAdmin={isAdmin}
                   buttonText={'Institution'}
                   formType={formType}
