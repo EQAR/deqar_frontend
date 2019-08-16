@@ -37,6 +37,8 @@ import agency from '../../services/Agency';
 import { toast } from 'react-toastify';
 import { createFormNormalizer } from './createFormNormalizer';
 import FormAlert from './components/FormAlert'
+import setInstitutionsTable from "../Institutions/actions/setInstitutionsTable";
+import toggleInstitutionsTableFilter from "../Institutions/actions/toggleInstitutionsTableFilter";
 
 
 class InstitutionForm extends Component {
@@ -493,7 +495,7 @@ class InstitutionForm extends Component {
   }
 
   submitInstitutionForm = (value) => {
-    const { institutionID, formType } = this.props;
+    const { institutionID, formType , institutionTableState} = this.props;
     const messages = {
       create: "Institution was created.",
       edit: "Institution was updated."
@@ -504,6 +506,9 @@ class InstitutionForm extends Component {
       this.toggleLoading();
       toast.success(messages[formType]);
       this.props.history.push('/reference/institutions');
+      const tableState = {...institutionTableState, filtered: [{id: 'query', value: value.names_actual[0].name_official}]}
+      this.props.setInstitutionsTable(tableState)
+      this.props.toggleInstitutionsTableFilter()
     }).catch(error => {
       const errors = error.response.data.errors || error.response.data;
       if ('non_field_errors' in errors) {
@@ -900,8 +905,22 @@ InstitutionForm.propTypes = {
   backPath: PropTypes.string
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setInstitutionsTable: state => {
+      dispatch(setInstitutionsTable(state))
+    },
+    toggleInstitutionsTableFilter: state => {
+      dispatch(toggleInstitutionsTableFilter())
+    }
+  }
+};
+
 const mapStateToProps = (state) => {
-  return {isAdmin: state.user.is_admin}
+  return {
+    isAdmin: state.user.is_admin,
+    institutionTableState: state.institutionsTable
+  }
 }
 
-export default withRouter(connect(mapStateToProps)(InstitutionForm));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(InstitutionForm));

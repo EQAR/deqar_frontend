@@ -16,21 +16,30 @@ class InstitutionsTableFilters extends Component {
   }
 
   componentDidMount() {
-    this.setState({
+    this.setFilters();
+  }
+
+  // shouldComponentUpdate(nextProps) {
+  //   if (!this.state.query && nextProps.filterState.filtered.length > 0) {
+  //     this.setFilters();
+  //   }
+  //   return true;
+  // }
+
+  setFilters = () => this.setState({
       query: this.getFilterValue('query', 'text'),
       country: this.getFilterValue('country', 'select'),
       eter_id: this.getFilterValue('eter_id', 'text'),
       deqar_id: this.getFilterValue('deqar_id', 'text')
-    });
-  }
+    }, () => this.onFilter());
 
   getFilterValue = (field, fieldType) => {
     const {filterState} = this.props;
     const {filtered} = filterState;
     const filter = filtered.filter(f => f.id === field);
 
-    if(filter.length > 0) {
-      if(fieldType === 'select') {
+    if (filter.length > 0) {
+      if (fieldType === 'select') {
         return {value: filter[0].value, label: filter[0].value}
       } else {
         return filter[0].value;
@@ -67,7 +76,7 @@ class InstitutionsTableFilters extends Component {
   onFilter = () => {
     let filtered = [];
     Object.keys(this.state).forEach((key) => {
-      if(this.state[key]) {
+      if (this.state[key]) {
         if (typeof this.state[key] === 'object') {
           filtered.push({id: key, value: this.state[key]['value']})
         } else {
