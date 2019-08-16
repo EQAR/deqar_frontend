@@ -5,6 +5,7 @@ import institutionsTableReducer from "../views/Institutions/reducers/institution
 import myReportsTableReducer from "../views/MyReports/reducers/myReportsTableReducer";
 import reportsTableReducer from "../views/Reports/reducers/reportsTableReducer";
 import agenciesTableReducer from "../views/Agencies/reducers/agenciesTableReducer";
+import myAgenciesTableReducer from "../views/MyAgencies/reducers/myAgenciesTableReducer";
 import agencyActivitiesTableReducer from "../views/AgencyActivities/reducers/agencyActivitiesTableReducer";
 
 // Create the combined reducer
@@ -16,6 +17,7 @@ const reducer = combineReducers(
     myReportsTable: myReportsTableReducer,
     reportsTable: reportsTableReducer,
     agencyActivitiesTable: agencyActivitiesTableReducer,
+    myAgenciesTable: myAgenciesTableReducer,
     agenciesTable: agenciesTableReducer
   }
 );

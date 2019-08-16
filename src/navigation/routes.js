@@ -9,13 +9,16 @@ const Reports = React.lazy(() => import('../views/Reports/Reports'));
 const ReportDetails = React.lazy(() => import('../views/ReportDetails/ReportDetails'));
 const ReportSubmission = React.lazy(() => import('../views/ReportDetails/ReportSubmission'));
 const MyReportDetails = React.lazy(() => import('../views/ReportDetails/MyReportDetails'));
-const MyAgency = React.lazy(() => import('../views/MyAgency/MyAgency'));
+const MyAgencies = React.lazy(() => import('../views/MyAgencies/MyAgencies'));
+const MyAgencyDetails = React.lazy(() => import('../views/AgencyDetails/MyAgencyDetails'));
 const Agencies = React.lazy(() => import('../views/Agencies/Agencies'));
 const AgencyActivities = React.lazy(() => import('../views/AgencyActivities/AgencyActivities'));
 const AgencyDetails = React.lazy(() => import('../views/AgencyDetails/AgencyDetails'));
+const Page401 = React.lazy(() => import('../components/DefaultLayout/Page401'));
 
 const routes = [
-  { path: '/my-agency/:param', exact: true, name: 'My Agency Form', component: MyAgency, users: 'agency'},
+  { path: '/my-agencies', exact: true, name: 'My Agencies', component: MyAgencies, users: 'agency'},
+  { path: '/my-agencies/:param/:id', exact: true, name: 'My Agency Form', component: MyAgencyDetails, users: 'agency'},
   { path: '/my-profile', exact: true, name: 'My Profile', component: MyProfile, users: 'all' },
   { path: '/my-reports', exact: true, name: 'My Reports', component: MyReports, users: 'agency'},
   { path: '/my-reports/:param/:id', exact: true, name: 'Report Form', component: MyReportDetails, users: 'agency'},
@@ -29,6 +32,7 @@ const routes = [
   { path: '/reference/institutions/:param/:id', exact: true, name: 'Institution Form', component: InstitutionDetails, users: 'all'},
   { path: '/reference/reports', exact: true, name: 'Reports', component: Reports, users: 'all'},
   { path: '/reference/reports/:param/:id', exact: true, name: 'Report Form', component: ReportDetails, users: 'all'},
+  { path: '/401', exact: true, name: 'Page 401', component: Page401, users: 'all'}
 ];
 
 export default routes;

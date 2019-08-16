@@ -9,6 +9,13 @@ import AgencyActivitiesTableFilters from "./AgencyActivitiesTableFilters";
 const AgencyActivitiesTable = (props) => {
   const columnConfig = [
     {
+      field: 'id',
+      label: 'Activity ID',
+      width: 80,
+      resizable: false,
+      sortable: true,
+      style:{ 'textAlign': 'center'}
+    }, {
       field: 'agency',
       label: 'Agency',
       width: 150,
@@ -25,14 +32,7 @@ const AgencyActivitiesTable = (props) => {
       label: 'Activity Type',
       width: 250,
       sortable: true
-    }, {
-      field: 'id',
-      label: 'Activity ID',
-      width: 80,
-      resizable: false,
-      sortable: true,
-      style:{ 'textAlign': 'center'}
-    },
+    }
   ];
 
   const onFetchData = (state) => {

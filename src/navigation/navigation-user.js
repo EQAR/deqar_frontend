@@ -25,8 +25,8 @@ const navUser = {
           url: '/my-reports',
           icon: 'icon-docs',
         }, {
-          name: 'My Agency',
-          url: '/my-agency/view',
+          name: 'My Agencies',
+          url: '/my-agencies',
           icon: 'icon-home',
         }
       ]

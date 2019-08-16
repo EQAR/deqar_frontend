@@ -1,20 +1,19 @@
 import React from 'react';
 import agency from "../../services/Agency";
 import { connect } from "react-redux";
-import setAgenciesTable from "./actions/setAgenciesTable";
+import setMyAgenciesTable from "./actions/setMyAgenciesTable";
 import createTableAPIParams from "../../utils/createTableAPIParams";
-import style from "./AgenciesTable.module.css";
+import style from "./MyAgenciesTable.module.css";
 import {Link} from "react-router-dom";
 import DataTableRedux from "../../components/DataTable/DataTableRedux";
 import {dateRender} from "../../utils/tableColumnRenderers";
-import AgenciesTableFilters from "./AgenciesTableFilters";
 
 
-const AgenciesTable = (props) => {
+const MyAgenciesTable = (props) => {
   const linkRenderer = (row, param) => {
     return(
       <Link
-        to={{pathname: `/reference/agencies/view/${row.original.id}`}}
+        to={{pathname: `/my-agencies/view/${row.original.id}`}}
         className={style.Link}
       >
         {row.original[param]}
@@ -65,7 +64,7 @@ const AgenciesTable = (props) => {
 
   const onFetchData = (state) => {
     const params = createTableAPIParams(state, columnConfig);
-    return agency.getAgencies(params);
+    return agency.getMyAgencies(params);
   };
 
   const saveState = (state) => {
@@ -77,18 +76,16 @@ const AgenciesTable = (props) => {
       onFetchData={onFetchData}
       columnConfig={columnConfig}
       saveState={saveState}
-      filterable={true}
-      storeName={'agenciesTable'}
-    >
-      <AgenciesTableFilters />
-    </DataTableRedux>
+      filterable={false}
+      storeName={'myAgenciesTable'}
+    />
   );
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setAgenciesTable: state => {
-      dispatch(setAgenciesTable(state))
+      dispatch(setMyAgenciesTable(state))
     }
   }
 };
@@ -97,4 +94,4 @@ const mapStateToProps = (store) => {
   return {}
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AgenciesTable);
+export default connect(mapStateToProps, mapDispatchToProps)(MyAgenciesTable);
