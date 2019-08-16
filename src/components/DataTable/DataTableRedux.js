@@ -82,7 +82,6 @@ class DataTableRedux extends Component {
   onResizedChange = (newResized, event) => {
     const {tableState} = this.props;
     tableState['resized'] = newResized;
-    this.fetchData(tableState);
     this.saveState(tableState);
   };
 
