@@ -50,7 +50,10 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
 
   const changeValue = value =>  {
     setError('');
-    onChange ? onChange(value) : setValue(value);
+    setValue(value);
+    if (onChange) {
+      onChange(value);
+    }
   }
 
   return (

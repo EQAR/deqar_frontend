@@ -9,8 +9,8 @@ const initialState = {
   total: 0,
   sorted: [],
   filtered: [],
-  resized: [],
-  filterOpen: false
+  filterOpen: false,
+  resized: []
 };
 
 function agenciesTableReducer(state = initialState, action) {
@@ -22,8 +22,8 @@ function agenciesTableReducer(state = initialState, action) {
         page: action.payload.state.page,
         total: action.payload.state.total,
         sorted: action.payload.state.sorted,
-        resized: action.payload.state.resized,
         filtered: action.payload.state.filtered,
+        resized: action.payload.state.resized,
       };
     }
     case TOGGLE_AGENCIES_TABLE_FILTER: {

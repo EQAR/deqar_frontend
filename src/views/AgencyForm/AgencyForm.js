@@ -32,8 +32,6 @@ import FormTextArrayField from "../../components/FormFieldsUncontrolled/FormText
 import {toast} from "react-toastify";
 import {updateFormNormalizer} from "./normalizers/updateFormNormalizer";
 import {withRouter} from "react-router-dom";
-import FilePopupForm from "../ReportForm/ReportForm";
-import report from "../../services/Report";
 
 
 class AgencyForm extends Component {
@@ -82,11 +80,15 @@ class AgencyForm extends Component {
         this.populateForm();
         break;
       case 'edit':
-        this.setState({
-          readOnly: false
-        });
-        this.populateForm();
-        this.populateCountrySelect();
+        if (this.isEditable()) {
+          this.setState({
+            readOnly: false
+          });
+          this.populateForm();
+          this.populateCountrySelect();
+        } else {
+          this.props.history.push('/401');
+        }
         break;
       case 'create':
         this.setState({
@@ -127,15 +129,17 @@ class AgencyForm extends Component {
   }
 
   populateForm = () => {
-    const {agencyID} = this.props;
+    const {agencyID, backPath} = this.props;
 
-    if (agencyID) {
+    if (backPath.includes('/reference/agencies')) {
       agency.getAgency(agencyID).then((response) => {
         this.formApi.setValues(populateFormNormalizer(response.data));
       })
     } else {
-      agency.getMyAgency().then((response) => {
+      agency.getMyAgency(agencyID).then((response) => {
         this.formApi.setValues(populateFormNormalizer(response.data));
+      }).catch((error) => {
+        this.props.history.push('/401');
       })
     }
   };
@@ -355,20 +359,35 @@ class AgencyForm extends Component {
   };
 
   onSubmit = (values) => {
-    const {agencyID, formType} = this.props;
+    const {agencyID, formType, backPath} = this.props;
     switch(formType) {
       case 'create':
-        this.createAgency(values);
+        // this.createAgency(values);
         break;
       case 'edit':
-        if (agencyID) {
-          this.updateAgency(values);
+        if (this.isEditable()) {
+          if (backPath.includes('/reference/agencies')) {
+            this.updateAgency(values);
+          } else {
+            this.updateMyAgency(values);
+          }
         } else {
-          this.updateMyAgency(values);
+          this.props.history.push(backPath);
         }
         break;
       default:
         break;
+    }
+  };
+
+  // Buttons
+  isEditable = () => {
+    const {location, userIsAdmin} = this.props;
+    const currentPath = location.pathname;
+    if (currentPath.includes('/reference/agencies') && !userIsAdmin) {
+      return false
+    } else {
+      return true
     }
   };
 
@@ -385,7 +404,7 @@ class AgencyForm extends Component {
 
     return(
       <div className="animated fadeIn">
-        <Card>
+        <Card className={style.AgencyFormCard}>
           <CardHeader>
             <Row>
               <Col>
@@ -765,8 +784,8 @@ class AgencyForm extends Component {
                 <CardFooter>
                   <FormButtons
                     backPath={backPath}
-                    adminCondition={'my-agency'}
                     userIsAdmin={userIsAdmin}
+                    editButton={this.isEditable()}
                     buttonText={'Agency'}
                     recordID={agencyID}
                     formType={formType}

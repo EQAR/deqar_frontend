@@ -6,10 +6,10 @@ import { AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/re
 import logoFull from '../../assets/img/brand/logo-full.png';
 import logoBrand from '../../assets/img/brand/logo-brand.png';
 import user from '../../services/User';
-import setUser from "./actions/setUser";
 import {connect} from "react-redux";
 import styles from './DefaultHeader.module.css';
 import {withRouter} from "react-router-dom";
+import setUser from "./actions/setUser";
 
 const propTypes = {
   children: PropTypes.node,
@@ -19,9 +19,11 @@ const defaultProps = {};
 
 class DefaultHeader extends Component {
   componentDidMount() {
-    user.getUser().then((response) => {
-      this.props.setUser(response.data);
-    });
+    if (this.props.username === "") {
+      user.getUser().then((response) => {
+        this.props.setUser(response.data);
+      });
+    }
   }
 
   render() {
@@ -50,7 +52,7 @@ class DefaultHeader extends Component {
             </DropdownToggle>
             <DropdownMenu right style={{ right: 'auto' }}>
               <DropdownItem header tag="div" className="text-center"><strong>{username}</strong></DropdownItem>
-              <DropdownItem onClick={() => this.props.history.push('my-profile')}>
+              <DropdownItem onClick={() => this.props.history.push('/my-profile')}>
                   <i className="fa fa-user"> </i> Profile
               </DropdownItem>
               <DropdownItem onClick={e => this.props.onLogout(e)}>

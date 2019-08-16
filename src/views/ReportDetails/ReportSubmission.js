@@ -6,7 +6,7 @@ const ReportSubmission = (props) => {
     <React.Fragment>
       <ReportForm
         formType='create'
-        formTitle={'Submit Report'}
+        formTitle={'Submit Reports » Manual Submission'}
       />
     </React.Fragment>
   )

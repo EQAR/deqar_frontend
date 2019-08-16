@@ -4,8 +4,9 @@ import dashboardReportTableReducer from "../views/Dashboard/reducers/dashboardRe
 import institutionsTableReducer from "../views/Institutions/reducers/institutionsTableReducer";
 import myReportsTableReducer from "../views/MyReports/reducers/myReportsTableReducer";
 import reportsTableReducer from "../views/Reports/reducers/reportsTableReducer";
-import myAgencyActivitiesTableReducer from "../views/MyAgencyActivities/reducers/myAgencyActivitiesTableReducer";
 import agenciesTableReducer from "../views/Agencies/reducers/agenciesTableReducer";
+import myAgenciesTableReducer from "../views/MyAgencies/reducers/myAgenciesTableReducer";
+import agencyActivitiesTableReducer from "../views/AgencyActivities/reducers/agencyActivitiesTableReducer";
 
 // Create the combined reducer
 const reducer = combineReducers(
@@ -15,7 +16,8 @@ const reducer = combineReducers(
     dashboardReportTable: dashboardReportTableReducer,
     myReportsTable: myReportsTableReducer,
     reportsTable: reportsTableReducer,
-    myAgencyActivitiesTable: myAgencyActivitiesTableReducer,
+    agencyActivitiesTable: agencyActivitiesTableReducer,
+    myAgenciesTable: myAgenciesTableReducer,
     agenciesTable: agenciesTableReducer
   }
 );

@@ -1,0 +1,9 @@
+.DateColumn {
+  text-align: center;
+  line-height: 1em;
+}
+
+.DateText {
+  font-size: 10px;
+  line-height: 20px;
+}

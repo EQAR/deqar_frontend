@@ -82,7 +82,6 @@ class DataTableRedux extends Component {
   onResizedChange = (newResized, event) => {
     const {tableState} = this.props;
     tableState['resized'] = newResized;
-    this.fetchData(tableState);
     this.saveState(tableState);
   };
 
@@ -232,7 +231,7 @@ class DataTableRedux extends Component {
           React.cloneElement(this.props.children, {
             onFilter: this.onFilteredChange,
             facets: facets,
-            total: total
+            total: total,
           }) : null
         }
         <ReactTable
