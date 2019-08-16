@@ -63,7 +63,7 @@ class ReportForm extends Component {
   }
 
   componentDidMount() {
-    const { formType, backPath } = this.props;
+    const { formType } = this.props;
 
     switch(formType) {
       case 'view':

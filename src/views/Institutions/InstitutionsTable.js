@@ -44,12 +44,13 @@ const InstitutionsTable = (props) => {
       label: 'Institution',
       sortable: true,
       minWidth: 180,
-      render: linkRenderer
+      render: linkRenderer,
+      sortQueryParam: 'name_sort'
     },
     {
       field: 'country',
       label: 'Country',
-      sortable: true,
+      sortable: false,
       minWidth: 80,
       maxWidth: 130,
       render: countryRenderer
@@ -57,7 +58,7 @@ const InstitutionsTable = (props) => {
     {
       field: 'city',
       label: 'City',
-      sortable: true,
+      sortable: false,
       minWidth: 80,
       maxWidth: 130,
       render: cityRenderer

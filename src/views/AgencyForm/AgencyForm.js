@@ -359,7 +359,7 @@ class AgencyForm extends Component {
   };
 
   onSubmit = (values) => {
-    const {agencyID, formType, backPath} = this.props;
+    const {formType, backPath} = this.props;
     switch(formType) {
       case 'create':
         // this.createAgency(values);

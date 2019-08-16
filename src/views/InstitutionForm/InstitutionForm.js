@@ -611,7 +611,7 @@ class InstitutionForm extends Component {
                                   size="sm"
                                   color="secondary"
                                   onClick={this.toggleTransliteration}
-                                >Add Tranliteration</Button>
+                                >Add Transliteration</Button>
                               </Col>
                             </Row>
                           }
@@ -874,6 +874,7 @@ class InstitutionForm extends Component {
                   deleteButton={false}
                   backPath={backPath}
                   currentPath={backPath}
+                  editButton={false}
                   userIsAdmin={isAdmin}
                   buttonText={'Institution'}
                   formType={formType}

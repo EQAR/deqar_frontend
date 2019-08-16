@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Col, Collapse, FormGroup, Input, Row} from "reactstrap";
-import country from "../../services/Country";
 import SelectFilter from "../../components/DataTableFilters/SelectFilter";
 import ActiveDateFilter from "../../components/DataTableFilters/ActiveDateFilter";
 import {connect} from "react-redux";
