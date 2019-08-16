@@ -49,9 +49,9 @@ class Login extends Component {
       }).then(() => {
         user.getUser().then((response) => {
           this.props.setUser(response.data);
+        }).then(() => {
+          this.props.history.push("/");
         });
-      }).then(() => {
-        this.props.history.push("/");
       }).catch((error) => {
         this.setState({
           alertVisible: true
