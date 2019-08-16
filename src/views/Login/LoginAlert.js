@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const LoginAlert = ({visible, ...props}) => {
   const onDismiss = () => {
-    this.props.onClose();
+    props.onClose();
   };
 
   return (

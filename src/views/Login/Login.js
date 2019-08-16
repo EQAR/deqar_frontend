@@ -17,6 +17,7 @@ import auth from "../../services/Auth";
 import {connect} from "react-redux";
 import setUser from "../../components/DefaultLayout/actions/setUser";
 import user from "../../services/User";
+import axiosBearerInterceptor from "../../utils/axios.bearer_token";
 
 class Login extends Component {
   constructor(props) {
@@ -47,6 +48,7 @@ class Login extends Component {
       auth.authenticate(username, password).then((response) => {
         auth.saveToken(response.data.token);
       }).then(() => {
+        axiosBearerInterceptor();
         user.getUser().then((response) => {
           this.props.setUser(response.data);
         }).then(() => {
