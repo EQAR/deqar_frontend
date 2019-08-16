@@ -19,7 +19,6 @@ const defaultProps = {};
 
 class DefaultHeader extends Component {
   componentDidMount() {
-    console.log(this.props.username);
     if (this.props.username === "") {
       user.getUser().then((response) => {
         this.props.setUser(response.data);
