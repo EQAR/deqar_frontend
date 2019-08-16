@@ -37,7 +37,7 @@ const mapStateToProps = (store, ownProps) => {
 
   return {
     total: store[storeName].total,
-    filtered: store[storeName].total,
+    filtered: store[storeName].filtered,
     filterOpen: store[storeName].filterOpen
   }
 };

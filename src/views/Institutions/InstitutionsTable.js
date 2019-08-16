@@ -27,15 +27,22 @@ const InstitutionsTable = (props) => {
   const columnConfig = [
     {
       field: 'deqar_id',
+<<<<<<< HEAD
       label: 'DEQARINST ID',
       sortable: false,
       minWidth: 90,
       maxWidth: 120
+=======
+      label: 'DEQAR ID',
+      sortable: true,
+      minWidth: 80,
+      maxWidth: 150
+>>>>>>> dev
     },
     {
       field: 'eter_id',
       label: 'ETER ID',
-      sortable: false,
+      sortable: true,
       minWidth: 80,
       maxWidth: 80
     },
@@ -49,6 +56,7 @@ const InstitutionsTable = (props) => {
     {
       field: 'country',
       label: 'Country',
+<<<<<<< HEAD
       sortable: true,
       minWidth: 80,
       maxWidth: 130,
@@ -61,6 +69,11 @@ const InstitutionsTable = (props) => {
       minWidth: 80,
       maxWidth: 130,
       render: cityRenderer
+=======
+      sortable: false,
+      minWidth: 100,
+      maxWidth: 200,
+>>>>>>> dev
     }
   ];
 

@@ -6,13 +6,9 @@ import FormTextField from "../../../components/FormFields/FormTextField";
 import style from './NamePopupForm.module.css';
 import FormTextArrayField from "../../../components/FormFieldsUncontrolled/FormTextArrayField";
 import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
-import {validateDateFrom, validateRequiredDate} from "../../../utils/validators";
+import {validateRequiredDate} from "../../../utils/validators";
 
 class NamePopupForm extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   setFormApi = (formApi) => {
     const { formValue } = this.props;
     this.formApi = formApi;

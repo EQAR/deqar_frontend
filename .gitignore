@@ -20,3 +20,5 @@ npm-debug.log
 compilation-stats.json
 .editorconfig
 src/scss/_local.scss
+
+.env.development

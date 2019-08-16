@@ -17,9 +17,9 @@ const Agencies = (props) => {
 
   return(
     <div className="animated fadeIn">
-      <Card>
+      <Card className={style.AgenciesCard}>
         <CardHeader>
-          Agencies
+          Reference Data » Agencies
           <DataTableHeader
             storeName={'agenciesTable'}
             filterText={'Number of agencies'}
@@ -27,7 +27,7 @@ const Agencies = (props) => {
           />
         </CardHeader>
         <CardBody className={style.AgenciesCardBody}>
-          <AgenciesTable/>
+          <AgenciesTable />
         </CardBody>
       </Card>
     </div>

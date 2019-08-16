@@ -1,0 +1,11 @@
+.AgencyActivityCard {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    margin: 0;
+}
+
+.AgencyActivityCardBody {
+    padding: 10px;
+}

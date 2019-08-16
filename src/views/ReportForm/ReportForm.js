@@ -63,7 +63,7 @@ class ReportForm extends Component {
   }
 
   componentDidMount() {
-    const { formType } = this.props;
+    const { formType, backPath } = this.props;
 
     switch(formType) {
       case 'view':
@@ -73,13 +73,17 @@ class ReportForm extends Component {
         this.populateForm();
         break;
       case 'edit':
-        this.setState({
-          readOnly: false
-        });
-        this.populateForm();
-        this.populateAgencySelect();
-        this.populateStatusSelect();
-        this.populateDecisionSelect();
+        if (this.isEditable()) {
+          this.setState({
+            readOnly: false
+          });
+          this.populateForm();
+          this.populateAgencySelect();
+          this.populateStatusSelect();
+          this.populateDecisionSelect();
+        } else {
+          this.props.history.push('/401');
+        }
         break;
       case 'create':
         this.setState({
@@ -153,7 +157,7 @@ class ReportForm extends Component {
 
   populateActivitySelect = (agencyID) => {
     if(agencyID) {
-      agency.selectMyActivity(agencyID).then((response) => {
+      agency.selectActivity(agencyID).then((response) => {
         this.setState({
           agencyActivityOptions: response.data
         })
@@ -620,6 +624,18 @@ class ReportForm extends Component {
     }
   };
 
+  // Buttons
+  isEditable = () => {
+    const {location, userIsAdmin} = this.props;
+    const currentPath = location.pathname;
+    if (currentPath.includes('/reference/reports') && !userIsAdmin) {
+      return false
+    } else {
+      // More to come...
+      return true
+    }
+  };
+
   render() {
     const {agencyOptions, agencyActivityOptions, statusOptions, decisionOptions,
       fileModalOpen, fileModalValue, fileModalIndex,
@@ -628,7 +644,7 @@ class ReportForm extends Component {
 
     return(
       <div className="animated fadeIn">
-        <Card>
+        <Card className={style.ReportFormCard}>
           <CardHeader>
             <Row>
               <Col>
@@ -848,8 +864,9 @@ class ReportForm extends Component {
                 <CardFooter>
                   <FormButtons
                     backPath={backPath}
-                    adminCondition={'my-reports'}
                     userIsAdmin={userIsAdmin}
+                    editButton={this.isEditable()}
+                    deleteButton={this.isEditable()}
                     buttonText={'Report'}
                     recordID={reportID}
                     formType={formType}

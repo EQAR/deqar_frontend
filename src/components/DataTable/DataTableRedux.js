@@ -231,7 +231,7 @@ class DataTableRedux extends Component {
           React.cloneElement(this.props.children, {
             onFilter: this.onFilteredChange,
             facets: facets,
-            total: total
+            total: total,
           }) : null
         }
         <ReactTable
