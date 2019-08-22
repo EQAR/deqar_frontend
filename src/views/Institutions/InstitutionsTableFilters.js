@@ -1,98 +1,65 @@
-import React, {Component} from 'react';
-import {Col, Collapse, Input, Row} from "reactstrap";
-import {connect} from "react-redux";
+import React, { Component } from 'react';
+import { Col, Collapse, Input, Row } from "reactstrap";
+import { connect } from "react-redux";
 import SelectFilter from "../../components/DataTableFilters/SelectFilter";
 import FormGroup from "reactstrap/es/FormGroup";
 
 class InstitutionsTableFilters extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      query: '',
-      country: undefined,
-      eter_id: '',
-      deqar_id: '',
-      city: ''
-    };
-  }
-
-  componentDidMount() {
-    this.setFilters();
-  }
-
-  // shouldComponentUpdate(nextProps) {
-  //   if (!this.state.query && nextProps.filterState.filtered.length > 0) {
-  //     this.setFilters();
-  //   }
-  //   return true;
-  // }
-
-  setFilters = () => this.setState({
-    query: this.getFilterValue('query', 'text'),
-    country: this.getFilterValue('country', 'select'),
-    eter_id: this.getFilterValue('eter_id', 'text'),
-    deqar_id: this.getFilterValue('deqar_id', 'text'),
-    city: this.getFilterValue('city', 'text')
-  });
-
-  getFilterValue = (field, fieldType) => {
-    const {filterState} = this.props;
-    const {filtered} = filterState;
-    const filter = filtered.filter(f => f.id === field);
-
-    if (filter.length > 0) {
-      if (fieldType === 'select') {
-        return {value: filter[0].value, label: filter[0].value}
-      } else {
-        return filter[0].value;
-      }
-    }
-  };
 
   getSelectFilterOptions = (field) => {
     const { facets } = this.props;
+
     if (field in facets) {
-      const values = facets[field].filter(function(element, index, array) {
-        return (index % 2 === 0);
-      });
+      const values = facets[field].filter((element) => typeof element === 'string')
       return values.map(v => {
         return { value: v, label: v}
       });
     } else {
-      return []
+      return [];
     }
-  };
-
-  onFilterChange = (value, field) => {
-    this.setState({
-      [field]: value
-    }, () => this.onFilter());
-  };
+  }
 
   onFilterRemove = (field) => {
-    this.setState({
-      [field]: ''
-    }, () => this.onFilter());
-  };
+    this.onFilter('', field)
+  }
 
-  onFilter = () => {
-    let filtered = [];
-    Object.keys(this.state).forEach((key) => {
-      if (this.state[key]) {
-        if (typeof this.state[key] === 'object') {
-          filtered.push({id: key, value: this.state[key]['value']})
-        } else {
-          filtered.push({id: key, value: this.state[key]})
+  onFilter = (value, field) => {
+    let { filterState: { filtered } } = this.props;
+
+    if (!value) {
+      filtered = filtered.filter(f => f.id !== field);
+    } else if (filtered.some(f => f.id === field)) {
+      filtered.forEach(f => {
+        if (f.id === field) {
+          f.value = value;
         }
-      }
-    });
+      })
+    } else {
+      field === 'country' ?
+        filtered.push({id: field, value: value.value}) :
+        filtered.push({id: field, value: value});
+    }
+
     this.props.onFilter(filtered);
-  };
+  }
+
+  getValue = id => {
+    const { filterState: { filtered } } = this.props;
+    const filter = filtered.find(filter => filter.id === id);
+    console.log(filter);
+
+    return filter ? filter.value : '';
+  }
+
+  getCountryValue = () => {
+    const { filterState: { filtered } } = this.props;
+    const filter = filtered.find(filter => filter.id === 'country');
+    return filter ? { value: filter.value, label: filter.value } : '';
+  }
 
   render() {
-    const {filterState} = this.props;
-    const {filterOpen} = filterState;
-    const {query, eter_id, deqar_id, country, city} = this.state;
+    const { filterState } = this.props;
+    const { filterOpen } = filterState;
 
     return(
       <React.Fragment>
@@ -101,8 +68,8 @@ class InstitutionsTableFilters extends Component {
             <Col md={4}>
               <FormGroup>
                 <Input
-                  value={eter_id || ""}
-                  onChange={(e) => this.onFilterChange(e.target.value, 'eter_id')}
+                  value={this.getValue('eter_id')}
+                  onChange={(e) => this.onFilter(e.target.value, 'eter_id')}
                   placeholder={'ETER ID'}
                 />
               </FormGroup>
@@ -110,8 +77,8 @@ class InstitutionsTableFilters extends Component {
             <Col md={4}>
               <FormGroup>
                 <Input
-                  value={deqar_id || ""}
-                  onChange={(e) => this.onFilterChange(e.target.value, 'deqar_id')}
+                  value={this.getValue('deqar_id')}
+                  onChange={(e) => this.onFilter(e.target.value, 'deqar_id')}
                   placeholder={'DEQARINST ID'}
                 />
               </FormGroup>
@@ -120,8 +87,8 @@ class InstitutionsTableFilters extends Component {
               <FormGroup>
                 <SelectFilter
                   field={'country'}
-                  value={country}
-                  onFilter={this.onFilterChange}
+                  value={this.getCountryValue()}
+                  onFilter={this.onFilter}
                   onFilterRemove={this.onFilterRemove}
                   placeholder={'Filter by Country'}
                   selectFilterOptions={this.getSelectFilterOptions('country_facet')}
@@ -132,8 +99,8 @@ class InstitutionsTableFilters extends Component {
             <Col md={4}>
               <FormGroup>
                 <Input
-                  value={city || ""}
-                  onChange={(e) => this.onFilterChange(e.target.value, 'city')}
+                  value={this.getValue('city')}
+                  onChange={(e) => this.onFilter(e.target.value, 'city')}
                   placeholder={'City'}
                 />
               </FormGroup>
@@ -141,8 +108,8 @@ class InstitutionsTableFilters extends Component {
             <Col md={12}>
               <FormGroup>
                 <Input
-                  value={query || ""}
-                  onChange={(e) => this.onFilterChange(e.target.value, 'query')}
+                  value={this.getValue('query')}
+                  onChange={(e) => this.onFilter(e.target.value, 'query')}
                   placeholder={'Filter by Institution'}
                 />
               </FormGroup>
@@ -161,6 +128,6 @@ const mapStateToProps = (store) => {
       filtered: store.institutionsTable.filtered
     }
   }
-};
+}
 
 export default connect(mapStateToProps)(InstitutionsTableFilters)
