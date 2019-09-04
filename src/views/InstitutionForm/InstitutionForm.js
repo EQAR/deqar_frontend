@@ -500,7 +500,6 @@ class InstitutionForm extends Component {
       create: "Institution was created.",
       edit: "Institution was updated."
     }
-
     this.toggleLoading();
     this.getMethod(createFormNormalizer(value), institutionID).then((r) => {
       this.toggleLoading();
