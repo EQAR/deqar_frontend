@@ -63,7 +63,7 @@ class InstitutionForm extends Component {
       alertVisible: false,
       nonFieldErrors: [],
       isShowTransliteration: false,
-      alternativeNameCount: 0
+      alternativeNameCount: 0,
     }
   }
 
@@ -345,6 +345,10 @@ class InstitutionForm extends Component {
       this.setState({
         alternativeNameCount: this.formApi.getState().values.names_actual[0].alternative_names.length
       })
+    } else if (field === 'countries') {
+      values = this.formApi.getState().values;
+      values.countries.splice(i, 1);
+      this.formApi.setValues(values)
     } else {
       values = this.formApi.getValue(field);
       values.splice(i, 1);
@@ -385,6 +389,12 @@ class InstitutionForm extends Component {
                     placeholder={'Enter city name'}
                     disabled={!isEdit}
                   />
+                  {isEdit && i >= 1 && (
+                    <div className={style.removeButton + " pull-right"} onClick={(e) => this.onRemove(i, 'countries')}
+                    >
+                      <i className="fa fa-close"> </i>
+                    </div>
+                  )}
                   </FormGroup>
                 </Col>
               </Row>
@@ -554,7 +564,6 @@ class InstitutionForm extends Component {
       isShowTransliteration
     } = this.state;
     const { backPath, isAdmin, formType, formTitle } = this.props;
-
     return  qFeheaLevels ? (
       <Card className={style.InstitutionFormCard}>
         <CardHeader>
