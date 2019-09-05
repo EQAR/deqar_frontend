@@ -366,7 +366,7 @@ class InstitutionForm extends Component {
         return (
           <Fragment key={i}>
             <Scope scope={scopeName}>
-              <Row key={i}>
+              <Row key={i} className={style.relativeContainer}>
                 <Col md={6}>
                   <FormGroup>
                   <Label for="country" className={'required'}>Country</Label>
@@ -389,14 +389,14 @@ class InstitutionForm extends Component {
                     placeholder={'Enter city name'}
                     disabled={!isEdit}
                   />
-                  {isEdit && i >= 1 && (
-                    <div className={style.removeButton + " pull-right"} onClick={(e) => this.onRemove(i, 'countries')}
-                    >
-                      <i className="fa fa-close"> </i>
-                    </div>
-                  )}
                   </FormGroup>
                 </Col>
+                {isEdit && i >= 1 && (
+                  <div className={style.locationRemoveButton + " pull-right"} onClick={(e) => this.onRemove(i, 'countries')}
+                  >
+                    <i className="fa fa-close"> </i>
+                  </div>
+                )}
               </Row>
             </Scope>
           </Fragment>
@@ -423,14 +423,14 @@ class InstitutionForm extends Component {
           <Scope scope={scopeName}>
             <Row>
               <Col md={12}>
-                <FormGroup className={style.alternativeNameContainer}>
+                <FormGroup className={style.relativeContainer}>
                   <Label for="name">Alternative Institution Name # {c+1}</Label>
                   <FormTextField
                     field={'name'}
                     placeholder={'Enter alternative institution name'}
                   />
                   {isEdit && (
-                    <div className={style.removeButton + " pull-right"} onClick={(e) => this.onRemove(idx, 'alternative_names')}
+                    <div className={style.alternativeNameRemoveButton + " pull-right"} onClick={(e) => this.onRemove(idx, 'alternative_names')}
                     >
                       <i className="fa fa-close"> </i>
                     </div>
