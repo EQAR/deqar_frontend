@@ -6,6 +6,12 @@ import FormGroup from "reactstrap/es/FormGroup";
 
 class InstitutionsTableFilters extends Component {
 
+  componentDidUpdate = (prevProps) => {
+    if (this.props.filterState.filtered.length !== prevProps.filterState.filtered.length) {
+      this.onFilter(this.props.filterState.filtered.value, this.props.filterState.filtered.id)
+    }
+  }
+
   getSelectFilterOptions = (field) => {
     const { facets } = this.props;
 
@@ -46,8 +52,6 @@ class InstitutionsTableFilters extends Component {
   getValue = id => {
     const { filterState: { filtered } } = this.props;
     const filter = filtered.find(filter => filter.id === id);
-    console.log(filter);
-
     return filter ? filter.value : '';
   }
 
