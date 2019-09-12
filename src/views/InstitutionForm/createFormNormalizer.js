@@ -1,5 +1,8 @@
 export const createFormNormalizer = (formValues) => {
   let normalizedValues = {};
+  if (!Object.keys(formValues.names_actual[0]).includes('alternative_names')) {
+    formValues.names_actual[0].alternative_names = []
+  }
   const names = formValues.names_former
     ? [...formValues.names_actual, ...formValues.names_former]
     : formValues.names_actual
