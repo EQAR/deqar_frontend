@@ -31,7 +31,7 @@ const ReportsTable = (props) => {
       sortQueryParam: 'id_sort',
       style:{ 'textAlign': 'center'}
     }, {
-      field: 'agency',
+      field: 'agency_acronym',
       label: 'Agency',
       width: 150,
       resizable: false,
@@ -52,7 +52,7 @@ const ReportsTable = (props) => {
       resizable: false,
       sortable: true,
     }, {
-      field: 'activity_type',
+      field: 'agency_esg_activity_type',
       label: 'Activity Type',
       width: 150,
       resizable: false,

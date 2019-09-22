@@ -134,7 +134,7 @@ class ReportsTableFilters extends Component {
                   onFilter={this.onFilterChange}
                   onFilterRemove={this.onFilterRemove}
                   placeholder={'Filter by Agency'}
-                  selectFilterOptions={this.getSelectFilterOptions('agency')}
+                  selectFilterOptions={this.getSelectFilterOptions('agency_facet')}
                 />
               </FormGroup>
             </Col>
@@ -146,7 +146,7 @@ class ReportsTableFilters extends Component {
                   onFilter={this.onFilterChange}
                   onFilterRemove={this.onFilterRemove}
                   placeholder={'Filter by Country'}
-                  selectFilterOptions={this.getSelectFilterOptions('country')}
+                  selectFilterOptions={this.getSelectFilterOptions('country_facet')}
                 />
               </FormGroup>
             </Col>
@@ -158,7 +158,7 @@ class ReportsTableFilters extends Component {
                   onFilter={this.onFilterChange}
                   onFilterRemove={this.onFilterRemove}
                   placeholder={'Filter by Activity Type'}
-                  selectFilterOptions={this.getSelectFilterOptions('activity_type')}
+                  selectFilterOptions={this.getSelectFilterOptions('activity_type_facet')}
                 />
               </FormGroup>
             </Col>
@@ -170,7 +170,7 @@ class ReportsTableFilters extends Component {
                   onFilter={this.onFilterChange}
                   onFilterRemove={this.onFilterRemove}
                   placeholder={'Filter by Flag'}
-                  selectFilterOptions={this.getSelectFilterOptions('flag_level')}
+                  selectFilterOptions={this.getSelectFilterOptions('flag_level_facet')}
                 />
               </FormGroup>
             </Col>

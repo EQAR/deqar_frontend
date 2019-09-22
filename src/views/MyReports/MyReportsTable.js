@@ -61,7 +61,7 @@ const MyReportsTable = (props) => {
         resizable: false,
         sortable: true
       }, {
-        field: 'activity',
+        field: 'agency_esg_activity',
         label: 'Activity',
         width: 150,
         resizable: true,
