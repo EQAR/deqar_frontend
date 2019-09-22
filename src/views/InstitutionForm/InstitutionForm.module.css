@@ -1,3 +1,59 @@
+.InstitutionFormCard {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+  margin: 0;
+}
+
+.infoFooter {
+  background-color: hsl(0,0%,97%);
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 .borderLeft {
   border-right: 1px solid #CCCCCC;
+}
+
+.editButton {
+  margin-left: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+.relativeContainer {
+  position: relative;
+}
+
+.alternativeNameRemoveButton {
+  position: absolute;
+  bottom: 7px;
+  right: 0;
+  color: hsl(0,0%,80%);
+  order: 2;
+  text-align: right;
+  flex-grow: 1;
+  margin-left: 15px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.locationRemoveButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: hsl(0,0%,80%);
+  order: 2;
+  text-align: right;
+  flex-grow: 1;
+  margin-left: 15px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.removeButton:hover {
+  color: hsl(0,0%,60%);
 }

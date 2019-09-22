@@ -26,7 +26,7 @@ const FormDatePickerField = asField(({ fieldState, fieldApi, ...props }) => {
         {...rest}
         dateFormat="yyyy-MM-dd"
         className={fieldState.error ? 'form-control is-invalid' : 'form-control'}
-        disabled={disabled}
+        readOnly={disabled}
         placeholderText={disabled ? '' : placeholderText}
         onSelect={(value) => {
           setError('');
@@ -43,7 +43,7 @@ const FormDatePickerField = asField(({ fieldState, fieldApi, ...props }) => {
         }}
       />
       {fieldState.error ? (
-        <small className="help-block form-text text-danger">{fieldState.error}</small>
+        <small name="scroll-to-element" className="help-block form-text text-danger">{fieldState.error}</small>
       ) : null}
     </div>
   )

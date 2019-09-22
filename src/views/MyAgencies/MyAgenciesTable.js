@@ -1,98 +1,97 @@
-import React, { Component } from 'react';
-import DataTable from "../../components/DataTable/DataTable";
-import {connect} from "react-redux";
+import React from 'react';
 import agency from "../../services/Agency";
-import createTableAPIParams from "../../utils/createTableAPIParams";
+import { connect } from "react-redux";
 import setMyAgenciesTable from "./actions/setMyAgenciesTable";
+import createTableAPIParams from "../../utils/createTableAPIParams";
+import style from "./MyAgenciesTable.module.css";
+import {Link} from "react-router-dom";
+import DataTableRedux from "../../components/DataTable/DataTableRedux";
+import {dateRender} from "../../utils/tableColumnRenderers";
 
-class MyAgenciesTable extends Component {
-  constructor(props) {
-    super(props);
 
-    this.columnConfig = [
-      {
-        field: 'id',
-        label: 'ID',
-        width: 80,
-        resizable: false,
-        sortable: true,
-        filterable: false,
-        filterQueryParam: 'id',
-        style:{ 'textAlign': 'center'}
-      }, {
-        field: 'agency',
-        label: 'Agency',
-        width: 150,
-        sortable: true,
-        sortQueryParam: 'agency',
-        filterable: true,
-        filterType: 'select',
-        filterQueryParam: 'agency',
-        selectFilterValue: 'id',
-        selectFilterLabel: 'acronym_primary',
-        selectFilterPopulate: agency.selectAllAgency()
-      }, {
-        field: 'activity',
-        label: 'Activity Description',
-        minWidth: 250,
-        resizable: true,
-        sortable: true,
-        filterable: true
-      }, {
-        field: 'activity_type',
-        label: 'Activity Type',
-        width: 250,
-        sortable: true,
-        filterable: true,
-        filterType: 'select',
-        filterQueryParam: 'activity_type',
-        selectFilterValue: 'id',
-        selectFilterLabel: 'type',
-        selectFilterPopulate: agency.selectActivityType()
-      }
-    ];
-  }
-
-  onFetchData = (state) => {
-    const params = createTableAPIParams(state, this.columnConfig);
-    return agency.selectMyActivity(null, params);
+const MyAgenciesTable = (props) => {
+  const linkRenderer = (row, param) => {
+    return(
+      <Link
+        to={{pathname: `/my-agencies/view/${row.original.id}`}}
+        className={style.Link}
+      >
+        {row.original[param]}
+      </Link>)
   };
 
-  saveState = (state) => {
-    this.props.setMyAgenciesTable(state);
+  const columnConfig = [
+    {
+      field: 'deqar_id',
+      label: 'Agency ID',
+      sortable: true,
+      width: 80,
+      render: (row) => linkRenderer(row, 'id'),
+      sortQueryParam: 'deqar_id_sort',
+      style:{ 'textAlign': 'center'}
+    },
+    {
+      field: 'acronym',
+      label: 'Acronym',
+      sortable: true,
+      width: 150,
+      sortQueryParam: 'acronym_sort'
+    },
+    {
+      field: 'name',
+      label: 'Agency',
+      sortable: true,
+      render: (row) => linkRenderer(row, 'name'),
+      sortQueryParam: 'name_sort',
+      style:{ 'whiteSpace': 'unset'}
+    },
+    {
+      field: 'country',
+      label: 'Country',
+      sortable: true,
+      width: 150,
+      sortQueryParam: 'country_sort'
+    },
+    {
+      field: 'date',
+      label: 'Validity',
+      render: (row) => dateRender(row, 'valid_from', 'valid_to'),
+      width: 120,
+      sortable: true,
+      sortQueryParam: 'valid_from'
+    }
+  ];
+
+  const onFetchData = (state) => {
+    const params = createTableAPIParams(state, columnConfig);
+    return agency.getMyAgencies(params);
   };
 
-  render() {
-    const {initialState} = this.props;
+  const saveState = (state) => {
+    props.setAgenciesTable(state);
+  };
 
-    return (
-      <DataTable
-        onFetchData={this.onFetchData}
-        columnConfig={this.columnConfig}
-        saveState={this.saveState}
-        initialState={initialState}
-      />
-    )
-  }
-}
+  return (
+    <DataTableRedux
+      onFetchData={onFetchData}
+      columnConfig={columnConfig}
+      saveState={saveState}
+      filterable={false}
+      storeName={'myAgenciesTable'}
+    />
+  );
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setMyAgenciesTable: state => {
+    setAgenciesTable: state => {
       dispatch(setMyAgenciesTable(state))
     }
   }
 };
 
 const mapStateToProps = (store) => {
-  return {
-    initialState: {
-      pageSize: store.myAgenciesTable.pageSize,
-      page: store.myAgenciesTable.page,
-      sorted: store.myAgenciesTable.sorted,
-      filtered: store.myAgenciesTable.filtered
-    }
-  }
+  return {}
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyAgenciesTable);

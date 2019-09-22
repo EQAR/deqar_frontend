@@ -8,7 +8,7 @@ import {
   MANAGE_REPORT,
   POST_CSV,
   POST_FILE,
-  POST_REPORT
+  POST_REPORT, REMOVE_REPORT_FLAG
 } from "./config-api";
 
 class Report {
@@ -53,6 +53,14 @@ class Report {
   updateReport = (formValues, reportID) => {
     return axios.put(`${MANAGE_REPORT}/${reportID}/`, formValues);
   };
+
+  deleteReport = (reportID) => {
+    return axios.delete(`${MANAGE_REPORT}/${reportID}`);
+  };
+
+  deleteReportFlag = (flagID) => {
+    return axios.delete(`${REMOVE_REPORT_FLAG}/${flagID}`);
+  }
 }
 
 const report = new Report();

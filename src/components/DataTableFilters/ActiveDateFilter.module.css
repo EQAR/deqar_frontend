@@ -1,0 +1,7 @@
+.filterInputGroup {
+  padding: 0 10px;
+}
+
+.activeFilter {
+  padding-left: 5px;
+}

@@ -1,34 +1,49 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
-  Col,
-  Row
 } from "reactstrap";
 import ReportsTable from "./ReportsTable";
 import style from "./Reports.module.css";
+import toggleReportsTableFilter from "./actions/toggleReportsTableFilter";
+import DataTableHeader from "../../components/DataTable/DataTableHeader";
+import {connect} from "react-redux";
 
-class Reports extends Component {
-  render() {
-    return(
-      <div className="animated fadeIn">
-        <Card>
-          <CardHeader>
-            <Row>
-              <Col>Reports</Col>
-            </Row>
-          </CardHeader>
-          <CardBody className={style.ReportsCardBody}>
-            <ReportsTable/>
-          </CardBody>
-          <CardFooter>
-          </CardFooter>
-        </Card>
-      </div>
-    )
+const Reports = (props) => {
+  const onFilterClick = () => {
+    props.toggleReportsTableFilter()
+  };
+
+  return(
+    <div className="animated fadeIn">
+      <Card className={style.ReportsCard}>
+        <CardHeader>
+          Reference Data » Reports
+          <DataTableHeader
+            storeName={'reportsTable'}
+            filterText={'Number of reports'}
+            onFilterClick={onFilterClick}
+          />
+        </CardHeader>
+        <CardBody className={style.ReportsCardBody}>
+          <ReportsTable/>
+        </CardBody>
+      </Card>
+    </div>
+  )
+};
+
+const mapStateToProps = (store) => {
+  return {}
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleReportsTableFilter: state => {
+      dispatch(toggleReportsTableFilter())
+    }
   }
-}
+};
 
-export default Reports;
+export default connect(mapStateToProps, mapDispatchToProps)(Reports);

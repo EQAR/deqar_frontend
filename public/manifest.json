@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "DEQAR Admin UI",
+  "name": "DEQAR Admin UI - User Interface for the DEQAR administration frontend.",
   "icons": [
     {
       "src": "favicon.ico",

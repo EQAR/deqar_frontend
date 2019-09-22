@@ -1,34 +1,45 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
-  Col,
-  Row
 } from "reactstrap";
-import style from "./MyAgencies.module.css";
-import MyAgenciesTable from "./MyAgenciesTable";
+import MyAgenciesTable from './MyAgenciesTable';
+import style from "./MyAgencies.module.css"
+import {connect} from "react-redux";
 
-class Reports extends Component {
-  render() {
-    return(
-      <div className="animated fadeIn">
-        <Card>
+const MyAgencies = (props) => {
+  const getCard = () => {
+    if (props.agencies.length > 1) {
+      return(
+        <Card className={style.AgenciesCard}>
           <CardHeader>
-            <Row>
-              <Col>My Agencies</Col>
-            </Row>
+            My Data » My Agencies
           </CardHeader>
-          <CardBody className={style.ReportsCardBody}>
-            <MyAgenciesTable/>
+          <CardBody className={style.AgenciesCardBody}>
+            <MyAgenciesTable />
           </CardBody>
-          <CardFooter>
-          </CardFooter>
         </Card>
-      </div>
-    )
-  }
-}
+      )
+    } else {
+      const agency_id = props.agencies[0];
+      if (agency_id) {
+        props.history.push(`/my-agencies/view/${agency_id}`);
+      }
+    }
+  };
 
-export default Reports;
+  return(
+    <div className="animated fadeIn">
+      {getCard()}
+    </div>
+  )
+};
+
+const mapStateToProps = (store) => {
+  return {
+    agencies: store.user.agencies
+  }
+};
+
+export default connect(mapStateToProps)(MyAgencies);

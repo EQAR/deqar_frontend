@@ -46,26 +46,24 @@ const PasswordResetConfirm = Loadable({
 
 // Containers
 const DefaultLayout = Loadable({
-  loader: () => import('./components/DefaultLayout'),
+  loader: () => import('./components/DefaultLayout/DefaultLayout'),
   loading
 });
 
-class App extends React.Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <Router history={history}>
-          <Switch>
-            <Route exact path="/login" name="Login Page" component={Login}/>
-            <Route exact path="/forgot-password" name="Forgot Password" component={ForgotPassword}/>
-            <Route path="/password-reset/:uid/:token" name="Password Reset Confirm" component={PasswordResetConfirm}/>
-            <PrivateRoute path="/" name="Home" component={DefaultLayout} />
-          </Switch>
-        </Router>
-      </Provider>
-    )
-  }
-}
+const App = () => {
+  return (
+    <Provider store={store}>
+      <Router history={history}>
+        <Switch>
+          <Route exact path="/login" name="Login Page" component={Login}/>
+          <Route exact path="/forgot-password" name="Forgot Password" component={ForgotPassword}/>
+          <Route path="/password-reset/:uid/:token" name="Password Reset Confirm" component={PasswordResetConfirm}/>
+          <PrivateRoute path="/" name="Home" component={DefaultLayout} />
+        </Switch>
+      </Router>
+    </Provider>
+  )
+};
 
 const render = () => {
   ReactDOM.render(<App />, rootElement);

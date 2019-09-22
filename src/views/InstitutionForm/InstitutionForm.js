@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Form } from 'informed';
+import React, { Component, Fragment } from 'react';
+import { Form, Scope} from 'informed';
 import {
   Button,
   Card,
@@ -8,31 +8,62 @@ import {
   CardHeader,
   Col,
   FormGroup,
-  FormText,
+  Collapse,
   Label,
   Row
 } from "reactstrap";
 import PropTypes from 'prop-types';
+import Select from 'react-select';
+import { connect } from "react-redux";
+import { scroller } from 'react-scroll';
+import { withRouter } from "react-router-dom";
 
 import FormTextField from '../../components/FormFields/FormTextField';
+import FormSelectField from '../../components/FormFields/FormSelectField';
+import FormDatePickerField from "../../components/FormFields/FormDatePickerField";
 import institution from '../../services/Institution';
 import style from './InstitutionForm.module.css';
 import AssignedList from '../../components/FormFieldsUncontrolled/AssignedList';
-import AlternativeNameForm from './components/AlternativeNameForm';
-import LocationForm from './components/LocationForm';
+import FormButtons from '../../components/FormFieldsUncontrolled/FormButtons';
+import FormerNameForm from './components/FormerNameForm';
+import LocalIdForm from './components/LocalIdForm';
+import HistoricalLinkForm from './components/HistoricalLinkForm';
+import HierarchicalLinkForm from './components/HierarchicalLinkForm';
+import InfoBox from './components/InfoBox';
 import country from '../../services/Country';
-import {Link} from "react-router-dom";
+import qfEHEALevel from '../../services/QFeheaLevel';
+import { validateRoman, validateRequired, validateRequiredURL, validateDateFrom, validateDate } from "../../utils/validators";
+import agency from '../../services/Agency';
+import { toast } from 'react-toastify';
+import { createFormNormalizer } from './createFormNormalizer';
+import FormAlert from './components/FormAlert'
+import setInstitutionsTable from "../Institutions/actions/setInstitutionsTable";
+import toggleInstitutionsTableFilter from "../Institutions/actions/toggleInstitutionsTableFilter";
 
 
 class InstitutionForm extends Component {
   constructor(props) {
     super(props);
+    this._isMounted = true;
     this.state = {
-      readOnly: false,
-      nameModalOpen: false,
-      alternativeNameValue: null,
-      locationModalOpen: false,
-      locationValue: null
+      isEdit: false,
+      openModal: null,
+      formType: null,
+      formIndex: null,
+      formerNameValue: null,
+      localIDValue: null,
+      qFeheaLevels: [],
+      historicalLinkValue: null,
+      hierarchicalLinkValue: null,
+      countries: [],
+      infoBoxOpen: false,
+      agencies: [],
+      localIDDisabled: true,
+      loading: false,
+      alertVisible: false,
+      nonFieldErrors: [],
+      isShowTransliteration: false,
+      alternativeNameCount: 0,
     }
   }
 
@@ -40,109 +71,516 @@ class InstitutionForm extends Component {
     const { formType } = this.props;
 
     this.setState({
-      readOnly: this.isReadOnly(formType)
+      isEdit: this.isEditable(formType),
+      formType: formType
     });
     this.populate();
   }
 
-  isReadOnly = (formType) => formType === 'view';
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  scrollTo = () => {
+    scroller.scrollTo('scroll-to-element', {
+      duration: 800,
+      delay: 0,
+      offset: -100,
+      smooth: 'easeInOutQuart'
+    })
+  }
+
+  isEditable = () => {
+    const { formType, isAdmin } = this.props;
+    return isAdmin || formType === 'create';
+  }
 
   populate = () => {
-    const { formID, formType } = this.props;
+    const { institutionID, formType, isAdmin } = this.props;
+    const values = this.formApi.getState().values
 
     if (formType !== 'create') {
-      institution.getInstitution(formID).then((response, error) => {
-        this.formApi.setValues(response.data);
+      institution.getInstitution(institutionID).then((response) => {
+        let data = response.data
+        const historical_source = response.data.historical_source.map(s => ({...s, direction: 'source'}))
+        const historical_target = response.data.historical_target.map(t => ({...t, direction: 'target'}))
+        const hierarchical_parent = response.data.hierarchical_parent.map(p => ({...p, position: 'parent'}))
+        const hierarchical_child = response.data.hierarchical_child.map(c => ({...c, position: 'child'}))
+        data.historical_links = [...historical_source, ...historical_target];
+        data.hierarchical_links = [...hierarchical_child, ...hierarchical_parent];
+        data.flags = !data.flags || data.flags.length === 0 ? [{flag: 'none', flag_message: 'Institution has no flag assigned', banned: true}] : data.flags;
+        this.formApi.setValues(data);
+        this.setState({
+          isShowTransliteration: data.names_actual[0].name_official_transliterated ? true : false,
+          alternativeNameCount: data.names_actual ? data.names_actual[0].alternative_names.length : 0
+        })
+      });
+    } else {
+      this.formApi.setValues({
+        ...values,
+        flags: [{flag: 'none', flag_message: 'Institution has no flag assigned', banned: true}]
       })
     }
+
+    qfEHEALevel.select().then((response) => {
+      this.setState({
+        qFeheaLevels: response.data
+      });
+    });
+
+    country.getInstitutionCountries().then((response) => {
+      this.setState({
+        countries: response.data
+      });
+    });
+
+    isAdmin
+    ? agency.getAgencies().then((response) => this.setState({agencies: response.data.results}))
+    : agency.selectMySubmissionAgency().then((response) => this.setState({agencies: response.data}));
   }
 
   setFormApi = (formApi) => {
     this.formApi = formApi;
   }
 
-  formTitle(formType) {
+  toggleLoading = () => {
+    this.setState({
+      loading: !this.state.loading
+    });
+  }
+
+  toggleInfoBox = () => this.setState({ infoBoxOpen: !this.state.infoBoxOpen });
+
+  formTitle() {
+    let { formType } = this.state;
+
     return {
-      view: 'View Institution',
-      edit: 'Edit Institution',
+      view: 'Institution',
       create: 'Add Institution'
     }[formType];
   }
 
-  toggleNameModal = () => {
+  toggleModal = (modal) => {
+    const { openModal } = this.state;
+
+    modal = openModal === modal ? '' : modal;
     this.setState({
-      nameModalOpen: !this.state.nameModalOpen
+      openModal: modal
     })
   }
 
-  onNameSubmit = (value, index) => {
-
-  }
-
-  onNameRemove = (index) => {
-  }
-
-  onNameClick = (index) => {
+  onAddAlternativeName = () => {
     this.setState({
-      nameModalOpen: true,
-      alternativeNameValue: this.formApi.getValue('names')[0].alternative_names[index]
+      alternativeNameValue: null,
+      formIndex: null
+    });
+    this.toggleModal('alternative-name');
+  }
+
+  onAltenativeNameClick = (i) => {
+    this.setState({
+      alternativeNameValue: this.formApi.getValue('names_actual')[0].alternative_names[i],
+      formIndex: i
+    });
+    this.toggleModal('alternative-name');
+  }
+
+  getAlternativeNameValues = formState => (
+    formState.values.names_actual
+    ? formState.values.names_actual[0].alternative_names
+    : null
+  )
+
+  renderAlternativeNames = value => value.name;
+
+  onAddFormerName = () => {
+    this.setState({
+      formerNameValue: null,
+      formIndex: null
+    });
+    this.toggleModal('former-name');
+  }
+
+  onFormerNameClick = (i) => {
+    this.setState({
+      formerNameValue: this.formApi.getValue('names_former')[i],
+      formIndex: i
+    });
+    this.toggleModal('former-name');
+  }
+
+  getFormerValues = formState => (
+    formState.values.names_former
+    ? formState.values.names_former
+    : null
+  )
+
+  renderFormerNames = value => value.name_official;
+
+  onAddLocalID = () => {
+    const localIds = this.formApi.getValue('identifiers_local');
+    const { agencies } = this.state;
+
+    this.setState({
+      formerIndex: null,
+      localIDValue: null,
+      localIDDisabled: localIds ? agencies.filter(a => localIds.filter(l => l.agency.id !== a.id)) ? false : true : false
+    });
+    this.toggleModal('local-id');
+  }
+
+  onLocalIDClick = (i) => {
+    const localIds = this.formApi.getValue('identifiers_local');
+    const { agencies } = this.state;
+
+    this.setState({
+      localIDValue: localIds[i],
+      formerIndex: i,
+      localIDDisabled: agencies.find(a => localIds[i].agency.id === a.id) ? false : true
+    });
+    this.toggleModal('local-id');
+  }
+
+  getLocalIDValues = formState => {
+    const { agencies } = this.state;
+    let { identifiers_local } = formState.values;
+
+    if (identifiers_local && agencies) {
+      identifiers_local = identifiers_local.map(id => (
+        agencies.find(a => id.agency.id === a.id) ? {...id, banned: false }: {...id, banned: true})
+      )
+    }
+    return identifiers_local
+  }
+
+  renderLocalID = value => value.identifier;
+
+  changeQFEheaLvels = (level) => {
+    this.formApi.getValue('qf_ehea_levels')
+    ? this.formApi.setValue('qf_ehea_levels', [...this.formApi.getValue('qf_ehea_levels'), {qf_ehea_level: level.id}])
+    : this.formApi.setValue('qf_ehea_levels', [{qf_ehea_level: level.id}])
+  }
+
+  getQFEheaLevels = (formState) => {
+    const { qFeheaLevels } = this.state;
+
+    return formState.values.qf_ehea_levels && qFeheaLevels ?
+      formState.values.qf_ehea_levels.map(level => qFeheaLevels.filter(l => level.qf_ehea_level === l.id)[0]) :
+      null;
+  }
+
+  getQFEheaOptions = (qFeheaLevels) => {
+
+    const formLevels = this.formApi.getValue('qf_ehea_levels');
+    if (formLevels && qFeheaLevels) {
+      formLevels.forEach(l => {
+        qFeheaLevels = qFeheaLevels.filter(level => level.id !== l.qf_ehea_level);
+      });
+    }
+    return qFeheaLevels;
+  }
+
+  onAddHistoricalLink = () => {
+    this.setState({
+      formIndex: null,
+      historicalLinkValue: null
+    });
+    this.toggleModal('historical-link')
+  }
+
+  onHistoricalLinkClick = (i) => {
+    this.setState({
+      formIndex: i,
+      historicalLinkValue: this.formApi.getValue('historical_links')[i]
+    });
+    this.toggleModal('historical-link')
+  }
+
+  getHistoricalLinkValues = formState => (
+    formState.values.historical_links
+    ? formState.values.historical_links
+    : null
+  )
+
+  renderHistoricalLinks = value => value.institution.name_primary
+
+  onAddHierarchicallLink = () => {
+    this.setState({
+      formIndex: null,
+      hierarchicalLinkValue: null
+    });
+    this.toggleModal('hierarchical-link')
+  }
+
+  onHierarchicalLinkClick = (i) => {
+    this.setState({
+      formIndex: i,
+      hierarchicalLinkValue: this.formApi.getValue('hierarchical_links')[i]
+    });
+    this.toggleModal('hierarchical-link')
+  }
+
+  getHierarchicalLinkValues = formState => (
+    formState.values.hierarchical_links
+    ? formState.values.hierarchical_links
+    : null
+  )
+
+  renderHierarchicalLinks = value => value.institution.name_primary
+
+  onFormSubmit = (value, i, field) => {
+    let values = this.formApi.getValue(field) || [];
+    Number.isInteger(i) ? values[i] = value : values.push(value)
+    this.formApi.setValue(field, values);
+    this.toggleModal('');
+  }
+
+  onRemove = (i, field) => {
+    let values;
+
+    if (field === 'alternative_names') {
+      values = this.formApi.getState().values;
+      values.names_actual[0].alternative_names.splice(i, 1);
+      this.formApi.setValues(values)
+      this.setState({
+        alternativeNameCount: this.formApi.getState().values.names_actual[0].alternative_names.length
+      })
+    } else if (field === 'countries') {
+      values = this.formApi.getState().values;
+      values.countries.splice(i, 1);
+      this.formApi.setValues(values)
+    } else {
+      values = this.formApi.getValue(field);
+      values.splice(i, 1);
+      this.formApi.setValue(field, values);
+    }
+  }
+
+  renderLocations = formState => {
+    const { countries, isEdit } = this.state;
+    const c = this.formApi.getValue('countries') || [''];
+
+    if (countries) {
+      return c.map((country, i) => {
+        const scopeName = `countries[${i}]`;
+        return (
+          <Fragment key={i}>
+            <Scope scope={scopeName}>
+              <Row key={i} className={style.relativeContainer}>
+                <Col md={6}>
+                  <FormGroup>
+                  <Label for="country" className={'required'}>Country</Label>
+                  <FormSelectField
+                    field={'country'}
+                    options={countries}
+                    placeholder={'Please select'}
+                    labelField={'name_english'}
+                    valueField={'id'}
+                    disabled={!isEdit}
+                    validate={validateRequired}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={6}>
+                  <FormGroup>
+                  <Label for="city">City</Label>
+                  <FormTextField
+                    field={'city'}
+                    placeholder={'Enter city name'}
+                    disabled={!isEdit}
+                  />
+                  </FormGroup>
+                </Col>
+                {isEdit && i >= 1 && (
+                  <div className={style.locationRemoveButton + " pull-right"} onClick={(e) => this.onRemove(i, 'countries')}
+                  >
+                    <i className="fa fa-close"> </i>
+                  </div>
+                )}
+              </Row>
+            </Scope>
+          </Fragment>
+        )
+      });
+    }
+  }
+
+  onAddCountryClick = () => {
+    let countries = this.formApi.getValue('countries');
+    const values = this.formApi.getState().values;
+    countries = [...countries, {country: null, city: null}];
+    this.formApi.setValues({...values, countries: countries});
+  }
+
+  renderAlternativeNames = () => {
+    const { alternativeNameCount, isEdit } = this.state;
+    const count = Array.apply(null, {length: alternativeNameCount}).map(Number.call, Number);
+
+    return count.map((c, idx) => {
+      const scopeName = `names_actual[0].alternative_names[${idx}]`;
+      return (
+        <React.Fragment key={idx}>
+          <Scope scope={scopeName}>
+            <Row>
+              <Col md={12}>
+                <FormGroup className={style.relativeContainer}>
+                  <Label for="name">Alternative Institution Name # {c+1}</Label>
+                  <FormTextField
+                    field={'name'}
+                    placeholder={'Enter alternative institution name'}
+                  />
+                  {isEdit && (
+                    <div className={style.alternativeNameRemoveButton + " pull-right"} onClick={(e) => this.onRemove(idx, 'alternative_names')}
+                    >
+                      <i className="fa fa-close"> </i>
+                    </div>
+                  )}
+                </FormGroup>
+              </Col>
+            </Row>
+          </Scope>
+        </React.Fragment>
+      )
     });
   }
 
-  toggleLocationModal = () => {
-    this.setState({
-      locationModalOpen: !this.state.locationModalOpen
-    })
+  onAddButtonClick = () => {
+    const { alternativeNameCount } = this.state;
+
+    if (alternativeNameCount !== 0) {
+      let altNames = this.formApi.getValue('names_actual[0].alternative_names') || [{}];
+      const lastAltName = altNames.slice(-1).pop();
+
+      if (lastAltName) {
+        if ('name' in lastAltName) {
+          if (lastAltName.name.length > 0) {
+            this.setState({alternativeNameCount: alternativeNameCount + 1})
+          }
+        }
+      }
+    } else {
+      this.setState({alternativeNameCount: alternativeNameCount + 1})
+    }
   }
 
-  onCountryClick = () => {
-    this.setState({
-      locationModalOpen: true,
-      locationValue: this.formApi.getValue('countries')
-    });
-  }
-
-  onCountryRemove = () => {
-
-  };
-
-  getAlternativeValues = (formState) => {
-    return formState.values.names ? formState.values.names[0].alternative_names : null;
-  }
-
-  getCountry = (formState) => {
-    return formState.values.countries ? formState.values.countries[0].country.name_english : null;
-  }
-
-  renderAlternativeNames = (value) => {
-
-  }
-
-  renderCountries = (value) => {
-    const {city, country} = value;
-    const {name_english} = country;
-
-    return `${city} (${name_english})`
-  };
-
-  render() {
-    const { readOnly, nameModalOpen, alternativeNameValue, locationModalOpen, locationValue } = this.state;
-    const { formType, backPath } = this.props;
+  renderError = () => {
+    const {alertVisible, nonFieldErrors} = this.state;
 
     return (
-      <div className="animated fadeIn">
-        <Card>
+      <Row>
+        <Col md={12}>
+          <FormAlert
+            name="scroll-to-element"
+            visible={alertVisible}
+            onClose={this.onAlertClose}
+            errorMessage={nonFieldErrors}
+          />
+        </Col>
+      </Row>
+    )
+  }
+
+  onAlertClose = () => {
+    this.setState({
+      alertVisible: false
+    });
+  }
+
+  renderQFEheaLevels = value => value.level;
+
+  getLabel = (option) => option.level;
+
+  getValue = (option) => option.id;
+
+  submitForm = () => {
+    this.formApi.submitForm();
+  }
+
+  getMethod = (value, institutionID) => {
+    const { formType } = this.props;
+
+    return formType === 'create' ?
+    institution.submitInstitution(value) :
+    institution.updateInstitution(value, institutionID)
+  }
+
+  submitInstitutionForm = (value) => {
+    const { institutionID, formType , institutionTableState} = this.props;
+    const messages = {
+      create: "Institution was created.",
+      edit: "Institution was updated."
+    }
+    this.toggleLoading();
+    this.getMethod(createFormNormalizer(value), institutionID).then((r) => {
+      this.toggleLoading();
+      toast.success(messages[formType]);
+      this.props.history.push('/reference/institutions');
+      const tableState = {...institutionTableState, filtered: [{id: 'query', value: value.names_actual[0].name_official}]}
+      this.props.setInstitutionsTable(tableState)
+      this.props.toggleInstitutionsTableFilter()
+    }).catch(error => {
+      const errors = error.response.data.errors || error.response.data;
+      if ('non_field_errors' in errors) {
+        this.setState({
+          alertVisible: true,
+          nonFieldErrors: errors.non_field_errors
+        });
+        this.toggleLoading();
+      }
+
+      Object.keys(errors).forEach(key => {
+        if (errors[key].non_field_errors) {
+          this.setState({
+            alertVisible: true,
+            nonFieldErrors: errors[key].non_field_errors
+          });
+        } else {
+          if (this.formApi.fieldExists(key)) {
+            this.formApi.setError(key, errors[key]);
+          }
+        }
+      });
+      this.toggleLoading();
+      this.scrollTo();
+    })
+  }
+
+  toggleTransliteration = () => this.setState({isShowTransliteration: !this.state.isShowTransliteration})
+
+  render() {
+    const {
+      openModal,
+      alternativeNameCount,
+      formerNameValue,
+      historicalLinkValue,
+      hierarchicalLinkValue,
+      infoBoxOpen,
+      qFeheaLevels,
+      isEdit,
+      localIDValue,
+      localIDDisabled,
+      formIndex,
+      loading,
+      isShowTransliteration
+    } = this.state;
+    const { backPath, isAdmin, formType, formTitle } = this.props;
+    return  qFeheaLevels ? (
+      <Card className={style.InstitutionFormCard}>
         <CardHeader>
-            <Row>
-              <Col>{this.formTitle(formType)}</Col>
-            </Row>
-          </CardHeader>
-          <Form
-            getApi={this.setFormApi}
-          >
-            {({ formState }) => (
-              <React.Fragment>
-                <CardBody>
+          <Row>
+            <Col>{formTitle}</Col>
+          </Row>
+        </CardHeader>
+        <Form
+          className="animated fadeIn"
+          getApi={this.setFormApi}
+          onSubmit={this.submitInstitutionForm}
+          onSubmitFailure={this.scrollTo}
+        >
+          {({ formState }) => (
+            <React.Fragment>
+              <CardBody>
+              {this.renderError()}
                   <Row>
                     <Col md={6} className={style.borderLeft}>
                       <Row>
@@ -150,144 +588,76 @@ class InstitutionForm extends Component {
                           <FormGroup>
                           <Label for="name_official" className={'required'}>Institution Name, Official</Label>
                             <FormTextField
-                              field={'names[0].name_official'}
-                              disabled={readOnly}
+                              field={'names_actual[0].name_official'}
+                              placeholder={'Enter official institution name'}
+                              disabled={!isEdit}
+                              validate={validateRequired}
                             />
                           </FormGroup>
                         </Col>
                       </Row>
-                      <Row>
-                        <Col>
-                          <FormGroup>
-                          <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
-                            <FormTextField
-                              field={'names[0].name_official_transliterated'}
-                              disabled={readOnly}
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
+                          <Collapse isOpen={isShowTransliteration}>
+                            <Row>
+                              <Col>
+                                <FormGroup>
+                                  <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
+                                    <FormTextField
+                                      field={'names_actual[0].name_official_transliterated'}
+                                      placeholder={'Enter transliterated form'}
+                                      disabled={!isEdit}
+                                      validate={validateRoman}
+                                    />
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                          </Collapse>
+                          {!isEdit || isShowTransliteration ? "" :
+                            <Row>
+                              <Col md={12}>
+                                <Button
+                                  type={'button'}
+                                  size="sm"
+                                  color="secondary"
+                                  onClick={this.toggleTransliteration}
+                                >Add Transliteration</Button>
+                              </Col>
+                            </Row>
+                          }
                       <Row>
                         <Col>
                           <FormGroup>
                           <Label for="name_english">Institution Name, English</Label>
                             <FormTextField
-                              field={'names[0].name_english'}
-                              disabled={readOnly}
+                              field={'names_actual[0].name_english'}
+                              placeholder={'Enter English form'}
+                              disabled={!isEdit}
                             />
                           </FormGroup>
+                        </Col>
+                      </Row>
+                      <Collapse isOpen={alternativeNameCount > 0}>
+                        {this.renderAlternativeNames()}
+                      </Collapse>
+                      <Row>
+                        <Col md={12}>
+                          <div className="pull-right">
+                            <Button
+                              type={'button'}
+                              size="sm"
+                              color="secondary"
+                              onClick={this.onAddButtonClick}
+                            >Add Alternative Name</Button>
+                          </div>
                         </Col>
                       </Row>
                       <Row>
                         <Col md={6}>
                           <FormGroup>
-                          <Label for="acronym" className={'required'}>Institution Acronym</Label>
+                          <Label for="acronym">Institution Acronym</Label>
                             <FormTextField
-                              field={'names[0].acronym'}
-                              disabled={readOnly}
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                          <AlternativeNameForm
-                            modalOpen={nameModalOpen}
-                            onToggle={this.toggleNameModal}
-                            onFormSubmit={this.onNameSubmit}
-                            formValue={alternativeNameValue}
-                            disabled={readOnly}
-                          />
-                          <AssignedList
-                            errors={formState.errors}
-                            valueFields={['name']}
-                            values={this.getAlternativeValues(formState)}
-                            label={'Alternative Names'}
-                            btnLabel={'Add Alternative Name'}
-                            onRemove={this.onNameRemove}
-                            renderDisplayValue={this.renderAlternativeNames}
-                            onAddButtonClick={this.toggleNameModal}
-                            onClick={this.onNameClick}
-                            field={'alternative_names'}
-                            disabled={readOnly}
-                          />
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                          <LocationForm
-                            modalOpen={locationModalOpen}
-                            onToggle={this.toggleLocationModal}
-                            onFormSubmit={this.onNameSubmit}
-                            formValue={locationValue}
-                            disabled={readOnly}
-                          />
-                          <AssignedList
-                            values={formState.values.countries}
-                            errors={formState.errors}
-                            label={'Geographic Location'}
-                            labelShowRequired={true}
-                            btnLabel={'Add'}
-                            onAddButtonClick={this.toggleLocationModal}
-                            onClick={this.onCountryClick}
-                            onRemove={this.onCountryRemove}
-                            renderDisplayValue={this.renderCountries}
-                            field={'countries'}
-                            disabled={readOnly}
-                          />
-                        </Col>
-                      </Row>
-                    </Col>
-                    <Col md={6}>
-                      <Row>
-                        <Col md={6}>
-                          <FormGroup>
-                          <Label for="deqar_id">DEQARINST ID</Label>
-                            <FormTextField
-                              field={'deqar_id'}
-                              disabled
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col md={6}>
-                          <FormGroup>
-                          <Label for="eter_id">ETER ID</Label>
-                            <FormTextField
-                              field={'eter_id'}
-                              disabled
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                          <Col>
-                            <FormGroup>
-                            <Label for="deqar_id">National Identifier</Label>
-                              <FormTextField
-                                field={'identifiers[0].identifier'}
-                                disabled={readOnly}
-                              />
-                            </FormGroup>
-                          </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                          <FormGroup>
-                          <Label for="deqar_id">Local Identifier</Label>
-                            <FormTextField
-                              field={'identifiers[1].identifier'}
-                              disabled={readOnly}
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                          <FormGroup>
-                          <Label for="deqar_id">QF-EHEA Levels</Label>
-                            <FormTextField
-                              field={'deqar_id'}
-                              disabled={readOnly}
+                              field={'names_actual[0].acronym'}
+                              placeholder={'Enter acronym'}
+                              disabled={!isEdit}
                             />
                           </FormGroup>
                         </Col>
@@ -298,28 +668,243 @@ class InstitutionForm extends Component {
                           <Label for="website_link" className={'required'}>Institution Website</Label>
                             <FormTextField
                               field={'website_link'}
-                              disabled={readOnly}
+                              placeholder={'Enter institution website'}
+                              disabled={!isEdit}
+                              validate={validateRequiredURL}
                             />
                           </FormGroup>
                         </Col>
                       </Row>
+                      <Row>
+                        <Col>
+                        <FormerNameForm
+                            modalOpen={openModal === 'former-name'}
+                            onToggle={() => this.toggleModal('')}
+                            onFormSubmit={this.onFormSubmit}
+                            fieldName={'names_former'}
+                            formIndex = {formIndex}
+                            formValue={formerNameValue}
+                            disabled={!isEdit}
+                            />
+                          <AssignedList
+                            errors={formState.errors}
+                            valueFields={['name_official']}
+                            values={this.getFormerValues(formState)}
+                            label={'Former Names'}
+                            btnLabel={'Add'}
+                            onRemove={this.onRemove}
+                            onAddButtonClick={this.onAddFormerName}
+                            onClick={this.onFormerNameClick}
+                            renderDisplayValue={this.renderFormerNames}
+                            field={'names_former'}
+                            fieldName={'names_former'}
+                            disabled={!isEdit}
+                            />
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                        <LocalIdForm
+                            modalOpen={openModal === 'local-id'}
+                            onToggle={() => this.toggleModal('')}
+                            onFormSubmit={this.onFormSubmit}
+                            fieldName={'identifiers_local'}
+                            formIndex={formIndex}
+                            formValue={localIDValue}
+                            disabled={localIDDisabled}
+                            localIDs={formState.values.identifiers_local}
+                          />
+                          <AssignedList
+                            errors={formState.errors}
+                            valueFields={['identifier']}
+                            values={this.getLocalIDValues(formState)}
+                            label={'Local ID'}
+                            btnLabel={'Add'}
+                            onRemove={this.onRemove}
+                            onAddButtonClick={this.onAddLocalID}
+                            onClick={this.onLocalIDClick}
+                            renderDisplayValue={this.renderLocalID}
+                            field={'identifiers_local'}
+                            fieldName={'identifiers_local'}
+                            validate={this.validateAgency}
+                          />
+                        </Col>
+                      </Row>
+                    </Col>
+                    <Col md={6}>
+                      {this.renderLocations(formState)}
+                      {isEdit && formState.values.countries ?
+                        <Row>
+                          <Col md={12}>
+                            <div className="pull-right">
+                              <Button
+                                type={'button'}
+                                size="sm"
+                                color="secondary"
+                                onClick={this.onAddCountryClick}
+                              >Add New Location</Button>
+                            </div>
+                          </Col>
+                        </Row> : null
+                      }
+                      <Row>
+                        <Col md={6}>
+                          <FormGroup>
+                          <Label for="founding_date">Founding Year</Label>
+                            <FormDatePickerField
+                              field={'founding_date'}
+                              placeholderText={'Enter year'}
+                              disabled={!isEdit}
+                              validate={(value) => formState.values.closure_date ? validateDateFrom(value, formState.values.closure_date) : null}
+                              />
+                          </FormGroup>
+                        </Col>
+                        <Col md={6}>
+                          <FormGroup>
+                          <Label for="closing_date">Closing Year</Label>
+                            <FormDatePickerField
+                              field={'closure_date'}
+                              placeholderText={'Enter year'}
+                              validate ={validateDate}
+                              disabled={!isEdit}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                            <Row>
+                              <Col>
+                                <FormGroup>
+                                  <Label for="country">QF-EHEA Levels</Label>
+                                  <Select
+                                    className={!isEdit ? style.hidden : null}
+                                    options={this.getQFEheaOptions(qFeheaLevels)}
+                                    onChange={this.changeQFEheaLvels}
+                                    placeholder={'Select select multiple, if necessary'}
+                                    getOptionLabel={this.getLabel}
+                                    getOptionValue={this.getValue}
+                                    value={0}
+                                  />
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col>
+                                <FormGroup>
+                                  <AssignedList
+                                    errors={formState.errors}
+                                    valueFields={['qf_ehea_level']}
+                                    values={this.getQFEheaLevels(formState)}
+                                    renderDisplayValue={this.renderQFEheaLevels}
+                                    onClick={() => null}
+                                    field={'qf_ehea_levels'}
+                                    fieldName={'qf_ehea_levels'}
+                                    onRemove={this.onRemove}
+                                    disabled={!isEdit}
+                                    />
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <FormGroup>
+                          <Label for="comment">Other comment(optional)</Label>
+                            <FormTextField
+                              field={'other_comment'}
+                              placeholder={'Enter comment, if applicable'}
+                              disabled={!isEdit}
+                              />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                        <HistoricalLinkForm
+                            modalOpen={openModal === 'historical-link'}
+                            onToggle={() => this.toggleModal('')}
+                            onFormSubmit={this.onFormSubmit}
+                            formValue={historicalLinkValue}
+                            formIndex={formIndex}
+                            disabled={!isEdit}
+                            fieldName={'historical_links'}
+                          />
+                          <AssignedList
+                            errors={formState.errors}
+                            valueFields={['institution.name_primary']}
+                            values={this.getHistoricalLinkValues(formState)}
+                            label={'Historical Link'}
+                            btnLabel={'Add'}
+                            onRemove={this.onRemove}
+                            onAddButtonClick={this.onAddHistoricalLink}
+                            onClick={this.onHistoricalLinkClick}
+                            renderDisplayValue={this.renderHistoricalLinks}
+                            field={'historical_links'}
+                            fieldName={'historical_links'}
+                            disabled={!isEdit}
+                          />
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                        <HierarchicalLinkForm
+                            modalOpen={openModal === 'hierarchical-link'}
+                            onToggle={() => this.toggleModal('')}
+                            onFormSubmit={this.onFormSubmit}
+                            formValue={hierarchicalLinkValue}
+                            formIndex={formIndex}
+                            disabled={!isEdit}
+                            fieldName={'hierarchical_links'}
+                            />
+                          <AssignedList
+                            errors={formState.errors}
+                            valueFields={['institution.name_primary']}
+                            values={this.getHierarchicalLinkValues(formState)}
+                            label={'Hierarchical Link'}
+                            btnLabel={'Add'}
+                            onRemove={this.onRemove}
+                            onAddButtonClick={this.onAddHierarchicallLink}
+                            onClick={this.onHierarchicalLinkClick}
+                            renderDisplayValue={this.renderHierarchicalLinks}
+                            field={'hierarchical_links'}
+                            fieldName={'hierarchical_links'}
+                            disabled={!isEdit}
+                          />
+                        </Col>
+                      </Row>
                     </Col>
                   </Row>
-                </CardBody>
-              </React.Fragment>
+              </CardBody>
+              <CardFooter>
+                <FormButtons
+                  deleteButton={false}
+                  backPath={backPath}
+                  currentPath={backPath}
+                  editButton={false}
+                  userIsAdmin={isAdmin}
+                  buttonText={'Institution'}
+                  formType={formType}
+                  infoBoxOpen={infoBoxOpen}
+                  infoBoxToggle={this.toggleInfoBox}
+                  submitForm={this.formApi.submitForm}
+                  loading={loading}
+                />
+              </CardFooter>
+              <CardFooter className={style.infoFooter}>
+                <Collapse isOpen={infoBoxOpen}>
+                  <InfoBox
+                    formState={formState}
+                    disabled={!isEdit}
+                  />
+                </Collapse>
+              </CardFooter>
+            </React.Fragment>
             )}
-          </Form>
-          <CardFooter>
-            <Link to={{pathname: `${backPath}`}}>
-              <Button
-                size="sm"
-                color="primary"
-              >Close</Button>
-            </Link>
-          </CardFooter>
-        </Card>
-      </div>
-    )
+        </Form>
+      </Card>
+    ) : null;
   }
 }
 
@@ -329,4 +914,22 @@ InstitutionForm.propTypes = {
   backPath: PropTypes.string
 }
 
-export default InstitutionForm;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setInstitutionsTable: state => {
+      dispatch(setInstitutionsTable(state))
+    },
+    toggleInstitutionsTableFilter: state => {
+      dispatch(toggleInstitutionsTableFilter())
+    }
+  }
+};
+
+const mapStateToProps = (state) => {
+  return {
+    isAdmin: state.user.is_admin,
+    institutionTableState: state.institutionsTable
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(InstitutionForm));

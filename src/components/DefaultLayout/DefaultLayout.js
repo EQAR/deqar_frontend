@@ -1,10 +1,9 @@
-import React, { Component, Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { Container } from 'reactstrap';
 import auth from '../../services/Auth'
 
 import {
-  AppFooter,
   AppHeader,
   AppSidebar,
   AppSidebarFooter,
@@ -17,83 +16,111 @@ import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.min.css';
 
 // sidebar nav config
-import navigation from '../../navigation/navigation';
+import navUser from '../../navigation/navigation-user';
+import navAdmin from '../../navigation/navigation-admin';
 
 // routes config
 import routes from '../../navigation/routes';
 
-const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
+import style from './DefaultLayout.module.css';
+import {connect} from "react-redux";
+import Page404 from "./Page404";
+import resetUser from "./actions/resetUser";
+
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
-class DefaultLayout extends Component {
+const DefaultLayout = (props) => {
+  const loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
-  loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
-
-  signOut(e) {
+  const signOut = (e) => {
     e.preventDefault();
     auth.removeToken();
-    this.props.history.push('/login')
-  }
+    props.resetUser();
+    props.history.push('/login')
+  };
 
-  render() {
-    const containerStyle = {
-      zIndex: 1999
-    };
+  const containerStyle = {
+    zIndex: 1999
+  };
 
-    return (
-      <div className="app">
-        <ToastContainer
-          position="top-right"
-          autoClose={2000}
-          hideProgressBar={true}
-          draggable={false}
-          style={containerStyle}
-        />
-        <AppHeader fixed>
-          <Suspense fallback={this.loading()}>
-            <DefaultHeader onLogout={e=>this.signOut(e)}/>
+  const getRoutes = () => {
+    return props.is_admin ? routes.filter(r => r.users === 'all') : routes;
+  };
+
+  const getStartPage = () => {
+    return props.is_admin ? <Redirect from="/" exact to="/reference/reports"/> : <Redirect from="/" exact to="/my-reports" />
+  };
+
+  const generateRoutes = () => {
+    return(
+      <Suspense fallback={loading()}>
+        <Switch>
+          {getRoutes().map((route, idx) => {
+            return route.component ? (
+              <Route
+                key={idx}
+                path={route.path}
+                exact={route.exact}
+                name={route.name}
+                render={props => (
+                  <route.component {...props} />
+                )} />
+            ) : (null);
+          })}
+          {getStartPage()}
+          <Route component={Page404} />
+        </Switch>
+      </Suspense>
+    )
+  };
+
+  return (
+    <div className="app">
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={true}
+        draggable={false}
+        style={containerStyle}
+      />
+      <AppHeader fixed>
+        <Suspense fallback={loading()}>
+          <DefaultHeader onLogout={e=>signOut(e)}/>
+        </Suspense>
+      </AppHeader>
+      <div className="app-body">
+        <AppSidebar fixed display="lg" width={300}>
+          <AppSidebarHeader />
+          <AppSidebarForm />
+          <Suspense>
+            <AppSidebarNav navConfig={props.is_admin ? navAdmin : navUser} {...props} />
           </Suspense>
-        </AppHeader>
-        <div className="app-body">
-          <AppSidebar fixed display="lg">
-            <AppSidebarHeader />
-            <AppSidebarForm />
-            <Suspense>
-            <AppSidebarNav navConfig={navigation} {...this.props} />
-            </Suspense>
-            <AppSidebarFooter />
-            <AppSidebarMinimizer />
-          </AppSidebar>
-          <main className="main">
-            <Container fluid>
-              <Suspense fallback={this.loading()}>
-                <Switch>
-                  {routes.map((route, idx) => {
-                    return route.component ? (
-                      <Route
-                        key={idx}
-                        path={route.path}
-                        exact={route.exact}
-                        name={route.name}
-                        render={props => (
-                          <route.component {...props} />
-                        )} />
-                    ) : (null);
-                  })}
-                  <Redirect from="/" to="/dashboard" />
-                </Switch>
-              </Suspense>
-            </Container>
-          </main>
-        </div>
-        <AppFooter>
-          <Suspense fallback={this.loading()}>
-            <DefaultFooter />
-          </Suspense>
-        </AppFooter>
+          <AppSidebarFooter />
+          <AppSidebarMinimizer />
+        </AppSidebar>
+        <main className="main">
+          <Container className={style.Container}>
+            {generateRoutes()}
+          </Container>
+        </main>
       </div>
-    );
-  }
-}
 
-export default DefaultLayout;
+    </div>
+  );
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    resetUser: () => {
+      dispatch(resetUser())
+    }
+  }
+};
+
+const mapStateToProps = (store) => {
+  return {
+    is_admin: store.user.is_admin
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DefaultLayout);

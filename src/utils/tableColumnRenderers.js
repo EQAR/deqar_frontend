@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from "moment";
+import style from './tableColumnRenderers.module.css';
 
 export const flagRender = (row) => {
   let className = '';
@@ -27,15 +28,26 @@ export const arrayRenderer = (row) => {
   }
 };
 
-export const dateRender = (row) => {
-  let {valid_from, valid_to} = row.original;
+export const dateRender = (row, valid_from_field, valid_to_field) => {
+  let valid_from = row.original[valid_from_field];
+  let valid_to = row.original[valid_to_field];
   valid_from = moment(valid_from, moment.ISO_8601).format("YYYY-MM-DD");
 
   if(valid_to) {
     valid_to = moment(valid_to, moment.ISO_8601).format("YYYY-MM-DD");
-    return (<div className={'text-center'}>{valid_from}<br/>{valid_to}</div>);
+    return (
+      <div className={style.DateColumn}>
+        {valid_from}<br/>
+        <span className={style.DateText}>to</span><br/>
+        {valid_to}
+      </div>);
   } else {
-    return (<div className={'text-center'}>{valid_from}</div>);
+    return (
+      <div className={style.DateColumn}>
+        {valid_from}<br/>
+        <span className={style.DateText}>to</span><br/>
+        N/A
+      </div>);
   }
 };
 

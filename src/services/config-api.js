@@ -25,22 +25,34 @@ export const POST_FILE = SUBMISSIONAPI_URL + '/submit/reportfile';
 export const POST_CSV = SUBMISSIONAPI_URL + '/submit/csv';
 
 // Agency endpoints
-export const GET_MY_AGENCIES = ADMINAPI_URL + '/select/agency/';
-export const GET_MY_ACTIVITIES = ADMINAPI_URL + '/select/agency_esg_activity/';
+export const GET_MY_SUBMISSION_AGENCIES = ADMINAPI_URL + '/select/agency/';
 export const GET_ALL_AGENCIES = ADMINAPI_URL + '/select/agency_all/';
+export const GET_ACTIVITIES = ADMINAPI_URL + '/select/agency_esg_activity/';
 export const GET_ACTIVITY_TYPES = ADMINAPI_URL + '/select/activity_type/';
+export const GET_ASSOCIATIONS = ADMINAPI_URL + '/select/association/';
+export const GET_EQAR_DECISIONS = ADMINAPI_URL + '/select/eqar_decision_type/';
+export const GET_AGENCIES = ADMINAPI_URL + '/browse/all/agencies/';
+export const GET_MY_AGENCIES = ADMINAPI_URL + '/browse/my/agencies/';
+export const MANAGE_AGENCY = ADMINAPI_URL + '/agencies';
+export const MANAGE_MY_AGENCY = ADMINAPI_URL + '/my_agency/';
 
-// Report related endpoints
+export const POST_AGENCY_DECISION_FILE = ADMINAPI_URL + '/submit/decision';
+export const POST_AGENCY_DECISION_EXTRA_FILE = ADMINAPI_URL + '/submit/decision_extra';
+
+// Report related endpoints 
 export const GET_STATUSES = ADMINAPI_URL + '/select/report_status/';
 export const GET_DECISIONS = ADMINAPI_URL + '/select/report_decision/';
-export const GET_MY_REPORTS = ADMINAPI_URL + '/browse/my-reports/';
-export const GET_REPORTS = ADMINAPI_URL + '/browse/reports/';
+export const GET_MY_REPORTS = ADMINAPI_URL + '/browse/my/reports/';
+export const GET_REPORTS = ADMINAPI_URL + '/browse/all/reports/';
 
 export const MANAGE_REPORT = ADMINAPI_URL + '/reports';
+export const REMOVE_REPORT_FLAG = ADMINAPI_URL + '/reports/remove_flag';
 
 // Institution endpoints
 export const GET_INSTITUTIONS = ADMINAPI_URL + '/select/institutions/';
 export const GET_INSTITUTION = ADMINAPI_URL + '/institutions/';
+export const GET_HISTORICAL_RELATION_TYPES = ADMINAPI_URL + '/select/institution_historical_relationship_types/';
+export const MANAGE_INSTITUTION = ADMINAPI_URL + '/institutions/';
 
 // Language endpoints
 export const GET_LANGUAGES = ADMINAPI_URL + '/select/language/';

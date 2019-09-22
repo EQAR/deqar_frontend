@@ -1,136 +1,99 @@
-import React, { Component } from 'react';
+import React from 'react';
 import report from "../../services/Report";
 import {connect} from "react-redux";
 import setReportsTable from "./actions/setReportsTable";
-import agency from "../../services/Agency";
-import country from "../../services/Country";
-import list from "../../services/List";
 import createTableAPIParams from "../../utils/createTableAPIParams";
 import {arrayRenderer, dateRender, flagRender} from "../../utils/tableColumnRenderers";
-import DataTable from "../../components/DataTable/DataTable";
-import Link from "react-router-dom/es/Link";
+import {Link} from "react-router-dom";
 import style from "./ReportsTable.module.css";
+import ReportsTableFilters from "./ReportsTableFilters";
+import DataTableRedux from "../../components/DataTable/DataTableRedux";
 
-class ReportsTable extends Component {
-  constructor(props) {
-    super(props);
-
-    this.columnConfig = [
-      {
-        field: 'id',
-        label: 'DEQAR ID',
-        width: 80,
-        resizable: false,
-        sortable: false,
-        filterable: true,
-        filterQueryParam: 'id',
-        style:{ 'textAlign': 'center'}
-      }, {
-        field: 'agency',
-        label: 'Agency',
-        width: 150,
-        resizable: false,
-        sortable: true,
-        filterable: true,
-        filterType: 'select',
-        filterQueryParam: 'agency',
-        selectFilterValue: 'acronym_primary',
-        selectFilterLabel: 'acronym_primary',
-        selectFilterPopulate: agency.selectAllAgency()
-      }, {
-        field: 'institution_programme_primary',
-        label: 'Institution : Programme',
-        minWidth: 250,
-        render: this.linkRenderer,
-        resizable: true,
-        sortable: true,
-        sortQueryParam: 'institution_programme_sort',
-        filterable: true,
-        filterQueryParam: 'query',
-        style:{ 'whiteSpace': 'unset'}
-      }, {
-        field: 'country',
-        label: 'Country',
-        render: arrayRenderer,
-        width: 150,
-        resizable: false,
-        sortable: true,
-        filterable: true,
-        filterType: 'select',
-        filterQueryParam: 'country',
-        selectFilterValue: 'name_english',
-        selectFilterLabel: 'name_english',
-        selectFilterPopulate: country.select()
-      }, {
-        field: 'activity_type',
-        label: 'Activity',
-        width: 150,
-        resizable: false,
-        sortable: true,
-        filterable: true,
-        filterType: 'select',
-        filterQueryParam: 'activity_type',
-        selectFilterValue: 'type',
-        selectFilterLabel: 'type',
-        selectFilterPopulate: agency.selectActivityType()
-      }, {
-        field: 'date',
-        label: 'Validity',
-        render: dateRender,
-        width: 120,
-        sortable: true,
-        sortQueryParam: 'valid_from',
-        filterable: true,
-        filterType: 'activeDate',
-        filterQueryParam: 'year'
-      }, {
-        field: 'flag_level',
-        label: 'Flag',
-        render: flagRender,
-        width: 110,
-        sortable: true,
-        filterable: true,
-        filterType: 'select',
-        filterQueryParam: 'flag',
-        selectFilterValue: 'flag',
-        selectFilterLabel: 'flag',
-        selectFilterPopulate: list.selectFlags()
-      }
-    ];
-  }
-
-  onFetchData = (state) => {
-    const params = createTableAPIParams(state, this.columnConfig);
-    return report.getReports(params);
-  };
-
-  saveState = (state) => {
-    this.props.setReportsTable(state);
-  };
-
-  linkRenderer = (row) => {
+const ReportsTable = (props) => {
+  const linkRenderer = (row) => {
     return(
       <Link
-        to={{pathname: `/reports/view/${row.original.id}`}}
+        to={{pathname: `/reference/reports/view/${row.original.id}`}}
         className={style.Link}
       >
-        {row.original.institution_programme_primary}
+        {row.original.id}
       </Link>)
   };
 
-  render() {
-    const {initialState} = this.props;
+  const columnConfig = [
+    {
+      field: 'id',
+      label: 'DEQAR ID',
+      width: 80,
+      render: linkRenderer,
+      resizable: false,
+      sortable: true,
+      sortQueryParam: 'id_sort',
+      style:{ 'textAlign': 'center'}
+    }, {
+      field: 'agency_acronym',
+      label: 'Agency',
+      width: 150,
+      resizable: false,
+      sortable: true,
+    }, {
+      field: 'institution_programme_primary',
+      label: 'Institution : Programme',
+      minWidth: 250,
+      resizable: true,
+      sortable: true,
+      sortQueryParam: 'institution_programme_sort',
+      style:{ 'whiteSpace': 'unset'}
+    }, {
+      field: 'country',
+      label: 'Country',
+      render: arrayRenderer,
+      width: 150,
+      resizable: false,
+      sortable: true,
+    }, {
+      field: 'agency_esg_activity_type',
+      label: 'Activity Type',
+      width: 150,
+      resizable: false,
+      sortable: true
+    }, {
+      field: 'date',
+      label: 'Validity',
+      render: (row) => dateRender(row, 'valid_from', 'valid_to'),
+      width: 120,
+      sortable: true,
+      sortQueryParam: 'valid_from'
+    }, {
+      field: 'flag_level',
+      label: 'Flag',
+      render: flagRender,
+      width: 110,
+      sortable: true
+    }
+  ];
 
-    return (
-      <DataTable
-        onFetchData={this.onFetchData}
-        columnConfig={this.columnConfig}
-        saveState={this.saveState}
-        initialState={initialState}
-      />
-    )
-  }
-}
+  const onFetchData = (state) => {
+    const params = createTableAPIParams(state, columnConfig);
+    return report.getReports(params);
+  };
+
+  const saveState = (state) => {
+    props.setReportsTable(state);
+  };
+
+  return (
+    <DataTableRedux
+      onFetchData={onFetchData}
+      columnConfig={columnConfig}
+      saveState={saveState}
+      filterable={true}
+      storeName={'reportsTable'}
+    >
+      <ReportsTableFilters />
+    </DataTableRedux>
+  )
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -140,15 +103,8 @@ const mapDispatchToProps = (dispatch) => {
   }
 };
 
-const mapStateToProps = (store) => {
-  return {
-    initialState: {
-      page: store.reportsTable.page,
-      pageSize: store.reportsTable.pageSize,
-      sorted: store.reportsTable.sorted,
-      filtered: store.reportsTable.filtered
-    }
-  }
+const mapStateToProps = () => {
+  return {}
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportsTable);

@@ -14,6 +14,10 @@ import {
   Row } from 'reactstrap';
 import LoginAlert from "./LoginAlert";
 import auth from "../../services/Auth";
+import {connect} from "react-redux";
+import setUser from "../../components/DefaultLayout/actions/setUser";
+import user from "../../services/User";
+import axiosBearerInterceptor from "../../utils/axios.bearer_token";
 
 class Login extends Component {
   constructor(props) {
@@ -43,7 +47,13 @@ class Login extends Component {
     if (event.key === 'Enter' || event.key === undefined) {
       auth.authenticate(username, password).then((response) => {
         auth.saveToken(response.data.token);
-        this.props.history.push("/");
+      }).then(() => {
+        axiosBearerInterceptor();
+        user.getUser().then((response) => {
+          this.props.setUser(response.data);
+        }).then(() => {
+          this.props.history.push("/");
+        });
       }).catch((error) => {
         this.setState({
           alertVisible: true
@@ -124,4 +134,16 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setUser: user => {
+      dispatch(setUser(user))
+    }
+  }
+};
+
+const mapStateToProps = () => {
+  return {}
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

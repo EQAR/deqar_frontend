@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import InstitutionForm from '../InstitutionForm/InstitutionForm';
 
-class InstitutionDetails extends Component {
+const InstitutionDetails = (props) => {
+  const { id, param } = props.match.params;
 
-  render() {
-    const {id, param} = this.props.match.params;
-
-    return(
-      <React.Fragment>
-        <InstitutionForm
-          formType={param}
-          formID={parseInt(id, 10)}
-          backPath={'/institutions'}
-        />
-      </React.Fragment>
-    )
-  }
-}
+  return(
+    <React.Fragment>
+      <InstitutionForm
+        formTitle={param === 'view' ?
+          `Reference Data » Institutions » View : DEQARINST${id.padStart(4, '0')}` :
+          `Reference Data » Institutions » Edit : DEQARINST${id.padStart(4, '0')}`}
+        formType={param}
+        institutionID={parseInt(id, 10)}
+        backPath={'/reference/institutions'}
+      />
+    </React.Fragment>
+  )
+};
 
 export default InstitutionDetails;

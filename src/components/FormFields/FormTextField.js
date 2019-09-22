@@ -7,12 +7,12 @@ const FormTextField = asField(({ fieldState, placeholder, disabled, className, .
     <BasicText
       fieldState={fieldState}
       placeholder={disabled ? "" : placeholder}
-      disabled={disabled}
+      readOnly={disabled}
       {...props}
       className={cx(fieldState.error ? ' form-control is-invalid' : ' form-control', className)}
     />
     {fieldState.error ? (
-      <small className="help-block form-text text-danger">{fieldState.error}</small>
+      <small name="scroll-to-element" className="help-block form-text text-danger">{fieldState.error}</small>
     ) : null}
   </React.Fragment>
 ));

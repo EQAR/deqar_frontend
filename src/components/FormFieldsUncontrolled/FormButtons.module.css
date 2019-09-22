@@ -1,0 +1,12 @@
+
+.SubmitButton {
+  z-index: 0;
+}
+
+.DeleteButton {
+  margin-right: 10px;
+}
+
+.InfoButton {
+  margin-left: 10px;
+}

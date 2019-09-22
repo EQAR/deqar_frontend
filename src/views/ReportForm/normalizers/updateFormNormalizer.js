@@ -1,17 +1,35 @@
 export const updateFormNormalizer = (formValues) => {
   let normalizedForm = {};
+
   Object.keys(formValues).forEach(key => {
     const value = formValues[key];
-    switch (key) {
-      case 'institutions':
-        normalizedForm[key] = [];
-        value.forEach((v) => {
-          normalizedForm[key].push(v.id);
-        });
-        break;
-      default:
-        normalizedForm[key] = value;
-        break;
+    if(value) {
+      switch (value.constructor) {
+        case Object:
+          if ('id' in value) {
+            normalizedForm[key] = value.id
+          }
+          break;
+        case Array:
+          normalizedForm[key] = [];
+          value.forEach((v) => {
+            if('id' in v) {
+              if(['programmes', 'report_files', 'flags'].includes(key)) {
+                normalizedForm[key].push(updateFormNormalizer(v))
+              } else if ('alternative_names' === key) {
+                normalizedForm[key].push(v);
+              } else {
+                normalizedForm[key].push(v.id);
+              }
+            }
+          });
+          break;
+        default:
+          normalizedForm[key] = value;
+          break;
+      }
+    } else {
+      normalizedForm[key] = value;
     }
   });
   return normalizedForm;

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {GET_FLAGS, GET_QFEHEA_LEVELS} from "./config-api";
+import {GET_ASSOCIATIONS, GET_EQAR_DECISIONS, GET_FLAGS, GET_QFEHEA_LEVELS} from "./config-api";
 
 class List {
   selectQFEHEALevels = () => {
@@ -8,6 +8,14 @@ class List {
 
   selectFlags = () => {
     return axios.get(GET_FLAGS);
+  };
+
+  selectAssociations = () => {
+    return axios.get(GET_ASSOCIATIONS);
+  };
+
+  selectDecisions = () => {
+    return axios.get(GET_EQAR_DECISIONS);
   }
 }
 
