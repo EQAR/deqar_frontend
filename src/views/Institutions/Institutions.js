@@ -35,22 +35,22 @@ const Institutions = (props) => {
         <CardBody className={style.InstitutionsCardBody}>
           <InstitutionsTable/>
         </CardBody>
-        <CardFooter>
         {isAdmin && (
-          <Button
-            size="sm"
-            color="primary"
-            className={'pull-right'}
-          >
-            <Link
-              to={{pathname: '/reference/institutions/create'}}
-              className={style.Link}
+          <CardFooter>
+            <Button
+              size="sm"
+              color="primary"
+              className={'pull-right'}
             >
-              Add New Institution
-            </Link>
-          </Button>
+              <Link
+                to={{pathname: '/reference/institutions/create'}}
+                className={style.Link}
+              >
+                Add New Institution
+              </Link>
+            </Button>
+          </CardFooter>
         )}
-        </CardFooter>
       </Card>
     </div>
   )

@@ -785,7 +785,8 @@ class AgencyForm extends Component {
                   <FormButtons
                     backPath={backPath}
                     userIsAdmin={userIsAdmin}
-                    editButton={this.isEditable()}
+                    //editButton={this.isEditable()}
+                    editButton={false}
                     buttonText={'Agency'}
                     recordID={agencyID}
                     formType={formType}
