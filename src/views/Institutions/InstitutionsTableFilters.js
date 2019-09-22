@@ -5,12 +5,11 @@ import SelectFilter from "../../components/DataTableFilters/SelectFilter";
 import FormGroup from "reactstrap/es/FormGroup";
 
 class InstitutionsTableFilters extends Component {
-
   componentDidUpdate = (prevProps) => {
     if (this.props.filterState.filtered.length !== prevProps.filterState.filtered.length) {
       this.onFilter(this.props.filterState.filtered.value, this.props.filterState.filtered.id)
     }
-  }
+  };
 
   getSelectFilterOptions = (field) => {
     const { facets } = this.props;
@@ -23,11 +22,11 @@ class InstitutionsTableFilters extends Component {
     } else {
       return [];
     }
-  }
+  };
 
   onFilterRemove = (field) => {
     this.onFilter('', field)
-  }
+  };
 
   onFilter = (value, field) => {
     let { filterState: { filtered } } = this.props;
@@ -69,7 +68,7 @@ class InstitutionsTableFilters extends Component {
       <React.Fragment>
         <Collapse isOpen={filterOpen}>
           <Row form>
-            <Col md={4}>
+            <Col md={3}>
               <FormGroup>
                 <Input
                   value={this.getValue('eter_id')}
@@ -78,7 +77,7 @@ class InstitutionsTableFilters extends Component {
                 />
               </FormGroup>
             </Col>
-            <Col md={4}>
+            <Col md={3}>
               <FormGroup>
                 <Input
                   value={this.getValue('deqar_id')}
@@ -87,7 +86,7 @@ class InstitutionsTableFilters extends Component {
                 />
               </FormGroup>
             </Col>
-            <Col md={4}>
+            <Col md={3}>
               <FormGroup>
                 <SelectFilter
                   field={'country'}
@@ -100,7 +99,7 @@ class InstitutionsTableFilters extends Component {
                 />
               </FormGroup>
             </Col>
-            <Col md={4}>
+            <Col md={3}>
               <FormGroup>
                 <Input
                   value={this.getValue('city')}

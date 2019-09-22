@@ -4,10 +4,12 @@ import UserProfile from "./UserProfile";
 import ChangeTokenForm from "./ChangeTokenForm";
 import ChangeEmailForm from "./ChangeEmailForm";
 import ChangePasswordForm from "./ChangePasswordForm";
+import style from "./MyProfile.module.css";
+import cx from "classnames";
 
 const MyProfile = (props) => {
   return (
-    <div className="animated fadeIn">
+    <div className={cx(style.MyProfile, 'animated fadeIn')}>
       <Row>
         <Col md={6} xs={12}>
           <UserProfile />
