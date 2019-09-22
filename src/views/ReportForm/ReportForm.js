@@ -466,8 +466,10 @@ class ReportForm extends Component {
         this.uploadFiles(file.id, idx);
       });
     }).then(() =>{
+      const {userIsAdmin} = this.props;
+
       this.toggleLoading();
-      this.props.history.push('/my-reports');
+      userIsAdmin ? this.props.history.push('/reference/reports') : this.props.history.push('/my-reports');
     }).catch((error) => {
       const errors = error.response.data.errors;
       if ('non_field_errors' in errors) {
