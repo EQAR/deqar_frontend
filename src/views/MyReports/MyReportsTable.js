@@ -59,7 +59,7 @@ const MyReportsTable = (props) => {
         render: arrayRenderer,
         width: 150,
         resizable: false,
-        sortable: true
+        sortable: false
       }, {
         field: 'agency_esg_activity',
         label: 'Activity',
