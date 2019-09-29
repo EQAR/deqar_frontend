@@ -38,7 +38,8 @@ const InstitutionsTable = (props) => {
       label: 'ETER ID',
       sortable: true,
       minWidth: 80,
-      maxWidth: 80
+      maxWidth: 80,
+      sortQueryParam: 'eter_id_sort'
     },
     {
       field: 'name_display',
