@@ -28,9 +28,10 @@ const InstitutionsTable = (props) => {
     {
       field: 'deqar_id',
       label: 'DEQARINST ID',
-      sortable: false,
+      sortable: true,
       minWidth: 90,
-      maxWidth: 120
+      maxWidth: 120,
+      sortQueryParam: 'deqar_id_sort'
     },
     {
       field: 'eter_id',
