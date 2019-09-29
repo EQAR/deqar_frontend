@@ -68,16 +68,7 @@ class InstitutionsTableFilters extends Component {
       <React.Fragment>
         <Collapse isOpen={filterOpen}>
           <Row form>
-            <Col md={3}>
-              <FormGroup>
-                <Input
-                  value={this.getValue('eter_id')}
-                  onChange={(e) => this.onFilter(e.target.value, 'eter_id')}
-                  placeholder={'ETER ID'}
-                />
-              </FormGroup>
-            </Col>
-            <Col md={3}>
+            <Col md={2}>
               <FormGroup>
                 <Input
                   value={this.getValue('deqar_id')}
@@ -86,7 +77,25 @@ class InstitutionsTableFilters extends Component {
                 />
               </FormGroup>
             </Col>
-            <Col md={3}>
+            <Col md={2}>
+              <FormGroup>
+                <Input
+                  value={this.getValue('eter_id')}
+                  onChange={(e) => this.onFilter(e.target.value, 'eter_id')}
+                  placeholder={'ETER ID'}
+                />
+              </FormGroup>
+            </Col>
+            <Col md={4}>
+              <FormGroup>
+                <Input
+                  value={this.getValue('query')}
+                  onChange={(e) => this.onFilter(e.target.value, 'query')}
+                  placeholder={'Filter by Institution'}
+                />
+              </FormGroup>
+            </Col>
+            <Col md={2}>
               <FormGroup>
                 <SelectFilter
                   field={'country'}
@@ -99,21 +108,12 @@ class InstitutionsTableFilters extends Component {
                 />
               </FormGroup>
             </Col>
-            <Col md={3}>
+            <Col md={2}>
               <FormGroup>
                 <Input
                   value={this.getValue('city')}
                   onChange={(e) => this.onFilter(e.target.value, 'city')}
                   placeholder={'City'}
-                />
-              </FormGroup>
-            </Col>
-            <Col md={12}>
-              <FormGroup>
-                <Input
-                  value={this.getValue('query')}
-                  onChange={(e) => this.onFilter(e.target.value, 'query')}
-                  placeholder={'Filter by Institution'}
                 />
               </FormGroup>
             </Col>
