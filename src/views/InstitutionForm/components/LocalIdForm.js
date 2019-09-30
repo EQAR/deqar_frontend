@@ -8,17 +8,19 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
-  Row } from "reactstrap";
+  Row } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { Form } from 'informed';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
-import { validateRequired, validateDateFrom, validateDate } from "../../../utils/validators";
-import FormTextField from "../../../components/FormFields/FormTextField";
-import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
-import FormTextArea from "../../../components/FormFields/FormTextArea";
+import { validateRequired, validateDateFrom, validateDate } from '../../../utils/validators';
+import FormTextField from '../../../components/FormFields/FormTextField';
+import FormDatePickerField from '../../../components/FormFields/FormDatePickerField';
+import FormTextArea from '../../../components/FormFields/FormTextArea';
 import FormSelectField from '../../../components/FormFields/FormSelectField';
 import agency from '../../../services/Agency';
+import style from './Components.module.css';
+
 
 
 class LocalIdForm extends Component {
@@ -99,7 +101,7 @@ class LocalIdForm extends Component {
         >
           {({ formState }) => (
             <React.Fragment>
-              <ModalHeader toggle={this.onToggle}>{this.renderActionName()} Local ID</ModalHeader>
+              <ModalHeader>{this.renderActionName()} Local ID</ModalHeader>
               <ModalBody>
                 <Row>
                   <Col>
@@ -167,7 +169,7 @@ class LocalIdForm extends Component {
                   </Col>
                 </Row>
               </ModalBody>
-              <ModalFooter>
+              <ModalFooter className={style.modaFooterJustify}>
                 <Button
                   color="secondary"
                   type={'button'}

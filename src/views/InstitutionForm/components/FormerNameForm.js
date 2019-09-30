@@ -9,14 +9,15 @@ import {
   ModalFooter,
   ModalHeader,
   Collapse,
-  Row } from "reactstrap";
+  Row } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { Form, Scope} from 'informed';
 
-import FormTextField from "../../../components/FormFields/FormTextField";
-import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
-import FormTextArea from "../../../components/FormFields/FormTextArea";
-import { validateRequired, validateRequiredPastDate, validateRoman } from "../../../utils/validators";
+import FormTextField from '../../../components/FormFields/FormTextField';
+import FormDatePickerField from '../../../components/FormFields/FormDatePickerField';
+import FormTextArea from '../../../components/FormFields/FormTextArea';
+import { validateRequired, validateRequiredPastDate, validateRoman } from '../../../utils/validators';
+import style from './Components.module.css';
 
 class FormerNameForm extends Component {
   constructor(props) {
@@ -123,7 +124,7 @@ class FormerNameForm extends Component {
         >
           {({ formState }) => (
             <React.Fragment>
-              <ModalHeader toggle={this.onToggle}>{this.renderActionName()} Former Name</ModalHeader>
+              <ModalHeader>{this.renderActionName()} Former Name</ModalHeader>
               <ModalBody>
                 <Row>
                   <Col>
@@ -218,7 +219,7 @@ class FormerNameForm extends Component {
                   </Col>
                 </Row>
               </ModalBody>
-              <ModalFooter>
+              <ModalFooter className={style.modaFooterJustify}>
                 <Button
                   color="secondary"
                   type={'button'}

@@ -11,16 +11,16 @@ import {
   Collapse,
   Label,
   Row
-} from "reactstrap";
+} from 'reactstrap';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import { scroller } from 'react-scroll';
-import { withRouter } from "react-router-dom";
+import { withRouter } from 'react-router-dom';
 
 import FormTextField from '../../components/FormFields/FormTextField';
 import FormSelectField from '../../components/FormFields/FormSelectField';
-import FormDatePickerField from "../../components/FormFields/FormDatePickerField";
+import FormDatePickerField from '../../components/FormFields/FormDatePickerField';
 import institution from '../../services/Institution';
 import style from './InstitutionForm.module.css';
 import AssignedList from '../../components/FormFieldsUncontrolled/AssignedList';
@@ -32,13 +32,13 @@ import HierarchicalLinkForm from './components/HierarchicalLinkForm';
 import InfoBox from './components/InfoBox';
 import country from '../../services/Country';
 import qfEHEALevel from '../../services/QFeheaLevel';
-import { validateRoman, validateRequired, validateRequiredURL, validateDateFrom, validateDate } from "../../utils/validators";
+import { validateRoman, validateRequired, validateRequiredURL, validateDateFrom, validateDate } from '../../utils/validators';
 import agency from '../../services/Agency';
 import { toast } from 'react-toastify';
 import { createFormNormalizer } from './createFormNormalizer';
 import FormAlert from './components/FormAlert'
-import setInstitutionsTable from "../Institutions/actions/setInstitutionsTable";
-import toggleInstitutionsTableFilter from "../Institutions/actions/toggleInstitutionsTableFilter";
+import setInstitutionsTable from '../Institutions/actions/setInstitutionsTable';
+import toggleInstitutionsTableFilter from '../Institutions/actions/toggleInstitutionsTableFilter';
 
 
 class InstitutionForm extends Component {
@@ -92,7 +92,7 @@ class InstitutionForm extends Component {
 
   isEditable = () => {
     const { formType, isAdmin } = this.props;
-    return true || formType === 'create';
+    return isAdmin || formType === 'create';
   }
 
   populate = () => {
