@@ -55,7 +55,8 @@ const InstitutionsTable = (props) => {
       sortable: false,
       minWidth: 80,
       maxWidth: 130,
-      render: countryRenderer
+      render: countryRenderer,
+      style:{ 'whiteSpace': 'unset'}
     },
     {
       field: 'city',
@@ -63,7 +64,8 @@ const InstitutionsTable = (props) => {
       sortable: false,
       minWidth: 80,
       maxWidth: 130,
-      render: cityRenderer
+      render: cityRenderer,
+      style:{ 'whiteSpace': 'unset'}
     }
   ];
 
