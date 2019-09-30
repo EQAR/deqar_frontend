@@ -21,6 +21,8 @@ export const updateFormNormalizer = (formValues) => {
               } else {
                 normalizedForm[key].push(v.id);
               }
+            } else {
+              normalizedForm[key].push(updateFormNormalizer(v));
             }
           });
           break;
