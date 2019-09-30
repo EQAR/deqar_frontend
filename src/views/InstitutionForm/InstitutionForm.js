@@ -621,16 +621,19 @@ class InstitutionForm extends Component {
                               </Col>
                             </Row>
                           </Collapse>
-                          {!isEdit || isShowTransliteration ? "" :
+                          {!isEdit ? "" :
                             <Row>
-                              <Col md={12}>
-                                <Button
-                                  type={'button'}
-                                  size="sm"
-                                  color="secondary"
-                                  onClick={this.toggleTransliteration}
-                                >Add Transliteration</Button>
-                              </Col>
+                              <FormGroup>
+                                <Col md={12}>
+                                  <Button
+                                    size="sm"
+                                    color="link"
+                                    onClick={this.toggleTransliteration}
+                                  >
+                                    {isShowTransliteration ? 'Remove Transliteration' : 'Add Transliteration'}
+                                  </Button>
+                                </Col>
+                              </FormGroup>
                             </Row>
                           }
                       <Row>
