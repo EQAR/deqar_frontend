@@ -92,7 +92,7 @@ class InstitutionForm extends Component {
 
   isEditable = () => {
     const { formType, isAdmin } = this.props;
-    return isAdmin || formType === 'create';
+    return true || formType === 'create';
   }
 
   populate = () => {
@@ -361,47 +361,57 @@ class InstitutionForm extends Component {
     const c = this.formApi.getValue('countries') || [''];
 
     if (countries) {
-      return c.map((country, i) => {
-        const scopeName = `countries[${i}]`;
-        return (
-          <Fragment key={i}>
-            <Scope scope={scopeName}>
-              <Row key={i} className={style.relativeContainer}>
-                <Col md={6}>
-                  <FormGroup>
-                  <Label for="country" className={'required'}>Country</Label>
-                  <FormSelectField
-                    field={'country'}
-                    options={countries}
-                    placeholder={'Please select'}
-                    labelField={'name_english'}
-                    valueField={'id'}
-                    disabled={!isEdit}
-                    validate={validateRequired}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col md={6}>
-                  <FormGroup>
-                  <Label for="city">City</Label>
-                  <FormTextField
-                    field={'city'}
-                    placeholder={'Enter city name'}
-                    disabled={!isEdit}
-                  />
-                  </FormGroup>
-                </Col>
-                {isEdit && i >= 1 && (
-                  <div className={style.locationRemoveButton + " pull-right"} onClick={(e) => this.onRemove(i, 'countries')}
-                  >
-                    <i className="fa fa-close"> </i>
-                  </div>
-                )}
-              </Row>
-            </Scope>
-          </Fragment>
-        )
-      });
+      return (
+        <Fragment>
+          <Row>
+            <Col md={6}>
+              <Label for="country" className={'required'}>Country</Label>
+            </Col>
+            <Col md={6}>
+              <Label for="city">City</Label>
+            </Col>
+          </Row>
+          {c.map((country, i) => {
+            const scopeName = `countries[${i}]`;
+            return (
+              <Fragment key={i}>
+                <Scope scope={scopeName}>
+                  <Row key={i} className={style.relativeContainer}>
+                    <Col md={6}>
+                      <FormGroup>
+                      <FormSelectField
+                        field={'country'}
+                        options={countries}
+                        placeholder={'Please select'}
+                        labelField={'name_english'}
+                        valueField={'id'}
+                        disabled={!isEdit}
+                        validate={validateRequired}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md={6}>
+                      <FormGroup>
+                      <FormTextField
+                        field={'city'}
+                        placeholder={'Enter city name'}
+                        disabled={!isEdit}
+                      />
+                      </FormGroup>
+                    </Col>
+                    {isEdit && i >= 1 && (
+                      <div className={style.locationRemoveButton + " pull-right"} onClick={(e) => this.onRemove(i, 'countries')}
+                      >
+                        <i className="fa fa-close"> </i>
+                      </div>
+                    )}
+                  </Row>
+                </Scope>
+              </Fragment>
+            )
+          })}
+        </Fragment>
+      )
     }
   }
 
