@@ -173,16 +173,15 @@ class InfoBox extends Component {
             </FormGroup>
             <FormGroup>
               <Label>Record History</Label>
-              <Text field={'update_log'} hidden={true}/>
-              {this.renderUpdateLog()}
               <Text field={'created_at'} hidden={true}/>
               <Text field={'created_by'} hidden={true}/>
+              <Text field={'update_log'} hidden={true}/>
               <input
                 className={cx(style.infoInput, 'form-control')}
                 disabled={true}
                 value={`Record created: ${this.renderDate(formState.created_at)} by '${formState.created_by}'`}
-
               />
+              {this.renderUpdateLog()}
             </FormGroup>
           </Col>
         </Row>
