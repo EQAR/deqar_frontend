@@ -16,7 +16,7 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { connect } from 'react-redux';
 import { scroller } from 'react-scroll';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Prompt } from 'react-router-dom';
 
 import FormTextField from '../../components/FormFields/FormTextField';
 import FormSelectField from '../../components/FormFields/FormSelectField';
@@ -331,8 +331,9 @@ class InstitutionForm extends Component {
 
   onFormSubmit = (value, i, field) => {
     let values = this.formApi.getValue(field) || [];
-    Number.isInteger(i) ? values[i] = value : values.push(value)
+    Number.isInteger(i) ? values[i] = value : values.push(value);
     this.formApi.setValue(field, values);
+    this.formApi.setTouched(field, true);
     this.toggleModal('');
   }
 
@@ -565,6 +566,8 @@ class InstitutionForm extends Component {
     this.setState({isShowTransliteration: !isShowTransliteration})
   }
 
+  isBlocking = (formState) => formState.touched ? true : false
+
   render() {
     const {
       openModal,
@@ -579,7 +582,7 @@ class InstitutionForm extends Component {
       localIDDisabled,
       formIndex,
       loading,
-      isShowTransliteration
+      isShowTransliteration,
     } = this.state;
     const { backPath, isAdmin, formType, formTitle } = this.props;
     return  qFeheaLevels ? (
@@ -596,7 +599,11 @@ class InstitutionForm extends Component {
           onSubmitFailure={this.scrollTo}
         >
           {({ formState }) => (
-            <React.Fragment>
+            <Fragment>
+              <Prompt
+                when={this.isBlocking(formState)}
+                message="Are you sure you want to leave? Changes that you made may not be saved."
+              />
               <CardBody>
               {this.renderError()}
                   <Row>
@@ -919,7 +926,7 @@ class InstitutionForm extends Component {
                   />
                 </Collapse>
               </CardFooter>
-            </React.Fragment>
+            </Fragment>
             )}
         </Form>
       </Card>
