@@ -555,7 +555,14 @@ class InstitutionForm extends Component {
     })
   }
 
-  toggleTransliteration = () => this.setState({isShowTransliteration: !this.state.isShowTransliteration})
+  deleteTransliteration = () => {
+    const {isShowTransliteration} = this.state;
+    if(isShowTransliteration) {
+      this.formApi.setValue('names_actual[0].name_official_transliterated', '');
+
+    }
+    this.setState({isShowTransliteration: !isShowTransliteration})
+  }
 
   render() {
     const {
@@ -628,7 +635,7 @@ class InstitutionForm extends Component {
                                   <Button
                                     size="sm"
                                     color="link"
-                                    onClick={this.toggleTransliteration}
+                                    onClick={this.deleteTransliteration}
                                   >
                                     {isShowTransliteration ? 'Remove Transliteration' : 'Add Transliteration'}
                                   </Button>
