@@ -10,7 +10,7 @@ import {
   FormGroup,
   Collapse,
   Label,
-  Row
+  Row, FormText
 } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
@@ -39,6 +39,7 @@ import { createFormNormalizer } from './createFormNormalizer';
 import FormAlert from './components/FormAlert'
 import setInstitutionsTable from '../Institutions/actions/setInstitutionsTable';
 import toggleInstitutionsTableFilter from '../Institutions/actions/toggleInstitutionsTableFilter';
+import cx from 'classnames';
 
 
 class InstitutionForm extends Component {
@@ -602,7 +603,7 @@ class InstitutionForm extends Component {
                     <Col md={6} className={style.borderLeft}>
                       <Row>
                         <Col>
-                          <FormGroup>
+                          <FormGroup className={style.noFormGroupMargin}>
                           <Label for="name_official" className={'required'}>Institution Name, Official</Label>
                             <FormTextField
                               field={'names_actual[0].name_official'}
@@ -616,7 +617,7 @@ class InstitutionForm extends Component {
                           <Collapse isOpen={isShowTransliteration}>
                             <Row>
                               <Col>
-                                <FormGroup>
+                                <FormGroup className={cx(style.noFormGroupMargin, style.Transliteration)}>
                                   <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
                                     <FormTextField
                                       field={'names_actual[0].name_official_transliterated'}
@@ -632,13 +633,11 @@ class InstitutionForm extends Component {
                             <Row>
                               <FormGroup>
                                 <Col md={12}>
-                                  <Button
-                                    size="sm"
-                                    color="link"
-                                    onClick={this.deleteTransliteration}
-                                  >
-                                    {isShowTransliteration ? 'Remove Transliteration' : 'Add Transliteration'}
-                                  </Button>
+                                  <FormText color="muted">
+                                    <span onClick={this.deleteTransliteration} className={style.removeTransliteration}>
+                                      {isShowTransliteration ? 'Remove Transliteration' : 'Add Transliteration'}
+                                    </span>
+                                  </FormText>
                                 </Col>
                               </FormGroup>
                             </Row>

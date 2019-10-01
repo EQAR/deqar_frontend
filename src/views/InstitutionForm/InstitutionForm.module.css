@@ -59,3 +59,17 @@
 .removeButton:hover {
   color: hsl(0,0%,60%);
 }
+
+.removeTransliteration {
+  color: hsl(0,0%,40%);
+  border-bottom: 1px dotted;
+  cursor: pointer;
+}
+
+.noFormGroupMargin {
+  margin-bottom: 0px;
+}
+
+.Transliteration {
+  margin-top: 1rem;
+}
