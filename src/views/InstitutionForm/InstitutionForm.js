@@ -11,16 +11,16 @@ import {
   Collapse,
   Label,
   Row
-} from "reactstrap";
+} from 'reactstrap';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import { scroller } from 'react-scroll';
-import { withRouter } from "react-router-dom";
+import { withRouter } from 'react-router-dom';
 
 import FormTextField from '../../components/FormFields/FormTextField';
 import FormSelectField from '../../components/FormFields/FormSelectField';
-import FormDatePickerField from "../../components/FormFields/FormDatePickerField";
+import FormDatePickerField from '../../components/FormFields/FormDatePickerField';
 import institution from '../../services/Institution';
 import style from './InstitutionForm.module.css';
 import AssignedList from '../../components/FormFieldsUncontrolled/AssignedList';
@@ -32,13 +32,13 @@ import HierarchicalLinkForm from './components/HierarchicalLinkForm';
 import InfoBox from './components/InfoBox';
 import country from '../../services/Country';
 import qfEHEALevel from '../../services/QFeheaLevel';
-import { validateRoman, validateRequired, validateRequiredURL, validateDateFrom, validateDate } from "../../utils/validators";
+import { validateRoman, validateRequired, validateRequiredURL, validateDateFrom, validateDate } from '../../utils/validators';
 import agency from '../../services/Agency';
 import { toast } from 'react-toastify';
 import { createFormNormalizer } from './createFormNormalizer';
 import FormAlert from './components/FormAlert'
-import setInstitutionsTable from "../Institutions/actions/setInstitutionsTable";
-import toggleInstitutionsTableFilter from "../Institutions/actions/toggleInstitutionsTableFilter";
+import setInstitutionsTable from '../Institutions/actions/setInstitutionsTable';
+import toggleInstitutionsTableFilter from '../Institutions/actions/toggleInstitutionsTableFilter';
 
 
 class InstitutionForm extends Component {
@@ -361,47 +361,57 @@ class InstitutionForm extends Component {
     const c = this.formApi.getValue('countries') || [''];
 
     if (countries) {
-      return c.map((country, i) => {
-        const scopeName = `countries[${i}]`;
-        return (
-          <Fragment key={i}>
-            <Scope scope={scopeName}>
-              <Row key={i} className={style.relativeContainer}>
-                <Col md={6}>
-                  <FormGroup>
-                  <Label for="country" className={'required'}>Country</Label>
-                  <FormSelectField
-                    field={'country'}
-                    options={countries}
-                    placeholder={'Please select'}
-                    labelField={'name_english'}
-                    valueField={'id'}
-                    disabled={!isEdit}
-                    validate={validateRequired}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col md={6}>
-                  <FormGroup>
-                  <Label for="city">City</Label>
-                  <FormTextField
-                    field={'city'}
-                    placeholder={'Enter city name'}
-                    disabled={!isEdit}
-                  />
-                  </FormGroup>
-                </Col>
-                {isEdit && i >= 1 && (
-                  <div className={style.locationRemoveButton + " pull-right"} onClick={(e) => this.onRemove(i, 'countries')}
-                  >
-                    <i className="fa fa-close"> </i>
-                  </div>
-                )}
-              </Row>
-            </Scope>
-          </Fragment>
-        )
-      });
+      return (
+        <Fragment>
+          <Row>
+            <Col md={6}>
+              <Label for="country" className={'required'}>Country</Label>
+            </Col>
+            <Col md={6}>
+              <Label for="city">City</Label>
+            </Col>
+          </Row>
+          {c.map((country, i) => {
+            const scopeName = `countries[${i}]`;
+            return (
+              <Fragment key={i}>
+                <Scope scope={scopeName}>
+                  <Row key={i} className={style.relativeContainer}>
+                    <Col md={6}>
+                      <FormGroup>
+                      <FormSelectField
+                        field={'country'}
+                        options={countries}
+                        placeholder={'Please select'}
+                        labelField={'name_english'}
+                        valueField={'id'}
+                        disabled={!isEdit}
+                        validate={validateRequired}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md={6}>
+                      <FormGroup>
+                      <FormTextField
+                        field={'city'}
+                        placeholder={'Enter city name'}
+                        disabled={!isEdit}
+                      />
+                      </FormGroup>
+                    </Col>
+                    {isEdit && i >= 1 && (
+                      <div className={style.locationRemoveButton + " pull-right"} onClick={(e) => this.onRemove(i, 'countries')}
+                      >
+                        <i className="fa fa-close"> </i>
+                      </div>
+                    )}
+                  </Row>
+                </Scope>
+              </Fragment>
+            )
+          })}
+        </Fragment>
+      )
     }
   }
 
@@ -611,16 +621,19 @@ class InstitutionForm extends Component {
                               </Col>
                             </Row>
                           </Collapse>
-                          {!isEdit || isShowTransliteration ? "" :
+                          {!isEdit ? "" :
                             <Row>
-                              <Col md={12}>
-                                <Button
-                                  type={'button'}
-                                  size="sm"
-                                  color="secondary"
-                                  onClick={this.toggleTransliteration}
-                                >Add Transliteration</Button>
-                              </Col>
+                              <FormGroup>
+                                <Col md={12}>
+                                  <Button
+                                    size="sm"
+                                    color="link"
+                                    onClick={this.toggleTransliteration}
+                                  >
+                                    {isShowTransliteration ? 'Remove Transliteration' : 'Add Transliteration'}
+                                  </Button>
+                                </Col>
+                              </FormGroup>
                             </Row>
                           }
                       <Row>

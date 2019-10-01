@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Col from "reactstrap/es/Col";
-import Row from "reactstrap/es/Row";
+import Col from 'reactstrap/es/Col';
+import Row from 'reactstrap/es/Row';
 
-import style from "./InfoBox.module.css"
-import { FormGroup, ListGroup } from "reactstrap";
-import Label from "reactstrap/es/Label";
-import moment from "moment";
-import FormTextField from "../../../components/FormFields/FormTextField";
+import style from './InfoBox.module.css'
+import { FormGroup, ListGroup } from 'reactstrap';
+import Label from 'reactstrap/es/Label';
+import moment from 'moment';
+import FormTextField from '../../../components/FormFields/FormTextField';
 import cx from 'classnames';
 import FlagForm from './FlagForm';
 import AssignedList from '../../../components/FormFieldsUncontrolled/AssignedList';
-import {Text} from "informed";
+import { Text } from 'informed';
 
 
 class InfoBox extends Component {

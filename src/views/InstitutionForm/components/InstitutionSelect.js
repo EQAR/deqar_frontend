@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component} from 'react';
 import AsyncPaginate from 'react-select-async-paginate';
 import institution from '../../../services/Institution';
 import PropTypes from 'prop-types';
