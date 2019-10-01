@@ -465,11 +465,13 @@ class ReportForm extends Component {
       filesResponse.forEach((file, idx) => {
         this.uploadFiles(file.id, idx);
       });
-    }).then(() =>{
+      return response.data.submitted_report;
+    }).then((report) =>{
       const {userIsAdmin} = this.props;
-
       this.toggleLoading();
-      userIsAdmin ? this.props.history.push('/reference/reports') : this.props.history.push('/my-reports');
+      userIsAdmin ?
+        this.props.history.push(`/reference/reports/view/${report.id}`) :
+        this.props.history.push(`/my-reports/view/${report.id}`);
     }).catch((error) => {
       const errors = error.response.data.errors;
       if ('non_field_errors' in errors) {
@@ -506,8 +508,12 @@ class ReportForm extends Component {
         this.uploadFiles(file.id, idx);
       });
     }).then(() => {
+      const {userIsAdmin} = this.props;
+
       this.toggleLoading();
-      this.populateForm()
+      userIsAdmin ?
+        this.props.history.push(`/reference/reports/view/${reportID}`) :
+        this.props.history.push(`/my-reports/view/${reportID}`);
     }).catch(error => {
       this.toggleLoading();
     });
