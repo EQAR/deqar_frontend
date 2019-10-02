@@ -13,7 +13,6 @@ import {
   Row, FormText
 } from 'reactstrap';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
 import { connect } from 'react-redux';
 import { scroller } from 'react-scroll';
 import { withRouter, Prompt } from 'react-router-dom';
@@ -65,6 +64,7 @@ class InstitutionForm extends Component {
       nonFieldErrors: [],
       isShowTransliteration: false,
       alternativeNameCount: 0,
+      isSubmit: false
     }
   }
 
@@ -96,9 +96,14 @@ class InstitutionForm extends Component {
     return isAdmin || formType === 'create';
   }
 
-  populate = () => {
+  populate = async () => {
     const { institutionID, formType, isAdmin } = this.props;
     const values = this.formApi.getState().values
+
+    const qFeheaLevelsResponse = await qfEHEALevel.select();
+    this.setState({
+      qFeheaLevels: qFeheaLevelsResponse.data.map(level => ({id: level.id, qf_ehea_level: level.level}))
+    });
 
     if (formType !== 'create') {
       institution.getInstitution(institutionID).then((response) => {
@@ -110,6 +115,7 @@ class InstitutionForm extends Component {
         data.historical_links = [...historical_source, ...historical_target];
         data.hierarchical_links = [...hierarchical_child, ...hierarchical_parent];
         data.flags = !data.flags || data.flags.length === 0 ? [{flag: 'none', flag_message: 'Institution has no flag assigned', banned: true}] : data.flags;
+        data.qf_ehea_levels = data.qf_ehea_levels ? data.qf_ehea_levels.map(l => ({id: l.qf_ehea_level, qf_ehea_level: qFeheaLevelsResponse.data.find(q => q.id === l.qf_ehea_level).level})) : null
         this.formApi.setValues(data);
         this.setState({
           isShowTransliteration: data.names_actual[0].name_official_transliterated ? true : false,
@@ -122,12 +128,6 @@ class InstitutionForm extends Component {
         flags: [{flag: 'none', flag_message: 'Institution has no flag assigned', banned: true}]
       })
     }
-
-    qfEHEALevel.select().then((response) => {
-      this.setState({
-        qFeheaLevels: response.data
-      });
-    });
 
     country.getInstitutionCountries().then((response) => {
       this.setState({
@@ -255,31 +255,6 @@ class InstitutionForm extends Component {
   }
 
   renderLocalID = value => value.identifier;
-
-  changeQFEheaLvels = (level) => {
-    this.formApi.getValue('qf_ehea_levels')
-    ? this.formApi.setValue('qf_ehea_levels', [...this.formApi.getValue('qf_ehea_levels'), {qf_ehea_level: level.id}])
-    : this.formApi.setValue('qf_ehea_levels', [{qf_ehea_level: level.id}])
-  }
-
-  getQFEheaLevels = (formState) => {
-    const { qFeheaLevels } = this.state;
-
-    return formState.values.qf_ehea_levels && qFeheaLevels ?
-      formState.values.qf_ehea_levels.map(level => qFeheaLevels.filter(l => level.qf_ehea_level === l.id)[0]) :
-      null;
-  }
-
-  getQFEheaOptions = (qFeheaLevels) => {
-
-    const formLevels = this.formApi.getValue('qf_ehea_levels');
-    if (formLevels && qFeheaLevels) {
-      formLevels.forEach(l => {
-        qFeheaLevels = qFeheaLevels.filter(level => level.id !== l.qf_ehea_level);
-      });
-    }
-    return qFeheaLevels;
-  }
 
   onAddHistoricalLink = () => {
     this.setState({
@@ -498,8 +473,6 @@ class InstitutionForm extends Component {
     });
   }
 
-  renderQFEheaLevels = value => value.level;
-
   getLabel = (option) => option.level;
 
   getValue = (option) => option.id;
@@ -525,6 +498,7 @@ class InstitutionForm extends Component {
     this.toggleLoading();
     this.getMethod(createFormNormalizer(value), institutionID).then((r) => {
       this.toggleLoading();
+      this.setState({isSubmit: true})
       toast.success(messages[formType]);
       this.props.history.push('/reference/institutions');
       const tableState = {...institutionTableState, filtered: [{id: 'query', value: value.names_actual[0].name_official}]}
@@ -566,7 +540,7 @@ class InstitutionForm extends Component {
     this.setState({isShowTransliteration: !isShowTransliteration})
   }
 
-  isBlocking = (formState) => formState.touched ? true : false
+  isBlocking = (formState) => Object.keys(formState.touched).length > 0 && !this.state.isSubmit ? true : false
 
   render() {
     const {
@@ -803,32 +777,15 @@ class InstitutionForm extends Component {
                               <Col>
                                 <FormGroup>
                                   <Label for="country">QF-EHEA Levels</Label>
-                                  <Select
-                                    className={!isEdit ? style.hidden : null}
-                                    options={this.getQFEheaOptions(qFeheaLevels)}
-                                    onChange={this.changeQFEheaLvels}
-                                    placeholder={'Select select multiple, if necessary'}
-                                    getOptionLabel={this.getLabel}
-                                    getOptionValue={this.getValue}
-                                    value={0}
-                                  />
-                                </FormGroup>
-                              </Col>
-                            </Row>
-                            <Row>
-                              <Col>
-                                <FormGroup>
-                                  <AssignedList
-                                    errors={formState.errors}
-                                    valueFields={['qf_ehea_level']}
-                                    values={this.getQFEheaLevels(formState)}
-                                    renderDisplayValue={this.renderQFEheaLevels}
-                                    onClick={() => null}
+                                  <FormSelectField
                                     field={'qf_ehea_levels'}
-                                    fieldName={'qf_ehea_levels'}
-                                    onRemove={this.onRemove}
+                                    options={qFeheaLevels}
+                                    placeholder={'Please select multiple, if necessary'}
+                                    labelField={'qf_ehea_level'}
+                                    valueField={'qf_ehea_level'}
+                                    isMulti
                                     disabled={!isEdit}
-                                    />
+                                  />
                                 </FormGroup>
                               </Col>
                             </Row>
