@@ -3,7 +3,7 @@ import {Button, Col, Collapse, FormGroup, Label, Modal, ModalBody, ModalFooter, 
 import PropTypes from 'prop-types';
 import {Form, Scope} from 'informed';
 import FormTextField from "../../../components/FormFields/FormTextField";
-import {validateRequired} from "../../../utils/validators";
+import {validateRequired, validateRequiredUnique} from "../../../utils/validators";
 import country from '../../../services/Country';
 import FormSelectField from "../../../components/FormFields/FormSelectField";
 import list from "../../../services/List";
@@ -77,7 +77,11 @@ class ProgrammePopupForm extends Component {
                   <FormTextField
                     field={'name_alternative'}
                     placeholder={'Enter alternative programme name'}
-                    validate={validateRequired}
+                    validate={(value) => validateRequiredUnique(
+                      value,
+                      ['name_primary', 'alternative_names.name_alternative'],
+                      this.formApi.getState().values
+                    )}
                     disabled={disabled}
                   />
                 </FormGroup>
@@ -163,7 +167,11 @@ class ProgrammePopupForm extends Component {
                       <FormTextField
                         field={'name_primary'}
                         placeholder={'Enter programme name for display'}
-                        validate={validateRequired}
+                        validate={(value) => validateRequiredUnique(
+                          value,
+                          ['name_primary', 'alternative_names.name_alternative'],
+                          this.formApi.getState().values
+                        )}
                         disabled={disabled}
                       />
                     </FormGroup>
