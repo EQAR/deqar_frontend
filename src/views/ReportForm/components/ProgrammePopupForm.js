@@ -147,7 +147,8 @@ class ProgrammePopupForm extends Component {
     const {modalOpen, title, disabled, formIndex} = this.props;
     const {countryOptions, qfEHEALevelOptions, alternativeNameCount} = this.state;
 
-    const titleText = `${this.renderActionName()} ${title}`;
+    // const titleText = `${this.renderActionName()} ${title}`;
+    const titleText = 'Save';
 
     return(
       <Modal isOpen={modalOpen} toggle={this.onToggle}>

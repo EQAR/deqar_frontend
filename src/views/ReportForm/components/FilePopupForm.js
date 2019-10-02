@@ -194,7 +194,8 @@ class FilePopupForm extends Component {
     const {modalOpen, disabled, title, formIndex} = this.props;
     const {languageOptions} = this.state;
 
-    const titleText = `${this.renderActionName()} ${title}`;
+    //const titleText = `${this.renderActionName()} ${title}`;
+    const titleText = 'Save';
 
     return(
       <Modal isOpen={modalOpen} toggle={this.props.onToggle}>
