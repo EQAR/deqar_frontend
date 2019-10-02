@@ -69,6 +69,7 @@ class FilePopupForm extends Component {
 
     if(disabled) {
       if(formValue && formValue.original_location) {
+        /*
         return (
           <React.Fragment>
             <Label for="file">File Original URL</Label>
@@ -77,6 +78,7 @@ class FilePopupForm extends Component {
             </div>
           </React.Fragment>
         )
+        */
       }
     } else {
       return(
