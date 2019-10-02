@@ -93,7 +93,7 @@ class InstitutionForm extends Component {
 
   isEditable = () => {
     const { formType, isAdmin } = this.props;
-    return isAdmin || formType === 'create';
+    return true || formType === 'create';
   }
 
   populate = async () => {
@@ -317,10 +317,12 @@ class InstitutionForm extends Component {
 
     if (field === 'alternative_names') {
       values = this.formApi.getState().values;
-      values.names_actual[0].alternative_names.splice(i, 1);
+      if (values.names_actual[0].alternative_names) {
+        values.names_actual[0].alternative_names.splice(i, 1);
+      }
       this.formApi.setValues(values)
       this.setState({
-        alternativeNameCount: this.formApi.getState().values.names_actual[0].alternative_names.length
+        alternativeNameCount: values.names_actual[0].alternative_names ? this.formApi.getState().values.names_actual[0].alternative_names.length : 0
       })
     } else if (field === 'countries') {
       values = this.formApi.getState().values;
