@@ -99,13 +99,13 @@ class InfoBox extends Component {
   }
 
   renderURL = () => {
-    const { id } = this.props.formState.values;
+    const { name_primary, id } = this.props.formState.values;
 
-    if (id) {
+    if (name_primary && id) {
       return (
         <React.Fragment>
           <a href={`https://www.eqar.eu/qa-results/institution/?id=${id}`} target={'new'}>
-            {`https://www.eqar.eu/qa-results/institution/?id=${id}`}
+            {name_primary}
           </a>
         </React.Fragment>
       )
@@ -113,7 +113,7 @@ class InfoBox extends Component {
   }
 
   renderUpdateLog = () => {
-    const {formState} = this.props;
+    const { formState } = this.props;
 
     if (Object.entries(formState).length !== 0) {
       const updateLogs = formState.values['update_log'];

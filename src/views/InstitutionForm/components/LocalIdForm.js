@@ -29,7 +29,7 @@ class LocalIdForm extends Component {
     this._isMounted = true;
 
     this.state = {
-      agencies: null
+      agencies: []
     }
   }
 

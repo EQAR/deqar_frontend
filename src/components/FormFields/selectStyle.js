@@ -8,8 +8,6 @@ export const style = (borderColor) => {
     }),
     control: (provided, state) => ({
       ...provided,
-      maxHeight: '35px',
-      minHeight: '25px',
       '&:hover': {
         borderColor: 'none'
       },
@@ -17,6 +15,10 @@ export const style = (borderColor) => {
       backgroundColor: state.isDisabled ? '#FCFCFC' : '#FFFFFF'
     }),
     singleValue: (provided, state) => ({
+      ...provided,
+      color: state.isDisabled ? '#5c6873' : "#5C685C",
+    }),
+    multiValue: (provided, state) => ({
       ...provided,
       color: state.isDisabled ? '#5c6873' : "#5C685C",
     }),

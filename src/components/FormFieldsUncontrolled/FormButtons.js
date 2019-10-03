@@ -149,7 +149,7 @@ class FormButtons extends Component {
   };
 
   render() {
-    const {formType} = this.props;
+    const {formType, idForm} = this.props;
 
     switch (formType) {
       case 'view':
@@ -157,7 +157,10 @@ class FormButtons extends Component {
           <div>
             {this.renderCloseButton()}
             {this.renderHideInfoButton()}
-            {this.renderEditButton()}
+            <div className='pull-right'>
+              {idForm === 'institution' && this.renderDeleteButton()}
+              {this.renderEditButton()}
+            </div>
           </div>
         );
       case 'create':
@@ -200,7 +203,8 @@ FormButtons.propTypes = {
   buttonText: PropTypes.string,
   infoBoxOpen: PropTypes.bool.isRequired,
   infoBoxToggle: PropTypes.func.isRequired,
-  onDelete: PropTypes.func
+  onDelete: PropTypes.func,
+  idForm: PropTypes.string
 };
 
 export default withRouter(FormButtons);

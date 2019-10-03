@@ -89,6 +89,13 @@ export const validateDateFromRequired = (value, date_to) => {
   }
 }
 
+export const validateMultipleDate = (value, formerNames) => formerNames.some(n => n.name_valid_to === value) ? 'Date belongs to other name set' : null;
+
+export const validateMultipleRequiredDate = (value, formerNames) => (
+  validateRequiredDate(value)
+  || validatePastDate(value)
+  || validateMultipleDate(value, formerNames)
+)
 export const validateUnique = (value, fields, formValues) => {
   let numberOfValues = 0;
 
