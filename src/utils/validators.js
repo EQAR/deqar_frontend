@@ -120,6 +120,8 @@ export const validateUnique = (value, fields, formValues) => {
           })
         }
         break;
+      default:
+        break;
     }
   });
   if(numberOfValues > 1) {

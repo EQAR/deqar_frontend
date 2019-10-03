@@ -148,7 +148,7 @@ class ProgrammePopupForm extends Component {
   };
 
   render() {
-    const {modalOpen, title, disabled, formIndex} = this.props;
+    const {modalOpen, disabled, formIndex} = this.props;
     const {countryOptions, qfEHEALevelOptions, alternativeNameCount} = this.state;
 
     // const titleText = `${this.renderActionName()} ${title}`;

@@ -10,8 +10,6 @@ import { FilePond, registerPlugin } from 'react-filepond';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import 'filepond/dist/filepond.min.css';
 
-import style from './FilePopupForm.module.css'
-
 registerPlugin(FilePondPluginFileValidateType);
 
 class FilePopupForm extends Component {
@@ -191,7 +189,7 @@ class FilePopupForm extends Component {
   };
 
   render() {
-    const {modalOpen, disabled, title, formIndex} = this.props;
+    const {modalOpen, disabled, formIndex} = this.props;
     const {languageOptions} = this.state;
 
     //const titleText = `${this.renderActionName()} ${title}`;
