@@ -450,11 +450,7 @@ class ReportForm extends Component {
 
     const keys = ['name', 'qfehea'];
     const filteredProgrammes = names.filter(
-      (s => o =>
-          (k => !s.has(k) && s.add(k))
-          (keys.map(k => o[k]).join('|'))
-      )
-      (new Set)
+      (s => o => (k => !s.has(k) && s.add(k))(keys.map(k => o[k]).join('|')))(new Set())
     );
     if (filteredProgrammes.length !== names.length) {
       return "You have duplicates in your programme names!"
