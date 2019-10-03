@@ -36,6 +36,7 @@ import {updateFormNormalizer} from "./normalizers/updateFormNormalizer";
 import {decodeProgrammeNameData, encodeProgrammeNameData} from "./normalizers/programmeNameNormalizer";
 import confirm from 'reactstrap-confirm';
 import FormButtons from "../../components/FormFieldsUncontrolled/FormButtons";
+import PreventNavigation from '../../components/PreventNavigation/PreventNavigation'
 
 
 class ReportForm extends Component {
@@ -59,6 +60,7 @@ class ReportForm extends Component {
       loading: false,
       readOnly: false,
       infoBoxOpen: false,
+      isSubmit: false
     }
   }
 
@@ -483,6 +485,7 @@ class ReportForm extends Component {
     }).then((report) =>{
       const {userIsAdmin} = this.props;
       this.toggleLoading();
+      this.setState({isSubmit: true});
       userIsAdmin ?
         this.props.history.push(`/reference/reports/view/${report.id}`) :
         this.props.history.push(`/my-reports/view/${report.id}`);
@@ -525,6 +528,8 @@ class ReportForm extends Component {
       const {userIsAdmin} = this.props;
 
       this.toggleLoading();
+      this.setState({isSubmit: true});
+
       userIsAdmin ?
         this.props.history.push(`/reference/reports/view/${reportID}`) :
         this.props.history.push(`/my-reports/view/${reportID}`);
@@ -661,7 +666,7 @@ class ReportForm extends Component {
   render() {
     const {agencyOptions, agencyActivityOptions, statusOptions, decisionOptions,
       fileModalOpen, fileModalValue, fileModalIndex,
-      readOnly, infoBoxOpen, loading } = this.state;
+      readOnly, infoBoxOpen, loading, isSubmit } = this.state;
     const {formType, formTitle, reportID, userIsAdmin, backPath} = this.props;
 
     return(
@@ -682,6 +687,10 @@ class ReportForm extends Component {
           >
             {({ formState }) => (
               <React.Fragment>
+                <PreventNavigation
+                  formState={formState}
+                  isSubmit={isSubmit}
+                />
                 <CardBody>
                   {this.renderError()}
                   <Row>
