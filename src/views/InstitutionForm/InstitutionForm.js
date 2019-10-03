@@ -80,17 +80,14 @@ class InstitutionForm extends Component {
     this.populate();
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps) {
     const { formType } = this.props;
     if (formType !== prevProps.formType) {
-      console.log(formType, prevProps, prevState, snapshot)
       this.setState({
         isEdit: this.isEditable(formType),
         formType: formType
       });
       this.populate();
-      return
-
     }
   }
 
@@ -109,7 +106,6 @@ class InstitutionForm extends Component {
 
   isEditable = () => {
     const { formType, isAdmin } = this.props;
-    console.log(formType)
     return true && (formType === 'edit' || formType === 'create');
   }
 
@@ -146,11 +142,13 @@ class InstitutionForm extends Component {
       })
     }
 
-    country.getInstitutionCountries().then((response) => {
-      this.setState({
-        countries: response.data
+    if (formType !== 'view') {
+      country.getInstitutionCountries().then((response) => {
+        this.setState({
+          countries: response.data
+        });
       });
-    });
+    }
 
     isAdmin
     ? agency.getAgencies().then((response) => this.setState({agencies: response.data.results}))
@@ -667,18 +665,20 @@ class InstitutionForm extends Component {
                       <Collapse isOpen={alternativeNameCount > 0}>
                         {this.renderAlternativeNames()}
                       </Collapse>
-                      <Row>
-                        <Col md={12}>
-                          <div className="pull-right">
-                            <Button
-                              type={'button'}
-                              size="sm"
-                              color="secondary"
-                              onClick={this.onAddButtonClick}
-                            >Add Alternative Name</Button>
-                          </div>
-                        </Col>
-                      </Row>
+                      {!isEdit ? null :
+                        <Row>
+                          <Col md={12}>
+                            <div className="pull-right">
+                              <Button
+                                type={'button'}
+                                size="sm"
+                                color="secondary"
+                                onClick={this.onAddButtonClick}
+                              >Add Alternative Name</Button>
+                            </div>
+                          </Col>
+                        </Row>
+                      }
                       <Row>
                         <Col md={6}>
                           <FormGroup>
@@ -741,7 +741,7 @@ class InstitutionForm extends Component {
                             fieldName={'identifiers_local'}
                             formIndex={formIndex}
                             formValue={localIDValue}
-                            disabled={localIDDisabled}
+                            disabled={!isEdit}
                             localIDs={formState.values.identifiers_local}
                           />
                           <AssignedList
@@ -757,6 +757,7 @@ class InstitutionForm extends Component {
                             field={'identifiers_local'}
                             fieldName={'identifiers_local'}
                             validate={this.validateAgency}
+                            disabled={!isEdit}
                           />
                         </Col>
                       </Row>
@@ -905,19 +906,6 @@ class InstitutionForm extends Component {
                   loading={loading}
                   idForm={'institution'}
                 />
-                {/* <FormButtons
-                  deleteButton={false}
-                  backPath={backPath}
-                  currentPath={backPath}
-                  editButton={false}
-                  userIsAdmin={isAdmin}
-                  buttonText={'Institution'}
-                  formType={formType}
-                  infoBoxOpen={infoBoxOpen}
-                  infoBoxToggle={this.toggleInfoBox}
-                  submitForm={this.formApi.submitForm}
-                  loading={loading}
-                /> */}
               </CardFooter>
               <CardFooter className={style.infoFooter}>
                 <Collapse isOpen={infoBoxOpen}>
