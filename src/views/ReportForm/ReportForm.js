@@ -443,14 +443,20 @@ class ReportForm extends Component {
     // Mark duplicates
     let names = [];
     programmes.forEach((programme) => {
-      names.push(programme.name_primary);
-      if (programme.hasOwnProperty('alternative_names')) {
-        programme.alternative_names.forEach((aname) => {
-          names.push(aname.name_alternative);
-        });
-      }
+      names.push(
+        { name: programme.name_primary, qfehea: programme.qf_ehea_level.level }
+      );
     });
-    if (new Set(names).size !== names.length) {
+
+    const keys = ['name', 'qfehea'];
+    const filteredProgrammes = names.filter(
+      (s => o =>
+          (k => !s.has(k) && s.add(k))
+          (keys.map(k => o[k]).join('|'))
+      )
+      (new Set)
+    );
+    if (filteredProgrammes.length !== names.length) {
       return "You have duplicates in your programme names!"
     }
   };
