@@ -31,7 +31,13 @@ import HierarchicalLinkForm from './components/HierarchicalLinkForm';
 import InfoBox from './components/InfoBox';
 import country from '../../services/Country';
 import qfEHEALevel from '../../services/QFeheaLevel';
-import { validateRoman, validateRequired, validateRequiredURL, validateDateFrom, validateDate } from '../../utils/validators';
+import {
+  validateRoman,
+  validateRequired,
+  validateRequiredURL,
+  validateDateFrom,
+  validateDate,
+  validateRequiredUnique } from '../../utils/validators';
 import agency from '../../services/Agency';
 import { toast } from 'react-toastify';
 import { createFormNormalizer } from './createFormNormalizer';
@@ -441,6 +447,11 @@ class InstitutionForm extends Component {
                   <FormTextField
                     field={'name'}
                     placeholder={'Enter alternative institution name'}
+                    validate={(value) => validateRequiredUnique(
+                      value,
+                      ['names_actual[0].name_official', 'names_actual[0].alternative_names'],
+                      this.formApi.getState().values
+                    )}
                   />
                   {isEdit && (
                     <div className={style.alternativeNameRemoveButton + " pull-right"} onClick={(e) => this.onRemove(idx, 'alternative_names')}
