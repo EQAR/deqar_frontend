@@ -131,6 +131,7 @@ class InstitutionForm extends Component {
         data.qf_ehea_levels = data.qf_ehea_levels ? data.qf_ehea_levels.map(l => ({id: l.qf_ehea_level, qf_ehea_level: qFeheaLevelsResponse.data.find(q => q.id === l.qf_ehea_level).level})) : null
         this.formApi.setValues(data);
         this.setState({
+          formerNames: data.names_former,
           isShowTransliteration: data.names_actual[0].name_official_transliterated ? true : false,
           alternativeNameCount: data.names_actual ? data.names_actual[0].alternative_names.length : 0
         })
@@ -206,8 +207,6 @@ class InstitutionForm extends Component {
     ? formState.values.names_actual[0].alternative_names
     : null
   )
-
-  renderAlternativeNames = value => value.name;
 
   onAddFormerName = () => {
     this.setState({

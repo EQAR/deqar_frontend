@@ -16,7 +16,7 @@ import { Form, Scope} from 'informed';
 import FormTextField from '../../../components/FormFields/FormTextField';
 import FormDatePickerField from '../../../components/FormFields/FormDatePickerField';
 import FormTextArea from '../../../components/FormFields/FormTextArea';
-import { validateRequired, validateRequiredPastDate, validateRoman } from '../../../utils/validators';
+import { validateRequired, validateRequiredPastDate, validateRoman, validateMultipleFormerDate } from '../../../utils/validators';
 import style from './Components.module.css';
 
 class FormerNameForm extends Component {
@@ -68,7 +68,6 @@ class FormerNameForm extends Component {
     const { alternativeNameCount } = this.state;
     const { disabled } = this.props;
     const count = Array.apply(null, {length: alternativeNameCount}).map(Number.call, Number);
-    console.log(this.props.formerNames)
 
     return count.map((c, idx) => {
       const scopeName = `alternative_names[${idx}]`;
@@ -113,7 +112,7 @@ class FormerNameForm extends Component {
   }
 
   render() {
-    const { modalOpen, disabled, formIndex, fieldName } = this.props;
+    const { modalOpen, disabled, formIndex, fieldName, formerNames } = this.props;
     const { alternativeNameCount } = this.state;
 
     return(
@@ -201,7 +200,7 @@ class FormerNameForm extends Component {
                       <FormDatePickerField
                         field={'name_valid_to'}
                         placeholderText={'YYYY-MM-DD'}
-                        validate={validateRequiredPastDate}
+                        validate={value => validateMultipleFormerDate(value, formerNames)}
                         disabled={disabled}
                       />
                     </FormGroup>
