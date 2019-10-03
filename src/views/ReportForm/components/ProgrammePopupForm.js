@@ -3,7 +3,7 @@ import {Button, Col, Collapse, FormGroup, Label, Modal, ModalBody, ModalFooter, 
 import PropTypes from 'prop-types';
 import {Form, Scope} from 'informed';
 import FormTextField from "../../../components/FormFields/FormTextField";
-import {validateRequired, validateRequiredUnique} from "../../../utils/validators";
+import {validateRequiredUnique} from "../../../utils/validators";
 import country from '../../../services/Country';
 import FormSelectField from "../../../components/FormFields/FormSelectField";
 import list from "../../../services/List";
@@ -40,6 +40,9 @@ class ProgrammePopupForm extends Component {
 
   // Submit the form
   submitForm = () => {
+    this.setState({
+      alternativeNameCount: 0
+    });
     this.formApi.submitForm();
   };
 
@@ -62,6 +65,7 @@ class ProgrammePopupForm extends Component {
 
   renderAlternativeNames = () => {
     const {alternativeNameCount} = this.state;
+    console.log(alternativeNameCount);
     const {disabled} = this.props;
     const count = Array.apply(null, {length: alternativeNameCount}).map(Number.call, Number);
 
@@ -149,7 +153,6 @@ class ProgrammePopupForm extends Component {
 
     // const titleText = `${this.renderActionName()} ${title}`;
     const titleText = 'Save';
-
     return(
       <Modal isOpen={modalOpen} toggle={this.onToggle}>
         <Form
@@ -252,7 +255,7 @@ class ProgrammePopupForm extends Component {
                 <Button
                   color="secondary"
                   type={'button'}
-                  onClick={this.props.onToggle}
+                  onClick={this.onToggle}
                   size="sm"
                 >
                   Close
