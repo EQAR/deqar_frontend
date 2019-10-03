@@ -807,7 +807,7 @@ class InstitutionForm extends Component {
                             <Row>
                               <Col>
                                 <FormGroup>
-                                  <Label for="country">QF-EHEA Levels</Label>
+                                  <Label for="qf_ehea_levels">QF-EHEA Levels</Label>
                                   <FormSelectField
                                     field={'qf_ehea_levels'}
                                     options={qFeheaLevels}
