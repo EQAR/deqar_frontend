@@ -707,13 +707,13 @@ class ReportForm extends Component {
                               valueField={'id'}
                               onChange={this.onAgencyChanged}
                               validate={validateRequired}
-                              disabled={readOnly}
+                              disabled={true}
                             />
                           </FormGroup>
                         </Col>
                         <Col md={6}>
                           <FormGroup>
-                            <Label for="agency">Local Report Identifier</Label>
+                            <Label for="local_identifier">Local Report Identifier</Label>
                             <FormTextField
                               field={'local_identifier'}
                               placeholder={'Enter local report ID'}
