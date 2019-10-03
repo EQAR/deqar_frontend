@@ -39,6 +39,7 @@ import FormAlert from './components/FormAlert'
 import setInstitutionsTable from '../Institutions/actions/setInstitutionsTable';
 import toggleInstitutionsTableFilter from '../Institutions/actions/toggleInstitutionsTableFilter';
 import cx from 'classnames';
+import PreventNavigation from '../../components/PreventNavigation/PreventNavigation'
 
 
 class InstitutionForm extends Component {
@@ -64,7 +65,8 @@ class InstitutionForm extends Component {
       nonFieldErrors: [],
       isShowTransliteration: false,
       alternativeNameCount: 0,
-      isSubmit: false
+      isSubmit: false,
+      formerNames: []
     }
   }
 
@@ -76,6 +78,20 @@ class InstitutionForm extends Component {
       formType: formType
     });
     this.populate();
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const { formType } = this.props;
+    if (formType !== prevProps.formType) {
+      console.log(formType, prevProps, prevState, snapshot)
+      this.setState({
+        isEdit: this.isEditable(formType),
+        formType: formType
+      });
+      this.populate();
+      return
+
+    }
   }
 
   componentWillUnmount() {
@@ -93,7 +109,8 @@ class InstitutionForm extends Component {
 
   isEditable = () => {
     const { formType, isAdmin } = this.props;
-    return true || formType === 'create';
+    console.log(formType)
+    return true && (formType === 'edit' || formType === 'create');
   }
 
   populate = async () => {
@@ -223,7 +240,7 @@ class InstitutionForm extends Component {
     const { agencies } = this.state;
 
     this.setState({
-      formerIndex: null,
+      formIndex: null,
       localIDValue: null,
       localIDDisabled: localIds ? agencies.filter(a => localIds.filter(l => l.agency.id !== a.id)) ? false : true : false
     });
@@ -236,7 +253,7 @@ class InstitutionForm extends Component {
 
     this.setState({
       localIDValue: localIds[i],
-      formerIndex: i,
+      formIndex: i,
       localIDDisabled: agencies.find(a => localIds[i].agency.id === a.id) ? false : true
     });
     this.toggleModal('local-id');
@@ -309,6 +326,12 @@ class InstitutionForm extends Component {
     Number.isInteger(i) ? values[i] = value : values.push(value);
     this.formApi.setValue(field, values);
     this.formApi.setTouched(field, true);
+
+    if (field === 'names_former') {
+      this.setState({
+        formerNames: [...this.state.formerNames, value]
+      })
+    }
     this.toggleModal('');
   }
 
@@ -328,6 +351,10 @@ class InstitutionForm extends Component {
       values = this.formApi.getState().values;
       values.countries.splice(i, 1);
       this.formApi.setValues(values)
+    } else if (field === 'names_former') {
+      this.setState({
+        formerNames: this.state.formerNames.splice(i, 1)
+      })
     } else {
       values = this.formApi.getValue(field);
       values.splice(i, 1);
@@ -542,8 +569,6 @@ class InstitutionForm extends Component {
     this.setState({isShowTransliteration: !isShowTransliteration})
   }
 
-  isBlocking = (formState) => Object.keys(formState.touched).length > 0 && !this.state.isSubmit ? true : false
-
   render() {
     const {
       openModal,
@@ -559,6 +584,8 @@ class InstitutionForm extends Component {
       formIndex,
       loading,
       isShowTransliteration,
+      isSubmit,
+      formerNames
     } = this.state;
     const { backPath, isAdmin, formType, formTitle } = this.props;
     return  qFeheaLevels ? (
@@ -576,9 +603,9 @@ class InstitutionForm extends Component {
         >
           {({ formState }) => (
             <Fragment>
-              <Prompt
-                when={this.isBlocking(formState)}
-                message="Are you sure you want to leave? Changes that you made may not be saved."
+              <PreventNavigation
+                formState={formState}
+                isSubmit={isSubmit}
               />
               <CardBody>
               {this.renderError()}
@@ -687,6 +714,7 @@ class InstitutionForm extends Component {
                             formIndex = {formIndex}
                             formValue={formerNameValue}
                             disabled={!isEdit}
+                            formerNames={formerNames}
                             />
                           <AssignedList
                             errors={formState.errors}
@@ -864,6 +892,20 @@ class InstitutionForm extends Component {
               </CardBody>
               <CardFooter>
                 <FormButtons
+                  backPath={backPath}
+                  userIsAdmin={true}
+                  editButton={isEdit}
+                  deleteButton={isEdit}
+                  buttonText={'Institution'}
+                  formType={formType}
+                  infoBoxOpen={infoBoxOpen}
+                  infoBoxToggle={this.toggleInfoBox}
+                  submitForm={this.formApi.submitForm}
+                  onDelete={this.onDelete}
+                  loading={loading}
+                  idForm={'institution'}
+                />
+                {/* <FormButtons
                   deleteButton={false}
                   backPath={backPath}
                   currentPath={backPath}
@@ -875,7 +917,7 @@ class InstitutionForm extends Component {
                   infoBoxToggle={this.toggleInfoBox}
                   submitForm={this.formApi.submitForm}
                   loading={loading}
-                />
+                /> */}
               </CardFooter>
               <CardFooter className={style.infoFooter}>
                 <Collapse isOpen={infoBoxOpen}>

@@ -68,6 +68,7 @@ class FormerNameForm extends Component {
     const { alternativeNameCount } = this.state;
     const { disabled } = this.props;
     const count = Array.apply(null, {length: alternativeNameCount}).map(Number.call, Number);
+    console.log(this.props.formerNames)
 
     return count.map((c, idx) => {
       const scopeName = `alternative_names[${idx}]`;
@@ -251,7 +252,8 @@ FormerNameForm.propTypes = {
   formValue: PropTypes.object,
   onToggle: PropTypes.func.isRequired,
   onFormSubmit: PropTypes.func.isRequired,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  formerNames: PropTypes.array
 }
 
 export default FormerNameForm;
