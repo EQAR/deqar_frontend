@@ -15,6 +15,9 @@ const InstitutionDetails = (props) => {
       case 'create': {
         return `Reference Data » Institutions » Create`
       }
+      default: {
+        return ''
+      }
     }
   };
 

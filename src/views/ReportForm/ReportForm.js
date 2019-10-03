@@ -437,6 +437,20 @@ class ReportForm extends Component {
         return "At least one program record is required"
       }
     }
+
+    // Mark duplicates
+    let names = [];
+    programmes.forEach((programme) => {
+      names.push(programme.name_primary);
+      if (programme.hasOwnProperty('alternative_names')) {
+        programme.alternative_names.forEach((aname) => {
+          names.push(aname.name_alternative);
+        });
+      }
+    });
+    if (new Set(names).size !== names.length) {
+      return "You have duplicates in your programme names!"
+    }
   };
 
   setFormApi = (formApi) => {

@@ -69,6 +69,7 @@ class FilePopupForm extends Component {
 
     if(disabled) {
       if(formValue && formValue.original_location) {
+        /*
         return (
           <React.Fragment>
             <Label for="file">File Original URL</Label>
@@ -77,6 +78,7 @@ class FilePopupForm extends Component {
             </div>
           </React.Fragment>
         )
+        */
       }
     } else {
       return(
@@ -192,7 +194,8 @@ class FilePopupForm extends Component {
     const {modalOpen, disabled, title, formIndex} = this.props;
     const {languageOptions} = this.state;
 
-    const titleText = `${this.renderActionName()} ${title}`;
+    //const titleText = `${this.renderActionName()} ${title}`;
+    const titleText = 'Save';
 
     return(
       <Modal isOpen={modalOpen} toggle={this.props.onToggle}>

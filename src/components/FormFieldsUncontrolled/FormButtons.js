@@ -6,7 +6,6 @@ import {Link, withRouter} from "react-router-dom";
 import FormTextField from "../FormFields/FormTextField";
 import PropTypes from 'prop-types';
 import style from "./FormButtons.module.css";
-import cx from 'classnames';
 
 class FormButtons extends Component {
   constructor(props) {

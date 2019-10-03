@@ -15,7 +15,7 @@ import {
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { scroller } from 'react-scroll';
-import { withRouter, Prompt } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import FormTextField from '../../components/FormFields/FormTextField';
 import FormSelectField from '../../components/FormFields/FormSelectField';
@@ -36,8 +36,7 @@ import {
   validateRequired,
   validateRequiredURL,
   validateDateFrom,
-  validateDate,
-  validateRequiredUnique } from '../../utils/validators';
+  validateDate } from '../../utils/validators';
 import agency from '../../services/Agency';
 import { toast } from 'react-toastify';
 import { createFormNormalizer } from './createFormNormalizer';
@@ -65,7 +64,6 @@ class InstitutionForm extends Component {
       countries: [],
       infoBoxOpen: false,
       agencies: [],
-      localIDDisabled: true,
       loading: false,
       alertVisible: false,
       nonFieldErrors: [],
@@ -112,7 +110,7 @@ class InstitutionForm extends Component {
 
   isEditable = () => {
     const { formType, isAdmin } = this.props;
-    return true && (formType === 'edit' || formType === 'create');
+    return isAdmin && (formType === 'edit' || formType === 'create');
   }
 
   populate = async () => {
@@ -385,7 +383,7 @@ class InstitutionForm extends Component {
             return (
               <Fragment key={i}>
                 <Scope scope={scopeName}>
-                  <Row key={i} className={style.relativeContainer}>
+                  <Row key={i}>
                     <Col md={6}>
                       <FormGroup>
                       <FormSelectField
@@ -399,7 +397,7 @@ class InstitutionForm extends Component {
                         />
                       </FormGroup>
                     </Col>
-                    <Col md={6}>
+                    <Col md={5}>
                       <FormGroup>
                       <FormTextField
                         field={'city'}
@@ -409,10 +407,15 @@ class InstitutionForm extends Component {
                       </FormGroup>
                     </Col>
                     {isEdit && i >= 1 && (
-                      <div className={style.locationRemoveButton + " pull-right"} onClick={(e) => this.onRemove(i, 'countries')}
-                      >
-                        <i className="fa fa-close"> </i>
-                      </div>
+                      <Col md={1}>
+                        <Button
+                          className={style.locationRemoveButton}
+                          color="link"
+                          onClick={(e) => this.onRemove(i, 'countries')}
+                        >
+                          <i className="fa fa-close"> </i>
+                        </Button>
+                      </Col>
                     )}
                   </Row>
                 </Scope>
@@ -447,11 +450,7 @@ class InstitutionForm extends Component {
                   <FormTextField
                     field={'name'}
                     placeholder={'Enter alternative institution name'}
-                    validate={(value) => validateRequiredUnique(
-                      value,
-                      ['names_actual[0].name_official', 'names_actual[0].alternative_names'],
-                      this.formApi.getState().values
-                    )}
+                    disabled={!isEdit}
                   />
                   {isEdit && (
                     <div className={style.alternativeNameRemoveButton + " pull-right"} onClick={(e) => this.onRemove(idx, 'alternative_names')}
@@ -588,14 +587,13 @@ class InstitutionForm extends Component {
       qFeheaLevels,
       isEdit,
       localIDValue,
-      localIDDisabled,
       formIndex,
       loading,
       isShowTransliteration,
       isSubmit,
       formerNames
     } = this.state;
-    const { backPath, isAdmin, formType, formTitle } = this.props;
+    const { backPath, formType, formTitle } = this.props;
     return  qFeheaLevels ? (
       <Card className={style.InstitutionFormCard}>
         <CardHeader>
@@ -731,7 +729,7 @@ class InstitutionForm extends Component {
                             valueFields={['name_official']}
                             values={this.getFormerValues(formState)}
                             label={'Former Names'}
-                            btnLabel={'Add'}
+                            btnLabel={'Add previous name set'}
                             onRemove={this.onRemove}
                             onAddButtonClick={this.onAddFormerName}
                             onClick={this.onFormerNameClick}

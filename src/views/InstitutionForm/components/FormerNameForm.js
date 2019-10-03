@@ -16,7 +16,7 @@ import { Form, Scope} from 'informed';
 import FormTextField from '../../../components/FormFields/FormTextField';
 import FormDatePickerField from '../../../components/FormFields/FormDatePickerField';
 import FormTextArea from '../../../components/FormFields/FormTextArea';
-import { validateRequired, validateRequiredPastDate, validateRoman, validateMultipleFormerDate } from '../../../utils/validators';
+import { validateRequired, validateRoman, validateMultipleRequiredDate } from '../../../utils/validators';
 import style from './Components.module.css';
 
 class FormerNameForm extends Component {
@@ -200,7 +200,7 @@ class FormerNameForm extends Component {
                       <FormDatePickerField
                         field={'name_valid_to'}
                         placeholderText={'YYYY-MM-DD'}
-                        validate={value => validateMultipleFormerDate(value, formerNames)}
+                        validate={value => validateMultipleRequiredDate(value, formerNames)}
                         disabled={disabled}
                       />
                     </FormGroup>
