@@ -65,7 +65,6 @@ class ProgrammePopupForm extends Component {
 
   renderAlternativeNames = () => {
     const {alternativeNameCount} = this.state;
-    console.log(alternativeNameCount);
     const {disabled} = this.props;
     const count = Array.apply(null, {length: alternativeNameCount}).map(Number.call, Number);
 
@@ -111,15 +110,10 @@ class ProgrammePopupForm extends Component {
   onAddButtonClick = () => {
     const {alternativeNameCount} = this.state;
     if(alternativeNameCount !== 0) {
-      let altNames = this.formApi.getValue('alternative_names');
-      altNames = altNames ? altNames : [{}];
-      const lastAltName = altNames.slice(-1).pop();
-
-      if(lastAltName) {
-        if ('name_alternative' in lastAltName) {
-          if (lastAltName.name_alternative.length > 0) {
-            this.setState({alternativeNameCount: alternativeNameCount + 1})
-          }
+      const alternativeNames = this.formApi.getValue('alternative_names');
+      if(alternativeNames) {
+        if (alternativeNames.length === alternativeNameCount) {
+          this.setState({alternativeNameCount: alternativeNameCount + 1})
         }
       }
     } else {
