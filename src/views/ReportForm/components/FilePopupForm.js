@@ -125,8 +125,11 @@ class FilePopupForm extends Component {
 
   // Submit the form
   submitForm = () => {
+    const value = this.formApi.getState().values;
+    const {formIndex} = this.props;
+
     this.props.onFormSubmitFile(this.state.files);
-    this.formApi.submitForm();
+    this.props.onFormSubmit(value, formIndex);
   };
 
   // Populate selects
@@ -199,7 +202,6 @@ class FilePopupForm extends Component {
       <Modal isOpen={modalOpen} toggle={this.props.onToggle}>
         <Form
           getApi={this.setFormApi}
-          onSubmit={(value) => this.props.onFormSubmit(value, formIndex)}
           id="file-popup-form"
         >
           {({ formState }) => (

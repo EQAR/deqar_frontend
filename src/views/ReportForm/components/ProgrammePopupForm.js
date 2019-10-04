@@ -7,7 +7,7 @@ import {validateRequiredUnique} from "../../../utils/validators";
 import country from '../../../services/Country';
 import FormSelectField from "../../../components/FormFields/FormSelectField";
 import list from "../../../services/List";
-import style from "../../../components/FormFieldsUncontrolled/AssignedList.module.css";
+import style from "./ProgrammePopupForm.module.css";
 
 class ProgrammePopupForm extends Component {
   constructor(props) {
@@ -38,12 +38,23 @@ class ProgrammePopupForm extends Component {
     }
   };
 
+  // Remove values
+  onNameRemove = (i, field) => {
+    const {alternativeNameCount} = this.state;
+    let values = this.formApi.getState().values;
+    values.alternative_names.splice(i, 1);
+    this.formApi.setValues(values);
+    this.setState({alternativeNameCount: alternativeNameCount - 1})
+  };
+
   // Submit the form
   submitForm = () => {
+    const value = this.formApi.getState().values;
+    const {formIndex} = this.props;
     this.setState({
       alternativeNameCount: 0
     });
-    this.formApi.submitForm();
+    this.props.onFormSubmit(value, formIndex);
   };
 
   // Populate selects
@@ -76,7 +87,7 @@ class ProgrammePopupForm extends Component {
             <Row>
               <Col md={12}>
                 <FormGroup>
-                  <Label for="name_alternative">Alternative Programme Name # {c+1}</Label>
+                  <Label for="name_alternative">Alternative Programme Name # {c+1} / Qualification Name # {c+1}</Label>
                   <FormTextField
                     field={'name_alternative'}
                     placeholder={'Enter alternative programme name'}
@@ -89,9 +100,8 @@ class ProgrammePopupForm extends Component {
                   />
                 </FormGroup>
               </Col>
-              <Col md={12}>
+              <Col md={10}>
                 <FormGroup>
-                  <Label for="qualification_alternative">Qualification Name # {c+1}</Label>
                   <FormTextField
                     field={'qualification_alternative'}
                     placeholder={'Enter alternative qualification name'}
@@ -99,6 +109,17 @@ class ProgrammePopupForm extends Component {
                   />
                 </FormGroup>
               </Col>
+              {!disabled && (
+                <Col md={2}>
+                  <Button
+                    className={style.nameRemoveButton}
+                    color="link"
+                    onClick={(e) => this.onNameRemove(idx, 'alternative_names')}
+                  >
+                    <i className="fa fa-close"> </i>
+                  </Button>
+                </Col>
+              )}
             </Row>
           </Scope>
         </React.Fragment>
@@ -151,7 +172,6 @@ class ProgrammePopupForm extends Component {
       <Modal isOpen={modalOpen} toggle={this.onToggle}>
         <Form
           getApi={this.setFormApi}
-          onSubmit={(value) => this.props.onFormSubmit(value, formIndex)}
           id={`file-popup-form-${formIndex}`}
         >
           {({ formState }) => (
