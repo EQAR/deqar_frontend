@@ -444,7 +444,10 @@ class ReportForm extends Component {
     let names = [];
     programmes.forEach((programme) => {
       names.push(
-        { name: programme.name_primary, qfehea: programme.qf_ehea_level.level }
+        {
+          name: programme.name_primary,
+          qfehea: programme.hasOwnProperty('qf_ehea_level') ? programme.qf_ehea_level.level : ''
+        }
       );
     });
 
@@ -617,6 +620,18 @@ class ReportForm extends Component {
     }
   };
 
+  getBackPath = () => {
+    const {formType, reportID} = this.props;
+    switch(formType) {
+      case 'view':
+        return `/reference/reports`;
+      case 'edit':
+        return `/reference/reports/view/${reportID}`;
+      default:
+        break;
+    }
+  };
+
   // Assigned List display values
   renderInstitutions = (value) => {
     return value['name_primary'];
@@ -669,7 +684,7 @@ class ReportForm extends Component {
     const {agencyOptions, agencyActivityOptions, statusOptions, decisionOptions,
       fileModalOpen, fileModalValue, fileModalIndex,
       readOnly, infoBoxOpen, loading, isSubmit } = this.state;
-    const {formType, formTitle, reportID, userIsAdmin, backPath} = this.props;
+    const {formType, formTitle, reportID, userIsAdmin} = this.props;
 
     return(
       <div className="animated fadeIn">
@@ -896,7 +911,7 @@ class ReportForm extends Component {
                 </CardBody>
                 <CardFooter>
                   <FormButtons
-                    backPath={backPath}
+                    backPath={this.getBackPath()}
                     userIsAdmin={userIsAdmin}
                     editButton={this.isEditable()}
                     deleteButton={this.isEditable()}
@@ -940,7 +955,6 @@ ReportForm.propTypes = {
   formTitle: PropTypes.string.isRequired,
   formType: PropTypes.oneOf(['create', 'view', 'edit']),
   reportID: PropTypes.string,
-  backPath: PropTypes.string,
   userIsAdmin: PropTypes.bool
 };
 

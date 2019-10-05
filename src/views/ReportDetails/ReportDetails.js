@@ -14,7 +14,6 @@ const ReportDetails = ({userIsAdmin, ...props}) => {
           `Reference Data » Reports » Edit : DEQAR ID ${id}`}
         formType={param}
         reportID={id}
-        backPath={'/reference/reports'}
         userIsAdmin={userIsAdmin}
       />
     </React.Fragment>

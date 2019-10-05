@@ -50,13 +50,12 @@ class ProgrammePopupForm extends Component {
   };
 
   // Submit the form
-  submitForm = () => {
-    const value = this.formApi.getState().values;
+  onSubmit = (values) => {
     const {formIndex} = this.props;
     this.setState({
       alternativeNameCount: 0
     });
-    this.props.onFormSubmit(value, formIndex);
+    this.props.onFormSubmit(values, formIndex);
   };
 
   // Populate selects
@@ -174,6 +173,7 @@ class ProgrammePopupForm extends Component {
         <Form
           getApi={this.setFormApi}
           id={`file-popup-form-${formIndex}`}
+          onSubmit={this.onSubmit}
         >
           {({ formState }) => (
             <React.Fragment>
@@ -279,7 +279,7 @@ class ProgrammePopupForm extends Component {
                   <Button
                     color="primary"
                     type={'button'}
-                    onClick={this.submitForm}
+                    onClick={() => this.formApi.submitForm()}
                     size="sm"
                   >
                     Save
