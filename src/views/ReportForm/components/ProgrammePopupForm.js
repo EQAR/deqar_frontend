@@ -163,11 +163,10 @@ class ProgrammePopupForm extends Component {
   };
 
   render() {
-    const {modalOpen, disabled, formIndex} = this.props;
+    const {modalOpen, disabled, formIndex, title} = this.props;
     const {countryOptions, qfEHEALevelOptions, alternativeNameCount} = this.state;
 
-    // const titleText = `${this.renderActionName()} ${title}`;
-    const titleText = 'Save';
+    const titleText = `${this.renderActionName()} ${title}`;
     return(
       <Modal isOpen={modalOpen} toggle={this.onToggle}>
         <Form
@@ -281,7 +280,7 @@ class ProgrammePopupForm extends Component {
                     onClick={this.submitForm}
                     size="sm"
                   >
-                    {titleText}
+                    Save
                   </Button>
                 }
               </ModalFooter>

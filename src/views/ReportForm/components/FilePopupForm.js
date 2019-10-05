@@ -192,11 +192,10 @@ class FilePopupForm extends Component {
   };
 
   render() {
-    const {modalOpen, disabled, formIndex} = this.props;
+    const {modalOpen, disabled, title} = this.props;
     const {languageOptions} = this.state;
 
-    //const titleText = `${this.renderActionName()} ${title}`;
-    const titleText = 'Save';
+    const titleText = `${this.renderActionName()} ${title}`;
 
     return(
       <Modal isOpen={modalOpen} toggle={this.props.onToggle}>
@@ -268,7 +267,7 @@ class FilePopupForm extends Component {
                     onClick={this.submitForm}
                     size="sm"
                   >
-                    {titleText}
+                    Save
                   </Button>
                 }
               </ModalFooter>
