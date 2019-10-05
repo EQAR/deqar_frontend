@@ -42,8 +42,10 @@ class ProgrammePopupForm extends Component {
   onNameRemove = (i, field) => {
     const {alternativeNameCount} = this.state;
     let values = this.formApi.getState().values;
-    values.alternative_names.splice(i, 1);
-    this.formApi.setValues(values);
+    if (values.hasOwnProperty('alternative_names')) {
+      values.alternative_names.splice(i, 1);
+      this.formApi.setValues(values);
+    }
     this.setState({alternativeNameCount: alternativeNameCount - 1})
   };
 
