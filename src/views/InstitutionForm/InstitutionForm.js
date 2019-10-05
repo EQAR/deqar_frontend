@@ -536,10 +536,11 @@ class InstitutionForm extends Component {
       this.toggleLoading();
       this.setState({isSubmit: true})
       toast.success(messages[formType]);
-      this.props.history.push('/reference/institutions');
-      const tableState = {...institutionTableState, filtered: [{id: 'query', value: value.names_actual[0].name_official}]}
-      this.props.setInstitutionsTable(tableState)
-      this.props.toggleInstitutionsTableFilter()
+      const institutionID = r.data.id;
+      this.props.history.push(`/reference/institutions/view/${institutionID}`);
+      //const tableState = {...institutionTableState, filtered: [{id: 'query', value: value.names_actual[0].name_official}]}
+      //this.props.setInstitutionsTable(tableState)
+      //this.props.toggleInstitutionsTableFilter()
     }).catch(error => {
       const errors = error.response.data.errors || error.response.data;
       if ('non_field_errors' in errors) {
@@ -576,6 +577,18 @@ class InstitutionForm extends Component {
     this.setState({isShowTransliteration: !isShowTransliteration})
   }
 
+  getBackPath = () => {
+    const {formType, formID} = this.props;
+    switch(formType) {
+      case 'view':
+        return `/reference/institutions`;
+      case 'edit':
+        return `/reference/institutions/view/${formID}`;
+      default:
+        break;
+    }
+  };
+
   render() {
     const {
       openModal,
@@ -593,7 +606,7 @@ class InstitutionForm extends Component {
       isSubmit,
       formerNames
     } = this.state;
-    const { backPath, formType, formTitle } = this.props;
+    const { formType, formTitle } = this.props;
     return  qFeheaLevels ? (
       <Card className={style.InstitutionFormCard}>
         <CardHeader>
@@ -901,7 +914,7 @@ class InstitutionForm extends Component {
               </CardBody>
               <CardFooter>
                 <FormButtons
-                  backPath={backPath}
+                  backPath={this.getBackPath()}
                   userIsAdmin={true}
                   editButton={isEdit}
                   deleteButton={isEdit}
