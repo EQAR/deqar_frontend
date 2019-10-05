@@ -855,7 +855,7 @@ class ReportForm extends Component {
                         <Col md={12}>
                           <FilePopupForm
                             modalOpen={fileModalOpen}
-                            title={'file'}
+                            title={'File'}
                             formValue={fileModalValue}
                             formIndex={fileModalIndex}
                             onToggle={this.toggleFileModal}
