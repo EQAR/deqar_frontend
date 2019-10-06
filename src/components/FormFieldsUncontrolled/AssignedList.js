@@ -14,7 +14,7 @@ const AssignedList = ({values, errors, label, btnLabel, field, fieldName, labelS
           [style.ListGroupItemHasError]: fieldHasError(),
           [style.ListGroupItemDisabled]: disabled
         })}>
-        <span className={style.ListGroupItemName}> </span>
+        <span className={field !== 'institutions' ? style.ListGroupItemName : undefined}> </span>
       </ListGroupItem>
     );
 
@@ -31,7 +31,7 @@ const AssignedList = ({values, errors, label, btnLabel, field, fieldName, labelS
               })}
             key={idx}
           >
-            <span onClick={() => props.onClick(idx)} className={style.ListGroupItemName}>
+            <span onClick={() => props.onClick(idx)} className={field !== 'institutions' ? style.ListGroupItemName : undefined}>
               {props.renderDisplayValue(value)}
             </span>
             { disabled || banned ? "" :
