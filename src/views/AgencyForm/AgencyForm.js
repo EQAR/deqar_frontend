@@ -732,7 +732,7 @@ class AgencyForm extends Component {
                         <Col md={12}>
                           <FocusCountryPopupForm
                             modalOpen={focusCountryModalOpen}
-                            title={'Activity'}
+                            title={'Focus Country'}
                             onToggle={() => this.toggleModal('focusCountry')}
                             onFormSubmit={(idx, value) => this.onPopupFormSubmit(idx, value, 'focusCountry', 'focus_countries')}
                             formValue={focusCountryModalValue}
