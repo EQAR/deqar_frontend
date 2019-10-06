@@ -158,8 +158,8 @@ class AgencyForm extends Component {
   };
 
   renderActivities = (value) => {
-    const {activity_type, activity_description, activity_local_identifier, activity_valid_to} = value;
-    return `${activity_description}
+    const {activity_type, activity, activity_local_identifier, activity_valid_to} = value;
+    return `${activity}
        (${activity_type['type']}${activity_local_identifier ? `; ${activity_local_identifier})` : ')'}
        ${activity_valid_to ? activity_valid_to : ''}`;
   };
