@@ -20,12 +20,11 @@ const AssignedList = ({values, errors, label, btnLabel, field, fieldName, labelS
     values = values ? values : [];
 
     if (values.length > 0) {
-      const banned = values.banned ? values.banned : false;
       return (
         <Row>
         {values.map((value, idx) => {
             return(
-              <Col md={6}>
+              <Col md={6} key={idx}>
                 <ListGroupItem
                   className={cx(style.ListGroupItem,
                     {
@@ -33,7 +32,6 @@ const AssignedList = ({values, errors, label, btnLabel, field, fieldName, labelS
                       [style.ListGroupItemDisabled]: disabled
 
                     })}
-                  key={idx}
                 >
               <span onClick={() => props.onClick(idx)} className={field !== 'institutions' ? style.ListGroupItemName : undefined}>
                 {props.renderDisplayValue(value)}
