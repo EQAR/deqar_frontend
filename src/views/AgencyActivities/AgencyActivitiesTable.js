@@ -20,7 +20,7 @@ const AgencyActivitiesTable = (props) => {
       label: 'Agency',
       width: 150,
       sortable: true,
-      sortQueryParam: 'agency'
+      sortQueryParam: 'agency,id'
     }, {
       field: 'activity',
       label: 'Activity Description',
