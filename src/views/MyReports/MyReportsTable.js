@@ -9,23 +9,24 @@ import style from "../MyReports/MyReportsTable.module.css";
 import MyReportsTableFilters from "./MyReportsTableFilters";
 import DataTableRedux from "../../components/DataTable/DataTableRedux";
 import {Col, Row} from "reactstrap";
+import cx from 'classnames';
 
 const MyReportsTable = (props) => {
   const linkRenderer = (row) => {
     return(
-        <Row>
-          <Col className={style.deqarID}>
-            <Link
-              to={{pathname: `/my-reports/view/${row.original.id}`}}
-              className={style.Link}
-            >
-              {row.original.id}
-            </Link>
-          </Col>
-          <Col className={style.LocalID}>
-              {row.original.local_id ? row.original.local_id[0] : null}
-          </Col>
-        </Row>
+      <Row>
+        <Col md={6} className={cx('align-self-center', style.deqarID)}>
+          <Link
+            to={{pathname: `/my-reports/view/${row.original.id}`}}
+            className={style.Link}
+          >
+            {row.original.id}
+          </Link>
+        </Col>
+        <Col md={6} className={cx('align-self-center', style.LocalID)}>
+          {row.original.local_id ? row.original.local_id[0] : null}
+        </Col>
+      </Row>
     )
   };
 
@@ -36,7 +37,7 @@ const MyReportsTable = (props) => {
         render: uploadDateRender,
         width: 100,
         resizable: false,
-        sortable: false
+        sortable: true
       }, {
         field: 'id',
         label: 'DEQAR | Local ID',
