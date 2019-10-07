@@ -4,7 +4,7 @@ const initialState = {
   pageSize: 10,
   page: 0,
   total: 0,
-  sorted: [],
+  sorted: [{id: 'id', desc: 'true'}],
   filtered: [],
   resized: [],
   filterOpen: false
