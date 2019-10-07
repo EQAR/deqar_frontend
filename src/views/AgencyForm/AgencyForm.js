@@ -675,7 +675,6 @@ class AgencyForm extends Component {
                           </FormGroup>
                         </Col>
                       </Row>
-
                       <Row>
                         <Col md={12}>
                           <DecisionPopupForm
@@ -703,7 +702,18 @@ class AgencyForm extends Component {
                           />
                         </Col>
                       </Row>
-
+                      <Row>
+                        <Col md={12}>
+                          <FormGroup>
+                            <Label for="description_note" className={'required'}>Description Note</Label>
+                            <FormTextAreaFormatted
+                              field={'description_note'}
+                              disabled={this.isReadOnly()}
+                              validate={validateRequired}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
                       <Row>
                         <Col md={12}>
                           <AgencyActivityPopupForm
@@ -765,18 +775,6 @@ class AgencyForm extends Component {
                             <FormTextAreaFormatted
                               field={'specialisation_note'}
                               disabled={this.isReadOnly()}
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col md={12}>
-                          <FormGroup>
-                            <Label for="description_note" className={'required'}>Description Note</Label>
-                            <FormTextAreaFormatted
-                              field={'description_note'}
-                              disabled={this.isReadOnly()}
-                              validate={validateRequired}
                             />
                           </FormGroup>
                         </Col>
