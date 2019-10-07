@@ -680,6 +680,12 @@ class ReportForm extends Component {
     }
   };
 
+  // Agency selector
+  isAgencyDisabled = () => {
+    const {formType} = this.props;
+    return formType !== 'create';
+  };
+
   render() {
     const {agencyOptions, agencyActivityOptions, statusOptions, decisionOptions,
       fileModalOpen, fileModalValue, fileModalIndex,
@@ -724,7 +730,7 @@ class ReportForm extends Component {
                               valueField={'id'}
                               onChange={this.onAgencyChanged}
                               validate={validateRequired}
-                              disabled={true}
+                              disabled={this.isAgencyDisabled()}
                             />
                           </FormGroup>
                         </Col>

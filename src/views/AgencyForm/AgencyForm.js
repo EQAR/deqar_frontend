@@ -802,7 +802,7 @@ class AgencyForm extends Component {
                   {formType === 'create' ? "" :
                     <Collapse isOpen={infoBoxOpen}>
                       <InfoBox
-                        id={formState.values.id}
+                        id={agencyID}
                         formState={formState.values}
                         disabled={readOnly}
                         userIsAdmin={userIsAdmin}
