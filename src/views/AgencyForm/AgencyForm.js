@@ -333,17 +333,18 @@ class AgencyForm extends Component {
       });
     }).then(() => {
       this.toggleLoading();
-      this.populateForm();
+      this.props.history.push(`/reference/agencies/view/${agencyID}`);
     }).catch(error => {
       this.toggleLoading();
     });
   };
 
   updateMyAgency = (values) => {
+    const { agencyID } = this.props;
     this.toggleLoading();
     values = updateFormNormalizer(values);
     values = this.mergeNames(values);
-    agency.updateMyAgency(values).then((response) => {
+    agency.updateMyAgency(values, agencyID).then((response) => {
       toast.success("Agency record was updated.");
       const decisionsResponse = response.data.decisions;
       decisionsResponse.forEach((decision, idx) => {
@@ -352,24 +353,26 @@ class AgencyForm extends Component {
       });
     }).then(() => {
       this.toggleLoading();
-      this.populateForm();
+      this.props.history.push(`/my-agencies/view/${agencyID}`);
     }).catch(error => {
       this.toggleLoading();
     });
   };
 
   onSubmit = (values) => {
-    const {formType, backPath} = this.props;
+    const {formType, backPath, location} = this.props;
+    const path = location.pathname;
+
     switch(formType) {
       case 'create':
         // this.createAgency(values);
         break;
       case 'edit':
         if (this.isEditable()) {
-          if (backPath.includes('/reference/agencies')) {
-            this.updateAgency(values);
-          } else {
+          if (path.includes('my-agencies')) {
             this.updateMyAgency(values);
+          } else {
+            this.updateAgency(values);
           }
         } else {
           this.props.history.push(backPath);
@@ -785,8 +788,8 @@ class AgencyForm extends Component {
                   <FormButtons
                     backPath={backPath}
                     userIsAdmin={userIsAdmin}
-                    //editButton={this.isEditable()}
-                    editButton={false}
+                    editButton={this.isEditable()}
+                    //editButton={false}
                     buttonText={'Agency'}
                     recordID={agencyID}
                     formType={formType}
