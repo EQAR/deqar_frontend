@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Form, Scope} from 'informed';
+import {Form} from 'informed';
 import {
   Card,
   CardBody,
@@ -37,6 +37,7 @@ import {decodeProgrammeNameData, encodeProgrammeNameData} from "./normalizers/pr
 import confirm from 'reactstrap-confirm';
 import FormButtons from "../../components/FormFieldsUncontrolled/FormButtons";
 import PreventNavigation from '../../components/PreventNavigation/PreventNavigation'
+import ReportLinkPopupForm from "./components/ReportLinkPopupForm";
 
 
 class ReportForm extends Component {
@@ -55,6 +56,9 @@ class ReportForm extends Component {
       programmeModalOpen: false,
       programmeModalValue: undefined,
       programmeModalIndex: undefined,
+      reportLinkModalOpen: false,
+      reportLinkModalValue: undefined,
+      reportLinkModalIndex: undefined,
       alertVisible: false,
       nonFieldErrors: [],
       loading: false,
@@ -331,6 +335,19 @@ class ReportForm extends Component {
     }
     this.formApi.setValue('programmes', programmes);
     this.toggleModal('programme');
+  };
+
+  onReportLinkSubmit = (value, idx) => {
+    let reportLinks = this.formApi.getValue('report_links');
+    reportLinks = reportLinks ? reportLinks : [];
+
+    if(idx >= 0) {
+      reportLinks[idx] = value;
+    } else {
+      reportLinks.push(value);
+    }
+    this.formApi.setValue('report_links', reportLinks);
+    this.toggleModal('reportLink');
   };
 
   onFileFormSubmit = (value, idx) => {
@@ -647,6 +664,16 @@ class ReportForm extends Component {
     return `${name_primary}${degree}${qf_ehea}`;
   };
 
+  renderReportLinks = (value) => {
+    const {link, link_display_name} = value;
+
+    if (link_display_name) {
+      return link_display_name;
+    } else {
+      return link
+    }
+  };
+
   renderFiles = (value) => {
     const {display_name} = value;
     const {report_language} = value;
@@ -689,6 +716,7 @@ class ReportForm extends Component {
   render() {
     const {agencyOptions, agencyActivityOptions, statusOptions, decisionOptions,
       fileModalOpen, fileModalValue, fileModalIndex,
+      reportLinkModalOpen, reportLinkModalValue, reportLinkModalIndex,
       readOnly, infoBoxOpen, loading, isSubmit } = this.state;
     const {formType, formTitle, reportID, userIsAdmin} = this.props;
 
@@ -867,7 +895,7 @@ class ReportForm extends Component {
                             onToggle={this.toggleFileModal}
                             onFormSubmit={this.onFileFormSubmit}
                             onFormSubmitFile={this.onFileAdded}
-                            disabled={readOnly}
+                            disabled={readOnly} fo
                           />
                           <AssignedList
                             field={'report_files'}
@@ -887,17 +915,28 @@ class ReportForm extends Component {
                       </Row>
                       <Row>
                         <Col md={12}>
-                          <Scope scope="report_links[0]">
-                            <FormGroup>
-                              <Label for="link">Link to page on agency website (optional)</Label>
-                              <FormTextField
-                                field={'link'}
-                                validate={validateURL}
-                                placeholder={'Enter URL of webpage'}
-                                disabled={readOnly}
-                              />
-                            </FormGroup>
-                          </Scope>
+                          <ReportLinkPopupForm
+                            modalOpen={reportLinkModalOpen}
+                            title={'Report Link'}
+                            formValue={reportLinkModalValue}
+                            formIndex={reportLinkModalIndex}
+                            onToggle={() => this.toggleModal('reportLink')}
+                            onFormSubmit={this.onReportLinkSubmit}
+                            disabled={readOnly}
+                          />
+                          <AssignedList
+                            field={'report_links'}
+                            errors={formState.errors}
+                            renderDisplayValue={this.renderReportLinks}
+                            label={'Links'}
+                            labelShowRequired={true}
+                            btnLabel={'Add'}
+                            values={formState.values.report_links}
+                            onRemove={(idx) => this.onListItemRemove(idx, 'report_links')}
+                            onAddButtonClick={() => this.toggleModal('reportLink')}
+                            onClick={(idx) => this.onListItemClick(idx, 'reportLink', 'report_links')}
+                            disabled={readOnly}
+                          />
                         </Col>
                       </Row>
                       <Row>
