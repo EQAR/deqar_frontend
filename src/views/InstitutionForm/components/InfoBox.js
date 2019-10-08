@@ -160,7 +160,7 @@ class InfoBox extends Component {
                   <Label for="deqar_id">DEQARINST ID</Label>
                   <FormTextField
                     field={'deqar_id'}
-                    disabled
+                    disabled={disabled}
                   />
                 </FormGroup>
               </Col>

@@ -606,7 +606,7 @@ class InstitutionForm extends Component {
       isSubmit,
       formerNames
     } = this.state;
-    const { formType, formTitle } = this.props;
+    const { formType, formTitle, userIsAdmin } = this.props;
     return  qFeheaLevels ? (
       <Card className={style.InstitutionFormCard}>
         <CardHeader>
@@ -632,7 +632,7 @@ class InstitutionForm extends Component {
                     <Col md={6} className={style.borderLeft}>
                       <Row>
                         <Col>
-                          <FormGroup className={style.noFormGroupMargin}>
+                          <FormGroup className={isEdit ? style.noFormGroupMargin : ''}>
                           <Label for="name_official" className={'required'}>Institution Name, Official</Label>
                             <FormTextField
                               field={'names_actual[0].name_official'}
@@ -915,9 +915,7 @@ class InstitutionForm extends Component {
               <CardFooter>
                 <FormButtons
                   backPath={this.getBackPath()}
-                  userIsAdmin={true}
-                  editButton={isEdit}
-                  deleteButton={isEdit}
+                  userIsAdmin={userIsAdmin}
                   buttonText={'Institution'}
                   formType={formType}
                   infoBoxOpen={infoBoxOpen}
@@ -944,10 +942,15 @@ class InstitutionForm extends Component {
   }
 }
 
+InstitutionForm.defaultProps = {
+  userIsAdmin: false
+};
+
 InstitutionForm.propTypes = {
   formType: PropTypes.string.isRequired,
   formID: PropTypes.number,
-  backPath: PropTypes.string
+  backPath: PropTypes.string,
+  userIsAdmin: PropTypes.bool
 }
 
 const mapDispatchToProps = (dispatch) => {

@@ -158,7 +158,6 @@ class FormButtons extends Component {
             {this.renderCloseButton()}
             {this.renderHideInfoButton()}
             <div className='pull-right'>
-              {idForm === 'institution' && this.renderDeleteButton()}
               {this.renderEditButton()}
             </div>
           </div>

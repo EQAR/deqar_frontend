@@ -1,7 +1,8 @@
 import React from 'react';
 import InstitutionForm from '../InstitutionForm/InstitutionForm';
+import {connect} from "react-redux";
 
-const InstitutionDetails = (props) => {
+const InstitutionDetails = ({userIsAdmin, ...props}) => {
   const { id, param } = props.match.params;
 
   const getTitle = () => {
@@ -33,4 +34,10 @@ const InstitutionDetails = (props) => {
   )
 };
 
-export default InstitutionDetails;
+const mapStateToProps = (store) => {
+  return {
+    userIsAdmin: store.user.is_admin
+  }
+};
+
+export default connect(mapStateToProps)(InstitutionDetails);

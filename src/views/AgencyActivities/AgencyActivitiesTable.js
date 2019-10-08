@@ -20,13 +20,13 @@ const AgencyActivitiesTable = (props) => {
       label: 'Agency',
       width: 150,
       sortable: true,
-      sortQueryParam: 'agency,id'
+      sortQueryParam: 'agency__acronym_primary'
     }, {
       field: 'activity',
       label: 'Activity Description',
       minWidth: 250,
       resizable: true,
-      sortable: true
+      sortable: true,
     }, {
       field: 'activity_type',
       label: 'Activity Type',
