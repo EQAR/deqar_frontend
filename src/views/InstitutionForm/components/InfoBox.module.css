@@ -25,10 +25,6 @@
   cursor: text;
 }
 
-.infoInput {
-  background-color: transparent !important;
-}
-
-.internalNote {
+.disabledInput {
   background-color: transparent !important;
 }

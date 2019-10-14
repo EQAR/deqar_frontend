@@ -149,7 +149,7 @@ class FormButtons extends Component {
   };
 
   render() {
-    const {formType, idForm} = this.props;
+    const {formType} = this.props;
 
     switch (formType) {
       case 'view':
@@ -203,7 +203,6 @@ FormButtons.propTypes = {
   infoBoxOpen: PropTypes.bool.isRequired,
   infoBoxToggle: PropTypes.func.isRequired,
   onDelete: PropTypes.func,
-  idForm: PropTypes.string
 };
 
 export default withRouter(FormButtons);

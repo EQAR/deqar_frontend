@@ -2,10 +2,8 @@ import React, {Component} from 'react';
 import {Button, Col, FormGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row} from "reactstrap";
 import {Form} from 'informed';
 import PropTypes from 'prop-types';
-import FormTextField from "../../../components/FormFields/FormTextField";
 import FormTextArea from "../../../components/FormFields/FormTextArea";
 import {validateRequired} from "../../../utils/validators";
-import FormSelectField from "./FilePopupForm";
 
 
 class ReportLinkPopupForm extends Component {

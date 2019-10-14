@@ -17,8 +17,7 @@ import FormTextField from "../../components/FormFields/FormTextField";
 import {
   validateDate,
   validateDateFrom,
-  validateRequired,
-  validateURL
+  validateRequired
 } from "../../utils/validators";
 import moment from 'moment'
 import AssignedList from "../../components/FormFieldsUncontrolled/AssignedList";

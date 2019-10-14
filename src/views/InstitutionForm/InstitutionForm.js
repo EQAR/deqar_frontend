@@ -526,7 +526,7 @@ class InstitutionForm extends Component {
   }
 
   submitInstitutionForm = (value) => {
-    const { institutionID, formType , institutionTableState} = this.props;
+    const { institutionID, formType } = this.props;
     const messages = {
       create: "Institution was created.",
       edit: "Institution was updated."
@@ -966,8 +966,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
   return {
-    isAdmin: state.user.is_admin,
-    institutionTableState: state.institutionsTable
+    isAdmin: state.user.is_admin
   }
 }
 
