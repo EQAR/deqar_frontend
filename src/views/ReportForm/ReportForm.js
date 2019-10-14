@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Form, Scope} from 'informed';
+import {Form} from 'informed';
 import {
   Card,
   CardBody,
@@ -17,8 +17,7 @@ import FormTextField from "../../components/FormFields/FormTextField";
 import {
   validateDate,
   validateDateFrom,
-  validateRequired,
-  validateURL
+  validateRequired
 } from "../../utils/validators";
 import moment from 'moment'
 import AssignedList from "../../components/FormFieldsUncontrolled/AssignedList";
@@ -36,6 +35,8 @@ import {updateFormNormalizer} from "./normalizers/updateFormNormalizer";
 import {decodeProgrammeNameData, encodeProgrammeNameData} from "./normalizers/programmeNameNormalizer";
 import confirm from 'reactstrap-confirm';
 import FormButtons from "../../components/FormFieldsUncontrolled/FormButtons";
+import PreventNavigation from '../../components/PreventNavigation/PreventNavigation'
+import ReportLinkPopupForm from "./components/ReportLinkPopupForm";
 
 
 class ReportForm extends Component {
@@ -54,11 +55,15 @@ class ReportForm extends Component {
       programmeModalOpen: false,
       programmeModalValue: undefined,
       programmeModalIndex: undefined,
+      reportLinkModalOpen: false,
+      reportLinkModalValue: undefined,
+      reportLinkModalIndex: undefined,
       alertVisible: false,
       nonFieldErrors: [],
       loading: false,
       readOnly: false,
       infoBoxOpen: false,
+      isSubmit: false
     }
   }
 
@@ -331,6 +336,19 @@ class ReportForm extends Component {
     this.toggleModal('programme');
   };
 
+  onReportLinkSubmit = (value, idx) => {
+    let reportLinks = this.formApi.getValue('report_links');
+    reportLinks = reportLinks ? reportLinks : [];
+
+    if(idx >= 0) {
+      reportLinks[idx] = value;
+    } else {
+      reportLinks.push(value);
+    }
+    this.formApi.setValue('report_links', reportLinks);
+    this.toggleModal('reportLink');
+  };
+
   onFileFormSubmit = (value, idx) => {
     let reportFiles = this.formApi.getValue('report_files');
     reportFiles = reportFiles ? reportFiles : [];
@@ -437,6 +455,25 @@ class ReportForm extends Component {
         return "At least one program record is required"
       }
     }
+
+    // Mark duplicates
+    let names = [];
+    programmes.forEach((programme) => {
+      names.push(
+        {
+          name: programme.name_primary,
+          qfehea: programme.hasOwnProperty('qf_ehea_level') ? programme.qf_ehea_level.level : ''
+        }
+      );
+    });
+
+    const keys = ['name', 'qfehea'];
+    const filteredProgrammes = names.filter(
+      (s => o => (k => !s.has(k) && s.add(k))(keys.map(k => o[k]).join('|')))(new Set())
+    );
+    if (filteredProgrammes.length !== names.length) {
+      return "You have duplicates in your programme names!"
+    }
   };
 
   setFormApi = (formApi) => {
@@ -465,11 +502,14 @@ class ReportForm extends Component {
       filesResponse.forEach((file, idx) => {
         this.uploadFiles(file.id, idx);
       });
-    }).then(() =>{
+      return response.data.submitted_report;
+    }).then((report) =>{
       const {userIsAdmin} = this.props;
-
       this.toggleLoading();
-      userIsAdmin ? this.props.history.push('/reference/reports') : this.props.history.push('/my-reports');
+      this.setState({isSubmit: true});
+      userIsAdmin ?
+        this.props.history.push(`/reference/reports/view/${report.id}`) :
+        this.props.history.push(`/my-reports/view/${report.id}`);
     }).catch((error) => {
       const errors = error.response.data.errors;
       if ('non_field_errors' in errors) {
@@ -506,8 +546,14 @@ class ReportForm extends Component {
         this.uploadFiles(file.id, idx);
       });
     }).then(() => {
+      const {userIsAdmin} = this.props;
+
       this.toggleLoading();
-      this.populateForm()
+      this.setState({isSubmit: true});
+
+      userIsAdmin ?
+        this.props.history.push(`/reference/reports/view/${reportID}`) :
+        this.props.history.push(`/my-reports/view/${reportID}`);
     }).catch(error => {
       this.toggleLoading();
     });
@@ -590,6 +636,18 @@ class ReportForm extends Component {
     }
   };
 
+  getBackPath = () => {
+    const {formType, reportID} = this.props;
+    switch(formType) {
+      case 'view':
+        return `/reference/reports`;
+      case 'edit':
+        return `/reference/reports/view/${reportID}`;
+      default:
+        break;
+    }
+  };
+
   // Assigned List display values
   renderInstitutions = (value) => {
     return value['name_primary'];
@@ -603,6 +661,16 @@ class ReportForm extends Component {
 
     const qf_ehea = value['qf_ehea_level'] ? ` (${value['qf_ehea_level']['level']})` : '';
     return `${name_primary}${degree}${qf_ehea}`;
+  };
+
+  renderReportLinks = (value) => {
+    const {link, link_display_name} = value;
+
+    if (link_display_name) {
+      return link_display_name;
+    } else {
+      return link
+    }
   };
 
   renderFiles = (value) => {
@@ -638,11 +706,18 @@ class ReportForm extends Component {
     }
   };
 
+  // Agency selector
+  isAgencyDisabled = () => {
+    const {formType} = this.props;
+    return formType !== 'create';
+  };
+
   render() {
     const {agencyOptions, agencyActivityOptions, statusOptions, decisionOptions,
       fileModalOpen, fileModalValue, fileModalIndex,
-      readOnly, infoBoxOpen, loading } = this.state;
-    const {formType, formTitle, reportID, userIsAdmin, backPath} = this.props;
+      reportLinkModalOpen, reportLinkModalValue, reportLinkModalIndex,
+      readOnly, infoBoxOpen, loading, isSubmit } = this.state;
+    const {formType, formTitle, reportID, userIsAdmin} = this.props;
 
     return(
       <div className="animated fadeIn">
@@ -662,6 +737,10 @@ class ReportForm extends Component {
           >
             {({ formState }) => (
               <React.Fragment>
+                <PreventNavigation
+                  formState={formState}
+                  isSubmit={isSubmit}
+                />
                 <CardBody>
                   {this.renderError()}
                   <Row>
@@ -678,13 +757,13 @@ class ReportForm extends Component {
                               valueField={'id'}
                               onChange={this.onAgencyChanged}
                               validate={validateRequired}
-                              disabled={readOnly}
+                              disabled={this.isAgencyDisabled()}
                             />
                           </FormGroup>
                         </Col>
                         <Col md={6}>
                           <FormGroup>
-                            <Label for="agency">Local Report Identifier</Label>
+                            <Label for="local_identifier">Local Report Identifier</Label>
                             <FormTextField
                               field={'local_identifier'}
                               placeholder={'Enter local report ID'}
@@ -809,13 +888,13 @@ class ReportForm extends Component {
                         <Col md={12}>
                           <FilePopupForm
                             modalOpen={fileModalOpen}
-                            title={'file'}
+                            title={'File'}
                             formValue={fileModalValue}
                             formIndex={fileModalIndex}
                             onToggle={this.toggleFileModal}
                             onFormSubmit={this.onFileFormSubmit}
                             onFormSubmitFile={this.onFileAdded}
-                            disabled={readOnly}
+                            disabled={readOnly} fo
                           />
                           <AssignedList
                             field={'report_files'}
@@ -835,17 +914,28 @@ class ReportForm extends Component {
                       </Row>
                       <Row>
                         <Col md={12}>
-                          <Scope scope="report_links[0]">
-                            <FormGroup>
-                              <Label for="link">Link to page on agency website (optional)</Label>
-                              <FormTextField
-                                field={'link'}
-                                validate={validateURL}
-                                placeholder={'Enter URL of webpage'}
-                                disabled={readOnly}
-                              />
-                            </FormGroup>
-                          </Scope>
+                          <ReportLinkPopupForm
+                            modalOpen={reportLinkModalOpen}
+                            title={'Report Link'}
+                            formValue={reportLinkModalValue}
+                            formIndex={reportLinkModalIndex}
+                            onToggle={() => this.toggleModal('reportLink')}
+                            onFormSubmit={this.onReportLinkSubmit}
+                            disabled={readOnly}
+                          />
+                          <AssignedList
+                            field={'report_links'}
+                            errors={formState.errors}
+                            renderDisplayValue={this.renderReportLinks}
+                            label={'Links'}
+                            labelShowRequired={true}
+                            btnLabel={'Add'}
+                            values={formState.values.report_links}
+                            onRemove={(idx) => this.onListItemRemove(idx, 'report_links')}
+                            onAddButtonClick={() => this.toggleModal('reportLink')}
+                            onClick={(idx) => this.onListItemClick(idx, 'reportLink', 'report_links')}
+                            disabled={readOnly}
+                          />
                         </Col>
                       </Row>
                       <Row>
@@ -865,7 +955,7 @@ class ReportForm extends Component {
                 </CardBody>
                 <CardFooter>
                   <FormButtons
-                    backPath={backPath}
+                    backPath={this.getBackPath()}
                     userIsAdmin={userIsAdmin}
                     editButton={this.isEditable()}
                     deleteButton={this.isEditable()}
@@ -909,7 +999,6 @@ ReportForm.propTypes = {
   formTitle: PropTypes.string.isRequired,
   formType: PropTypes.oneOf(['create', 'view', 'edit']),
   reportID: PropTypes.string,
-  backPath: PropTypes.string,
   userIsAdmin: PropTypes.bool
 };
 

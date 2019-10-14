@@ -36,6 +36,7 @@ const ReportsTable = (props) => {
       width: 150,
       resizable: false,
       sortable: true,
+      sortQueryParam: 'agency_sort',
     }, {
       field: 'institution_programme_primary',
       label: 'Institution : Programme',

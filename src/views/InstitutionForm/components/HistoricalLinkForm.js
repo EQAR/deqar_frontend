@@ -8,17 +8,18 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
-  Row } from "reactstrap";
+  Row } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { Form } from 'informed';
 
-import FormDatePickerField from "../../../components/FormFields/FormDatePickerField";
-import FormTextArea from "../../../components/FormFields/FormTextArea";
+import FormDatePickerField from '../../../components/FormFields/FormDatePickerField';
+import FormTextArea from '../../../components/FormFields/FormTextArea';
 import InstitutionSelect from './InstitutionSelect';
 import AssignedList from '../../../components/FormFieldsUncontrolled/AssignedList';
 import institution from '../../../services/Institution'
-import { validateRequired, validateDate } from "../../../utils/validators";
+import { validateRequired, validateDate } from '../../../utils/validators';
 import FormSelectField from '../../../components/FormFields/FormSelectField';
+import style from './Components.module.css';
 
 
 class HistoricalLinkForm extends Component {
@@ -133,7 +134,7 @@ class HistoricalLinkForm extends Component {
         >
           {({ formState }) => (
             <React.Fragment>
-              <ModalHeader toggle={this.onToggle}>{this.renderActionName()} Historical Link</ModalHeader>
+              <ModalHeader>{this.renderActionName()} Historical Link</ModalHeader>
               <ModalBody>
                 <Row>
                   <Col>
@@ -207,7 +208,7 @@ class HistoricalLinkForm extends Component {
                   </Col>
                 </Row>
               </ModalBody>
-              <ModalFooter>
+              <ModalFooter className={style.modaFooterJustify}>
                 <Button
                   color="secondary"
                   type={'button'}

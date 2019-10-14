@@ -157,7 +157,9 @@ class FormButtons extends Component {
           <div>
             {this.renderCloseButton()}
             {this.renderHideInfoButton()}
-            {this.renderEditButton()}
+            <div className='pull-right'>
+              {this.renderEditButton()}
+            </div>
           </div>
         );
       case 'create':
@@ -200,7 +202,7 @@ FormButtons.propTypes = {
   buttonText: PropTypes.string,
   infoBoxOpen: PropTypes.bool.isRequired,
   infoBoxToggle: PropTypes.func.isRequired,
-  onDelete: PropTypes.func
+  onDelete: PropTypes.func,
 };
 
 export default withRouter(FormButtons);

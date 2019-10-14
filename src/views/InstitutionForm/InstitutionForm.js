@@ -10,17 +10,16 @@ import {
   FormGroup,
   Collapse,
   Label,
-  Row
-} from "reactstrap";
+  Row, FormText
+} from 'reactstrap';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import { scroller } from 'react-scroll';
-import { withRouter } from "react-router-dom";
+import { withRouter } from 'react-router-dom';
 
 import FormTextField from '../../components/FormFields/FormTextField';
 import FormSelectField from '../../components/FormFields/FormSelectField';
-import FormDatePickerField from "../../components/FormFields/FormDatePickerField";
+import FormDatePickerField from '../../components/FormFields/FormDatePickerField';
 import institution from '../../services/Institution';
 import style from './InstitutionForm.module.css';
 import AssignedList from '../../components/FormFieldsUncontrolled/AssignedList';
@@ -32,13 +31,20 @@ import HierarchicalLinkForm from './components/HierarchicalLinkForm';
 import InfoBox from './components/InfoBox';
 import country from '../../services/Country';
 import qfEHEALevel from '../../services/QFeheaLevel';
-import { validateRoman, validateRequired, validateRequiredURL, validateDateFrom, validateDate } from "../../utils/validators";
+import {
+  validateRoman,
+  validateRequired,
+  validateRequiredURL,
+  validateDateFrom,
+  validateDate } from '../../utils/validators';
 import agency from '../../services/Agency';
 import { toast } from 'react-toastify';
 import { createFormNormalizer } from './createFormNormalizer';
 import FormAlert from './components/FormAlert'
-import setInstitutionsTable from "../Institutions/actions/setInstitutionsTable";
-import toggleInstitutionsTableFilter from "../Institutions/actions/toggleInstitutionsTableFilter";
+import setInstitutionsTable from '../Institutions/actions/setInstitutionsTable';
+import toggleInstitutionsTableFilter from '../Institutions/actions/toggleInstitutionsTableFilter';
+import cx from 'classnames';
+import PreventNavigation from '../../components/PreventNavigation/PreventNavigation'
 
 
 class InstitutionForm extends Component {
@@ -58,12 +64,13 @@ class InstitutionForm extends Component {
       countries: [],
       infoBoxOpen: false,
       agencies: [],
-      localIDDisabled: true,
       loading: false,
       alertVisible: false,
       nonFieldErrors: [],
       isShowTransliteration: false,
       alternativeNameCount: 0,
+      isSubmit: false,
+      formerNames: []
     }
   }
 
@@ -75,6 +82,17 @@ class InstitutionForm extends Component {
       formType: formType
     });
     this.populate();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { formType } = this.props;
+    if (formType !== prevProps.formType) {
+      this.setState({
+        isEdit: this.isEditable(formType),
+        formType: formType
+      });
+      this.populate();
+    }
   }
 
   componentWillUnmount() {
@@ -92,12 +110,17 @@ class InstitutionForm extends Component {
 
   isEditable = () => {
     const { formType, isAdmin } = this.props;
-    return isAdmin || formType === 'create';
+    return isAdmin && (formType === 'edit' || formType === 'create');
   }
 
-  populate = () => {
+  populate = async () => {
     const { institutionID, formType, isAdmin } = this.props;
     const values = this.formApi.getState().values
+
+    const qFeheaLevelsResponse = await qfEHEALevel.select();
+    this.setState({
+      qFeheaLevels: qFeheaLevelsResponse.data.map(level => ({id: level.id, qf_ehea_level: level.level}))
+    });
 
     if (formType !== 'create') {
       institution.getInstitution(institutionID).then((response) => {
@@ -109,8 +132,10 @@ class InstitutionForm extends Component {
         data.historical_links = [...historical_source, ...historical_target];
         data.hierarchical_links = [...hierarchical_child, ...hierarchical_parent];
         data.flags = !data.flags || data.flags.length === 0 ? [{flag: 'none', flag_message: 'Institution has no flag assigned', banned: true}] : data.flags;
+        data.qf_ehea_levels = data.qf_ehea_levels ? data.qf_ehea_levels.map(l => ({id: l.qf_ehea_level, qf_ehea_level: qFeheaLevelsResponse.data.find(q => q.id === l.qf_ehea_level).level})) : null
         this.formApi.setValues(data);
         this.setState({
+          formerNames: data.names_former,
           isShowTransliteration: data.names_actual[0].name_official_transliterated ? true : false,
           alternativeNameCount: data.names_actual ? data.names_actual[0].alternative_names.length : 0
         })
@@ -122,17 +147,13 @@ class InstitutionForm extends Component {
       })
     }
 
-    qfEHEALevel.select().then((response) => {
-      this.setState({
-        qFeheaLevels: response.data
+    if (formType !== 'view') {
+      country.getInstitutionCountries().then((response) => {
+        this.setState({
+          countries: response.data
+        });
       });
-    });
-
-    country.getInstitutionCountries().then((response) => {
-      this.setState({
-        countries: response.data
-      });
-    });
+    }
 
     isAdmin
     ? agency.getAgencies().then((response) => this.setState({agencies: response.data.results}))
@@ -191,8 +212,6 @@ class InstitutionForm extends Component {
     : null
   )
 
-  renderAlternativeNames = value => value.name;
-
   onAddFormerName = () => {
     this.setState({
       formerNameValue: null,
@@ -222,7 +241,7 @@ class InstitutionForm extends Component {
     const { agencies } = this.state;
 
     this.setState({
-      formerIndex: null,
+      formIndex: null,
       localIDValue: null,
       localIDDisabled: localIds ? agencies.filter(a => localIds.filter(l => l.agency.id !== a.id)) ? false : true : false
     });
@@ -235,7 +254,7 @@ class InstitutionForm extends Component {
 
     this.setState({
       localIDValue: localIds[i],
-      formerIndex: i,
+      formIndex: i,
       localIDDisabled: agencies.find(a => localIds[i].agency.id === a.id) ? false : true
     });
     this.toggleModal('local-id');
@@ -254,31 +273,6 @@ class InstitutionForm extends Component {
   }
 
   renderLocalID = value => value.identifier;
-
-  changeQFEheaLvels = (level) => {
-    this.formApi.getValue('qf_ehea_levels')
-    ? this.formApi.setValue('qf_ehea_levels', [...this.formApi.getValue('qf_ehea_levels'), {qf_ehea_level: level.id}])
-    : this.formApi.setValue('qf_ehea_levels', [{qf_ehea_level: level.id}])
-  }
-
-  getQFEheaLevels = (formState) => {
-    const { qFeheaLevels } = this.state;
-
-    return formState.values.qf_ehea_levels && qFeheaLevels ?
-      formState.values.qf_ehea_levels.map(level => qFeheaLevels.filter(l => level.qf_ehea_level === l.id)[0]) :
-      null;
-  }
-
-  getQFEheaOptions = (qFeheaLevels) => {
-
-    const formLevels = this.formApi.getValue('qf_ehea_levels');
-    if (formLevels && qFeheaLevels) {
-      formLevels.forEach(l => {
-        qFeheaLevels = qFeheaLevels.filter(level => level.id !== l.qf_ehea_level);
-      });
-    }
-    return qFeheaLevels;
-  }
 
   onAddHistoricalLink = () => {
     this.setState({
@@ -330,8 +324,15 @@ class InstitutionForm extends Component {
 
   onFormSubmit = (value, i, field) => {
     let values = this.formApi.getValue(field) || [];
-    Number.isInteger(i) ? values[i] = value : values.push(value)
+    Number.isInteger(i) ? values[i] = value : values.push(value);
     this.formApi.setValue(field, values);
+    this.formApi.setTouched(field, true);
+
+    if (field === 'names_former') {
+      this.setState({
+        formerNames: [...this.state.formerNames, value]
+      })
+    }
     this.toggleModal('');
   }
 
@@ -340,15 +341,21 @@ class InstitutionForm extends Component {
 
     if (field === 'alternative_names') {
       values = this.formApi.getState().values;
-      values.names_actual[0].alternative_names.splice(i, 1);
+      if (values.names_actual[0].alternative_names) {
+        values.names_actual[0].alternative_names.splice(i, 1);
+      }
       this.formApi.setValues(values)
       this.setState({
-        alternativeNameCount: this.formApi.getState().values.names_actual[0].alternative_names.length
+        alternativeNameCount: values.names_actual[0].alternative_names ? this.formApi.getState().values.names_actual[0].alternative_names.length : 0
       })
     } else if (field === 'countries') {
       values = this.formApi.getState().values;
       values.countries.splice(i, 1);
       this.formApi.setValues(values)
+    } else if (field === 'names_former') {
+      this.setState({
+        formerNames: this.state.formerNames.splice(i, 1)
+      })
     } else {
       values = this.formApi.getValue(field);
       values.splice(i, 1);
@@ -361,47 +368,62 @@ class InstitutionForm extends Component {
     const c = this.formApi.getValue('countries') || [''];
 
     if (countries) {
-      return c.map((country, i) => {
-        const scopeName = `countries[${i}]`;
-        return (
-          <Fragment key={i}>
-            <Scope scope={scopeName}>
-              <Row key={i} className={style.relativeContainer}>
-                <Col md={6}>
-                  <FormGroup>
-                  <Label for="country" className={'required'}>Country</Label>
-                  <FormSelectField
-                    field={'country'}
-                    options={countries}
-                    placeholder={'Please select'}
-                    labelField={'name_english'}
-                    valueField={'id'}
-                    disabled={!isEdit}
-                    validate={validateRequired}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col md={6}>
-                  <FormGroup>
-                  <Label for="city">City</Label>
-                  <FormTextField
-                    field={'city'}
-                    placeholder={'Enter city name'}
-                    disabled={!isEdit}
-                  />
-                  </FormGroup>
-                </Col>
-                {isEdit && i >= 1 && (
-                  <div className={style.locationRemoveButton + " pull-right"} onClick={(e) => this.onRemove(i, 'countries')}
-                  >
-                    <i className="fa fa-close"> </i>
-                  </div>
-                )}
-              </Row>
-            </Scope>
-          </Fragment>
-        )
-      });
+      return (
+        <Fragment>
+          <Row>
+            <Col md={6}>
+              <Label for="country" className={'required'}>Country</Label>
+            </Col>
+            <Col md={6}>
+              <Label for="city">City</Label>
+            </Col>
+          </Row>
+          {c.map((country, i) => {
+            const scopeName = `countries[${i}]`;
+            return (
+              <Fragment key={i}>
+                <Scope scope={scopeName}>
+                  <Row key={i}>
+                    <Col md={6}>
+                      <FormGroup>
+                      <FormSelectField
+                        field={'country'}
+                        options={countries}
+                        placeholder={'Please select'}
+                        labelField={'name_english'}
+                        valueField={'id'}
+                        disabled={!isEdit}
+                        validate={validateRequired}
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md={5}>
+                      <FormGroup>
+                      <FormTextField
+                        field={'city'}
+                        placeholder={'Enter city name'}
+                        disabled={!isEdit}
+                      />
+                      </FormGroup>
+                    </Col>
+                    {isEdit && i >= 1 && (
+                      <Col md={1}>
+                        <Button
+                          className={style.locationRemoveButton}
+                          color="link"
+                          onClick={(e) => this.onRemove(i, 'countries')}
+                        >
+                          <i className="fa fa-close"> </i>
+                        </Button>
+                      </Col>
+                    )}
+                  </Row>
+                </Scope>
+              </Fragment>
+            )
+          })}
+        </Fragment>
+      )
     }
   }
 
@@ -428,6 +450,7 @@ class InstitutionForm extends Component {
                   <FormTextField
                     field={'name'}
                     placeholder={'Enter alternative institution name'}
+                    disabled={!isEdit}
                   />
                   {isEdit && (
                     <div className={style.alternativeNameRemoveButton + " pull-right"} onClick={(e) => this.onRemove(idx, 'alternative_names')}
@@ -486,8 +509,6 @@ class InstitutionForm extends Component {
     });
   }
 
-  renderQFEheaLevels = value => value.level;
-
   getLabel = (option) => option.level;
 
   getValue = (option) => option.id;
@@ -505,7 +526,7 @@ class InstitutionForm extends Component {
   }
 
   submitInstitutionForm = (value) => {
-    const { institutionID, formType , institutionTableState} = this.props;
+    const { institutionID, formType } = this.props;
     const messages = {
       create: "Institution was created.",
       edit: "Institution was updated."
@@ -513,11 +534,13 @@ class InstitutionForm extends Component {
     this.toggleLoading();
     this.getMethod(createFormNormalizer(value), institutionID).then((r) => {
       this.toggleLoading();
+      this.setState({isSubmit: true})
       toast.success(messages[formType]);
-      this.props.history.push('/reference/institutions');
-      const tableState = {...institutionTableState, filtered: [{id: 'query', value: value.names_actual[0].name_official}]}
-      this.props.setInstitutionsTable(tableState)
-      this.props.toggleInstitutionsTableFilter()
+      const institutionID = r.data.id;
+      this.props.history.push(`/reference/institutions/view/${institutionID}`);
+      //const tableState = {...institutionTableState, filtered: [{id: 'query', value: value.names_actual[0].name_official}]}
+      //this.props.setInstitutionsTable(tableState)
+      //this.props.toggleInstitutionsTableFilter()
     }).catch(error => {
       const errors = error.response.data.errors || error.response.data;
       if ('non_field_errors' in errors) {
@@ -545,7 +568,26 @@ class InstitutionForm extends Component {
     })
   }
 
-  toggleTransliteration = () => this.setState({isShowTransliteration: !this.state.isShowTransliteration})
+  deleteTransliteration = () => {
+    const {isShowTransliteration} = this.state;
+    if(isShowTransliteration) {
+      this.formApi.setValue('names_actual[0].name_official_transliterated', '');
+
+    }
+    this.setState({isShowTransliteration: !isShowTransliteration})
+  }
+
+  getBackPath = () => {
+    const {formType, formID} = this.props;
+    switch(formType) {
+      case 'view':
+        return `/reference/institutions`;
+      case 'edit':
+        return `/reference/institutions/view/${formID}`;
+      default:
+        break;
+    }
+  };
 
   render() {
     const {
@@ -558,12 +600,13 @@ class InstitutionForm extends Component {
       qFeheaLevels,
       isEdit,
       localIDValue,
-      localIDDisabled,
       formIndex,
       loading,
-      isShowTransliteration
+      isShowTransliteration,
+      isSubmit,
+      formerNames
     } = this.state;
-    const { backPath, isAdmin, formType, formTitle } = this.props;
+    const { formType, formTitle, userIsAdmin } = this.props;
     return  qFeheaLevels ? (
       <Card className={style.InstitutionFormCard}>
         <CardHeader>
@@ -578,14 +621,18 @@ class InstitutionForm extends Component {
           onSubmitFailure={this.scrollTo}
         >
           {({ formState }) => (
-            <React.Fragment>
+            <Fragment>
+              <PreventNavigation
+                formState={formState}
+                isSubmit={isSubmit}
+              />
               <CardBody>
               {this.renderError()}
                   <Row>
                     <Col md={6} className={style.borderLeft}>
                       <Row>
                         <Col>
-                          <FormGroup>
+                          <FormGroup className={isEdit ? style.noFormGroupMargin : ''}>
                           <Label for="name_official" className={'required'}>Institution Name, Official</Label>
                             <FormTextField
                               field={'names_actual[0].name_official'}
@@ -599,7 +646,7 @@ class InstitutionForm extends Component {
                           <Collapse isOpen={isShowTransliteration}>
                             <Row>
                               <Col>
-                                <FormGroup>
+                                <FormGroup className={cx(style.noFormGroupMargin, style.Transliteration)}>
                                   <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
                                     <FormTextField
                                       field={'names_actual[0].name_official_transliterated'}
@@ -611,16 +658,17 @@ class InstitutionForm extends Component {
                               </Col>
                             </Row>
                           </Collapse>
-                          {!isEdit || isShowTransliteration ? "" :
+                          {!isEdit ? "" :
                             <Row>
-                              <Col md={12}>
-                                <Button
-                                  type={'button'}
-                                  size="sm"
-                                  color="secondary"
-                                  onClick={this.toggleTransliteration}
-                                >Add Transliteration</Button>
-                              </Col>
+                              <FormGroup>
+                                <Col md={12}>
+                                  <FormText color="muted">
+                                    <span onClick={this.deleteTransliteration} className={style.removeTransliteration}>
+                                      {isShowTransliteration ? 'Remove Transliteration' : 'Add Transliteration'}
+                                    </span>
+                                  </FormText>
+                                </Col>
+                              </FormGroup>
                             </Row>
                           }
                       <Row>
@@ -638,18 +686,20 @@ class InstitutionForm extends Component {
                       <Collapse isOpen={alternativeNameCount > 0}>
                         {this.renderAlternativeNames()}
                       </Collapse>
-                      <Row>
-                        <Col md={12}>
-                          <div className="pull-right">
-                            <Button
-                              type={'button'}
-                              size="sm"
-                              color="secondary"
-                              onClick={this.onAddButtonClick}
-                            >Add Alternative Name</Button>
-                          </div>
-                        </Col>
-                      </Row>
+                      {!isEdit ? null :
+                        <Row>
+                          <Col md={12}>
+                            <div className="pull-right">
+                              <Button
+                                type={'button'}
+                                size="sm"
+                                color="secondary"
+                                onClick={this.onAddButtonClick}
+                              >Add Alternative Name</Button>
+                            </div>
+                          </Col>
+                        </Row>
+                      }
                       <Row>
                         <Col md={6}>
                           <FormGroup>
@@ -685,13 +735,14 @@ class InstitutionForm extends Component {
                             formIndex = {formIndex}
                             formValue={formerNameValue}
                             disabled={!isEdit}
+                            formerNames={formerNames}
                             />
                           <AssignedList
                             errors={formState.errors}
                             valueFields={['name_official']}
                             values={this.getFormerValues(formState)}
                             label={'Former Names'}
-                            btnLabel={'Add'}
+                            btnLabel={'Add previous name set'}
                             onRemove={this.onRemove}
                             onAddButtonClick={this.onAddFormerName}
                             onClick={this.onFormerNameClick}
@@ -711,7 +762,7 @@ class InstitutionForm extends Component {
                             fieldName={'identifiers_local'}
                             formIndex={formIndex}
                             formValue={localIDValue}
-                            disabled={localIDDisabled}
+                            disabled={!isEdit}
                             localIDs={formState.values.identifiers_local}
                           />
                           <AssignedList
@@ -727,6 +778,7 @@ class InstitutionForm extends Component {
                             field={'identifiers_local'}
                             fieldName={'identifiers_local'}
                             validate={this.validateAgency}
+                            disabled={!isEdit}
                           />
                         </Col>
                       </Row>
@@ -776,33 +828,16 @@ class InstitutionForm extends Component {
                             <Row>
                               <Col>
                                 <FormGroup>
-                                  <Label for="country">QF-EHEA Levels</Label>
-                                  <Select
-                                    className={!isEdit ? style.hidden : null}
-                                    options={this.getQFEheaOptions(qFeheaLevels)}
-                                    onChange={this.changeQFEheaLvels}
-                                    placeholder={'Select select multiple, if necessary'}
-                                    getOptionLabel={this.getLabel}
-                                    getOptionValue={this.getValue}
-                                    value={0}
-                                  />
-                                </FormGroup>
-                              </Col>
-                            </Row>
-                            <Row>
-                              <Col>
-                                <FormGroup>
-                                  <AssignedList
-                                    errors={formState.errors}
-                                    valueFields={['qf_ehea_level']}
-                                    values={this.getQFEheaLevels(formState)}
-                                    renderDisplayValue={this.renderQFEheaLevels}
-                                    onClick={() => null}
+                                  <Label for="qf_ehea_levels">QF-EHEA Levels</Label>
+                                  <FormSelectField
                                     field={'qf_ehea_levels'}
-                                    fieldName={'qf_ehea_levels'}
-                                    onRemove={this.onRemove}
+                                    options={qFeheaLevels}
+                                    placeholder={'Please select multiple, if necessary'}
+                                    labelField={'qf_ehea_level'}
+                                    valueField={'qf_ehea_level'}
+                                    isMulti
                                     disabled={!isEdit}
-                                    />
+                                  />
                                 </FormGroup>
                               </Col>
                             </Row>
@@ -879,17 +914,16 @@ class InstitutionForm extends Component {
               </CardBody>
               <CardFooter>
                 <FormButtons
-                  deleteButton={false}
-                  backPath={backPath}
-                  currentPath={backPath}
-                  editButton={false}
-                  userIsAdmin={isAdmin}
+                  backPath={this.getBackPath()}
+                  userIsAdmin={userIsAdmin}
                   buttonText={'Institution'}
                   formType={formType}
                   infoBoxOpen={infoBoxOpen}
                   infoBoxToggle={this.toggleInfoBox}
                   submitForm={this.formApi.submitForm}
+                  onDelete={this.onDelete}
                   loading={loading}
+                  idForm={'institution'}
                 />
               </CardFooter>
               <CardFooter className={style.infoFooter}>
@@ -900,7 +934,7 @@ class InstitutionForm extends Component {
                   />
                 </Collapse>
               </CardFooter>
-            </React.Fragment>
+            </Fragment>
             )}
         </Form>
       </Card>
@@ -908,10 +942,15 @@ class InstitutionForm extends Component {
   }
 }
 
+InstitutionForm.defaultProps = {
+  userIsAdmin: false
+};
+
 InstitutionForm.propTypes = {
   formType: PropTypes.string.isRequired,
   formID: PropTypes.number,
-  backPath: PropTypes.string
+  backPath: PropTypes.string,
+  userIsAdmin: PropTypes.bool
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -927,8 +966,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
   return {
-    isAdmin: state.user.is_admin,
-    institutionTableState: state.institutionsTable
+    isAdmin: state.user.is_admin
   }
 }
 

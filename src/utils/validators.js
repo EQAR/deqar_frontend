@@ -88,3 +88,45 @@ export const validateDateFromRequired = (value, date_to) => {
     return validateRequiredDate(value);
   }
 }
+
+export const validateMultipleDate = (value, formerNames) => formerNames.some(n => n.name_valid_to === value) ? 'Date belongs to other name set' : null;
+
+export const validateMultipleRequiredDate = (value, formerNames) => (
+  validateRequiredDate(value)
+  || validatePastDate(value)
+  || validateMultipleDate(value, formerNames)
+)
+export const validateUnique = (value, fields, formValues) => {
+  let numberOfValues = 0;
+
+  fields.forEach((field) => {
+    const f = field.split('.');
+    switch (f.length) {
+      case 1:
+        if (formValues.hasOwnProperty(f[0])) {
+          if (formValues[f[0]] === value) {
+            numberOfValues += 1;
+          }
+        }
+        break;
+      case 2:
+        if (formValues.hasOwnProperty(f[0])) {
+          formValues[f[0]].forEach((subform) => {
+            if (subform.hasOwnProperty(f[1])) {
+              if (subform[f[1]] === value) {
+                numberOfValues += 1;
+              }
+            }
+          })
+        }
+        break;
+      default:
+        break;
+    }
+  });
+  if(numberOfValues > 1) {
+    return 'Duplicate entry, please correct it before submission'
+  }
+}
+
+export const validateRequiredUnique = (value, fields, formValues) => validateRequired(value) || validateUnique(value, fields, formValues)

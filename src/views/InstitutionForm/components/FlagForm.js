@@ -8,14 +8,15 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
-  Row } from "reactstrap";
+  Row } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { Form } from 'informed';
 import Select from 'react-select';
 
-import FormTextArea from "../../../components/FormFields/FormTextArea";
+import FormTextArea from '../../../components/FormFields/FormTextArea';
 import agency from '../../../services/Agency';
-import { validateRequired } from "../../../utils/validators";
+import { validateRequired } from '../../../utils/validators';
+import style from './Components.module.css';
 
 class FlagForm extends Component {
   constructor(props) {
@@ -88,10 +89,10 @@ class FlagForm extends Component {
 
   render() {
     const { modalOpen, formIndex } = this.props;
-    const { agencies, flags } = this.state;
+    const { flags } = this.state;
 
     return(
-      <Modal isOpen={modalOpen} toggle={this.onToggle}>
+      <Modal isOpen={modalOpen}>
         <Form
           getApi={this.setFormApi}
           onSubmit={(value) => this.props.onFormSubmit(value, formIndex)}
@@ -99,23 +100,8 @@ class FlagForm extends Component {
         >
           {({ formState }) => (
             <React.Fragment>
-              <ModalHeader toggle={this.onToggle}>{this.renderActionName()} Flag</ModalHeader>
+              <ModalHeader>{this.renderActionName()} Flag</ModalHeader>
               <ModalBody>
-                {/* <Row>
-                  <Col>
-                    <FormGroup>
-                    <Label for="agency" className={'required'}>Agency</Label>
-                    <FormSelectField
-                      field={'agency'}
-                      options={agencies}
-                      placeholder={'Please select'}
-                      labelField={'acronym_primary'}
-                      valueField={'id'}
-                      validate={validateRequired}
-                    />
-                    </FormGroup>
-                  </Col>
-                </Row> */}
                 <Row>
                   <Col>
                     <FormGroup>
@@ -143,7 +129,7 @@ class FlagForm extends Component {
                   </Col>
                 </Row>
               </ModalBody>
-              <ModalFooter>
+              <ModalFooter className={style.modaFooterJustify}>
                 <Button
                   color="secondary"
                   type={'button'}

@@ -26,6 +26,7 @@
 
 .relativeContainer {
   position: relative;
+  align-content: flex-end;
 }
 
 .alternativeNameRemoveButton {
@@ -42,18 +43,29 @@
 }
 
 .locationRemoveButton {
-  position: absolute;
-  top: 0;
-  right: 0;
   color: hsl(0,0%,80%);
-  order: 2;
-  text-align: right;
-  flex-grow: 1;
-  margin-left: 15px;
-  margin-right: 15px;
-  cursor: pointer;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.locationRemoveButton:hover {
+  color: hsl(0,0%,60%);
 }
 
 .removeButton:hover {
   color: hsl(0,0%,60%);
+}
+
+.removeTransliteration {
+  color: hsl(0,0%,40%);
+  border-bottom: 1px dotted;
+  cursor: pointer;
+}
+
+.noFormGroupMargin {
+  margin-bottom: 0px;
+}
+
+.Transliteration {
+  margin-top: 1rem;
 }

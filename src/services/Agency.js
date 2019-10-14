@@ -18,11 +18,11 @@ class Agency {
   };
 
   getMyAgency = (agencyID) => {
-    return axios.get(`${MANAGE_MY_AGENCY}${agencyID}`);
+    return axios.get(`${MANAGE_MY_AGENCY}${agencyID}/`);
   };
 
-  updateMyAgency = (formValues) => {
-    return axios.put(MANAGE_MY_AGENCY, formValues);
+  updateMyAgency = (formValues, agencyID) => {
+    return axios.put(`${MANAGE_MY_AGENCY}${agencyID}/`, formValues);
   };
 
   selectActivity = (agencyID, params=null) => {

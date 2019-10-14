@@ -174,7 +174,7 @@ class NamePopupForm extends Component {
                     onClick={this.submitForm}
                     size="sm"
                   >
-                    {titleText}
+                    Save
                   </Button>
                 }
               </ModalFooter>

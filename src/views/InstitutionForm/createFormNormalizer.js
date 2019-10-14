@@ -52,6 +52,8 @@ export const createFormNormalizer = (formValues) => {
         agency: id.agency.id,
         resource: 'local identifier'
       }))
+    } else if (key === 'qf_ehea_levels') {
+      normalizedValues['qf_ehea_levels'] = formValues.qf_ehea_levels.map(l => ({qf_ehea_level: l.id}));
     } else {
       normalizedValues[key] = formValues[key];
     }

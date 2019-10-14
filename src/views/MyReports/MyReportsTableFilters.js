@@ -27,7 +27,7 @@ class MyReportsTableFilters extends Component {
       local_id: this.getFilterValue('local_id', 'text'),
       country: this.getFilterValue('country', 'select'),
       agency: this.getFilterValue('agency', 'select'),
-      activity: this.getFilterValue('activity', 'select'),
+      activity: this.getFilterValue('activity_facet', 'select'),
       flag: this.getFilterValue('flag', 'select'),
       year: this.getFilterValue('year', 'text'),
       active: this.getFilterValue('active', 'boolean')

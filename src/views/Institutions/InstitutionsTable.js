@@ -13,7 +13,7 @@ const InstitutionsTable = (props) => {
   const linkRenderer = (row) => {
     return(
       <Link
-        to={{pathname: `/reference/institutions/edit/${row.original.id}`}}
+        to={{pathname: `/reference/institutions/view/${row.original.id}`}}
         className={style.Link}
       >
         {row.original.name_display}
@@ -28,16 +28,18 @@ const InstitutionsTable = (props) => {
     {
       field: 'deqar_id',
       label: 'DEQARINST ID',
-      sortable: false,
+      sortable: true,
       minWidth: 90,
-      maxWidth: 120
+      maxWidth: 120,
+      sortQueryParam: 'deqar_id_sort'
     },
     {
       field: 'eter_id',
       label: 'ETER ID',
       sortable: true,
       minWidth: 80,
-      maxWidth: 80
+      maxWidth: 80,
+      sortQueryParam: 'eter_id_sort'
     },
     {
       field: 'name_display',
@@ -53,7 +55,8 @@ const InstitutionsTable = (props) => {
       sortable: false,
       minWidth: 80,
       maxWidth: 130,
-      render: countryRenderer
+      render: countryRenderer,
+      style:{ 'whiteSpace': 'unset'}
     },
     {
       field: 'city',
@@ -61,7 +64,8 @@ const InstitutionsTable = (props) => {
       sortable: false,
       minWidth: 80,
       maxWidth: 130,
-      render: cityRenderer
+      render: cityRenderer,
+      style:{ 'whiteSpace': 'unset'}
     }
   ];
 

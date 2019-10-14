@@ -158,8 +158,8 @@ class AgencyForm extends Component {
   };
 
   renderActivities = (value) => {
-    const {activity_type, activity_description, activity_local_identifier, activity_valid_to} = value;
-    return `${activity_description}
+    const {activity_type, activity, activity_local_identifier, activity_valid_to} = value;
+    return `${activity}
        (${activity_type['type']}${activity_local_identifier ? `; ${activity_local_identifier})` : ')'}
        ${activity_valid_to ? activity_valid_to : ''}`;
   };
@@ -333,17 +333,18 @@ class AgencyForm extends Component {
       });
     }).then(() => {
       this.toggleLoading();
-      this.populateForm();
+      this.props.history.push(`/reference/agencies/view/${agencyID}`);
     }).catch(error => {
       this.toggleLoading();
     });
   };
 
   updateMyAgency = (values) => {
+    const { agencyID } = this.props;
     this.toggleLoading();
     values = updateFormNormalizer(values);
     values = this.mergeNames(values);
-    agency.updateMyAgency(values).then((response) => {
+    agency.updateMyAgency(values, agencyID).then((response) => {
       toast.success("Agency record was updated.");
       const decisionsResponse = response.data.decisions;
       decisionsResponse.forEach((decision, idx) => {
@@ -352,24 +353,26 @@ class AgencyForm extends Component {
       });
     }).then(() => {
       this.toggleLoading();
-      this.populateForm();
+      this.props.history.push(`/my-agencies/view/${agencyID}`);
     }).catch(error => {
       this.toggleLoading();
     });
   };
 
   onSubmit = (values) => {
-    const {formType, backPath} = this.props;
+    const {formType, backPath, location} = this.props;
+    const path = location.pathname;
+
     switch(formType) {
       case 'create':
         // this.createAgency(values);
         break;
       case 'edit':
         if (this.isEditable()) {
-          if (backPath.includes('/reference/agencies')) {
-            this.updateAgency(values);
-          } else {
+          if (path.includes('my-agencies')) {
             this.updateMyAgency(values);
+          } else {
+            this.updateAgency(values);
           }
         } else {
           this.props.history.push(backPath);
@@ -672,7 +675,6 @@ class AgencyForm extends Component {
                           </FormGroup>
                         </Col>
                       </Row>
-
                       <Row>
                         <Col md={12}>
                           <DecisionPopupForm
@@ -700,7 +702,18 @@ class AgencyForm extends Component {
                           />
                         </Col>
                       </Row>
-
+                      <Row>
+                        <Col md={12}>
+                          <FormGroup>
+                            <Label for="description_note" className={'required'}>Description Note</Label>
+                            <FormTextAreaFormatted
+                              field={'description_note'}
+                              disabled={this.isReadOnly()}
+                              validate={validateRequired}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
                       <Row>
                         <Col md={12}>
                           <AgencyActivityPopupForm
@@ -732,7 +745,7 @@ class AgencyForm extends Component {
                         <Col md={12}>
                           <FocusCountryPopupForm
                             modalOpen={focusCountryModalOpen}
-                            title={'Activity'}
+                            title={'Focus Country'}
                             onToggle={() => this.toggleModal('focusCountry')}
                             onFormSubmit={(idx, value) => this.onPopupFormSubmit(idx, value, 'focusCountry', 'focus_countries')}
                             formValue={focusCountryModalValue}
@@ -766,18 +779,6 @@ class AgencyForm extends Component {
                           </FormGroup>
                         </Col>
                       </Row>
-                      <Row>
-                        <Col md={12}>
-                          <FormGroup>
-                            <Label for="description_note" className={'required'}>Description Note</Label>
-                            <FormTextAreaFormatted
-                              field={'description_note'}
-                              disabled={this.isReadOnly()}
-                              validate={validateRequired}
-                            />
-                          </FormGroup>
-                        </Col>
-                      </Row>
                     </Col>
                   </Row>
                 </CardBody>
@@ -785,8 +786,8 @@ class AgencyForm extends Component {
                   <FormButtons
                     backPath={backPath}
                     userIsAdmin={userIsAdmin}
-                    //editButton={this.isEditable()}
-                    editButton={false}
+                    editButton={this.isEditable()}
+                    //editButton={false}
                     buttonText={'Agency'}
                     recordID={agencyID}
                     formType={formType}
@@ -801,7 +802,7 @@ class AgencyForm extends Component {
                   {formType === 'create' ? "" :
                     <Collapse isOpen={infoBoxOpen}>
                       <InfoBox
-                        id={formState.values.id}
+                        id={agencyID}
                         formState={formState.values}
                         disabled={readOnly}
                         userIsAdmin={userIsAdmin}

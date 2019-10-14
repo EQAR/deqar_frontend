@@ -3,11 +3,11 @@ import {Button, Col, Collapse, FormGroup, Label, Modal, ModalBody, ModalFooter, 
 import PropTypes from 'prop-types';
 import {Form, Scope} from 'informed';
 import FormTextField from "../../../components/FormFields/FormTextField";
-import {validateRequired} from "../../../utils/validators";
+import {validateRequiredUnique} from "../../../utils/validators";
 import country from '../../../services/Country';
 import FormSelectField from "../../../components/FormFields/FormSelectField";
 import list from "../../../services/List";
-import style from "../../../components/FormFieldsUncontrolled/AssignedList.module.css";
+import style from "./ProgrammePopupForm.module.css";
 
 class ProgrammePopupForm extends Component {
   constructor(props) {
@@ -38,9 +38,24 @@ class ProgrammePopupForm extends Component {
     }
   };
 
+  // Remove values
+  onNameRemove = (i, field) => {
+    const {alternativeNameCount} = this.state;
+    let values = this.formApi.getState().values;
+    if (values.hasOwnProperty('alternative_names')) {
+      values.alternative_names.splice(i, 1);
+      this.formApi.setValues(values);
+    }
+    this.setState({alternativeNameCount: alternativeNameCount - 1})
+  };
+
   // Submit the form
-  submitForm = () => {
-    this.formApi.submitForm();
+  onSubmit = (values) => {
+    const {formIndex} = this.props;
+    this.setState({
+      alternativeNameCount: 0
+    });
+    this.props.onFormSubmit(values, formIndex);
   };
 
   // Populate selects
@@ -73,18 +88,21 @@ class ProgrammePopupForm extends Component {
             <Row>
               <Col md={12}>
                 <FormGroup>
-                  <Label for="name_alternative">Alternative Programme Name # {c+1}</Label>
+                  <Label for="name_alternative">Alternative Programme Name # {c+1} / Qualification Name # {c+1}</Label>
                   <FormTextField
                     field={'name_alternative'}
                     placeholder={'Enter alternative programme name'}
-                    validate={validateRequired}
+                    validate={(value) => validateRequiredUnique(
+                      value,
+                      ['name_primary', 'alternative_names.name_alternative'],
+                      this.formApi.getState().values
+                    )}
                     disabled={disabled}
                   />
                 </FormGroup>
               </Col>
-              <Col md={12}>
+              <Col md={10}>
                 <FormGroup>
-                  <Label for="qualification_alternative">Qualification Name # {c+1}</Label>
                   <FormTextField
                     field={'qualification_alternative'}
                     placeholder={'Enter alternative qualification name'}
@@ -92,6 +110,17 @@ class ProgrammePopupForm extends Component {
                   />
                 </FormGroup>
               </Col>
+              {!disabled && (
+                <Col md={2}>
+                  <Button
+                    className={style.nameRemoveButton}
+                    color="link"
+                    onClick={(e) => this.onNameRemove(idx, 'alternative_names')}
+                  >
+                    <i className="fa fa-close"> </i>
+                  </Button>
+                </Col>
+              )}
             </Row>
           </Scope>
         </React.Fragment>
@@ -103,15 +132,10 @@ class ProgrammePopupForm extends Component {
   onAddButtonClick = () => {
     const {alternativeNameCount} = this.state;
     if(alternativeNameCount !== 0) {
-      let altNames = this.formApi.getValue('alternative_names');
-      altNames = altNames ? altNames : [{}];
-      const lastAltName = altNames.slice(-1).pop();
-
-      if(lastAltName) {
-        if ('name_alternative' in lastAltName) {
-          if (lastAltName.name_alternative.length > 0) {
-            this.setState({alternativeNameCount: alternativeNameCount + 1})
-          }
+      const alternativeNames = this.formApi.getValue('alternative_names');
+      if(alternativeNames) {
+        if (alternativeNames.length === alternativeNameCount) {
+          this.setState({alternativeNameCount: alternativeNameCount + 1})
         }
       }
     } else {
@@ -140,17 +164,16 @@ class ProgrammePopupForm extends Component {
   };
 
   render() {
-    const {modalOpen, title, disabled, formIndex} = this.props;
+    const {modalOpen, disabled, formIndex, title} = this.props;
     const {countryOptions, qfEHEALevelOptions, alternativeNameCount} = this.state;
 
     const titleText = `${this.renderActionName()} ${title}`;
-
     return(
       <Modal isOpen={modalOpen} toggle={this.onToggle}>
         <Form
           getApi={this.setFormApi}
-          onSubmit={(value) => this.props.onFormSubmit(value, formIndex)}
           id={`file-popup-form-${formIndex}`}
+          onSubmit={this.onSubmit}
         >
           {({ formState }) => (
             <React.Fragment>
@@ -163,7 +186,11 @@ class ProgrammePopupForm extends Component {
                       <FormTextField
                         field={'name_primary'}
                         placeholder={'Enter programme name for display'}
-                        validate={validateRequired}
+                        validate={(value) => validateRequiredUnique(
+                          value,
+                          ['name_primary', 'alternative_names.name_alternative'],
+                          this.formApi.getState().values
+                        )}
                         disabled={disabled}
                       />
                     </FormGroup>
@@ -243,7 +270,7 @@ class ProgrammePopupForm extends Component {
                 <Button
                   color="secondary"
                   type={'button'}
-                  onClick={this.props.onToggle}
+                  onClick={this.onToggle}
                   size="sm"
                 >
                   Close
@@ -252,10 +279,10 @@ class ProgrammePopupForm extends Component {
                   <Button
                     color="primary"
                     type={'button'}
-                    onClick={this.submitForm}
+                    onClick={() => this.formApi.submitForm()}
                     size="sm"
                   >
-                    {titleText}
+                    Save
                   </Button>
                 }
               </ModalFooter>

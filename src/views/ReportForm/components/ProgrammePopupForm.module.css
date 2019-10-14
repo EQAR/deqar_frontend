@@ -1,0 +1,14 @@
+.nameRemoveButton {
+    color: hsl(0,0%,80%);
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.nameRemoveButton:hover {
+    color: hsl(0,0%,60%);
+}
+
+.Button {
+    margin-left: 10px;
+    margin-bottom: 10px;
+}

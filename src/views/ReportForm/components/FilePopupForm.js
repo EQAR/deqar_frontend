@@ -10,8 +10,6 @@ import { FilePond, registerPlugin } from 'react-filepond';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import 'filepond/dist/filepond.min.css';
 
-import style from './FilePopupForm.module.css'
-
 registerPlugin(FilePondPluginFileValidateType);
 
 class FilePopupForm extends Component {
@@ -69,6 +67,7 @@ class FilePopupForm extends Component {
 
     if(disabled) {
       if(formValue && formValue.original_location) {
+        /*
         return (
           <React.Fragment>
             <Label for="file">File Original URL</Label>
@@ -77,6 +76,7 @@ class FilePopupForm extends Component {
             </div>
           </React.Fragment>
         )
+        */
       }
     } else {
       return(
@@ -124,9 +124,11 @@ class FilePopupForm extends Component {
   };
 
   // Submit the form
-  submitForm = () => {
+  onSubmit = (values) => {
+    const {formIndex} = this.props;
+
     this.props.onFormSubmitFile(this.state.files);
-    this.formApi.submitForm();
+    this.props.onFormSubmit(values, formIndex);
   };
 
   // Populate selects
@@ -189,7 +191,7 @@ class FilePopupForm extends Component {
   };
 
   render() {
-    const {modalOpen, disabled, title, formIndex} = this.props;
+    const {modalOpen, disabled, title} = this.props;
     const {languageOptions} = this.state;
 
     const titleText = `${this.renderActionName()} ${title}`;
@@ -198,8 +200,8 @@ class FilePopupForm extends Component {
       <Modal isOpen={modalOpen} toggle={this.props.onToggle}>
         <Form
           getApi={this.setFormApi}
-          onSubmit={(value) => this.props.onFormSubmit(value, formIndex)}
           id="file-popup-form"
+          onSubmit={this.onSubmit}
         >
           {({ formState }) => (
             <React.Fragment>
@@ -262,10 +264,10 @@ class FilePopupForm extends Component {
                   <Button
                     color="primary"
                     type={'button'}
-                    onClick={this.submitForm}
+                    onClick={() => this.formApi.submitForm()}
                     size="sm"
                   >
-                    {titleText}
+                    Save
                   </Button>
                 }
               </ModalFooter>

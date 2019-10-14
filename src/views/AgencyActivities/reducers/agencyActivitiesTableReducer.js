@@ -7,7 +7,7 @@ const initialState = {
   pageSize: 10,
   page: 0,
   total: 0,
-  sorted: [],
+  sorted: [{id: 'agency', desc: false}],
   filtered: [],
   filterOpen: false,
 };

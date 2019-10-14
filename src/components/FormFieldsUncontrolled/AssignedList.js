@@ -1,22 +1,52 @@
 import React from "react";
-import {Button, FormGroup, Label, ListGroup, ListGroupItem} from "reactstrap";
+import {Button, Col, FormGroup, Label, ListGroup, ListGroupItem, Row} from "reactstrap";
 import PropTypes from 'prop-types';
 import style from './AssignedList.module.css';
 import {Text} from "informed";
 import cx from 'classnames';
 
 const AssignedList = ({values, errors, label, btnLabel, field, fieldName, labelShowRequired, disabled, ...props}) => {
+  const renderEmpty = () =>(
+    <ListGroupItem className={cx(style.ListGroupItem,
+      {
+        [style.ListGroupItemHasError]: fieldHasError(),
+        [style.ListGroupItemDisabled]: disabled
+      })}>
+      <span className={field !== 'institutions' ? style.ListGroupItemName : undefined}> </span>
+    </ListGroupItem>
+  );
+
+  const renderListItemsRow = (values) => {
+    values = values ? values : [];
+
+    if (values.length > 0) {
+      return (
+        <Row>
+        {values.map((value, idx) => {
+            return(
+              <Col md={6} key={idx}>
+                <ListGroupItem
+                  className={cx(style.ListGroupItem,
+                    {
+                      [style.ListGroupItemHasError]: fieldHasError(),
+                      [style.ListGroupItemDisabled]: disabled
+
+                    })}
+                >
+              <span onClick={() => props.onClick(idx)} className={field !== 'institutions' ? style.ListGroupItemName : undefined}>
+                {props.renderDisplayValue(value)}
+              </span>
+                </ListGroupItem>
+              </Col>
+            )
+          })}
+        </Row>
+      )
+    }
+  };
+
   const renderListItems = (values) => {
     values = values ? values : [];
-    const emptyBox = (
-      <ListGroupItem className={cx(style.ListGroupItem,
-        {
-          [style.ListGroupItemHasError]: fieldHasError(),
-          [style.ListGroupItemDisabled]: disabled
-        })}>
-        <span className={style.ListGroupItemName}> </span>
-      </ListGroupItem>
-    );
 
     if (values.length > 0) {
       const banned = values.banned ? values.banned : false;
@@ -31,7 +61,7 @@ const AssignedList = ({values, errors, label, btnLabel, field, fieldName, labelS
               })}
             key={idx}
           >
-            <span onClick={() => props.onClick(idx)} className={style.ListGroupItemName}>
+            <span onClick={() => props.onClick(idx)} className={field !== 'institutions' ? style.ListGroupItemName : undefined}>
               {props.renderDisplayValue(value)}
             </span>
             { disabled || banned ? "" :
@@ -43,7 +73,7 @@ const AssignedList = ({values, errors, label, btnLabel, field, fieldName, labelS
         )
       });
     } else {
-      return emptyBox;
+      return renderEmpty();
     }
   }
 
@@ -82,7 +112,7 @@ const AssignedList = ({values, errors, label, btnLabel, field, fieldName, labelS
             className={style.Button}
           >{btnLabel}</Button> : null}
         <ListGroup className={style.ListGroup}>
-          {renderListItems(values)}
+          {field === 'focus_countries' ? renderListItemsRow(values) : renderListItems(values)}
         </ListGroup>
         {displayErrors(errors, field)}
 

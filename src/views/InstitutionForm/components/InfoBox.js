@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Col from "reactstrap/es/Col";
-import Row from "reactstrap/es/Row";
+import Col from 'reactstrap/es/Col';
+import Row from 'reactstrap/es/Row';
 
-import style from "./InfoBox.module.css"
-import { FormGroup, ListGroup } from "reactstrap";
-import Label from "reactstrap/es/Label";
-import moment from "moment";
-import FormTextField from "../../../components/FormFields/FormTextField";
+import style from './InfoBox.module.css'
+import { FormGroup, ListGroup } from 'reactstrap';
+import Label from 'reactstrap/es/Label';
+import moment from 'moment';
+import FormTextField from '../../../components/FormFields/FormTextField';
 import cx from 'classnames';
-import FlagForm from './FlagForm';
-import AssignedList from '../../../components/FormFieldsUncontrolled/AssignedList';
-import {Text} from "informed";
+import { Text } from 'informed';
+import ListGroupItem from "reactstrap/es/ListGroupItem";
 
 
 class InfoBox extends Component {
@@ -26,49 +25,76 @@ class InfoBox extends Component {
   }
 
   flagRender = (value) => {
-    return {
-      none: 'badge badge-success',
-      low_level: 'badge badge-warning',
-      high_level: 'badge badge-danger'
-    }[value.replace(' ', '_')]
-  }
-
-  renderFlags = value => (
-    <Row>
-      <Col xs={4}>
-        <span className={this.flagRender(value.flag)}>{value.flag}</span>
-      </Col>
-      <Col xs={8}>
-        <span>{value.flag_message}</span>
-      </Col>
-    </Row>
-  )
-
-  onFlagRemove = (i) => {
-    let { flags } =  this.props.formState.values;
-
-    if (flags[0].flag !== 'none') {
-      flags.splice(i, 1);
+    let className = '';
+    switch(value) {
+      case 'none':
+        className = 'badge badge-success';
+        break;
+      case 'low level':
+        className = 'badge badge-warning';
+        break;
+      case 'high level':
+        className = 'badge badge-danger';
+        break;
+      default:
+        return null;
     }
-    if (flags.length === 0) {
-      flags = [{flag: 'none', flag_message: 'Institution has no flag assigned', banned: true}];
+    return(<span className={className}>{value}</span>);
+  };
+
+  renderFlags = () => {
+    const { formState, userIsAdmin } = this.props;
+    if(Object.entries(formState).length !== 0) {
+      const {flags} = formState;
+      if(flags && flags.length > 0) {
+        return flags.map((flag, idx) => {
+          if(flag.active) {
+            if(userIsAdmin) {
+              return(
+                <ListGroupItem key={idx} className={style.ListGroupItem}>
+                  <Col xs={2} className={style.flagInfo}>
+                    {this.flagRender(flag.flag)}
+                  </Col>
+                  <Col xs={9} className={style.flagMessage}>
+                    <span>{flag.flag_message}</span>
+                  </Col>
+                  <Col xs={1} className={style.flagInfo}>
+                    <div className={style.removeButton + " pull-right"} onClick={() => {this.props.onRemoveFlag(flag.id)}}>
+                      <i className="fa fa-close"> </i>
+                    </div>
+                  </Col>
+                </ListGroupItem>
+              )
+            } else {
+              return(
+                <ListGroupItem key={idx} className={style.ListGroupItem}>
+                  <Col xs={2} className={style.flagInfo}>
+                    {this.flagRender(flag.flag)}
+                  </Col>
+                  <Col xs={10} className={style.flagMessage}>
+                    <span>{flag.flag_message}</span>
+                  </Col>
+                </ListGroupItem>
+              )
+            }
+          } else {
+            return(undefined)
+          }
+        });
+      } else {
+        return (
+          <ListGroupItem className={style.ListGroupItem} disabled={true}>
+            <Col xs={2} className={style.flagInfo}>
+              {this.flagRender('none')}
+            </Col>
+            <Col xs={10} className={style.flagMessage}>
+              <span>Institution record has no flag assigned</span>
+            </Col>
+          </ListGroupItem>
+        )
+      }
     }
-    this.props.formState.values.flags = flags;
-    this.setState({
-      flags: flags
-    });
-  }
-
-  onFlagClick = (index) => {
-    let { flags } =  this.props.formState.values;
-
-    this.setState({
-      flagValue: flags[index],
-      flagIndex: index
-    });
-
-    this.toggleModal();
-  }
+  };
 
   onFormSubmit = (value, i) => {
     let { flags } =  this.props.formState.values;
@@ -90,22 +116,14 @@ class InfoBox extends Component {
     })
   }
 
-  onAddFlagClick = () => {
-    this.setState({
-      flagValue: null,
-      flagIndex: null
-    });
-    this.toggleModal();
-  }
-
   renderURL = () => {
-    const { id } = this.props.formState.values;
+    const { name_primary, id } = this.props.formState.values;
 
-    if (id) {
+    if (name_primary && id) {
       return (
         <React.Fragment>
           <a href={`https://www.eqar.eu/qa-results/institution/?id=${id}`} target={'new'}>
-            {`https://www.eqar.eu/qa-results/institution/?id=${id}`}
+            {name_primary}
           </a>
         </React.Fragment>
       )
@@ -113,7 +131,7 @@ class InfoBox extends Component {
   }
 
   renderUpdateLog = () => {
-    const {formState} = this.props;
+    const { formState } = this.props;
 
     if (Object.entries(formState).length !== 0) {
       const updateLogs = formState.values['update_log'];
@@ -147,7 +165,6 @@ class InfoBox extends Component {
 
   render() {
     const { formState, disabled } = this.props;
-    const { openModal, flagValue, flagIndex } = this.state;
     const values = formState.values;
 
     return (
@@ -160,7 +177,8 @@ class InfoBox extends Component {
                   <Label for="deqar_id">DEQARINST ID</Label>
                   <FormTextField
                     field={'deqar_id'}
-                    disabled
+                    disabled={disabled}
+                    className={disabled ? style.disabledInput : ''}
                   />
                 </FormGroup>
               </Col>
@@ -169,7 +187,8 @@ class InfoBox extends Component {
                   <Label for="eter_id">ETER ID</Label>
                   <FormTextField
                     field={'eter_id'}
-                    disabled
+                    disabled={disabled}
+                    className={disabled ? style.disabledInput : ''}
                   />
                 </FormGroup>
               </Col>
@@ -182,29 +201,13 @@ class InfoBox extends Component {
                     {this.renderURL()}
                   </ListGroup>
                 </FormGroup>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <FlagForm
-                  modalOpen={openModal}
-                  onToggle={() => this.toggleModal()}
-                  onFormSubmit={this.onFormSubmit}
-                  formValue={flagValue}
-                  formIndex={flagIndex}
-                />
-                <AssignedList
-                  errors={formState.errors}
-                  valueFields={['request']}
-                  values={values.flags}
-                  label={'Flags'}
-                  btnLabel={'Add'}
-                  onRemove={this.onFlagRemove}
-                  renderDisplayValue={this.renderFlags}
-                  onAddButtonClick={this.onAddFlagClick}
-                  onClick={this.onFlagClick}
-                  field={'flags'}
-                />
+                <FormGroup>
+                  <Label>Current flags</Label>
+                  <Text field={'flags'} hidden={true}/>
+                  <ListGroup>
+                    {this.renderFlags()}
+                  </ListGroup>
+                </FormGroup>
               </Col>
             </Row>
           </Col>
@@ -217,7 +220,8 @@ class InfoBox extends Component {
                     field={'internal_note'}
                     placeholder={'Enter note, if necessary'}
                     disabled={disabled}
-                    />
+                    className={disabled ? style.disabledInput : ''}
+                  />
                 </FormGroup>
               </Col>
               </Row>
@@ -229,7 +233,7 @@ class InfoBox extends Component {
                     {this.renderUpdateLog()}
                     <Text field={'created_at'} hidden={true}/>
                     <input
-                      className={cx(style.infoInput, 'form-control')}
+                      className={cx(style.disabledInput, 'form-control')}
                       disabled={true}
                       value={`Record created: ${this.renderDate(values.created_at)}`}
 
