@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Col, Collapse, Row} from "reactstrap";
 import {Scope} from "informed";
-import style from "../../views/AgencyForm/AgencyForm.module.css";
+import style from "../../views/Forms/FormFields/AgencyForm/AgencyForm.module.css";
 
 class FormTextArrayField extends Component {
   constructor(props) {

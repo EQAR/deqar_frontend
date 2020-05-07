@@ -30,12 +30,12 @@ class Report {
     return axios.put(`${POST_FILE}/${reportFileID}/${file.name}`, file);
   };
 
-  selectStatus = () => {
-    return axios.get(GET_STATUSES);
+  selectStatus = (configParams) => {
+    return axios.get(GET_STATUSES, configParams);
   };
 
-  selectDecisions = () => {
-    return axios.get(GET_DECISIONS);
+  selectDecisions = (configParams) => {
+    return axios.get(GET_DECISIONS, configParams);
   };
 
   getReports = (params) => {
@@ -44,6 +44,10 @@ class Report {
 
   getMyReports = (params) => {
     return axios.get(GET_MY_REPORTS, { params: params });
+  };
+
+  createReport = (formValues) => {
+    return axios.post(`${MANAGE_REPORT}/`, formValues);
   };
 
   getReport = (reportID) => {

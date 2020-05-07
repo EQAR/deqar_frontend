@@ -1,0 +1,56 @@
+.Label {
+  margin-left: 0;
+}
+
+.ListGroup {
+  margin-left: 0;
+}
+
+.ErrorText {
+  margin-left: 0;
+}
+
+.ListGroupItem {
+  border-style: dashed;
+  vertical-align: middle;
+  padding-left: 10px;
+  min-height: 35px;
+  display: flex;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+.ListGroupItemDisabled {
+  border: unset;
+  background-color: hsl(0,0%,99%);
+}
+
+.ListGroupItemHasError {
+  border-color: #f86c6b;
+}
+
+.ListGroupItemName {
+  color: hsl(0,0%,40%);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  cursor: pointer;
+  order: 1;
+}
+
+.Button {
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.removeButton {
+  color: hsl(0,0%,80%);
+  order: 2;
+  text-align:right;
+  flex-grow: 1;
+  margin-left: 15px;
+  cursor: pointer;
+}
+
+.removeButton:hover {
+  color: hsl(0,0%,60%);
+}

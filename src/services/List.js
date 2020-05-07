@@ -2,8 +2,8 @@ import axios from 'axios';
 import {GET_ASSOCIATIONS, GET_EQAR_DECISIONS, GET_FLAGS, GET_QFEHEA_LEVELS} from "./config-api";
 
 class List {
-  selectQFEHEALevels = () => {
-    return axios.get(GET_QFEHEA_LEVELS);
+  selectQFEHEALevels = (configParams) => {
+    return axios.get(GET_QFEHEA_LEVELS, configParams);
   };
 
   selectFlags = () => {

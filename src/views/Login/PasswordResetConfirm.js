@@ -12,8 +12,7 @@ import {
 } from 'reactstrap';
 import { Form, Text } from 'informed';
 import {Link} from 'react-router-dom';
-import LaddaButton, {EXPAND_RIGHT} from 'react-ladda';
-import 'ladda/dist/ladda-themeless.min.css';
+import LaddaButton, {EXPAND_RIGHT} from '@zumper/react-ladda';
 import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import {checkFormCanBeSubmitted} from '../../utils/checkFormCanBeSubmitted';

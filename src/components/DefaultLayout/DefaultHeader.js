@@ -50,7 +50,7 @@ class DefaultHeader extends Component {
                 name={'('+username+')'}
               />
             </DropdownToggle>
-            <DropdownMenu right style={{ right: 'auto' }}>
+            <DropdownMenu right>
               <DropdownItem header tag="div" className="text-center"><strong>{username}</strong></DropdownItem>
               <DropdownItem onClick={() => this.props.history.push('/my-profile')}>
                   <i className="fa fa-user"> </i> Profile

@@ -1,0 +1,13 @@
+.RemoveButton {
+    color: hsl(0,0%,80%);
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.RemoveButton:hover {
+    color: hsl(0,0%,60%);
+}
+
+.Button {
+    margin-bottom: 10px;
+}

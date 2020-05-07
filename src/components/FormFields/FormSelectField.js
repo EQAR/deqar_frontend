@@ -1,13 +1,13 @@
 import React from 'react';
 import { asField } from 'informed';
 import Select from 'react-select';
-import { style } from './selectStyle';
+import { style } from './FormSelectField/FormSelectFieldStyle';
 
 const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
   const { value } = fieldState;
   const { setValue, setTouched, setError } = fieldApi;
   const { onChange, onBlur, initialValue, forwardedRef, labelField, valueField, disabled, placeholder, includeID,
-    isMulti, givenValue, ...rest } = props;
+    isMulti, givenValue, optionsAPI, ...rest } = props;
   const borderColor = fieldApi.getError() ? '#f86c6b' : '#e4e7ea';
   const customStyles = style(borderColor);
 
@@ -92,7 +92,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, ...props }) => {
       ) : null}
     </React.Fragment>
   )
-})
+});
 
 FormSelectField.defaultProps = {
   includeID: false

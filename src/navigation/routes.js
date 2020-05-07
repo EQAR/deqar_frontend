@@ -1,19 +1,19 @@
 import React from "react";
 
-const MyProfile = React.lazy(() => import('../views/MyProfile/MyProfile'));
-const CSVUpload = React.lazy(() => import('../views/CSVUpload/CSVUpload'));
-const Institutions = React.lazy(() => import('../views/Institutions/Institutions'));
-const InstitutionDetails = React.lazy(() => import('../views/InstitutionDetails/InstitutionDetails'));
-const MyReports = React.lazy(() => import('../views/MyReports/MyReports'));
-const Reports = React.lazy(() => import('../views/Reports/Reports'));
-const ReportDetails = React.lazy(() => import('../views/ReportDetails/ReportDetails'));
-const ReportSubmission = React.lazy(() => import('../views/ReportDetails/ReportSubmission'));
-const MyReportDetails = React.lazy(() => import('../views/ReportDetails/MyReportDetails'));
-const MyAgencies = React.lazy(() => import('../views/MyAgencies/MyAgencies'));
-const MyAgencyDetails = React.lazy(() => import('../views/AgencyDetails/MyAgencyDetails'));
-const Agencies = React.lazy(() => import('../views/Agencies/Agencies'));
-const AgencyActivities = React.lazy(() => import('../views/AgencyActivities/AgencyActivities'));
-const AgencyDetails = React.lazy(() => import('../views/AgencyDetails/AgencyDetails'));
+const MyProfile = React.lazy(() => import('../views/MyData/MyProfile/MyProfile'));
+const CSVUpload = React.lazy(() => import('../views/SubmitReports/CSVUpload/CSVUpload'));
+const Institutions = React.lazy(() => import('../views/ReferenceData/Institutions/Institutions'));
+const InstitutionDetails = React.lazy(() => import('../views/Forms/FormOpeners/InstitutionDetails'));
+const MyReports = React.lazy(() => import('../views/MyData/MyReports/MyReports'));
+const Reports = React.lazy(() => import('../views/ReferenceData/Reports/Reports'));
+const ReportDetails = React.lazy(() => import('../views/Forms/FormOpeners/ReportDetails'));
+const ReportSubmission = React.lazy(() => import('../views/SubmitReports/ManualSubmission/ReportSubmission'));
+const MyReportDetails = React.lazy(() => import('../views/Forms/FormOpeners/MyReportDetails'));
+const MyAgencies = React.lazy(() => import('../views/MyData/MyAgencies/MyAgencies'));
+const MyAgencyDetails = React.lazy(() => import('../views/Forms/FormOpeners/MyAgencyDetails'));
+const Agencies = React.lazy(() => import('../views/ReferenceData/Agencies/Agencies'));
+const AgencyActivities = React.lazy(() => import('../views/ReferenceData/AgencyActivities/AgencyActivities'));
+const AgencyDetails = React.lazy(() => import('../views/Forms/FormOpeners/AgencyDetails'));
 const Page401 = React.lazy(() => import('../components/DefaultLayout/Page401'));
 
 const routes = [

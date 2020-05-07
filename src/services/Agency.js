@@ -25,11 +25,11 @@ class Agency {
     return axios.put(`${MANAGE_MY_AGENCY}${agencyID}/`, formValues);
   };
 
-  selectActivity = (agencyID, params=null) => {
+  selectActivity = (agencyID, params) => {
     if(agencyID) {
       return axios.get(`${GET_ACTIVITIES}${agencyID}/`);
     } else {
-      return axios.get(`${GET_ACTIVITIES}`, {params: params});
+      return axios.get(`${GET_ACTIVITIES}`, params);
     }
   };
 
