@@ -81,10 +81,9 @@ class CSVGrid extends Component {
     this.gridAPI.forEachNode((node, idx) => {
       const data = results[idx];
       if(data.submission_status === 'success') {
-        res.push(data.submitted_report);
-      } else {
-        res.push(node.data);
+        node.data['report_id'] = data.submitted_report['report_id'];
       }
+      res.push(node.data);
     });
     this.gridAPI.setRowData(res);
   };
