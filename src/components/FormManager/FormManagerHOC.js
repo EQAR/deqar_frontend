@@ -13,7 +13,6 @@ const withFormManager = (OriginalForm) => {
     constructor(props) {
       super(props);
       this.state = {
-        uploadedFile: null,
         alertVisible: false,
         nonFieldErrors: [],
         loading: false,

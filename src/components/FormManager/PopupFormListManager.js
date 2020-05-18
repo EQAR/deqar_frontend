@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Col, Row} from "reactstrap";
 import FormAssignedList from "../FormFields/FormAssignedList/FormAssignedList";
 
-const PopupFormListManager = ({disabled, label, btnLabel='Add', field, labelShowRequired=false, renderDisplayValue, columns=1, formApi, validate, ...props}) => {
+const PopupFormListManager = ({disabled, label, btnLabel='Add', field, labelShowRequired=false, renderDisplayValue, columns=0, formApi, validate, ...props}) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [formIndex, setFormIndex] = useState(undefined);
   const [formValue, setFormValue] = useState({});

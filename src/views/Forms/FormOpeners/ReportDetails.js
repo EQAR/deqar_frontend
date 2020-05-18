@@ -24,7 +24,6 @@ const ReportDetails = ({...props}) => {
           create: createFormNormalizer,
           update: updateFormNormalizer
         }}
-        fileFields={['report_files']}
         module={'report'}
         formTitle={param === 'view' ?
           `Reference Data » Reports » View & Edit : DEQAR ID ${id}` :

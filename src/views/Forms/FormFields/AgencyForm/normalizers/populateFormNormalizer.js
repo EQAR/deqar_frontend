@@ -18,6 +18,5 @@ export const decodeNameData = (formValues) => {
 export const encodeNameData = (formValues) => {
   let {former_names, current_names, ...values} = formValues;
   values['names'] = [...current_names, ...former_names];
-  console.log(values);
   return values;
 };

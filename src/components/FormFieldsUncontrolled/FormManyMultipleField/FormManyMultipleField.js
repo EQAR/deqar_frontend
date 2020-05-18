@@ -3,12 +3,12 @@ import {Scope} from "informed";
 import {Button, Col} from "reactstrap";
 import style from "./FormManyMultipleField.module.css";
 
-const FormManyMultipleField = ({disabled, scopeName, data, extra=0, formApi, render, ...props}) => {
-  const [count, setCount] = useState(extra);
+const FormManyMultipleField = ({disabled, scopeName, data, formApi, render, ...props}) => {
+  const [count, setCount] = useState(1);
 
   // componentDidMount
   useEffect(() => {
-    setCount(data ? data.length + extra : extra);
+    setCount(data ? data.length : 1);
   }, [data]);
 
   const onAddButtonClick = () => {
@@ -28,6 +28,8 @@ const FormManyMultipleField = ({disabled, scopeName, data, extra=0, formApi, ren
     if (values.hasOwnProperty(scopeName)) {
       values[scopeName].splice(idx, 1);
       formApi.setValues(values);
+    } else {
+      setCount(count-1);
     }
   };
 

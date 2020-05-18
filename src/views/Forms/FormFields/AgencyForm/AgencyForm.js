@@ -25,8 +25,9 @@ import MembershipSubform from "./components/MembershipSubform";
 import FormSelectField from "../../../../components/FormFields/FormSelectField/FormSelectField";
 import country from "../../../../services/Country";
 import FocusCountrySubform from "./components/FocusCountrySubform";
-import FormManySingleField from "../../../../components/FormFieldsUncontrolled/FormManySingleField/FormManySingleField";
 import NameSubform from "./components/NameSubform";
+import FormManyTextField from "../../../../components/FormFields/FormManyTextField/FormManyTextField";
+import DecisionSubform from "./components/DecisionSubform";
 
 
 const AgencyForm = ({formType, formApi, formState, readOnly}) => {
@@ -135,21 +136,19 @@ const AgencyForm = ({formType, formApi, formState, readOnly}) => {
         </Row>
         <Row>
           <Col md={6}>
-            <FormManySingleField
-              label={'Contact Phone'}
-              required={true}
-              disabled={readOnly}
-              scopeName={'phone_numbers'}
-              formApi={formApi}
-              data={formState.values['phone_numbers']}
-              extra={1}
-            >
-              <FormTextField
+            <FormGroup>
+              <FormManyTextField
+                label={'Contact Phone'}
+                data={formState.values['phone_numbers']}
+                scopeName={'phone_numbers'}
                 field={'phone'}
-                placeholder={'Enter phone number'}
+                required={true}
                 disabled={readOnly}
+                formApi={formApi}
+                placeholder={'Enter phone number'}
+                validate={validateRequired}
               />
-            </FormManySingleField>
+            </FormGroup>
           </Col>
           <Col md={6}>
             <FormGroup>
@@ -164,21 +163,19 @@ const AgencyForm = ({formType, formApi, formState, readOnly}) => {
         </Row>
         <Row>
           <Col md={12}>
-            <FormManySingleField
-              label={'Contact Email'}
-              required={true}
-              disabled={readOnly}
-              scopeName={'emails'}
-              formApi={formApi}
-              data={formState.values['emails']}
-              extra={1}
-            >
-              <FormTextField
+            <FormGroup>
+              <FormManyTextField
+                label={'Contact Email'}
+                data={formState.values['emails']}
+                scopeName={'emails'}
                 field={'email'}
-                placeholder={'Enter contact email address for agency'}
+                required={true}
                 disabled={readOnly}
+                formApi={formApi}
+                placeholder={'Enter contact email address for agency'}
+                validate={validateRequired}
               />
-            </FormManySingleField>
+            </FormGroup>
           </Col>
         </Row>
         <Row>
@@ -272,7 +269,16 @@ const AgencyForm = ({formType, formApi, formState, readOnly}) => {
         </Row>
         <Row>
           <Col md={12}>
-            // Decision Popup
+            <PopupFormListManager
+              label={'EQAR Decisions'}
+              field={'decisions'}
+              formApi={formApi}
+              renderDisplayValue={renderDecisions}
+              labelShowRequired={true}
+              disabled={readOnly}
+            >
+              <DecisionSubform />
+            </PopupFormListManager>
           </Col>
         </Row>
         <Row>

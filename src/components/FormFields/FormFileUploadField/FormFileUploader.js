@@ -7,19 +7,19 @@ import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import 'filepond/dist/filepond.min.css';
 import style from './FormFileUploader.module.css';
 
-const FormFileUploader = ({ api, state, disabled }) => {
+const FormFileUploader = ({ api, state, disabled, label, nameField, sizeField, fileField='file', uploadField }) => {
   registerPlugin(FilePondPluginFileEncode, FilePondPluginFileValidateType);
 
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
-    if (state.filename) {
+    if (state[nameField]) {
       setFiles([{
         options: {
           type: 'local',
           file: {
-            name: state.filename,
-            size: state.filesize,
+            name: state[nameField],
+            size: state[sizeField],
             type: 'application/pdf'
           }
         }
@@ -29,27 +29,27 @@ const FormFileUploader = ({ api, state, disabled }) => {
 
   const onRemoveFile = (error, file) => {
     setFiles([]);
-    api.setValue('filename', '');
-    api.setValue('filesize', '');
-    api.setValue('fileupload', '');
+    api.setValue(nameField, '');
+    api.setValue(sizeField, '');
+    api.setValue(uploadField, '');
   };
 
   const onAddFile = (error, file) => {
     if (file.origin !== 3) {
       setFiles([file]);
-      api.setValue('filename', file.filename);
-      api.setValue('filesize', file.fileSize);
-      api.setValue('fileupload', file.getFileEncodeBase64String());
+      api.setValue(nameField, file.filename);
+      api.setValue(sizeField, file.fileSize);
+      api.setValue(uploadField, file.getFileEncodeBase64String());
     }
   };
 
   if (disabled) {
-    if (state.file) {
+    if (state[fileField]) {
       return(
         <React.Fragment>
-          <Label for="file">File</Label>
+          <Label>{label}</Label>
           <div className={style.Download}>
-            <a href={state.file} target={'new'}>Download file from DEQAR</a>
+            <a href={state[fileField]} target={'new'}>Download file from DEQAR</a>
           </div>
         </React.Fragment>
       )
@@ -59,9 +59,12 @@ const FormFileUploader = ({ api, state, disabled }) => {
   } else {
     return (
       <React.Fragment>
-        <Text field={'filename'} hidden />
-        <Text field={'filesize'} hidden />
-        <Text field={'fileupload'} hidden />
+        {
+          label && <Label>{label}</Label>
+        }
+        <Text field={nameField} hidden />
+        <Text field={sizeField} hidden />
+        <Text field={uploadField} hidden />
         <FilePond
           allowFileEncode={true}
           files={files}

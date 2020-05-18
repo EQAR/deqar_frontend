@@ -1,13 +1,13 @@
 import React from "react";
 import { asField } from 'informed';
-import {Button, FormGroup, Label, ListGroup, ListGroupItem} from "reactstrap";
+import {Button, Col, FormGroup, Label, ListGroup, ListGroupItem, Row} from "reactstrap";
 import PropTypes from 'prop-types';
 import style from './FormAssignedList.module.css';
 import {Text} from "informed";
 import cx from 'classnames';
 
 
-const FormAssignedList = asField(({ fieldState, fieldApi, columns, ...props }) => {
+const FormAssignedList = asField(({ fieldState, fieldApi, columns=0, ...props }) => {
   const { value, error } = fieldState;
   const { setValue } = fieldApi;
   const { field, label, btnLabel, labelShowRequired, renderDisplayValue, onClick, disabled } = props;
@@ -31,7 +31,7 @@ const FormAssignedList = asField(({ fieldState, fieldApi, columns, ...props }) =
     </ListGroupItem>
   );
 
-  const renderListItems = () => {
+  const renderListItems = (columns, col) => {
     if (value) {
       if (value.length > 0) {
         const banned = value.banned ? value.banned : false;
@@ -69,6 +69,14 @@ const FormAssignedList = asField(({ fieldState, fieldApi, columns, ...props }) =
     }
   };
 
+  const renderListGroup = () => {
+    return (
+      <ListGroup className={style.ListGroup}>
+        {renderListItems()}
+      </ListGroup>
+    )
+  };
+
   const displayErrors = () => {
     if (error) {
       return(<small name="scroll-to-element" className={cx('help-block form-text text-danger', style.ErrorText)}>{error}</small>)
@@ -93,9 +101,7 @@ const FormAssignedList = asField(({ fieldState, fieldApi, columns, ...props }) =
             onClick={props.onAddButtonClick}
             className={style.Button}
           >{btnLabel}</Button> : null}
-        <ListGroup className={style.ListGroup}>
-          {renderListItems()}
-        </ListGroup>
+        {renderListGroup()}
         {displayErrors()}
       </FormGroup>
     </div>

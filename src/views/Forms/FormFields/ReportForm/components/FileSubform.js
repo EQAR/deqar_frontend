@@ -26,6 +26,10 @@ const FileSubform = ({formApi, formState, disabled}) => {
       </Col>
       <Col md={12}>
         <FormFileUploader
+          label={'File'}
+          nameField={'filename'}
+          sizeField={'filesize'}
+          uploadField={'fileupload'}
           api={formApi}
           state={formState.values}
           disabled={disabled}

@@ -16,11 +16,13 @@ export const updateFormNormalizer = (formValues) => {
             if('id' in v) {
               if(['activities', 'decisions', 'focus_countries', 'memberships', 'names'].includes(key)) {
                 normalizedForm[key].push(updateFormNormalizer(v))
-              } else if (['emails', 'phone_numbers', 'agency_name_versions'].includes(key)) {
+              } else if (['agency_name_versions', 'phone_numbers', 'emails'].includes(key)) {
                 normalizedForm[key].push(v);
               } else {
                 normalizedForm[key].push(v.id);
               }
+            } else {
+              normalizedForm[key].push(v);
             }
           });
           break;

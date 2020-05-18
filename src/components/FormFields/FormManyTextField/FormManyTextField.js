@@ -1,15 +1,17 @@
 import React, {useState, useEffect} from 'react';
-import {Scope} from "informed";
+import {Scope, Text} from "informed";
 import {Button, Col, FormGroup, InputGroup, InputGroupAddon, Label, Row} from "reactstrap";
-import style from "./FormManySingleField.module.css";
+import style from "./FormManyTextField.module.css";
+import FormRemovableTextField from "./FormRemovableTextField";
 
-const FormManySingleField = ({disabled, scopeName, label, data, extra=0, required=false, formApi, render, ...props}) => {
+const FormManyTextField = ({disabled, scopeName, data, field, label, required=false, formApi, validate, placeholder, ...props}) => {
+  const extra = 1;
   const [count, setCount] = useState(extra);
 
   // componentDidMount
   useEffect(() => {
     setCount(data ? data.length : extra);
-  }, [data, extra]);
+  }, [data]);
 
   const onAddButtonClick = () => {
     if (count === 0) {
@@ -26,8 +28,15 @@ const FormManySingleField = ({disabled, scopeName, label, data, extra=0, require
   const onRemoveButtonClick = (idx) => {
     let values = formApi.getState().values;
     if (values.hasOwnProperty(scopeName)) {
-      values[scopeName].splice(idx, 1);
+      if (idx === 0) {
+        const obj = values[scopeName][idx];
+        obj[field] = "";
+      } else {
+        values[scopeName].splice(idx, 1);
+      }
       formApi.setValues(values);
+    } else {
+      setCount(count-1);
     }
   };
 
@@ -42,19 +51,14 @@ const FormManySingleField = ({disabled, scopeName, label, data, extra=0, require
               <Scope scope={scope}>
                 <FormGroup row>
                   <Col md={12}>
-                    <InputGroup>
-                      {props.children}
-                      {!disabled && (
-                        <InputGroupAddon addonType="append">
-                          <Button
-                            color="secondary"
-                            onClick={(e) => onRemoveButtonClick(idx)}
-                          >
-                            <i className="fa fa-trash-o"> </i>
-                          </Button>
-                        </InputGroupAddon>
-                      )}
-                    </InputGroup>
+                    <Text field={'id'} hidden />
+                    <FormRemovableTextField
+                      onRemoveButtonClick={() => onRemoveButtonClick(idx)}
+                      field={field}
+                      placeholder={placeholder}
+                      disabled={disabled}
+                      validate={validate}
+                    />
                   </Col>
                 </FormGroup>
               </Scope>
@@ -83,4 +87,4 @@ const FormManySingleField = ({disabled, scopeName, label, data, extra=0, require
   )
 };
 
-export default FormManySingleField;
+export default FormManyTextField;
