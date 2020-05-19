@@ -35,7 +35,8 @@ const withPopupFormManager = (OriginalPopupForm) => {
     };
 
     render() {
-      const {formIndex, field, title, readOnly, modalOpen, disabled} = this.props;
+      const {formIndex, field, title, readOnly, modalOpen, disabled, submitDisabled} = this.props;
+      const submitButtonDisabled = submitDisabled !== undefined ? submitDisabled : disabled;
       const titleText = `${this.renderActionName()} ${title}`;
 
       return(
@@ -65,7 +66,7 @@ const withPopupFormManager = (OriginalPopupForm) => {
                   >
                     Close
                   </Button>
-                  { disabled ? "" :
+                  { submitButtonDisabled ? "" :
                     <Button
                       color="primary"
                       type={'button'}

@@ -1,14 +1,16 @@
 import React from 'react';
-import {Col, FormGroup, Label, ModalBody, Row} from "reactstrap";
+import {Col, FormGroup, Label, Row} from "reactstrap";
 import withPopupFormManager from "../../../../../components/FormManager/PopupFormManagerHOC";
 import FormTextField from "../../../../../components/FormFields/FormTextField/FormTextField";
-import {Checkbox, TextArea} from "informed";
+import {TextArea} from "informed";
 import FormManyMultipleField from "../../../../../components/FormFieldsUncontrolled/FormManyMultipleField/FormManyMultipleField";
 import {validateRequiredUnique} from "../../../../../utils/validators";
 import validatePrimaryCheckbox from "../validators/validatePrimaryCheckbox";
 import FormCheckbox from "../../../../../components/FormFields/FormCheckbox/FormCheckbox";
 
-const NameSubform = ({formApi, formState, disabled}) => {
+const NameSubform = ({formApi, formState, formType}) => {
+  const disabled = formType === 'view';
+
   const onCheckboxClick = (field, index, checked) => {
     if (checked) {
       const values = formState.values;

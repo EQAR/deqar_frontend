@@ -1,6 +1,6 @@
 import React from "react";
 import { asField } from 'informed';
-import {Button, Col, FormGroup, Label, ListGroup, ListGroupItem, Row} from "reactstrap";
+import {Button, FormGroup, Label, ListGroup, ListGroupItem} from "reactstrap";
 import PropTypes from 'prop-types';
 import style from './FormAssignedList.module.css';
 import {Text} from "informed";

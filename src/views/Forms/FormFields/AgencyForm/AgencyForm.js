@@ -30,7 +30,7 @@ import FormManyTextField from "../../../../components/FormFields/FormManyTextFie
 import DecisionSubform from "./components/DecisionSubform";
 
 
-const AgencyForm = ({formType, formApi, formState, readOnly}) => {
+const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) => {
   const renderDecisions = (value) => {
     const {decision_file_name, decision_type, decision_date} = value;
     return `${decision_type['type']}, ${decision_date} (${decision_file_name})`;
@@ -87,9 +87,11 @@ const AgencyForm = ({formType, formApi, formState, readOnly}) => {
               formApi={formApi}
               renderDisplayValue={renderNames}
               labelShowRequired={true}
-              disabled={readOnly}
+              disabled={module === 'myAgency' ? true : readOnly}
             >
-              <NameSubform />
+              <NameSubform
+                submitDisabled={formType === 'view'}
+              />
             </PopupFormListManager>
           </Col>
         </Row>
@@ -101,9 +103,11 @@ const AgencyForm = ({formType, formApi, formState, readOnly}) => {
               formApi={formApi}
               renderDisplayValue={renderNames}
               labelShowRequired={false}
-              disabled={readOnly}
+              disabled={module === 'myAgency' ? true : readOnly}
             >
-              <NameSubform />
+              <NameSubform
+                submitDisabled={formType === 'view'}
+              />
             </PopupFormListManager>
           </Col>
         </Row>
@@ -200,7 +204,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly}) => {
                 placeholder={'Please select'}
                 labelField={'name_english'}
                 valueField={'id'}
-                disabled={readOnly}
+                disabled={module === 'myAgency' ? true : readOnly}
                 validate={validateRequired}
               />
             </FormGroup>
@@ -213,7 +217,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly}) => {
               formApi={formApi}
               renderDisplayValue={renderMemberships}
               labelShowRequired={false}
-              disabled={readOnly}
+              disabled={module === 'myAgency' ? true : readOnly}
             >
               <MembershipSubform />
             </PopupFormListManager>
@@ -230,7 +234,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly}) => {
                 field={'registration_start'}
                 validate={(value) => validateDateFromRequired(value, formState.values.registration_valid_to)}
                 placeholderText={'YYYY-MM-DD'}
-                disabled={readOnly}
+                disabled={module === 'myAgency' ? true : readOnly}
               />
             </FormGroup>
           </Col>
@@ -241,7 +245,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly}) => {
                 field={'registration_valid_to'}
                 validate={validateRequiredDate}
                 placeholderText={'YYYY-MM-DD'}
-                disabled={readOnly}
+                disabled={module === 'myAgency' ? true : readOnly}
               />
             </FormGroup>
           </Col>
@@ -251,7 +255,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly}) => {
               <Checkbox
                 field="is_registered"
                 className={style.Checkbox}
-                disabled={readOnly}
+                disabled={module === 'myAgency' ? true : readOnly}
               />
             </FormGroup>
           </Col>
@@ -262,7 +266,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly}) => {
               <Label for="registration_note">Registration Note</Label>
               <FormTextAreaFormatted
                 field={'registration_note'}
-                disabled={readOnly}
+                disabled={module === 'myAgency' ? true : readOnly}
               />
             </FormGroup>
           </Col>
@@ -275,7 +279,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly}) => {
               formApi={formApi}
               renderDisplayValue={renderDecisions}
               labelShowRequired={true}
-              disabled={readOnly}
+              disabled={module === 'myAgency' ? true : readOnly}
             >
               <DecisionSubform />
             </PopupFormListManager>
@@ -287,7 +291,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly}) => {
               <Label for="description_note" className={'required'}>Description Note</Label>
               <FormTextAreaFormatted
                 field={'description_note'}
-                disabled={readOnly}
+                disabled={module === 'myAgency' ? true : readOnly}
                 validate={validateRequired}
               />
             </FormGroup>
@@ -300,9 +304,11 @@ const AgencyForm = ({formType, formApi, formState, readOnly}) => {
               formApi={formApi}
               renderDisplayValue={renderActivities}
               labelShowRequired={true}
-              disabled={readOnly}
+              disabled={module === 'myAgency' ? true : readOnly}
             >
-              <AgencyActivitySubform />
+              <AgencyActivitySubform
+                submitDisabled={formType === 'view'}
+              />
             </PopupFormListManager>
           </Col>
         </Row>
@@ -314,7 +320,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly}) => {
               formApi={formApi}
               renderDisplayValue={renderFocusCountries}
               labelShowRequired={true}
-              disabled={readOnly}
+              disabled={module === 'myAgency' ? true : readOnly}
               columns={2}
             >
               <FocusCountrySubform />
@@ -328,7 +334,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly}) => {
               <Label for="specialisation_note">Specialisation Note</Label>
               <FormTextAreaFormatted
                 field={'specialisation_note'}
-                disabled={readOnly}
+                disabled={module === 'myAgency' ? true : readOnly}
               />
             </FormGroup>
           </Col>

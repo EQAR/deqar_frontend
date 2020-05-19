@@ -6,8 +6,7 @@ import 'suneditor/dist/css/suneditor.min.css';
 import style from './FormTextAreaFormatted.module.css';
 
 const FormTextAreaFormatted = asField(({ fieldState, fieldApi, onChange, disabled, height, ...props }) => {
-  const { value, error } = fieldState;
-  const { setValue } = fieldApi;
+  const { error } = fieldState;
 
   const options = {
     buttonList: [

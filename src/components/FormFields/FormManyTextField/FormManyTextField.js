@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Scope, Text} from "informed";
-import {Button, Col, FormGroup, InputGroup, InputGroupAddon, Label, Row} from "reactstrap";
+import {Button, Col, FormGroup, Label, Row} from "reactstrap";
 import style from "./FormManyTextField.module.css";
 import FormRemovableTextField from "./FormRemovableTextField";
 

@@ -22,7 +22,7 @@ export const updateFormNormalizer = (formValues) => {
                 normalizedForm[key].push(v.id);
               }
             } else {
-              normalizedForm[key].push(v);
+              normalizedForm[key].push(updateFormNormalizer(v));
             }
           });
           break;

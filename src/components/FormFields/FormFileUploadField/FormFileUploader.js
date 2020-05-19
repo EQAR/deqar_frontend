@@ -25,7 +25,7 @@ const FormFileUploader = ({ api, state, disabled, label, nameField, sizeField, f
         }
       }])
     }
-  }, [state]);
+  }, [state, nameField, sizeField]);
 
   const onRemoveFile = (error, file) => {
     setFiles([]);

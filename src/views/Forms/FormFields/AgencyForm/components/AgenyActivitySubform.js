@@ -7,7 +7,7 @@ import FormSelectField from "../../../../../components/FormFields/FormSelectFiel
 import FormDatePickerField from "../../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 import agency from "../../../../../services/Agency";
 
-const AgencyActivitySubform = ({formApi, formState, disabled}) => {
+const AgencyActivitySubform = ({formApi, formState, disabled, submitDisabled, formType}) => {
   return (
     <React.Fragment>
       <Row>
@@ -58,7 +58,7 @@ const AgencyActivitySubform = ({formApi, formState, disabled}) => {
             <FormTextField
               field={'activity_local_identifier'}
               placeholderText={'Enter local ID for activity'}
-              disabled={disabled}
+              disabled={formType === 'view'}
             />
           </FormGroup>
         </Col>
