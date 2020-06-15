@@ -12,15 +12,19 @@ const IngestInfo = ({clickedRowIndex, ingestResponse, ...props}) => {
       if(error.hasOwnProperty('non_field_errors')) {
         errorMsg.push(...error['non_field_errors']);
       } else {
-        Object.keys(error).forEach((key) => {
-          if(Array.isArray(error)) {
-            errorMsg.push(...error[key]);
-          } else {
-            Object.keys(error[key]).forEach((k) => {
-              errorMsg.push(...error[key][k])
-            })
-          }
-        });
+        if (typeof error === 'string' || error instanceof String) {
+          errorMsg.push(error);
+        } else {
+          Object.keys(error).forEach((key) => {
+            if(Array.isArray(error)) {
+              errorMsg.push(...error[key]);
+            } else {
+              Object.keys(error[key]).forEach((k) => {
+                errorMsg.push(...error[key][k])
+              })
+            }
+          });
+        }
       }
     });
 
