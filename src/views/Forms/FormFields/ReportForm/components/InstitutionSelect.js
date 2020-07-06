@@ -3,7 +3,7 @@ import AsyncPaginate from 'react-select-async-paginate';
 import institution from '../../../../../services/Institution';
 import PropTypes from 'prop-types';
 
-const InstitutionSelect = ({onChange, selectedValues, ...props}) => {
+const InstitutionSelect = ({onChange, selectedValues, emptyAfterChange=true, ...props}) => {
   const [value, setValue] = useState('');
 
   const customStyles = {
@@ -33,12 +33,13 @@ const InstitutionSelect = ({onChange, selectedValues, ...props}) => {
   };
 
   const onValueChange = (value) => {
-    setValue('');
+    emptyAfterChange ? setValue('') : setValue(value);
     onChange(value);
   };
 
   return(
     <AsyncPaginate
+      {...props}
       value={value}
       placeholder={'Enter institution name, ETER ID, city or country'}
       styles={customStyles}

@@ -70,7 +70,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
         <Row>
           <Col md={12}>
             <FormGroup>
-              <Label for="link">Primary Name / Acronym</Label>
+              <Label for="primary_name_acronym">Primary Name / Acronym</Label>
               <FormTextField
                 field={'primary_name_acronym'}
                 placeholder={'Primary Name / Acronym'}
@@ -114,7 +114,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
         <Row>
           <Col md={12}>
             <FormGroup>
-              <Label for="link" className={'required'}>Agency Website</Label>
+              <Label className={'required'}>Agency Website</Label>
               <FormTextField
                 field={'website_link'}
                 placeholder={'Enter agency website'}
@@ -128,7 +128,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
         <Row>
           <Col md={12}>
             <FormGroup>
-              <Label for="link" className={'required'}>Contact Person</Label>
+              <Label className={'required'}>Contact Person</Label>
               <FormTextField
                 validate={validateRequired}
                 field={'contact_person'}

@@ -4,8 +4,7 @@ import {Button, Col, FormGroup, Label, Row} from "reactstrap";
 import style from "./FormManyTextField.module.css";
 import FormRemovableTextField from "./FormRemovableTextField";
 
-const FormManyTextField = ({disabled, scopeName, data, field, label, required=false, formApi, validate, placeholder, ...props}) => {
-  const extra = 1;
+const FormManyTextField = ({disabled, scopeName, data, field, label, extra=1, required=false, addButtonText='Add More...', formApi, validate, placeholder, ...props}) => {
   const [count, setCount] = useState(extra);
 
   // componentDidMount
@@ -42,7 +41,10 @@ const FormManyTextField = ({disabled, scopeName, data, field, label, required=fa
 
   return (
     <React.Fragment>
-      <Label className={required ? 'required' : undefined}>{label}</Label>
+      {
+        extra !== 0 || (extra === 0 && count > 0) &&
+        <Label className={required ? 'required' : undefined}>{label}</Label>
+      }
       {
         [...Array(count)].map((c, idx) => {
           const scope = `${scopeName}[${idx}]`;
@@ -77,7 +79,7 @@ const FormManyTextField = ({disabled, scopeName, data, field, label, required=fa
                 color="secondary"
                 onClick={onAddButtonClick}
                 className={style.Button}
-              >Add More...</Button>
+              >{addButtonText}</Button>
             </div>
           </Col>
         </Row>

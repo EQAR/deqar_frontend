@@ -1,34 +1,46 @@
 import React from 'react';
-import InstitutionForm from '../FormFields/InstitutionForm/InstitutionForm';
 import {connect} from "react-redux";
+import institution from "../../../services/Institution";
+import {updateFormNormalizer} from "../FormFields/InstitutionForm/normalizers/updateFormNormalizer";
+import InstitutionForm from "../FormFields/InstitutionForm/InstitutionForm";
+import {encodeIdentifiers, encodeNames} from "../FormFields/InstitutionForm/normalizers/formEncoders";
+import {decodeHierarhicalLinks, decodeHistoricalLinks} from "../FormFields/InstitutionForm/normalizers/formDecoders";
 
 const InstitutionDetails = ({userIsAdmin, ...props}) => {
-  const { id, param } = props.match.params;
+  const {id, param} = props.match.params;
 
-  const getTitle = () => {
+  const renderFormTitle = () => {
     switch (param) {
-      case 'view': {
-        return `Reference Data » Institutions » View : DEQARINST${id.padStart(4, '0')}`;
-      }
-      case 'edit': {
-        return `Reference Data » Institutions » Edit : DEQARINST${id.padStart(4, '0')}`;
-      }
-      case 'create': {
-        return `Reference Data » Institutions » Create`
-      }
-      default: {
-        return ''
-      }
+      case 'view':
+        return `Reference Data » Institutions » View : Institution ID ${id}`;
+      case 'edit':
+        return `Reference Data » Institutions » Edit : Institution ID ${id}`;
+      case 'create':
+        return `Reference Data » Institutions » Create`;
+      default:
+        break;
     }
   };
 
   return(
     <React.Fragment>
       <InstitutionForm
-        formTitle={getTitle()}
+        api={{
+          read: institution.getInstitution,
+          update: institution.updateInstitution,
+        }}
+        decoders={[decodeHistoricalLinks, decodeHierarhicalLinks]}
+        encoders = {[encodeNames, encodeIdentifiers]}
+        normalizers={{
+          create: updateFormNormalizer,
+          update: updateFormNormalizer
+        }}
+        module={'institution'}
+        formTitle={renderFormTitle()}
         formType={param}
-        institutionID={parseInt(id, 10)}
-        backPath={'/reference/institutions'}
+        recordID={id}
+        backPath={'/reference/institutions/'}
+        userIsAdmin={userIsAdmin}
       />
     </React.Fragment>
   )

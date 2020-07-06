@@ -3,7 +3,7 @@ import {Scope} from "informed";
 import {Button, Col} from "reactstrap";
 import style from "./FormManyMultipleField.module.css";
 
-const FormManyMultipleField = ({disabled, scopeName, data, formApi, render, ...props}) => {
+const FormManyMultipleField = ({disabled, scopeName, data, formApi, render, addButtonText="Add More...", ...props}) => {
   const [count, setCount] = useState(1);
 
   // componentDidMount
@@ -68,7 +68,7 @@ const FormManyMultipleField = ({disabled, scopeName, data, formApi, render, ...p
               color="secondary"
               onClick={onAddButtonClick}
               className={style.Button}
-            >Add More...</Button>
+            >{addButtonText}</Button>
           </div>
         </Col>
       }

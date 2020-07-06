@@ -1,71 +1,36 @@
-.InstitutionFormCard {
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  border-radius: 0;
-  margin: 0;
+.FormLeft {
+    border-right: 1px solid #CCCCCC;
 }
 
-.infoFooter {
-  background-color: hsl(0,0%,97%);
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-.borderLeft {
-  border-right: 1px solid #CCCCCC;
-}
-
-.editButton {
-  margin-left: 10px;
-}
-
-.hidden {
-  display: none;
-}
-
-.relativeContainer {
-  position: relative;
-  align-content: flex-end;
-}
-
-.alternativeNameRemoveButton {
-  position: absolute;
-  bottom: 7px;
-  right: 0;
-  color: hsl(0,0%,80%);
-  order: 2;
-  text-align: right;
-  flex-grow: 1;
-  margin-left: 15px;
-  margin-right: 15px;
-  cursor: pointer;
-}
-
-.locationRemoveButton {
-  color: hsl(0,0%,80%);
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.locationRemoveButton:hover {
-  color: hsl(0,0%,60%);
-}
-
-.removeButton:hover {
-  color: hsl(0,0%,60%);
+.Button {
+    margin-left: 10px;
 }
 
 .removeTransliteration {
-  color: hsl(0,0%,40%);
-  border-bottom: 1px dotted;
-  cursor: pointer;
+    color: hsl(0,0%,40%);
+    border-bottom: 1px dotted;
+    cursor: pointer;
+}
+
+.Checkbox {
+    margin-top: 10px;
+}
+
+.GroupLabel {
+    border-bottom: 1px dotted;
+    margin-bottom: 20px;
+}
+
+.infoFooter {
+    background-color: hsl(0,0%,97%);
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 .noFormGroupMargin {
-  margin-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 .Transliteration {
-  margin-top: 1rem;
+    margin-top: 1rem;
 }

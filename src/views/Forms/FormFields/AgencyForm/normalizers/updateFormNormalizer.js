@@ -3,7 +3,7 @@ export const updateFormNormalizer = (formValues) => {
 
   Object.keys(formValues).forEach(key => {
     const value = formValues[key];
-    if(value) {
+    if (value) {
       switch (value.constructor) {
         case Object:
           if ('id' in value) {
