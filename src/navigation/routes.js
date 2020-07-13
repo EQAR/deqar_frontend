@@ -14,6 +14,7 @@ const MyAgencyDetails = React.lazy(() => import('../views/Forms/FormOpeners/MyAg
 const Agencies = React.lazy(() => import('../views/ReferenceData/Agencies/Agencies'));
 const AgencyActivities = React.lazy(() => import('../views/ReferenceData/AgencyActivities/AgencyActivities'));
 const AgencyDetails = React.lazy(() => import('../views/Forms/FormOpeners/AgencyDetails'));
+const Countries = React.lazy(() => import('../views/ReferenceData/Countries/Countries'));
 const Page401 = React.lazy(() => import('../components/DefaultLayout/Page401'));
 
 const routes = [
@@ -32,6 +33,7 @@ const routes = [
   { path: '/reference/institutions/:param/:id', exact: true, name: 'Institution Form', component: InstitutionDetails, users: 'all'},
   { path: '/reference/reports', exact: true, name: 'Reports', component: Reports, users: 'all'},
   { path: '/reference/reports/:param/:id', exact: true, name: 'Report Form', component: ReportDetails, users: 'all'},
+  { path: '/reference/countries', exact: true, name: 'Countries', component: Countries, users: 'all'},
   { path: '/401', exact: true, name: 'Page 401', component: Page401, users: 'all'}
 ];
 
