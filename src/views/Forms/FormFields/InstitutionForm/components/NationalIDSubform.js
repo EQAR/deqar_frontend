@@ -10,9 +10,7 @@ import withPopupFormManager from "../../../../../components/FormManager/PopupFor
 import FormDatePickerField from "../../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 import FormTextArea from "../../../../../components/FormFields/FormTextArea/FormTextArea";
 
-const LocalIDSubform = ({formApi, formState, formType}) => {
-  const disabled = formType === 'view';
-
+const LocalIDSubform = ({formApi, formState, disabled}) => {
   return (
     <React.Fragment>
       <FormTextField

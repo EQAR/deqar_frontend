@@ -50,7 +50,7 @@ export const decodeHistoricalLinks = (data) => {
         relationship_type: {
           institution_direction: "source",
           relationship: link.relationship_type.type_from,
-          relationship_type_id: link.relationship_type.relationship_type_id
+          relationship_type_id: link.relationship_type.id
         },
         relationship_note: link.relationship_note,
         relationship_date: link.relationship_date
@@ -66,7 +66,7 @@ export const decodeHistoricalLinks = (data) => {
         relationship_type: {
           institution_direction: "target",
           relationship: link.relationship_type.type_to,
-          relationship_type_id: link.relationship_type.relationship_type_id
+          relationship_type_id: link.relationship_type.id
         },
         relationship_note: link.relationship_note,
         relationship_date: link.relationship_date

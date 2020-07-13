@@ -15,7 +15,8 @@ export const updateFormNormalizer = (formValues) => {
           value.forEach((v) => {
             if ('id' in v) {
               if (['countries', 'qf_ehea_levels', 'flags', 'update_log', 'names', 'identifiers',
-                'historical_source', 'historical_target'].includes(key)) {
+                'historical_source', 'historical_target',
+                'hierarchical_parent', 'hierarchical_child'].includes(key)) {
                 normalizedForm[key].push(updateFormNormalizer(v))
               } else {
                 normalizedForm[key].push(v.id);

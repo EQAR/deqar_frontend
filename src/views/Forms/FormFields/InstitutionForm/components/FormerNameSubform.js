@@ -7,9 +7,7 @@ import FormManyTextField from "../../../../../components/FormFields/FormManyText
 import FormDatePickerField from "../../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 import FormTextArea from "../../../../../components/FormFields/FormTextArea/FormTextArea";
 
-const FormerNameSubform = ({formApi, formState, formType}) => {
-  const disabled = formType === 'view';
-
+const FormerNameSubform = ({formApi, formState, disabled}) => {
   return (
     <React.Fragment>
       <Row>

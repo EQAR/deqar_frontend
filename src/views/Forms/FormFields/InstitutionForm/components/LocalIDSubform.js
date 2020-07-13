@@ -12,9 +12,7 @@ import FormTextArea from "../../../../../components/FormFields/FormTextArea/Form
 import FormSelectField from "../../../../../components/FormFields/FormSelectField/FormSelectField";
 import agency from "../../../../../services/Agency";
 
-const LocalIDSubform = ({formApi, formState, formType}) => {
-  const disabled = formType === 'view';
-
+const LocalIDSubform = ({formApi, formState, disabled}) => {
   return (
     <React.Fragment>
       <FormTextField

@@ -3,7 +3,11 @@ import {connect} from "react-redux";
 import institution from "../../../services/Institution";
 import {updateFormNormalizer} from "../FormFields/InstitutionForm/normalizers/updateFormNormalizer";
 import InstitutionForm from "../FormFields/InstitutionForm/InstitutionForm";
-import {encodeIdentifiers, encodeNames} from "../FormFields/InstitutionForm/normalizers/formEncoders";
+import {
+  encodeHierarchicalLink, encodeHistoricalLink,
+  encodeIdentifiers,
+  encodeNames
+} from "../FormFields/InstitutionForm/normalizers/formEncoders";
 import {decodeHierarhicalLinks, decodeHistoricalLinks} from "../FormFields/InstitutionForm/normalizers/formDecoders";
 
 const InstitutionDetails = ({userIsAdmin, ...props}) => {
@@ -30,7 +34,7 @@ const InstitutionDetails = ({userIsAdmin, ...props}) => {
           update: institution.updateInstitution,
         }}
         decoders={[decodeHistoricalLinks, decodeHierarhicalLinks]}
-        encoders = {[encodeNames, encodeIdentifiers]}
+        encoders = {[encodeNames, encodeIdentifiers, encodeHierarchicalLink, encodeHistoricalLink]}
         normalizers={{
           create: updateFormNormalizer,
           update: updateFormNormalizer

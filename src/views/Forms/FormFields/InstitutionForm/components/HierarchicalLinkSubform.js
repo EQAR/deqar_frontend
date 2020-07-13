@@ -5,13 +5,10 @@ import FormAssignedList from "../../../../../components/FormFields/FormAssignedL
 import withPopupFormManager from "../../../../../components/FormManager/PopupFormManagerHOC";
 import {validateDate, validateDateFrom, validateRequired} from "../../../../../utils/validators";
 import FormSelectField from "../../../../../components/FormFields/FormSelectField/FormSelectField";
-import country from "../../../../../services/Country";
 import FormDatePickerField from "../../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 import FormTextArea from "../../../../../components/FormFields/FormTextArea/FormTextArea";
 
-const HierarchicalLinkSubform = ({formApi, formState, formType}) => {
-  const disabled = formType === 'view';
-
+const HierarchicalLinkSubform = ({formApi, formState, disabled}) => {
   const relationShipTypes = [
     {
       relationship: 'Parent of',
@@ -45,16 +42,18 @@ const HierarchicalLinkSubform = ({formApi, formState, formType}) => {
           </FormGroup>
         </Col>
       </Row>
-      <Row>
-        <Col md={12}>
-          <FormGroup>
-            <Label for="institution" className={'required'}>Institution</Label>
-            <InstitutionSelect
-              onChange={onInstitutionSelected}
-            />
-          </FormGroup>
-        </Col>
-      </Row>
+      {!disabled &&
+        <Row>
+          <Col md={12}>
+            <FormGroup>
+              <Label for="institution" className={'required'}>Institution</Label>
+              <InstitutionSelect
+                onChange={onInstitutionSelected}
+              />
+            </FormGroup>
+          </Col>
+        </Row>
+      }
       <Row>
         <Col md={12}>
           { disabled ? <Label for="institution" className={'required'}>Institution</Label> : null}
@@ -63,6 +62,7 @@ const HierarchicalLinkSubform = ({formApi, formState, formType}) => {
             validate={validateRequired}
             labelShowRequired={true}
             renderDisplayValue={(value) => (value['name_primary'])}
+            onClick={() => {}}
             disabled={disabled}
           />
         </Col>

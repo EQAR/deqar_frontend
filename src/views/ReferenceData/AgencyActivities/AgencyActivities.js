@@ -5,7 +5,7 @@ import {
   CardHeader
 } from "reactstrap";
 import style from "./AgencyActivities.module.css";
-import MyAgenciesTable from "./AgencyActivitiesTable";
+import AgencyActivitiesTable from "./AgencyActivitiesTable";
 import toggleAgencyActivitiesTableFilter from "./actions/toggleAgencyActivitiesTableFilter";
 import connect from "react-redux/es/connect/connect";
 import DataTableHeader from "../../../components/DataTable/DataTableHeader";
@@ -27,7 +27,7 @@ const AgencyActivities = (props) => {
           />
         </CardHeader>
         <CardBody className={style.AgencyActivityCardBody}>
-          <MyAgenciesTable/>
+          <AgencyActivitiesTable/>
         </CardBody>
       </Card>
     </div>

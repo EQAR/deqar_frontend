@@ -9,9 +9,7 @@ import institution from "../../../../../services/Institution";
 import FormDatePickerField from "../../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 import FormTextArea from "../../../../../components/FormFields/FormTextArea/FormTextArea";
 
-const HistoricalLinkSubform = ({formApi, formState, formType}) => {
-  const disabled = formType === 'view';
-
+const HistoricalLinkSubform = ({formApi, formState, disabled}) => {
   const onInstitutionSelected = (value) => {
     formApi.setValue('institution', [value])
   };
@@ -34,16 +32,18 @@ const HistoricalLinkSubform = ({formApi, formState, formType}) => {
           </FormGroup>
         </Col>
       </Row>
-      <Row>
-        <Col md={12}>
-          <FormGroup>
-            <Label for="institution" className={'required'}>Institution</Label>
-            <InstitutionSelect
-              onChange={onInstitutionSelected}
-            />
-          </FormGroup>
-        </Col>
-      </Row>
+      {!disabled &&
+        <Row>
+          <Col md={12}>
+            <FormGroup>
+              <Label for="institution" className={'required'}>Institution</Label>
+              <InstitutionSelect
+                onChange={onInstitutionSelected}
+              />
+            </FormGroup>
+          </Col>
+        </Row>
+      }
       <Row>
         <Col md={12}>
           { disabled ? <Label for="institution" className={'required'}>Institution</Label> : null}
@@ -52,6 +52,7 @@ const HistoricalLinkSubform = ({formApi, formState, formType}) => {
             validate={validateRequired}
             labelShowRequired={true}
             renderDisplayValue={(value) => (value['name_primary'])}
+            onClick={() => {}}
             disabled={disabled}
           />
         </Col>

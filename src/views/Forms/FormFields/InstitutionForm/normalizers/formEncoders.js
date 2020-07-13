@@ -26,3 +26,42 @@ export const encodeIdentifiers = (formValues) => {
   }
   return values;
 };
+
+
+export const encodeHierarchicalLink = (formValues) => {
+  let {hierarchical_links, ...values} = formValues;
+  values['hierarchical_parent'] = [];
+  values['hierarchical_child'] = [];
+
+  if (hierarchical_links.length > 0) {
+    hierarchical_links.forEach(link => {
+      link['institution'] = link['institution'][0];
+      if (link.relationship.id === 'parent') {
+        values['hierarchical_child'].push(link);
+      } else {
+        values['hierarchical_parent'].push(link);
+      }
+    });
+  }
+  return values;
+};
+
+
+export const encodeHistoricalLink = (formValues) => {
+  let {historical_links, ...values} = formValues;
+  values['historical_source'] = [];
+  values['historical_target'] = [];
+
+  if (historical_links.length > 0) {
+    historical_links.forEach(link => {
+      link['institution'] = link['institution'][0];
+      if (link.relationship_type.institution_direction === 'target') {
+        values['historical_source'].push(link);
+      } else {
+        values['historical_target'].push(link);
+      }
+    });
+  }
+
+  return values;
+};
