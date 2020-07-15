@@ -37,7 +37,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, optionsAPI, ...props })
       unmounted = true;
       source.cancel();
     };
-  }, [optionsAPI]);
+  }, [optionsAPI, staticOptions]);
 
   const getLabel = (option) => {
     if (includeID) {

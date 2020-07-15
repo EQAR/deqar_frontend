@@ -97,7 +97,7 @@ class CountriesTableFilters extends Component {
     const {filterState} = this.props;
     const {filterOpen} = filterState;
     const {search, ehea_is_member, external_QAA_is_permitted, european_approach_is_permitted,
-      has_full_institution_list, ehea_key_commitment, booleanSelectOptions, permissionTypeOptions} = this.state;
+      ehea_key_commitment, booleanSelectOptions, permissionTypeOptions} = this.state;
 
     return(
       <React.Fragment>

@@ -1,5 +1,5 @@
 import React from "react";
-import {Col, FormGroup, Label, ModalBody, Row} from "reactstrap";
+import {Col, FormGroup, Label, Row} from "reactstrap";
 import FormTextField from "../../../../../components/FormFields/FormTextField/FormTextField";
 import {
   validateDate,

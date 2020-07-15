@@ -1,5 +1,5 @@
 import React from "react";
-import {Col, FormGroup, Label, ModalBody, Row} from "reactstrap";
+import {Col, FormGroup, Label, Row} from "reactstrap";
 import InstitutionSelect from "../../ReportForm/components/InstitutionSelect";
 import FormAssignedList from "../../../../../components/FormFields/FormAssignedList/FormAssignedList";
 import withPopupFormManager from "../../../../../components/FormManager/PopupFormManagerHOC";

@@ -5,7 +5,6 @@ import withPopupFormManager from "../../../../../components/FormManager/PopupFor
 import FormSelectField from "../../../../../components/FormFields/FormSelectField/FormSelectField";
 import FormDatePickerField from "../../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 import country from "../../../../../services/Country";
-import {Checkbox} from "informed";
 import FormCheckbox from "../../../../../components/FormFields/FormCheckbox/FormCheckbox";
 
 const FocusCountrySubform = ({formApi, formState, disabled}) => {

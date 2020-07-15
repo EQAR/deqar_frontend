@@ -1,5 +1,3 @@
-import {validateValuesMatch} from "../../../../../utils/validators";
-
 export const decodeHierarhicalLinks = (data) => {
   let {hierarchical_parent, hierarchical_child, ...values} = data;
   values['hierarchical_links'] = [];

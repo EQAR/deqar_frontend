@@ -10,7 +10,7 @@ const FormManyTextField = ({disabled, scopeName, data, field, label, extra=1, re
   // componentDidMount
   useEffect(() => {
     setCount(data ? data.length : extra);
-  }, [data]);
+  }, [data, extra]);
 
   const onAddButtonClick = () => {
     if (count === 0) {
@@ -42,7 +42,7 @@ const FormManyTextField = ({disabled, scopeName, data, field, label, extra=1, re
   return (
     <React.Fragment>
       {
-        extra !== 0 || (extra === 0 && count > 0) &&
+        (extra !== 0 || (extra === 0 && count > 0)) &&
         <Label className={required ? 'required' : undefined}>{label}</Label>
       }
       {

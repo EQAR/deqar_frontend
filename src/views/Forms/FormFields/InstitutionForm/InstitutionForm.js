@@ -14,7 +14,7 @@ import FormDatePickerField from "../../../../components/FormFields/FormDatePicke
 import FormSelectField from "../../../../components/FormFields/FormSelectField/FormSelectField";
 import list from "../../../../services/List";
 import cx from "classnames";
-import {validateRequired, validateRequiredUnique, validateRoman} from "../../../../utils/validators";
+import {validateRequired, validateRoman} from "../../../../utils/validators";
 import FormManyMultipleField
   from "../../../../components/FormFieldsUncontrolled/FormManyMultipleField/FormManyMultipleField";
 import country from "../../../../services/Country";
