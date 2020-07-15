@@ -61,7 +61,9 @@ export const GET_LANGUAGES = ADMINAPI_URL + '/select/language/';
 export const GET_COUNTRIES = ADMINAPI_URL + '/select/country/';
 export const GET_COUNTRIES_LIST = ADMINAPI_URL + '/countries/';
 export const GET_INSTITUTION_COUNTRIES = ADMINAPI_URL + '/select/institutions/country/';
-export const GET_PERMISSION_TYPES = ADMINAPI_URL + '/select/permission_type';
+export const GET_PERMISSION_TYPES = ADMINAPI_URL + '/select/permission_type/';
+export const GET_QA_REQUIREMENT_TYPE = ADMINAPI_URL + '/select/qa_requirement_type/';
+export const MANAGE_COUNTRIES = ADMINAPI_URL + '/countries/';
 
 // List endpoints
 export const GET_QFEHEA_LEVELS = ADMINAPI_URL + '/select/qf_ehea_level/';

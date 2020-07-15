@@ -1,0 +1,30 @@
+.reportFormLeft {
+    border-right: 1px solid #CCCCCC;
+}
+
+.Button {
+    margin-left: 10px;
+}
+
+.Checkbox {
+    margin-top: 10px;
+}
+
+.GroupLabel {
+    border-bottom: 1px dotted;
+    margin-bottom: 20px;
+}
+
+.infoFooter {
+    background-color: hsl(0,0%,97%);
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.AgencyFormCard {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    margin: 0;
+}

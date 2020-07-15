@@ -6,6 +6,7 @@ import FormSelectField from "../../../../../components/FormFields/FormSelectFiel
 import FormDatePickerField from "../../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 import country from "../../../../../services/Country";
 import {Checkbox} from "informed";
+import FormCheckbox from "../../../../../components/FormFields/FormCheckbox/FormCheckbox";
 
 const FocusCountrySubform = ({formApi, formState, disabled}) => {
   return (
@@ -30,22 +31,22 @@ const FocusCountrySubform = ({formApi, formState, disabled}) => {
         <Col md={6}>
           <FormGroup>
             <Label for="country_is_official">Official</Label>
-            <Checkbox
+            <FormCheckbox
               field={'country_is_official'}
               disabled={disabled}
               className={'form-control'}
-              style={{marginLeft: '10px'}}
+              style={{display: 'block', marginTop: 0, marginLeft: '10px'}}
             />
           </FormGroup>
         </Col>
         <Col md={6}>
           <FormGroup>
             <Label for="country_is_crossborder">Crossborder</Label>
-            <Checkbox
+            <FormCheckbox
               field={'country_is_crossborder'}
               disabled={disabled}
               className={'form-control'}
-              style={{marginLeft: '10px'}}
+              style={{display: 'block', marginTop: 0, marginLeft: '10px'}}
             />
           </FormGroup>
         </Col>

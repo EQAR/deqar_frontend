@@ -90,6 +90,8 @@ class FormInfoBox extends Component {
         return this.renderInstitutionURL();
       case 'agency':
         return this.renderAgencyURL();
+      case 'country':
+        return this.renderCountryURL();
       default:
         break;
     }
@@ -113,6 +115,23 @@ class FormInfoBox extends Component {
             )
           })}
           </React.Fragment>
+        )
+      }
+    }
+  };
+
+  renderCountryURL = () => {
+    const {formState} = this.props;
+
+    if (Object.entries(formState).length !== 0) {
+      const country_id = formState['id'];
+      if(country_id) {
+        return(
+          <ListGroupItem className={style.ListGroupItem}>
+            <a href={`https://www.eqar.eu/kb/country-information/country/?id=${country_id}`} target={'new'}>
+              {`https://www.eqar.eu/kb/country-information/country/?id=${country_id}`}
+            </a>
+          </ListGroupItem>
         )
       }
     }

@@ -1,5 +1,11 @@
 import axios from 'axios';
-import {GET_ASSOCIATIONS, GET_EQAR_DECISIONS, GET_FLAGS, GET_QFEHEA_LEVELS} from "./config-api";
+import {
+  GET_ASSOCIATIONS,
+  GET_EQAR_DECISIONS,
+  GET_FLAGS,
+  GET_QA_REQUIREMENT_TYPE,
+  GET_QFEHEA_LEVELS
+} from "./config-api";
 
 class List {
   selectQFEHEALevels = (configParams) => {
@@ -16,6 +22,10 @@ class List {
 
   selectDecisions = () => {
     return axios.get(GET_EQAR_DECISIONS);
+  };
+
+  selectQARequirementType = () => {
+    return axios.get(GET_QA_REQUIREMENT_TYPE);
   }
 }
 

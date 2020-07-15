@@ -2,7 +2,7 @@ import React from 'react';
 import { Checkbox, asField } from 'informed';
 import style from "./FormCheckbox.module.css"
 
-const FormCheckbox = asField(({ fieldState, placeholder, disabled, className, ...props }) => (
+const FormCheckbox = asField(({ fieldState, placeholder, className, ...props }) => (
   <React.Fragment>
     <Checkbox
       className={style.Checkbox}
