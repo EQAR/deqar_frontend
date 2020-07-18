@@ -90,6 +90,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
               disabled={module === 'myAgency' ? true : readOnly}
             >
               <NameSubform
+                formType={formType}
                 submitDisabled={formType === 'view'}
               />
             </PopupFormListManager>
@@ -106,6 +107,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
               disabled={module === 'myAgency' ? true : readOnly}
             >
               <NameSubform
+                formType={formType}
                 submitDisabled={formType === 'view'}
               />
             </PopupFormListManager>
