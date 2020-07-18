@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from "react-redux";
 import country from "../../../services/Country";
 import CountryForm from "../FormFields/CountryForm/CountryForm";
+import {updateFormNormalizer} from "../FormFields/CountryForm/normalizers/updateFormNormalizer";
 
 const CountryDetails = ({userIsAdmin, ...props}) => {
   const {id, param} = props.match.params;
@@ -29,6 +30,8 @@ const CountryDetails = ({userIsAdmin, ...props}) => {
         decoders={[]}
         encoders = {[]}
         normalizers={{
+          create: updateFormNormalizer,
+          update: updateFormNormalizer
         }}
         module={'country'}
         formTitle={renderFormTitle()}
