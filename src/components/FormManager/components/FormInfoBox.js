@@ -27,7 +27,7 @@ class FormInfoBox extends Component {
   };
 
   renderFlags = () => {
-    const { formState, userIsAdmin } = this.props;
+    const { module, formState, userIsAdmin } = this.props;
     if(Object.entries(formState).length !== 0) {
       const {flags} = formState;
       if(flags && flags.length > 0) {
@@ -72,7 +72,7 @@ class FormInfoBox extends Component {
               {this.flagRender('none')}
             </Col>
             <Col xs={10} className={style.flagMessage}>
-              <span>Report record has no flag assigned</span>
+              <span>{module.charAt(0).toUpperCase() + module.slice(1)} has no flag assigned</span>
             </Col>
           </ListGroupItem>
         )
