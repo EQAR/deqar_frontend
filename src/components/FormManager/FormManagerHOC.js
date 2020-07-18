@@ -6,6 +6,7 @@ import PreventNavigation from "../PreventNavigation/PreventNavigation";
 import FormButtons from "./components/FormButtons";
 import FormInfoBox from "./components/FormInfoBox";
 import {toast} from "react-toastify";
+import confirm from 'reactstrap-confirm';
 
 const withFormManager = (OriginalForm) => {
 
@@ -105,7 +106,7 @@ const withFormManager = (OriginalForm) => {
 
     getBackPath = () => {
       const {formType, backPath, recordID} = this.props;
-      switch(formType) {
+      switch (formType) {
         case 'view':
           return backPath;
         case 'edit':
@@ -167,6 +168,28 @@ const withFormManager = (OriginalForm) => {
       });
     };
 
+    onRemoveFlag = (flagID) => {
+      const {api} = this.props;
+      const deleteFlagAPI = api.deleteFlag;
+
+      confirm({
+        title: 'Remove Flag',
+        message: 'Are you sure you would like to remove this flag?',
+        confirmColor: 'danger'
+      }).then((result) => {
+        if (result) {
+          if (deleteFlagAPI) {
+            deleteFlagAPI(flagID).then((result) => {
+              this.populateForm();
+              this.setState({
+                infoBoxOpen: true
+              })
+            });
+          }
+        }
+      });
+    };
+
     render() {
       const {formTitle, formID, userIsAdmin, formType, recordID, module} = this.props;
       const {isSubmitted, readOnly, infoBoxOpen, loading} = this.state;
@@ -189,10 +212,12 @@ const withFormManager = (OriginalForm) => {
             >
               {({ formApi, formState }) => (
                 <React.Fragment>
-                  <PreventNavigation
-                    formState={formState}
-                    isSubmitted={isSubmitted}
-                  />
+                  { formType !== 'view' &&
+                    <PreventNavigation
+                      formState={formState}
+                      isSubmitted={isSubmitted}
+                    />
+                  }
                   <CardBody>
                     <OriginalForm
                       {...this.props}
@@ -207,7 +232,7 @@ const withFormManager = (OriginalForm) => {
                       backPath={this.getBackPath()}
                       userIsAdmin={userIsAdmin}
                       editButton={this.isEditable()}
-                      deleteButton={this.isEditable()}
+                      deleteButton={module === 'report' && this.isEditable()}
                       buttonText={buttonText}
                       recordID={recordID}
                       formType={formType}

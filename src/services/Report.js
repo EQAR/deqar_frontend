@@ -62,7 +62,7 @@ class Report {
     return axios.delete(`${MANAGE_REPORT}/${reportID}`);
   };
 
-  deleteReportFlag = (flagID) => {
+  deleteFlag = (flagID) => {
     return axios.delete(`${REMOVE_REPORT_FLAG}/${flagID}`);
   }
 }
