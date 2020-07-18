@@ -35,12 +35,12 @@ class FormButtons extends Component {
 
   renderEditSubmitButton = () => {
     const {submitMessageOpen} = this.state;
-    const {loading, deleteButton, userIsAdmin} = this.props;
+    const {loading, deleteButton} = this.props;
 
     if (submitMessageOpen) {
       return (
         <div className={'pull-right'}>
-          {(deleteButton | userIsAdmin) ? this.renderDeleteButton() : null}
+          {deleteButton ? this.renderDeleteButton() : null}
           <LaddaButton
             className={style.SubmitButton + " btn btn-primary btn-ladda btn-sm"}
             loading={loading}
@@ -53,7 +53,7 @@ class FormButtons extends Component {
     } else {
       return(
         <div className={'pull-right'}>
-          {(deleteButton | userIsAdmin) ? this.renderDeleteButton() : null}
+          {deleteButton ? this.renderDeleteButton() : null}
           <Button
             type={'button'}
             size="sm"
