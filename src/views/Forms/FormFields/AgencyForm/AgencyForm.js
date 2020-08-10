@@ -37,8 +37,8 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
   };
 
   const renderActivities = (value) => {
-    const {activity_type, activity, activity_local_identifier, activity_valid_to} = value;
-    return `${activity}
+    const {id, activity_type, activity, activity_local_identifier, activity_valid_to} = value;
+    return `${activity} - ID ${id} 
        (${activity_type['type']}${activity_local_identifier ? `; ${activity_local_identifier})` : ')'}
        ${activity_valid_to ? activity_valid_to : ''}`;
   };
