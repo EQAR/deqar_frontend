@@ -7,6 +7,7 @@ import FormButtons from "./components/FormButtons";
 import FormInfoBox from "./components/FormInfoBox";
 import {toast} from "react-toastify";
 import confirm from 'reactstrap-confirm';
+import report from "../../services/Report";
 
 const withFormManager = (OriginalForm) => {
 
@@ -180,6 +181,28 @@ const withFormManager = (OriginalForm) => {
         if (result) {
           if (deleteFlagAPI) {
             deleteFlagAPI(flagID).then((result) => {
+              this.populateForm();
+              this.setState({
+                infoBoxOpen: true
+              })
+            });
+          }
+        }
+      });
+    };
+
+    onDelete = () => {
+      const {api, module, recordID} = this.props;
+      const deleteRecord = api.delete;
+
+      confirm({
+        title: 'Request Deletion',
+        message: `Are you sure you would like to mark this ${module} as deleted?`,
+        confirmColor: 'danger'
+      }).then((result) => {
+        if (result) {
+          if (deleteRecord) {
+            deleteRecord(recordID).then((result) => {
               this.populateForm();
               this.setState({
                 infoBoxOpen: true
