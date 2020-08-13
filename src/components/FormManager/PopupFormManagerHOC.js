@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 import {Form} from "informed";
+import style from "./FormManagerHOC.module.css";
 
 const withPopupFormManager = (OriginalPopupForm) => {
   class PopupFormManager extends React.Component {
@@ -49,7 +50,7 @@ const withPopupFormManager = (OriginalPopupForm) => {
             {({ formApi, formState }) => (
               <React.Fragment>
                 <ModalHeader>{titleText}</ModalHeader>
-                <ModalBody>
+                <ModalBody className={disabled ? undefined : style.EditFormCard }>
                   <OriginalPopupForm
                     {...this.props}
                     formApi={formApi}

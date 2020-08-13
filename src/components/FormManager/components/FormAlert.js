@@ -2,28 +2,24 @@ import React from 'react';
 import { Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
 
-class FormAlert extends React.Component {
-  onDismiss = () => {
-    this.props.onClose();
+const FormAlert = ({visible, errorMessage, onClose, ...props}) => {
+  const onDismiss = () => {
+    onClose();
   };
 
-  render() {
-    const {visible, errorMessage} = this.props;
-
-    return (
-      <Alert color="danger" isOpen={visible} toggle={this.onDismiss}>
-        {errorMessage.map((msg) => {
-          return (
-            <React.Fragment>
-              <span>{msg}</span>
-              <br/>
-            </React.Fragment>
-          )
-        })}
-      </Alert>
-    );
-  }
-}
+  return (
+    <Alert color="danger" isOpen={visible} toggle={onDismiss}>
+      {errorMessage.map((msg, idx) => {
+        return (
+          <React.Fragment key={idx}>
+            <span>{msg}</span>
+            <br/>
+          </React.Fragment>
+        )
+      })}
+    </Alert>
+  );
+};
 
 FormAlert.defaultProps = {
   visible: false,

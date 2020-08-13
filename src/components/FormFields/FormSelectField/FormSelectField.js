@@ -9,7 +9,7 @@ const FormSelectField = asField(({ fieldState, fieldApi, optionsAPI, ...props })
 
   const { value } = fieldState;
   const { setValue, setTouched, setError } = fieldApi;
-  const { onChange, onBlur, initialValue, forwardedRef, labelField, valueField, disabled, placeholder, includeID,
+  const { onChange, onBlur, initialValue, forwardedRef, labelField, valueField, idField, disabled, placeholder, includeID,
     isMulti, givenValue, staticOptions, ...rest } = props;
   const borderColor = fieldApi.getError() ? '#f86c6b' : '#e4e7ea';
   const customStyles = style(borderColor);
@@ -40,11 +40,13 @@ const FormSelectField = asField(({ fieldState, fieldApi, optionsAPI, ...props })
   }, [optionsAPI, staticOptions]);
 
   const getLabel = (option) => {
+    const id = idField ? idField : 'id';
+
     if (includeID) {
       if (includeID === 'back') {
-        return (<React.Fragment>{option[labelField]} - ID {option['id']}</React.Fragment>)
+        return (<React.Fragment>{option[labelField]} - ID {option[id]}</React.Fragment>)
       } else {
-        return (<React.Fragment>{option['id']} - {option[labelField]}</React.Fragment>)
+        return (<React.Fragment>{option[id]} - {option[labelField]}</React.Fragment>)
       }
     } else {
       return option[labelField]

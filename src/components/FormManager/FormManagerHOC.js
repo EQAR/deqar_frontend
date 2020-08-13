@@ -8,6 +8,7 @@ import FormInfoBox from "./components/FormInfoBox";
 import {toast} from "react-toastify";
 import confirm from 'reactstrap-confirm';
 import report from "../../services/Report";
+import FormAlert from "./components/FormAlert";
 
 const withFormManager = (OriginalForm) => {
 
@@ -164,6 +165,13 @@ const withFormManager = (OriginalForm) => {
         this.setState({isSubmitted: true});
         history.push(this.getBackPath())
       }).catch((error) => {
+        const errorData = error.response.data;
+        if (errorData.hasOwnProperty('non_field_errors')) {
+          this.setState({
+            alertVisible: true,
+            nonFieldErrors: errorData['non_field_errors']
+          })
+        }
         toast.error('There was some error on your form!');
         this.toggleLoading();
       });
@@ -213,6 +221,29 @@ const withFormManager = (OriginalForm) => {
       });
     };
 
+    onAlertClose = () => {
+      this.setState({
+        alertVisible: false,
+        nonFieldErrors: []
+      })
+    };
+
+    renderError = () => {
+      const {alertVisible, nonFieldErrors} = this.state;
+
+      return (
+        <Row>
+          <Col md={12}>
+            <FormAlert
+              visible={alertVisible}
+              onClose={this.onAlertClose}
+              errorMessage={nonFieldErrors}
+            />
+          </Col>
+        </Row>
+      )
+    };
+
     render() {
       const {formTitle, formID, userIsAdmin, formType, recordID, module} = this.props;
       const {isSubmitted, readOnly, infoBoxOpen, loading} = this.state;
@@ -241,7 +272,8 @@ const withFormManager = (OriginalForm) => {
                       isSubmitted={isSubmitted}
                     />
                   }
-                  <CardBody>
+                  <CardBody className={formType !== 'view' ? style.EditFormCard : undefined}>
+                    {this.renderError()}
                     <OriginalForm
                       {...this.props}
                       formApi={formApi}

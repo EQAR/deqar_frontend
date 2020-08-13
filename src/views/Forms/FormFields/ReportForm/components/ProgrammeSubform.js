@@ -5,7 +5,7 @@ import FormTextField from "../../../../../components/FormFields/FormTextField/Fo
 import FormSelectField from "../../../../../components/FormFields/FormSelectField/FormSelectField";
 import list from "../../../../../services/List";
 import country from "../../../../../services/Country";
-import {validateRequiredUnique} from "../../../../../utils/validators";
+import {validateRequiredUnique, validateUnique} from "../../../../../utils/validators";
 import FormManyMultipleField from "../../../../../components/FormFieldsUncontrolled/FormManyMultipleField/FormManyMultipleField";
 
 
@@ -50,7 +50,7 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
                 <FormTextField
                   field={'name_alternative'}
                   placeholder={'Enter alternative programme name'}
-                  validate={(value) => validateRequiredUnique(
+                  validate={(value) => validateUnique(
                     value,
                     ['name_primary', 'alternative_names.name_alternative'],
                     formState.values
@@ -80,6 +80,8 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
             placeholder={'Please select'}
             labelField={'level'}
             valueField={'id'}
+            includeID={'front'}
+            idField={'code'}
             disabled={disabled}
           />
         </FormGroup>

@@ -42,11 +42,6 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
     formApi.setValue('institutions', institutions);
   };
 
-  // Render Agency Activity
-  const renderAgencyActivity = (value) => {
-    return `${value.activity} - ID ${value.id}`
-  };
-
   // Report Links
   const renderLinksDisplayValue = (value) => {
     const {link, link_display_name} = value;
