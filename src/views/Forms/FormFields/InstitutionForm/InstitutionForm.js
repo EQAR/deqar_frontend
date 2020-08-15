@@ -66,6 +66,26 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
     <Row>
       <Col md={6} className={style.FormLeft}>
         <Row>
+          <Col md={6}>
+            <FormGroup>
+              <Label for={'deqar_id'}>DEQAR ID</Label>
+              <FormTextField
+                field={'deqar_id'}
+                disabled={true}
+              />
+            </FormGroup>
+          </Col>
+          <Col md={6}>
+            <FormGroup>
+              <Label for={'eter_id'}>ETER ID</Label>
+              <FormTextField
+                field={'eter_id'}
+                disabled={true}
+              />
+            </FormGroup>
+          </Col>
+        </Row>
+        <Row>
           <Col md={12}>
             <FormGroup className={formType === 'edit' ? style.noFormGroupMargin : ''}>
               <Label for={'names_actual[0].name_official'} className={'required'}>Institution Name, Official</Label>
