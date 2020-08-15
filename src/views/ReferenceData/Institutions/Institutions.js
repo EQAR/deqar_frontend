@@ -56,8 +56,8 @@ const Institutions = (props) => {
   )
 }
 
-const mapStateToProps = (state) => {
-  return {isAdmin: state.user.is_admin}
+const mapStateToProps = (store) => {
+  return {isAdmin: store.user.is_admin}
 }
 
 const mapDispatchToProps = (dispatch) => {
