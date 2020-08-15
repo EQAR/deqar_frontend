@@ -7,9 +7,9 @@ const initialState = {
   pageSize: 10,
   page: 0,
   total: 0,
-  sorted: [{id: 'name', desc: false}],
+  sorted: [{id: 'ehea_is_member', desc: true}],
   filtered: [],
-  filterOpen: false,
+  filterOpen: true,
   resized: []
 };
 

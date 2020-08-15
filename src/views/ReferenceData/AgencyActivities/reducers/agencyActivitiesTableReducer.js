@@ -9,7 +9,7 @@ const initialState = {
   total: 0,
   sorted: [{id: 'agency', desc: false}],
   filtered: [],
-  filterOpen: false,
+  filterOpen: true,
 };
 
 function agencyActivitiesTableReducer(state = initialState, action) {

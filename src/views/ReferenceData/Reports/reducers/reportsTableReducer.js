@@ -10,7 +10,7 @@ const initialState = {
   sorted: [{id: 'id', desc: true}],
   filtered: [],
   resized: [],
-  filterOpen: false
+  filterOpen: true
 };
 
 function reportsTableReducer(state = initialState, action) {

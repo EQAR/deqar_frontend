@@ -94,7 +94,7 @@ class CountriesTableFilters extends Component {
   };
 
   render() {
-    const {filterState} = this.props;
+    const {filterState, isAdmin} = this.props;
     const {filterOpen} = filterState;
     const {search, ehea_is_member, external_QAA_is_permitted, european_approach_is_permitted,
       ehea_key_commitment, booleanSelectOptions, permissionTypeOptions} = this.state;
@@ -124,45 +124,50 @@ class CountriesTableFilters extends Component {
                 />
               </FormGroup>
             </Col>
-            <Col md={4}>
-              <FormGroup>
-                <Label>External QAA is Permitted</Label>
-                <SelectFilter
-                  field={'external_QAA_is_permitted'}
-                  value={external_QAA_is_permitted}
-                  onFilter={this.onFilterChange}
-                  onFilterRemove={this.onFilterRemove}
-                  placeholder={'- Select Permission -'}
-                  selectFilterOptions={permissionTypeOptions}
-                />
-              </FormGroup>
-            </Col>
-            <Col md={4}>
-              <FormGroup>
-                <Label>European Approach is Permitted</Label>
-                <SelectFilter
-                  field={'european_approach_is_permitted'}
-                  value={european_approach_is_permitted}
-                  onFilter={this.onFilterChange}
-                  onFilterRemove={this.onFilterRemove}
-                  placeholder={'- Select Permission - '}
-                  selectFilterOptions={permissionTypeOptions}
-                />
-              </FormGroup>
-            </Col>
-            <Col md={4}>
-              <FormGroup>
-                <Label>EHEA Key Commitment</Label>
-                <SelectFilter
-                  field={'ehea_key_commitment'}
-                  value={ehea_key_commitment}
-                  onFilter={this.onFilterChange}
-                  onFilterRemove={this.onFilterRemove}
-                  placeholder={'- Select Permission -'}
-                  selectFilterOptions={permissionTypeOptions}
-                />
-              </FormGroup>
-            </Col>
+            {
+              isAdmin &&
+              <React.Fragment>
+                <Col md={4}>
+                  <FormGroup>
+                    <Label>External QAA is Permitted</Label>
+                    <SelectFilter
+                      field={'external_QAA_is_permitted'}
+                      value={external_QAA_is_permitted}
+                      onFilter={this.onFilterChange}
+                      onFilterRemove={this.onFilterRemove}
+                      placeholder={'- Select Permission -'}
+                      selectFilterOptions={permissionTypeOptions}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={4}>
+                  <FormGroup>
+                    <Label>European Approach is Permitted</Label>
+                    <SelectFilter
+                      field={'european_approach_is_permitted'}
+                      value={european_approach_is_permitted}
+                      onFilter={this.onFilterChange}
+                      onFilterRemove={this.onFilterRemove}
+                      placeholder={'- Select Permission - '}
+                      selectFilterOptions={permissionTypeOptions}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={4}>
+                  <FormGroup>
+                    <Label>EHEA Key Commitment</Label>
+                    <SelectFilter
+                      field={'ehea_key_commitment'}
+                      value={ehea_key_commitment}
+                      onFilter={this.onFilterChange}
+                      onFilterRemove={this.onFilterRemove}
+                      placeholder={'- Select Permission -'}
+                      selectFilterOptions={permissionTypeOptions}
+                    />
+                  </FormGroup>
+                </Col>
+              </React.Fragment>
+            }
           </Row>
         </Collapse>
       </React.Fragment>
@@ -175,7 +180,8 @@ const mapStateToProps = (store) => {
     filterState: {
       filterOpen: store.countriesTable.filterOpen,
       filtered: store.countriesTable.filtered
-    }
+    },
+    isAdmin: store.user.is_admin
   }
 };
 

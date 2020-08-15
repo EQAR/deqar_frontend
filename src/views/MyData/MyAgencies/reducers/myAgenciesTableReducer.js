@@ -8,7 +8,7 @@ const initialState = {
   total: 0,
   sorted: [],
   filtered: [],
-  filterOpen: false,
+  filterOpen: true,
   resized: []
 };
 

@@ -9,7 +9,7 @@ const initialState = {
   total: 0,
   sorted: [{id: 'acronym', desc: false}],
   filtered: [],
-  filterOpen: false,
+  filterOpen: true,
   resized: []
 };
 

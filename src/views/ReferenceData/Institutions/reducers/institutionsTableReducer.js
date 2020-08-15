@@ -10,7 +10,7 @@ const initialState = {
   sorted: [{id: 'deqar_id', desc: false}],
   filtered: [],
   resized: [],
-  filterOpen: false
+  filterOpen: true
 };
 
 function institutionsTableReducer(state = initialState, action) {
