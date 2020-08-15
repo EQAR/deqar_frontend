@@ -10,21 +10,29 @@ import withPopupFormManager from "../../../../../components/FormManager/PopupFor
 import FormDatePickerField from "../../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 import FormTextArea from "../../../../../components/FormFields/FormTextArea/FormTextArea";
 
-const LocalIDSubform = ({formApi, formState, disabled}) => {
+const OtherIDSubform = ({formApi, formState, disabled}) => {
   return (
     <React.Fragment>
-      <FormTextField
-        field={'resource'}
-        hidden={true}
-        initialValue={'national identifier'}
-      />
       <Row>
         <Col>
           <FormGroup>
-            <Label for="identifier" className={'required'}>National Identifier</Label>
+            <Label for="resource" className={'required'}>Resource</Label>
+            <FormTextField
+              field={'resource'}
+              placeholder={'Enter resource'}
+              validate={validateRequired}
+              disabled={disabled}
+            />
+          </FormGroup>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <FormGroup>
+            <Label for="identifier" className={'required'}>Other Identifier</Label>
             <FormTextField
               field={'identifier'}
-              placeholder={'Enter national identifier'}
+              placeholder={'Enter identifier'}
               validate={validateRequired}
               disabled={disabled}
             />
@@ -39,7 +47,10 @@ const LocalIDSubform = ({formApi, formState, disabled}) => {
               field={'identifier_valid_from'}
               placeholderText={'YYYY-MM-DD'}
               disabled={disabled}
-              validate={(value) => validateDateFrom(value, formState.values['identifier_valid_to'])}
+              validate={(value) => validateDateFrom(
+                value,
+                formState.values['identifier_valid_to'],
+                "Valid from date should be earlier than valid to date!")}
             />
           </FormGroup>
         </Col>
@@ -71,4 +82,4 @@ const LocalIDSubform = ({formApi, formState, disabled}) => {
   )
 };
 
-export default withPopupFormManager(LocalIDSubform);
+export default withPopupFormManager(OtherIDSubform);
