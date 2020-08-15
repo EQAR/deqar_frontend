@@ -57,7 +57,11 @@ const LocalIDSubform = ({formApi, formState, disabled}) => {
               field={'identifier_valid_from'}
               placeholderText={'YYYY-MM-DD'}
               disabled={disabled}
-              validate={(value) => validateDateFrom(value, formState.values['identifier_valid_to'])}
+              validate={(value) => validateDateFrom(
+                value,
+                formState.values['identifier_valid_to'],
+                "Valid from date should be earlier than valid to date!"
+              )}
             />
           </FormGroup>
         </Col>

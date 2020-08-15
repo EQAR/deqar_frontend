@@ -58,7 +58,11 @@ const FocusCountrySubform = ({formApi, formState, disabled}) => {
               field={'country_valid_from'}
               placeholderText={'YYYY-MM-DD'}
               disabled={disabled}
-              validate={(value) => validateDateFromRequired(value, formState.values.country_valid_to)}
+              validate={(value) => validateDateFromRequired(
+                value,
+                formState.values.country_valid_to,
+                "Country valid from date should be earlier than valid to date!"
+              )}
             />
           </FormGroup>
         </Col>

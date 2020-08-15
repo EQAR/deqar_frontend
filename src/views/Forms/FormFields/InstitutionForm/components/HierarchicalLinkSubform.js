@@ -74,7 +74,11 @@ const HierarchicalLinkSubform = ({formApi, formState, disabled}) => {
             <FormDatePickerField
               field={'valid_from'}
               placeholderText={'YYYY-MM-DD'}
-              validate={(value) => validateDateFrom(value, formState.values.valid_to)}
+              validate={(value) => validateDateFrom(
+                value,
+                formState.values.valid_to,
+                "Link valid from date should be earlier than valid to date!"
+              )}
               disabled={disabled}
             />
           </FormGroup>

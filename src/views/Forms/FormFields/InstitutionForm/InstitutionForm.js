@@ -14,7 +14,7 @@ import FormDatePickerField from "../../../../components/FormFields/FormDatePicke
 import FormSelectField from "../../../../components/FormFields/FormSelectField/FormSelectField";
 import list from "../../../../services/List";
 import cx from "classnames";
-import {validateRequired, validateRoman} from "../../../../utils/validators";
+import {validateDateFromRequired, validateRequired, validateRoman} from "../../../../utils/validators";
 import FormManyMultipleField
   from "../../../../components/FormFieldsUncontrolled/FormManyMultipleField/FormManyMultipleField";
 import country from "../../../../services/Country";
@@ -22,7 +22,7 @@ import FormManyTextField from "../../../../components/FormFields/FormManyTextFie
 import PopupFormListManager from "../../../../components/FormManager/PopupFormListManager";
 import FormerNameSubform from "./components/FormerNameSubform";
 import LocalIDSubform from "./components/LocalIDSubform";
-import NationalIDSubform from "./components/NationalIDSubform";
+import OtherIDSubform from "./components/OtherIDSubform";
 import HierarchicalLinkSubform from "./components/HierarchicalLinkSubform";
 import HistoricalLinkSubform from "./components/HistoricalLinkSubform";
 
@@ -130,7 +130,6 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
                 formApi={formApi}
                 placeholder={'Enter alternative institution name'}
                 extra={0}
-                validate={validateRequired}
               />
             </FormGroup>
           </Col>
@@ -189,13 +188,13 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
           <Col md={12}>
             <PopupFormListManager
               field={'identifiers_national'}
-              label={'National ID'}
+              label={'Other ID'}
               formApi={formApi}
-              renderDisplayValue={value => (`${value.identifier} (National)`)}
+              renderDisplayValue={value => (`${value.identifier} (${value.resource})`)}
               labelShowRequired={false}
               disabled={readOnly}
             >
-              <NationalIDSubform />
+              <OtherIDSubform />
             </PopupFormListManager>
           </Col>
         </Row>
@@ -203,7 +202,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
       <Col md={6}>
         <Row>
           <Col md={12}>
-            <Label for="country" className={'required'}>Countries</Label>
+            <Label for="country" className={'required'}>Location</Label>
           </Col>
           <FormManyMultipleField
             addButtonText={'Add New Location'}
@@ -218,7 +217,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
                     <FormSelectField
                       field={'country'}
                       optionsAPI={country.select}
-                      placeholder={'Please select'}
+                      placeholder={'Please select country'}
                       labelField={'name_english'}
                       valueField={'id'}
                       disabled={readOnly}
@@ -229,7 +228,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
                   <FormGroup>
                     <FormTextField
                       field={'city'}
-                      placeholder={'Enter city name'}
+                      placeholder={'Please enter city name'}
                       disabled={readOnly}
                     />
                   </FormGroup>
@@ -246,6 +245,11 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
                 field={'founding_date'}
                 placeholderText={'YYYY-MM-DD'}
                 disabled={readOnly}
+                validate={(value) => validateDateFromRequired(
+                  value,
+                  formState.values.closing_date,
+                  "Founding date should be eariler than closing date!"
+                )}
               />
             </FormGroup>
           </Col>
@@ -268,7 +272,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
                 field={'qf_ehea_levels'}
                 optionsAPI={list.selectQFEHEALevels}
                 placeholder={'Please select'}
-                labelField={'qf_ehea_level'}
+                labelField={'level'}
                 valueField={'id'}
                 isMulti
                 disabled={readOnly}

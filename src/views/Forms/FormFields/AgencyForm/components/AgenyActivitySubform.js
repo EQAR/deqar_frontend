@@ -84,7 +84,11 @@ const AgencyActivitySubform = ({formApi, formState, disabled, submitDisabled, fo
               field={'activity_valid_from'}
               placeholderText={'YYYY-MM-DD'}
               disabled={disabled}
-              validate={(value) => validateDateFromRequired(value, formState.values.activity_valid_to)}
+              validate={(value) => validateDateFromRequired(
+                value,
+                formState.values.activity_valid_to,
+                "Activity valid from date should be eariler than valid to date!"
+              )}
             />
           </FormGroup>
         </Col>

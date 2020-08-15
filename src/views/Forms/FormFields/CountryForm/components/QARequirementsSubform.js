@@ -58,7 +58,11 @@ const QARequirmentsSubform = ({formApi, formState, disabled, submitDisabled, for
               field={'requirement_valid_from'}
               placeholderText={'YYYY-MM-DD'}
               disabled={disabled}
-              validate={(value) => validateDateFromRequired(value, formState.values.requirement_valid_to)}
+              validate={(value) => validateDateFromRequired(
+                value,
+                formState.values.requirement_valid_to,
+                "Requirement valid from date should be earlier than valid to date!"
+                )}
             />
           </FormGroup>
         </Col>

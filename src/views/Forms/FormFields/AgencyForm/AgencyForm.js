@@ -234,7 +234,10 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
               <Label for="registration_start" className={'required'}>Valid from</Label>
               <FormDatePickerField
                 field={'registration_start'}
-                validate={(value) => validateDateFromRequired(value, formState.values.registration_valid_to)}
+                validate={(value) => validateDateFromRequired(
+                  value,
+                  formState.values.registration_valid_to,
+                  'Registration start date should be earlier than registration end date')}
                 placeholderText={'YYYY-MM-DD'}
                 disabled={module === 'myAgency' ? true : readOnly}
               />

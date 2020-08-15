@@ -7,19 +7,19 @@ export const validateRequired = (value) => {
   } else if (value.length === 0) {
     return 'This field is required!'
   }
-}
+};
 
 export const validateEmail = (value) => {
   if (!EmailValidator.validate(value)) {
     return 'E-mail should be properly formatted.'
   }
-}
+};
 
 export const validateValuesMatch = (val1, val2) => {
   if (val1 !== val2) {
     return 'Values do not match!'
   }
-}
+};
 
 export const validateDate = (value) => {
   if (value) {
@@ -27,20 +27,20 @@ export const validateDate = (value) => {
     ? 'Date format is invalid!'
     : null
   }
-}
+};
 
 export const validatePastDate = (value) => (
   moment(value).isAfter(new Date())
-  ? 'Date should be earlier!'
+  ? 'Date should not exceed today\'s date!'
   : null
-)
+);
 
 export const validateRequiredDate = (value) => validateRequired(value) || validateDate(value)
 
 export const validateRequiredPastDate = (value) => (
   validateRequiredDate(value)
   || validatePastDate(value)
-)
+);
 
 export const validateURL = (value) => {
   if (value) {
@@ -51,7 +51,7 @@ export const validateURL = (value) => {
       return 'The URL is not properly formatted.'
     }
   }
-}
+};
 
 export const validateRequiredURL = (value) => validateRequired(value) || validateURL(value)
 
@@ -65,11 +65,11 @@ export const validateRoman = (value) => {
   }
 };
 
-export const validateDateFrom = (value, date_to) => {
+export const validateDateFrom = (value, date_to, errorMessage) => {
   if (!validateDate(value)) {
     if (date_to) {
       if (!moment(value).isBefore(date_to)) {
-        return "Founding year is later than closing year"
+        return errorMessage
       }
     }
   } else {
@@ -77,11 +77,11 @@ export const validateDateFrom = (value, date_to) => {
   }
 }
 
-export const validateDateFromRequired = (value, date_to) => {
+export const validateDateFromRequired = (value, date_to, errorMessage) => {
   if (!validateRequiredDate(value)) {
     if (date_to) {
       if (!validateRequiredDate(date_to)) {
-        return validateDateFrom(value, date_to) ? validateDateFrom(value, date_to) : null;
+        return validateDateFrom(value, date_to, errorMessage) ? validateDateFrom(value, date_to, errorMessage) : null;
       }
     }
   } else {

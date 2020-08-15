@@ -216,7 +216,11 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
               <Label for="valid_from" className={'required'}>Valid from</Label>
               <FormDatePickerField
                 field={'valid_from'}
-                validate={(value) => validateDateFromRequired(value, formState.values.valid_to)}
+                validate={(value) => validateDateFromRequired(
+                  value,
+                  formState.values.valid_to,
+                  "Report valid from date should be earlier than valid to date!"
+                  )}
                 placeholderText={'YYYY-MM-DD'}
                 disabled={readOnly}
               />

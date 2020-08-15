@@ -1,8 +1,8 @@
 import React from 'react';
 import {Col, FormGroup, Label, Row} from "reactstrap";
-import {validateRequired} from "../../../../../utils/validators";
 import FormTextArea from "../../../../../components/FormFields/FormTextArea/FormTextArea";
 import withPopupFormManager from "../../../../../components/FormManager/PopupFormManagerHOC";
+import {validateRequiredURL} from "../../../../../utils/validators";
 
 const ReportLinkSubform = ({formApi, formState, disabled}) => {
   return (
@@ -13,7 +13,7 @@ const ReportLinkSubform = ({formApi, formState, disabled}) => {
           <FormTextArea
             field={'link'}
             placeholder={'Enter URL'}
-            validate={validateRequired}
+            validate={validateRequiredURL}
             disabled={disabled}
           />
         </FormGroup>
