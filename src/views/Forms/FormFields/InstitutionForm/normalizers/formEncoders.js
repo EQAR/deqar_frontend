@@ -55,6 +55,7 @@ export const encodeHistoricalLink = (formValues) => {
   if (historical_links.length > 0) {
     historical_links.forEach(link => {
       link['institution'] = link['institution'][0];
+      link['relationship_type'] = {id: link['relationship_type']['relationship_type_id']};
       if (link.relationship_type.institution_direction === 'target') {
         values['historical_source'].push(link);
       } else {
@@ -62,6 +63,8 @@ export const encodeHistoricalLink = (formValues) => {
       }
     });
   }
+
+  console.log(values);
 
   return values;
 };
