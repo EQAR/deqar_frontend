@@ -108,7 +108,7 @@ class CountriesTableFilters extends Component {
                 <Input
                   value={search || ""}
                   onChange={(e) => this.onFilterChange(e.target.value, 'search')}
-                  placeholder={'Filter by Country Name / Alpha2 / Alpha3'}
+                  placeholder={'Filter by Country Name / Alpha-2 Code / Alpha-3 Code'}
                 />
               </FormGroup>
             </Col>
@@ -129,39 +129,36 @@ class CountriesTableFilters extends Component {
               <React.Fragment>
                 <Col md={4}>
                   <FormGroup>
-                    <Label>External QAA is Permitted</Label>
-                    <SelectFilter
-                      field={'external_QAA_is_permitted'}
-                      value={external_QAA_is_permitted}
-                      onFilter={this.onFilterChange}
-                      onFilterRemove={this.onFilterRemove}
-                      placeholder={'- Select Permission -'}
-                      selectFilterOptions={permissionTypeOptions}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col md={4}>
-                  <FormGroup>
-                    <Label>European Approach is Permitted</Label>
-                    <SelectFilter
-                      field={'european_approach_is_permitted'}
-                      value={european_approach_is_permitted}
-                      onFilter={this.onFilterChange}
-                      onFilterRemove={this.onFilterRemove}
-                      placeholder={'- Select Permission - '}
-                      selectFilterOptions={permissionTypeOptions}
-                    />
-                  </FormGroup>
-                </Col>
-                <Col md={4}>
-                  <FormGroup>
-                    <Label>EHEA Key Commitment</Label>
                     <SelectFilter
                       field={'ehea_key_commitment'}
                       value={ehea_key_commitment}
                       onFilter={this.onFilterChange}
                       onFilterRemove={this.onFilterRemove}
-                      placeholder={'- Select Permission -'}
+                      placeholder={'Filter by EHEA Key Commitment'}
+                      selectFilterOptions={permissionTypeOptions}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={4}>
+                  <FormGroup>
+                    <SelectFilter
+                      field={'external_QAA_is_permitted'}
+                      value={external_QAA_is_permitted}
+                      onFilter={this.onFilterChange}
+                      onFilterRemove={this.onFilterRemove}
+                      placeholder={'Filter by Cross Border QA Permitted'}
+                      selectFilterOptions={permissionTypeOptions}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col md={4}>
+                  <FormGroup>
+                    <SelectFilter
+                      field={'european_approach_is_permitted'}
+                      value={european_approach_is_permitted}
+                      onFilter={this.onFilterChange}
+                      onFilterRemove={this.onFilterRemove}
+                      placeholder={'Filter by European Approach Permitted'}
                       selectFilterOptions={permissionTypeOptions}
                     />
                   </FormGroup>

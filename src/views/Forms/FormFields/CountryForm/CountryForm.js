@@ -34,9 +34,9 @@ const CountryForm = ({formType, formApi, formState, readOnly, module, ...props})
     <Row>
       <Col md={6} className={style.reportFormLeft}>
         <Row>
-          <Col md={6}>
+          <Col md={4}>
             <FormGroup>
-              <Label for="name_english">English Name</Label>
+              <Label for="name_english">English Country Name</Label>
               <FormTextField
                 field={'name_english'}
                 disabled={readOnly}
@@ -45,7 +45,7 @@ const CountryForm = ({formType, formApi, formState, readOnly, module, ...props})
           </Col>
           <Col md={3}>
             <FormGroup>
-              <Label for="iso_3166_alpha2">Alpha 2</Label>
+              <Label for="iso_3166_alpha2">Alpha-2 Code</Label>
               <FormTextField
                 field={'iso_3166_alpha2'}
                 disabled={readOnly}
@@ -54,16 +54,25 @@ const CountryForm = ({formType, formApi, formState, readOnly, module, ...props})
           </Col>
           <Col md={3}>
             <FormGroup>
-              <Label for="iso_3166_alpha3">Alpha 3</Label>
+              <Label for="iso_3166_alpha3">Alpha-3 Code</Label>
               <FormTextField
                 field={'iso_3166_alpha3'}
                 disabled={readOnly}
               />
             </FormGroup>
           </Col>
+          <Col md={2}>
+            <FormGroup>
+              <Label for="id">Country ID</Label>
+              <FormTextField
+                field={'id'}
+                disabled={true}
+              />
+            </FormGroup>
+          </Col>
         </Row>
         <Row>
-          <Col md={6}>
+          <Col md={3}>
             <FormGroup>
               <Label for="ehea_is_member">EHEA Member</Label>
               <FormCheckbox
@@ -74,9 +83,20 @@ const CountryForm = ({formType, formApi, formState, readOnly, module, ...props})
               />
             </FormGroup>
           </Col>
+          <Col md={3}>
+            <FormGroup>
+              <Label for="has_full_institution_list">Institution List</Label>
+              <FormCheckbox
+                field={'has_full_institution_list'}
+                disabled={readOnly}
+                className={'form-control'}
+                style={{display: 'block', marginTop: 0, marginLeft: '10px'}}
+              />
+            </FormGroup>
+          </Col>
           <Col md={6}>
             <FormGroup>
-              <Label for="eqar_governmental_member_start">Starting of EHEA Membership</Label>
+              <Label for="eqar_governmental_member_start">EQAR Member Since</Label>
               <FormDatePickerField
                 field={'eqar_governmental_member_start'}
                 placeholderText={'YYYY-MM-DD'}
@@ -103,7 +123,32 @@ const CountryForm = ({formType, formApi, formState, readOnly, module, ...props})
         <Row>
           <Col md={12}>
             <FormGroup>
-              <Label for="qa_requirement_note">QA Requirement Note</Label>
+              <Label for="general_note">General Information on Higher Education</Label>
+              <FormTextAreaFormatted
+                field={'general_note'}
+                disabled={readOnly}
+              />
+            </FormGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            <PopupFormListManager
+              field={'qa_requirements'}
+              label={'National EQA Requirements'}
+              formApi={formApi}
+              renderDisplayValue={renderQARequirements}
+              labelShowRequired={false}
+              disabled={readOnly}
+            >
+              <QARequirmentsSubform />
+            </PopupFormListManager>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            <FormGroup>
+              <Label for="qa_requirement_note">National EQA Requirement Note</Label>
               <FormTextAreaFormatted
                 field={'qa_requirement_note'}
                 disabled={readOnly}
@@ -113,8 +158,24 @@ const CountryForm = ({formType, formApi, formState, readOnly, module, ...props})
         </Row>
         <Row>
           <Col md={12}>
+            <PopupFormListManager
+              field={'qaa_regulations'}
+              label={'Further Information and Resources'}
+              formApi={formApi}
+              renderDisplayValue={renderQAARegulations}
+              labelShowRequired={false}
+              disabled={readOnly}
+            >
+              <QAARegulationsSubform />
+            </PopupFormListManager>
+          </Col>
+        </Row>
+      </Col>
+      <Col md={6}>
+        <Row>
+          <Col md={12}>
             <FormGroup>
-              <Label for="external_QAA_is_permitted">External QAA is Permitted</Label>
+              <Label for="external_QAA_is_permitted">Cross Border QA Permitted</Label>
               <FormSelectField
                 field={'external_QAA_is_permitted'}
                 optionsAPI={country.getPermissionTypes}
@@ -129,7 +190,7 @@ const CountryForm = ({formType, formApi, formState, readOnly, module, ...props})
         <Row>
           <Col md={12}>
             <FormGroup>
-              <Label for="external_QAA_note">External QAA Note</Label>
+              <Label for="external_QAA_note">Cross Border QA Note</Label>
               <FormTextAreaFormatted
                 field={'external_QAA_note'}
                 disabled={readOnly}
@@ -139,51 +200,8 @@ const CountryForm = ({formType, formApi, formState, readOnly, module, ...props})
         </Row>
         <Row>
           <Col md={12}>
-            <PopupFormListManager
-              field={'qaa_regulations'}
-              label={'QAA Regulations'}
-              formApi={formApi}
-              renderDisplayValue={renderQAARegulations}
-              labelShowRequired={false}
-              disabled={readOnly}
-            >
-              <QAARegulationsSubform />
-            </PopupFormListManager>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={12}>
-            <PopupFormListManager
-              field={'qa_requirements'}
-              label={'QA Requirements'}
-              formApi={formApi}
-              renderDisplayValue={renderQARequirements}
-              labelShowRequired={false}
-              disabled={readOnly}
-            >
-              <QARequirmentsSubform />
-            </PopupFormListManager>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={12}>
             <FormGroup>
-              <Label for="has_full_institution_list">Full Institution List</Label>
-              <FormCheckbox
-                field={'has_full_institution_list'}
-                disabled={readOnly}
-                className={'form-control'}
-                style={{display: 'block', marginTop: 0, marginLeft: '10px'}}
-              />
-            </FormGroup>
-          </Col>
-        </Row>
-      </Col>
-      <Col md={6}>
-        <Row>
-          <Col md={12}>
-            <FormGroup>
-              <Label for="eligibility">Eligibility</Label>
+              <Label for="eligibility">Cross Border QA - Eligibility Requirements for Foreign Agencies</Label>
               <FormTextAreaFormatted
                 field={'eligibility'}
                 disabled={readOnly}
@@ -194,7 +212,7 @@ const CountryForm = ({formType, formApi, formState, readOnly, module, ...props})
         <Row>
           <Col md={12}>
             <FormGroup>
-              <Label for="conditions">Conditions</Label>
+              <Label for="conditions">Cross Border QA - Conditions for Foreign Agencies</Label>
               <FormTextAreaFormatted
                 field={'conditions'}
                 disabled={readOnly}
@@ -205,7 +223,7 @@ const CountryForm = ({formType, formApi, formState, readOnly, module, ...props})
         <Row>
           <Col md={12}>
             <FormGroup>
-              <Label for="recognition">Recognition</Label>
+              <Label for="recognition">Cross Border QA - Recognition of External Reviews</Label>
               <FormTextAreaFormatted
                 field={'recognition'}
                 disabled={readOnly}
@@ -216,7 +234,7 @@ const CountryForm = ({formType, formApi, formState, readOnly, module, ...props})
         <Row>
           <Col md={12}>
             <FormGroup>
-              <Label for="european_approach_is_permitted">European Approach is Permitted</Label>
+              <Label for="european_approach_is_permitted">European Approach Permitted</Label>
               <FormSelectField
                 field={'european_approach_is_permitted'}
                 optionsAPI={country.getPermissionTypes}
@@ -234,17 +252,6 @@ const CountryForm = ({formType, formApi, formState, readOnly, module, ...props})
               <Label for="european_approach_note">European Approach Note</Label>
               <FormTextAreaFormatted
                 field={'european_approach_note'}
-                disabled={readOnly}
-              />
-            </FormGroup>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={12}>
-            <FormGroup>
-              <Label for="general_note">General Note</Label>
-              <FormTextAreaFormatted
-                field={'general_note'}
                 disabled={readOnly}
               />
             </FormGroup>

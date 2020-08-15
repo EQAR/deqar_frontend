@@ -9,3 +9,12 @@
 .CountriesCardBody {
     padding: 10px;
 }
+
+.Link {
+    color: #fff;
+}
+
+.Link:hover {
+    color: #fff;
+    text-decoration: none;
+}

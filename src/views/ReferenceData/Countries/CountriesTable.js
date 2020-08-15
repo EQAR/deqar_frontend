@@ -28,23 +28,30 @@ const CountriesTable = (props) => {
 
   const columnConfig = [
     {
+      field: 'id',
+      label: 'Country ID',
+      sortable: true,
+      width: 100,
+    }, {
+      field: 'iso_3166_alpha2',
+      label: 'Alpha-2 Code',
+      sortable: true,
+      width: 150,
+      sortQueryParam: 'iso_3166_alpha2',
+      render: (row) => linkRenderer(row, 'iso_3166_alpha2'),
+    }, {
+      field: 'iso_3166_alpha3',
+      label: 'Alpha-3 Code',
+      sortable: true,
+      width: 150,
+      sortQueryParam: 'iso_3166_alpha3',
+      render: (row) => linkRenderer(row, 'iso_3166_alpha3'),
+    }, {
       field: 'name_english',
-      label: 'Name',
+      label: 'Country',
       sortable: true,
       sortQueryParam: 'name_english',
       render: (row) => linkRenderer(row, 'name_english'),
-    }, {
-      field: 'iso_3166_alpha2',
-      label: 'Alpha 2',
-      sortable: true,
-      width: 150,
-      sortQueryParam: 'iso_3166_alpha2'
-    }, {
-      field: 'iso_3166_alpha3',
-      label: 'Alpha 3',
-      sortable: true,
-      width: 150,
-      sortQueryParam: 'iso_3166_alpha3'
     }, {
       field: 'ehea_is_member',
       label: 'EHEA Member',
