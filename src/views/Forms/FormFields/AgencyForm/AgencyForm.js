@@ -75,9 +75,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
               label={'Agency Name, Primary'}
               formType={formType}
               formApi={formApi}
-              values={() => {
-                return formState.values['current_primary_name'].length > 1 ? formState.values['current_primary_name'][0] : undefined
-              }}
+              values={formState.values.hasOwnProperty('current_primary_name') ? formState.values['current_primary_name'][0] : undefined}
               scopeName={'current_primary_name[0]'}
               counter={1}
               field={'name'}
@@ -90,9 +88,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
               label={'Agency Acronym, Primary'}
               formType={formType}
               formApi={formApi}
-              values={() => {
-                return formState.values['current_primary_name'].length > 1 ? formState.values['current_primary_name'][0] : undefined
-              }}
+              values={formState.values.hasOwnProperty('current_primary_name') ? formState.values['current_primary_name'][0] : undefined}
               scopeName={'current_primary_name[0]'}
               counter={1}
               field={'acronym'}

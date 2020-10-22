@@ -25,9 +25,7 @@ const NameSubform = ({formApi, formState, formType}) => {
             label={'Agency Former Name, Primary'}
             formType={formType}
             formApi={formApi}
-            values={() => {
-              return formState.values['former_primary_name'].length > 1 ? formState.values['former_primary_name'][0] : undefined
-            }}
+            values={formState.values.hasOwnProperty('former_primary_name') ? formState.values['former_primary_name'][0] : undefined}
             scopeName={'former_primary_name[0]'}
             counter={1}
             field={'name'}
@@ -40,9 +38,7 @@ const NameSubform = ({formApi, formState, formType}) => {
             label={'Agency Former Acronym, Primary'}
             formType={formType}
             formApi={formApi}
-            values={() => {
-              return formState.values['former_primary_name'].length > 1 ? formState.values['former_primary_name'][0] : undefined
-            }}
+            values={formState.values.hasOwnProperty('former_primary_name') ? formState.values['former_primary_name'][0] : undefined}
             scopeName={'former_primary_name[0]'}
             counter={1}
             field={'acronym'}
