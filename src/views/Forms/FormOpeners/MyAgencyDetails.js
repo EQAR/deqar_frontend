@@ -2,7 +2,8 @@ import React from 'react';
 import AgencyForm from "../FormFields/AgencyForm/AgencyForm";
 import {connect} from "react-redux";
 import agency from "../../../services/Agency";
-import {decodeNameData, encodeNameData} from "../FormFields/AgencyForm/normalizers/populateFormNormalizer";
+import {decodeNameData} from "../FormFields/AgencyForm/normalizers/formDecoders";
+import {encodeNameData} from "../FormFields/AgencyForm/normalizers/formEncoders";
 import {updateFormNormalizer} from "../FormFields/AgencyForm/normalizers/updateFormNormalizer";
 
 const MyAgency = ({userIsAdmin, match, agencies, ...props}) => {

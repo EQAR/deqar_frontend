@@ -36,12 +36,12 @@ const withPopupFormManager = (OriginalPopupForm) => {
     };
 
     render() {
-      const {formIndex, field, title, readOnly, modalOpen, disabled, submitDisabled} = this.props;
+      const {formIndex, field, title, readOnly, modalOpen, disabled, submitDisabled, size} = this.props;
       const submitButtonDisabled = submitDisabled !== undefined ? submitDisabled : disabled;
       const titleText = `${this.renderActionName()} ${title}`;
 
       return(
-        <Modal isOpen={modalOpen} toggle={this.onToggle}>
+        <Modal isOpen={modalOpen} toggle={this.onToggle} size={size ? size : ''}>
           <Form
             getApi={this.setFormApi}
             id={`${field}-${formIndex}`}

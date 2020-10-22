@@ -4,113 +4,112 @@ import withPopupFormManager from "../../../../../components/FormManager/PopupFor
 import FormTextField from "../../../../../components/FormFields/FormTextField/FormTextField";
 import {TextArea} from "informed";
 import FormManyMultipleField from "../../../../../components/FormFieldsUncontrolled/FormManyMultipleField/FormManyMultipleField";
-import {validateRequiredUnique} from "../../../../../utils/validators";
+import {
+  validateMultipleRequiredDate,
+  validateRequiredDate,
+  validateRequiredUnique
+} from "../../../../../utils/validators";
 import validatePrimaryCheckbox from "../validators/validatePrimaryCheckbox";
 import FormCheckbox from "../../../../../components/FormFields/FormCheckbox/FormCheckbox";
+import FormTextTransliterated from "../../../../../components/FormFields/FormTextTransliterated/FormTextTransliterated";
+import FormDatePickerField from "../../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 
 const NameSubform = ({formApi, formState, formType}) => {
   const disabled = formType === 'view';
 
-  const onCheckboxClick = (field, index, checked) => {
-    if (checked) {
-      const values = formState.values;
-      if (values.hasOwnProperty('agency_name_versions')) {
-        values['agency_name_versions'].forEach((value, idx) => {
-          if (idx+1 !== index) {
-            value[field] = false
-          }
-        });
-        formApi.setValues(values);
-      }
-    }
-  };
-
   return (
     <React.Fragment>
       <Row>
+        <Col md={7}>
+          <FormTextTransliterated
+            label={'Agency Former Name, Primary'}
+            formType={formType}
+            formApi={formApi}
+            values={() => {
+              return formState.values['former_primary_name'].length > 1 ? formState.values['former_primary_name'][0] : undefined
+            }}
+            scopeName={'former_primary_name[0]'}
+            counter={1}
+            field={'name'}
+            transliterationField={'name_transliterated'}
+            readOnly={disabled}
+          />
+        </Col>
+        <Col md={5}>
+          <FormTextTransliterated
+            label={'Agency Former Acronym, Primary'}
+            formType={formType}
+            formApi={formApi}
+            values={() => {
+              return formState.values['former_primary_name'].length > 1 ? formState.values['former_primary_name'][0] : undefined
+            }}
+            scopeName={'former_primary_name[0]'}
+            counter={1}
+            field={'acronym'}
+            transliterationField={'acronym_transliterated'}
+            readOnly={disabled}
+          />
+        </Col>
+      </Row>
+      <Row>
         <FormManyMultipleField
-          scopeName={'agency_name_versions'}
+          label={'Agency Alternative Names / Acronyms'}
+          deleteInRow={true}
+          scopeName={'former_alternative_names'}
           formApi={formApi}
-          data={formState.values['agency_name_versions']}
+          data={formState.values['former_alternative_names']}
           disabled={disabled}
-          render={({counter}) => (
+          extra={0}
+          addButtonText={'Add Alternative Name / Acronym'}
+          render={({counter, scope, data}) => (
             <React.Fragment>
-              <Col md={10}>
-                <FormGroup>
-                  <Label for="name">Agency Name</Label>
-                  <FormTextField
-                    field={'name'}
-                    placeholder={'Agency Name'}
-                    disabled={disabled}
-                    validate={(value) => validateRequiredUnique(
-                      value,
-                      ['name', 'agency_name_versions.name'],
-                      formState.values
-                    )}
-                  />
-                </FormGroup>
+              <Col md={7}>
+                <FormTextTransliterated
+                  labelDisabled={true}
+                  repeat={true}
+                  scopeName={scope}
+                  formType={disabled ? 'view' : 'edit'}
+                  formApi={formApi}
+                  field={'name'}
+                  values={data}
+                  transliterationField={'name_transliterated'}
+                />
               </Col>
-              <Col md={2}>
-                <FormGroup>
-                  <Label for="name_is_primary">Primary</Label>
-                  <FormCheckbox
-                    onClick={(e) => onCheckboxClick('name_is_primary', counter, e.target.checked)}
-                    field={'name_is_primary'}
-                    disabled={disabled}
-                    validate={(value, values) => validatePrimaryCheckbox(values, 'name_is_primary')}
-                  />
-                </FormGroup>
-              </Col>
-              <Col md={12}>
-                <FormGroup>
-                  <FormTextField
-                    field={'name_transliterated'}
-                    placeholder={'Agency Name Transliteration'}
-                    disabled={disabled}
-                  />
-                </FormGroup>
-              </Col>
-              <Col md={10}>
-                <FormGroup>
-                  <Label for="name">Agency Acronym</Label>
-                  <FormTextField
-                    field={'acronym'}
-                    placeholder={'Enter agency acronym'}
-                    disabled={disabled}
-                  />
-                </FormGroup>
-              </Col>
-              <Col md={2}>
-                <FormGroup>
-                  <Label for="acronym_is_primary">Primary</Label>
-                  <FormCheckbox
-                    onClick={(e) => onCheckboxClick('acronym_is_primary', counter, e.target.checked)}
-                    field={'acronym_is_primary'}
-                    disabled={disabled}
-                  />
-                </FormGroup>
-              </Col>
-              <Col md={10}>
-                <FormGroup>
-                  <FormTextField
-                    field={'acronym_transliterated'}
-                    placeholder={'Agency Acronym Transliteration'}
-                    disabled={disabled}
-                  />
-                </FormGroup>
+              <Col md={4}>
+                <FormTextTransliterated
+                  labelDisabled={true}
+                  repeat={true}
+                  scopeName={scope}
+                  formType={disabled ? 'view' : 'edit'}
+                  formApi={formApi}
+                  field={'acronym'}
+                  values={data}
+                  transliterationField={'acronym_transliterated'}
+                />
               </Col>
             </React.Fragment>
           )}
         />
       </Row>
       <Row>
-        <Col md={12}>
+        <Col md={6}>
           <FormGroup>
             <Label for="name_note">Name Note</Label>
             <TextArea
               field={'name_note'}
               placeholder={disabled ? "" : 'Enter note, as applicable'}
               className={'form-control'}
+              disabled={disabled}
+            />
+          </FormGroup>
+        </Col>
+        <Col md={6}>
+          <FormGroup>
+            <Label for="valid_to" className={'required'}>Valid To</Label>
+            <FormDatePickerField
+              field={'name_valid_to'}
+              placeholderText={'YYYY-MM-DD'}
+              validate={validateRequiredDate}
               disabled={disabled}
             />
           </FormGroup>

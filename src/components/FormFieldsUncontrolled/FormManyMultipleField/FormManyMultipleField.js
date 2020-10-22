@@ -1,15 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import {Scope} from "informed";
-import {Button, Col} from "reactstrap";
+import {Button, Col, Label} from "reactstrap";
 import style from "./FormManyMultipleField.module.css";
 
-const FormManyMultipleField = ({disabled, scopeName, data, formApi, render, addButtonText="Add More...", ...props}) => {
+const FormManyMultipleField = ({disabled, scopeName, data, formApi, render, deleteInRow=false, extra=1,
+                                 label, required, addButtonText="Add More...", ...props}) => {
   const [count, setCount] = useState(1);
 
   // componentDidMount
   useEffect(() => {
-    setCount(data ? data.length : 1);
-  }, [data]);
+    setCount(data ? data.length : extra);
+  }, [data, extra]);
 
   const onAddButtonClick = () => {
     if (count === 0) {
@@ -36,21 +37,30 @@ const FormManyMultipleField = ({disabled, scopeName, data, formApi, render, addB
   return (
     <React.Fragment>
       {
+        label &&
+          <Col sm={12}>
+            <Label className={required ? 'required' : undefined}>{label}</Label>
+          </Col>
+      }
+      {
         [...Array(count)].map((c, idx) => {
           const scope = `${scopeName}[${idx}]`;
           return (
             <React.Fragment key={idx}>
               <Scope scope={scope}>
-                {render({counter: idx+1})}
+                {render({counter: idx+1, scope: scope, data: data})}
                 {!disabled && (
-                  <Col md={2}>
-                    <Button
-                      color="secondary"
-                      size="sm"
-                      onClick={(e) => onRemoveButtonClick(idx)}
-                    >
-                      <i className="fa fa-trash-o"> </i>
-                    </Button>
+                  <Col sm={1}>
+                    <div className="pull-right">
+                      <Button
+                        color="secondary"
+                        size="sm"
+                        onClick={(e) => onRemoveButtonClick(idx)}
+                        className={style.DeleteButton}
+                      >
+                        <i className="fa fa-trash-o"> </i>
+                      </Button>
+                    </div>
                   </Col>
                 )}
               </Scope>

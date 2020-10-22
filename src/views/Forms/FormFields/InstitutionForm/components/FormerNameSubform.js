@@ -6,36 +6,19 @@ import withPopupFormManager from "../../../../../components/FormManager/PopupFor
 import FormManyTextField from "../../../../../components/FormFields/FormManyTextField/FormManyTextField";
 import FormDatePickerField from "../../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 import FormTextArea from "../../../../../components/FormFields/FormTextArea/FormTextArea";
+import FormTextTransliterated from "../../../../../components/FormFields/FormTextTransliterated/FormTextTransliterated";
 
 const FormerNameSubform = ({formApi, formState, disabled}) => {
   return (
     <React.Fragment>
-      <Row>
-        <Col>
-          <FormGroup>
-            <Label for="former_name_official" className={'required'}>Institution Name, Official</Label>
-            <FormTextField
-              field={'name_official'}
-              placeholder={'Enter official institution name'}
-              validate={validateRequired}
-              disabled={disabled}
-            />
-          </FormGroup>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <FormGroup>
-            <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
-            <FormTextField
-              field={'name_official_transliterated'}
-              placeholder={'Enter transliterated form'}
-              disabled={disabled}
-              validate={validateRoman}
-            />
-          </FormGroup>
-        </Col>
-      </Row>
+      <FormTextTransliterated
+        label={'Institution Former Name, Official'}
+        formType={disabled ? 'view' : 'edit'}
+        formApi={formApi}
+        field={'name_official'}
+        transliterationField={'name_official_transliterated'}
+        readOnly={disabled}
+      />
       <Row>
         <Col>
           <FormGroup>

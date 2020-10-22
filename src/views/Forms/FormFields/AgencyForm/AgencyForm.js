@@ -28,6 +28,8 @@ import FocusCountrySubform from "./components/FocusCountrySubform";
 import NameSubform from "./components/NameSubform";
 import FormManyTextField from "../../../../components/FormFields/FormManyTextField/FormManyTextField";
 import DecisionSubform from "./components/DecisionSubform";
+import FormTextTransliterated from "../../../../components/FormFields/FormTextTransliterated/FormTextTransliterated";
+import FormManyMultipleField from "../../../../components/FormFieldsUncontrolled/FormManyMultipleField/FormManyMultipleField";
 
 
 const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) => {
@@ -56,11 +58,11 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
   };
 
   const renderNames = (value) => {
-    const {agency_name_versions} = value;
-    const name_primary = agency_name_versions.filter(version => version['name_is_primary']);
-    const acronym_primary = agency_name_versions.filter(version => version['acronym_is_primary']);
-    if (name_primary.length > 0) {
-      return `${name_primary[0]['name']} (${acronym_primary[0]['acronym']})`
+    const {former_primary_name, ...values} = value;
+    if (former_primary_name.length > 0) {
+      const name = former_primary_name[0]['name'];
+      const acronym = former_primary_name[0]['acronym'];
+      return acronym ? `${name} (${acronym})` : name;
     }
   };
 
@@ -68,39 +70,87 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
     <Row>
       <Col md={6} className={style.reportFormLeft}>
         <Row>
-          <Col md={12}>
-            <FormGroup>
-              <Label for="primary_name_acronym">Primary Name / Acronym</Label>
-              <FormTextField
-                field={'primary_name_acronym'}
-                placeholder={'Primary Name / Acronym'}
-                disabled={true}
-              />
-            </FormGroup>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={12}>
-            <PopupFormListManager
-              label={'Current Names / Acronyms'}
-              field={'current_names'}
+          <Col md={7}>
+            <FormTextTransliterated
+              label={'Agency Name, Primary'}
+              formType={formType}
               formApi={formApi}
-              renderDisplayValue={renderNames}
-              labelShowRequired={true}
-              disabled={module === 'myAgency' ? true : readOnly}
-            >
-              <NameSubform
-                formType={formType}
-                submitDisabled={formType === 'view'}
-              />
-            </PopupFormListManager>
+              values={() => {
+                return formState.values['current_primary_name'].length > 1 ? formState.values['current_primary_name'][0] : undefined
+              }}
+              scopeName={'current_primary_name[0]'}
+              counter={1}
+              field={'name'}
+              transliterationField={'name_transliterated'}
+              readOnly={readOnly}
+            />
+          </Col>
+          <Col md={5}>
+            <FormTextTransliterated
+              label={'Agency Acronym, Primary'}
+              formType={formType}
+              formApi={formApi}
+              values={() => {
+                return formState.values['current_primary_name'].length > 1 ? formState.values['current_primary_name'][0] : undefined
+              }}
+              scopeName={'current_primary_name[0]'}
+              counter={1}
+              field={'acronym'}
+              transliterationField={'acronym_transliterated'}
+              readOnly={readOnly}
+            />
           </Col>
         </Row>
         <Row>
+          <FormManyMultipleField
+            label={'Agency Alternative Names / Acronyms'}
+            deleteInRow={true}
+            scopeName={'current_alternative_names'}
+            formApi={formApi}
+            data={formState.values['current_alternative_names']}
+            disabled={readOnly}
+            extra={0}
+            addButtonText={'Add Alternative Name / Acronym'}
+            render={({counter, scope, data}) => (
+              <React.Fragment>
+                <Col md={7}>
+                  <FormTextTransliterated
+                    repeat={true}
+                    labelDisabled={true}
+                    scopeName={scope}
+                    counter={counter}
+                    values={data}
+                    formType={formType}
+                    formApi={formApi}
+                    field={'name'}
+                    transliterationField={'name_transliterated'}
+                    readOnly={readOnly}
+                  />
+                </Col>
+                <Col md={4}>
+                  <FormTextTransliterated
+                    repeat={true}
+                    labelDisabled={true}
+                    scopeName={scope}
+                    counter={counter}
+                    values={data}
+                    formType={formType}
+                    formApi={formApi}
+                    field={'acronym'}
+                    transliterationField={'acronym_transliterated'}
+                    readOnly={readOnly}
+                  />
+                </Col>
+              </React.Fragment>
+            )}
+          />
+          </Row>
+          <Row>
           <Col md={12}>
             <PopupFormListManager
               label={'Former Names / Acronyms'}
-              field={'former_names'}
+              field={'names_former'}
+              btnLabel={'Add previous name set'}
               formApi={formApi}
               renderDisplayValue={renderNames}
               labelShowRequired={false}
@@ -109,6 +159,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
               <NameSubform
                 formType={formType}
                 submitDisabled={formType === 'view'}
+                size={'lg'}
               />
             </PopupFormListManager>
           </Col>

@@ -12,3 +12,11 @@
     margin-left: 10px;
     margin-bottom: 10px;
 }
+
+.DeleteButton {
+    margin-top: 4px;
+}
+
+.SameRowButton {
+    margin-top: 32px;
+}

@@ -12,7 +12,7 @@ import FormManyMultipleField from "../../../../../components/FormFieldsUncontrol
 const ProgrammeSubform = ({formApi, formState, disabled}) => {
   return (
     <Row>
-      <Col md={12}>
+      <Col md={6}>
         <FormGroup>
           <Label for="name_primary" className={'required'}>Programme Name</Label>
           <FormTextField
@@ -27,7 +27,7 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
           />
         </FormGroup>
       </Col>
-      <Col md={12}>
+      <Col md={6}>
         <FormGroup>
           <Label for="qualification_primary">Qualification Name</Label>
           <FormTextField
@@ -37,6 +37,9 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
           />
         </FormGroup>
       </Col>
+      <Col md={12}>
+        <Label for="alternative_names">Alternative Names / Qualifications</Label>
+      </Col>
       <FormManyMultipleField
         disabled={disabled}
         scopeName={'alternative_names'}
@@ -44,9 +47,8 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
         data={formState.values['alternative_names']}
         render={({counter}) => (
           <React.Fragment>
-            <Col md={12}>
+            <Col sm={6}>
               <FormGroup>
-                <Label for="name_alternative">{`Alternative Programme Name / Qualification Name # ${counter}`}</Label>
                 <FormTextField
                   field={'name_alternative'}
                   placeholder={'Enter alternative programme name'}
@@ -59,7 +61,7 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
                 />
               </FormGroup>
             </Col>
-            <Col md={10}>
+            <Col sm={5}>
               <FormGroup>
                 <FormTextField
                   field={'qualification_alternative'}
@@ -71,7 +73,7 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
           </React.Fragment>
         )}
       />
-      <Col md={12}>
+      <Col md={6}>
         <FormGroup>
           <Label for="qf_ehea_level">QF-EHEA Level</Label>
           <FormSelectField
@@ -86,7 +88,7 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
           />
         </FormGroup>
       </Col>
-      <Col md={12}>
+      <Col md={6}>
         <FormGroup>
           <Label for="nqf_level">NQF Level</Label>
           <FormTextField

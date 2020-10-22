@@ -96,7 +96,7 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
             disabled={readOnly}
             validate={validateProgrammes}
           >
-            <ProgrammeSubform />
+            <ProgrammeSubform size={'lg'}/>
           </PopupFormListManager>
         )
       }

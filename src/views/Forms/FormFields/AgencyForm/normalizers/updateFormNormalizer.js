@@ -14,9 +14,9 @@ export const updateFormNormalizer = (formValues) => {
           normalizedForm[key] = [];
           value.forEach((v) => {
             if('id' in v) {
-              if(['activities', 'decisions', 'focus_countries', 'memberships', 'names'].includes(key)) {
+              if(['activities', 'decisions', 'focus_countries', 'memberships'].includes(key)) {
                 normalizedForm[key].push(updateFormNormalizer(v))
-              } else if (['agency_name_versions', 'phone_numbers', 'emails'].includes(key)) {
+              } else if (['names', 'agency_name_versions', 'phone_numbers', 'emails'].includes(key)) {
                 normalizedForm[key].push(v);
               } else {
                 normalizedForm[key].push(v.id);

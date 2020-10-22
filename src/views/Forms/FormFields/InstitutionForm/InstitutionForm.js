@@ -13,7 +13,6 @@ import withFormManager from "../../../../components/FormManager/FormManagerHOC";
 import FormDatePickerField from "../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 import FormSelectField from "../../../../components/FormFields/FormSelectField/FormSelectField";
 import list from "../../../../services/List";
-import cx from "classnames";
 import {validateDateFromRequired, validateRequired, validateRoman} from "../../../../utils/validators";
 import FormManyMultipleField
   from "../../../../components/FormFieldsUncontrolled/FormManyMultipleField/FormManyMultipleField";
@@ -25,17 +24,9 @@ import LocalIDSubform from "./components/LocalIDSubform";
 import OtherIDSubform from "./components/OtherIDSubform";
 import HierarchicalLinkSubform from "./components/HierarchicalLinkSubform";
 import HistoricalLinkSubform from "./components/HistoricalLinkSubform";
+import FormTextTransliterated from "../../../../components/FormFields/FormTextTransliterated/FormTextTransliterated";
 
 const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...props}) => {
-  const [showTransliteration, setShowTransliteration] = useState(false);
-
-  const deleteTransliteration = () => {
-    if(showTransliteration) {
-      formApi.setValue('names_actual[0].name_official_transliterated', '');
-    }
-    setShowTransliteration(!showTransliteration);
-  };
-
   const renderFormerNames = (value) => {
     return value['name_official'];
   };
@@ -85,46 +76,16 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
             </FormGroup>
           </Col>
         </Row>
-        <Row>
-          <Col md={12}>
-            <FormGroup className={formType === 'edit' ? style.noFormGroupMargin : ''}>
-              <Label for={'names_actual[0].name_official'} className={'required'}>Institution Name, Official</Label>
-              <FormTextField
-                field={'names_actual[0].name_official'}
-                disabled={readOnly}
-                validate={validateRequired}
-              />
-            </FormGroup>
-          </Col>
-        </Row>
-        <Collapse isOpen={showTransliteration}>
-          <Row>
-            <Col>
-              <FormGroup className={cx(style.noFormGroupMargin, style.Transliteration)}>
-                <Label for="name_official_transliterated">Institution Name, Transliterated</Label>
-                <FormTextField
-                  field={'names_actual[0].name_official_transliterated'}
-                  placeholder={'Enter transliterated form'}
-                  disabled={readOnly}
-                  validate={validateRoman}
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-        </Collapse>
-        {formType !== 'edit' ? "" :
-          <Row>
-            <FormGroup>
-              <Col md={12}>
-                <FormText color="muted">
-                    <span onClick={deleteTransliteration} className={style.removeTransliteration}>
-                      {showTransliteration ? 'Remove Transliteration' : 'Add Transliteration'}
-                    </span>
-                </FormText>
-              </Col>
-            </FormGroup>
-          </Row>
-        }
+        <FormTextTransliterated
+          label={'Institution Name, Official'}
+          formType={formType}
+          formApi={formApi}
+          values={formState.values['names_actual'] ? formState.values['names_actual'][0] : undefined}
+          scopeName={'names_actual[0]'}
+          field={'name_official'}
+          transliterationField={'name_official_transliterated'}
+          readOnly={readOnly}
+        />
         <Row>
           <Col md={12}>
             <FormGroup>
@@ -244,7 +205,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
                     />
                   </FormGroup>
                 </Col>
-                <Col md={4}>
+                <Col md={5}>
                   <FormGroup>
                     <FormTextField
                       field={'city'}

@@ -3,7 +3,8 @@ import {connect} from "react-redux";
 import AgencyForm from "../FormFields/AgencyForm/AgencyForm";
 import agency from "../../../services/Agency";
 import {updateFormNormalizer} from "../FormFields/AgencyForm/normalizers/updateFormNormalizer";
-import {decodeNameData, encodeNameData} from "../FormFields/AgencyForm/normalizers/populateFormNormalizer";
+import {decodeNameData} from "../FormFields/AgencyForm/normalizers/formDecoders";
+import {encodeNameData} from "../FormFields/AgencyForm/normalizers/formEncoders";
 
 const AgencyDetails = ({userIsAdmin, ...props}) => {
   const {id, param} = props.match.params;

@@ -8,7 +8,11 @@ import {
   encodeIdentifiers,
   encodeNames
 } from "../FormFields/InstitutionForm/normalizers/formEncoders";
-import {decodeHierarhicalLinks, decodeHistoricalLinks} from "../FormFields/InstitutionForm/normalizers/formDecoders";
+import {
+  decodeHierarhicalLinks,
+  decodeHistoricalLinks,
+  decodeNames
+} from "../FormFields/InstitutionForm/normalizers/formDecoders";
 
 const InstitutionDetails = ({userIsAdmin, ...props}) => {
   const {id, param} = props.match.params;
