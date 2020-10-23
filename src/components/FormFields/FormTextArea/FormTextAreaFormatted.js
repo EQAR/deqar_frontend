@@ -7,6 +7,7 @@ import style from './FormTextAreaFormatted.module.css';
 
 const FormTextAreaFormatted = asField(({ fieldState, fieldApi, onChange, disabled, height, ...props }) => {
   const { value, error } = fieldState;
+  const { setValue, setTouched } = fieldApi;
 
   const options = {
     buttonList: [
@@ -20,6 +21,10 @@ const FormTextAreaFormatted = asField(({ fieldState, fieldApi, onChange, disable
     resizingBar : false
   };
 
+  const handleChange = (content) => {
+    setValue(content);
+  };
+
   return (
     <React.Fragment>
       <div className={disabled ? style.SunEditorDisabled : style.SunEditor}>
@@ -28,7 +33,7 @@ const FormTextAreaFormatted = asField(({ fieldState, fieldApi, onChange, disable
           showToolbar={!disabled}
           disable={disabled}
           setContents={value}
-          onChange={onChange}
+          onChange={handleChange}
           setOptions={options}
         />
       </div>
