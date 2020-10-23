@@ -37,7 +37,7 @@ const FormManyMultipleField = ({disabled, scopeName, data, formApi, render, dele
   return (
     <React.Fragment>
       {
-        label &&
+        (label && (count > 0 || extra > 0)) &&
           <Col sm={12}>
             <Label className={required ? 'required' : undefined}>{label}</Label>
           </Col>

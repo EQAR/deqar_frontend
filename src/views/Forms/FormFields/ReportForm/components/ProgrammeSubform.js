@@ -37,14 +37,15 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
           />
         </FormGroup>
       </Col>
-      <Col md={12}>
-        <Label for="alternative_names">Alternative Names / Qualifications</Label>
-      </Col>
       <FormManyMultipleField
+        label={'Agency Alternative Names / Qualifications'}
+        deleteInRow={true}
         disabled={disabled}
         scopeName={'alternative_names'}
         formApi={formApi}
         data={formState.values['alternative_names']}
+        addButtonText={'Add Alternative Programme Name'}
+        extra={0}
         render={({counter}) => (
           <React.Fragment>
             <Col sm={6}>
