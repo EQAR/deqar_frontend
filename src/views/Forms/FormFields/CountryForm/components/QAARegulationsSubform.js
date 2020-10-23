@@ -42,7 +42,7 @@ const QAARegulationsSubform = ({formApi, formState, disabled}) => {
               disabled={disabled}
               validate={(value) => validateDateFromRequired(
                 value,
-                formState.values.regulation_valid_from,
+                formState.values.regulation_valid_to,
                 "Regulation valid from date should be earlier than valid to date!"
               )}
             />
