@@ -7,6 +7,8 @@ import {validateDate, validateDateFrom, validateRequired} from "../../../../../u
 import FormSelectField from "../../../../../components/FormFields/FormSelectField/FormSelectField";
 import FormDatePickerField from "../../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 import FormTextArea from "../../../../../components/FormFields/FormTextArea/FormTextArea";
+import country from "../../../../../services/Country";
+import institution from "../../../../../services/Institution";
 
 const HierarchicalLinkSubform = ({formApi, formState, disabled}) => {
   const relationShipTypes = [
@@ -65,6 +67,21 @@ const HierarchicalLinkSubform = ({formApi, formState, disabled}) => {
             onClick={() => {}}
             disabled={disabled}
           />
+        </Col>
+      </Row>
+      <Row>
+        <Col md={12}>
+          <FormGroup>
+            <Label for="relationship_type">Relationship Type</Label>
+            <FormSelectField
+              field={'relationship_type'}
+              optionsAPI={institution.getHierarchicalRelationTypes}
+              placeholder={'Please select'}
+              labelField={'type'}
+              valueField={'id'}
+              disabled={disabled}
+            />
+          </FormGroup>
         </Col>
       </Row>
       <Row>

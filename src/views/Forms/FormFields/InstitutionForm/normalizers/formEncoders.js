@@ -64,7 +64,5 @@ export const encodeHistoricalLink = (formValues) => {
     });
   }
 
-  console.log(values);
-
   return values;
 };
