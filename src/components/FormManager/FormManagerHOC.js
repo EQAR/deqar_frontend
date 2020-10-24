@@ -145,13 +145,11 @@ const withFormManager = (OriginalForm) => {
 
       switch(formType) {
         case 'create':
-          normalizedForm = normalizers['create'](normalizedForm);
-          apiFunction = api.create(normalizedForm);
+          apiFunction = api.create(normalizers['create'](normalizedForm));
           message = 'created';
           break;
         case 'edit':
-          normalizedForm = normalizers['update'](normalizedForm);
-          apiFunction = api.update(normalizedForm, recordID);
+          apiFunction = api.update(normalizers['update'](normalizedForm), recordID);
           message = 'updated';
           break;
         default:
