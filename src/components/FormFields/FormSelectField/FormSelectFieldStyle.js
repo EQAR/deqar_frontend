@@ -33,7 +33,11 @@ export const style = (borderColor) => {
       ...provided,
       whiteSpace: 'nowrap',
       overFlow: 'hidden',
-      textOverFlow: 'ellipsis'
+      textOverFlow: 'ellipsis',
+    }),
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 999
     }),
     indicatorsContainer: (provided, state) => ({
       display: state.isDisabled ? 'none' : 'flex'
