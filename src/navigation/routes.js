@@ -16,6 +16,7 @@ const AgencyActivities = React.lazy(() => import('../views/ReferenceData/AgencyA
 const AgencyDetails = React.lazy(() => import('../views/Forms/FormOpeners/AgencyDetails'));
 const Countries = React.lazy(() => import('../views/ReferenceData/Countries/Countries'));
 const CountryDetails = React.lazy(() => import('../views/Forms/FormOpeners/CountryDetails'));
+const ReportFlags = React.lazy(() => import('../views/Flags/ReportFlags/ReportFlags'))
 const Page401 = React.lazy(() => import('../components/DefaultLayout/Page401'));
 
 const routes = [
@@ -37,6 +38,7 @@ const routes = [
   { path: '/reference/countries', exact: true, name: 'Countries', component: Countries, users: 'all'},
   { path: '/reference/countries/:param', exact: true, name: 'Country Form', component: CountryDetails, users: 'all'},
   { path: '/reference/countries/:param/:id', exact: true, name: 'Country Form', component: CountryDetails, users: 'all'},
+  { path: '/flags/reports', exact: true, name: 'Report Flags', component: ReportFlags, users: 'all'},
   { path: '/401', exact: true, name: 'Page 401', component: Page401, users: 'all'}
 ];
 

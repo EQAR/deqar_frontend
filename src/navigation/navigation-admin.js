@@ -42,8 +42,16 @@ const navAdmin = {
           icon: 'icon-globe'
         }
       ]
-    },
-    {
+    }, {
+      name: 'Flags',
+      icon: 'icon-flag',
+      url: '/flags',
+      children: [{
+        name: 'Report Flags',
+        url: '/flags/reports',
+        icon: 'icon-docs',
+      }]
+    }, {
       name: 'Statistics',
       url: '#',
       icon: 'icon-chart'

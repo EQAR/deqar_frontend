@@ -7,6 +7,7 @@ import agenciesTableReducer from "../views/ReferenceData/Agencies/reducers/agenc
 import myAgenciesTableReducer from "../views/MyData/MyAgencies/reducers/myAgenciesTableReducer";
 import agencyActivitiesTableReducer from "../views/ReferenceData/AgencyActivities/reducers/agencyActivitiesTableReducer";
 import countriesTableReducer from "../views/ReferenceData/Countries/reducers/countriesTableReducer";
+import reportFlagsTableReducer from "../views/Flags/ReportFlags/reducers/reportFlagsTableReducer";
 
 // Create the combined reducer
 const reducer = combineReducers(
@@ -19,6 +20,7 @@ const reducer = combineReducers(
     myAgenciesTable: myAgenciesTableReducer,
     agenciesTable: agenciesTableReducer,
     countriesTable: countriesTableReducer,
+    reportFlagsTable: reportFlagsTableReducer
   }
 );
 

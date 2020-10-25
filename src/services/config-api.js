@@ -69,3 +69,6 @@ export const MANAGE_COUNTRIES = ADMINAPI_URL + '/countries/';
 // List endpoints
 export const GET_QFEHEA_LEVELS = ADMINAPI_URL + '/select/qf_ehea_level/';
 export const GET_FLAGS = ADMINAPI_URL + '/select/flag/';
+
+// Flag endpoints
+export const GET_REPORT_FLAGS = ADMINAPI_URL + '/flags/reports/';

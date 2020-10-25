@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {
   GET_DECISIONS,
-  GET_MY_REPORTS,
+  GET_MY_REPORTS, GET_REPORT_FLAGS,
   GET_REPORTS,
   GET_REPORTS_BY_AGENCY,
   GET_STATUSES,
@@ -64,7 +64,11 @@ class Report {
 
   deleteFlag = (flagID) => {
     return axios.delete(`${REMOVE_REPORT_FLAG}/${flagID}`);
-  }
+  };
+
+  listFlags = (params) => {
+    return axios.get(GET_REPORT_FLAGS, { params: params });
+  };
 }
 
 const report = new Report();
