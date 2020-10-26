@@ -13,7 +13,12 @@ import withFormManager from "../../../../components/FormManager/FormManagerHOC";
 import FormDatePickerField from "../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 import FormSelectField from "../../../../components/FormFields/FormSelectField/FormSelectField";
 import list from "../../../../services/List";
-import {validateDateFromRequired, validateRequired, validateRoman} from "../../../../utils/validators";
+import {
+  validateDateFromRequired,
+  validateRequired,
+  validateRequiredURL,
+  validateRoman
+} from "../../../../utils/validators";
 import FormManyMultipleField
   from "../../../../components/FormFieldsUncontrolled/FormManyMultipleField/FormManyMultipleField";
 import country from "../../../../services/Country";
@@ -131,7 +136,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
               <FormTextField
                 field={'website_link'}
                 disabled={readOnly}
-                validate={validateRequired}
+                validate={validateRequiredURL}
               />
             </FormGroup>
           </Col>
