@@ -12,8 +12,8 @@ const FormTextAreaFormatted = asField(({ fieldState, fieldApi, onChange, disable
   const options = {
     buttonList: [
       ['bold', 'underline', 'italic'],
-      ['list', 'link'],
-      ['outdent', 'indent'],
+      ['list'],
+      ['removeFormat'],
       ['undo', 'redo']
     ],
     defaultStyle: 'font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; ' +
