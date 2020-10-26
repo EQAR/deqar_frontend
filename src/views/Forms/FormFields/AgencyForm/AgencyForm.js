@@ -12,7 +12,7 @@ import FormTextField from "../../../../components/FormFields/FormTextField/FormT
 import FormDatePickerField from "../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 import FormTextAreaFormatted from "../../../../components/FormFields/FormTextArea/FormTextAreaFormatted";
 import {
-  validateDateFromRequired,
+  validateDateFromRequired, validateEmailRequired,
   validateRequired,
   validateRequiredDate,
   validateRequiredURL
@@ -226,7 +226,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
                 disabled={readOnly}
                 formApi={formApi}
                 placeholder={'Enter contact email address for agency'}
-                validate={validateRequired}
+                validate={validateEmailRequired}
               />
             </FormGroup>
           </Col>
