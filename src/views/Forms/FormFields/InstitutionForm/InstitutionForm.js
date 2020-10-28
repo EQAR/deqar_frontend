@@ -143,7 +143,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
         <Row>
           <Col md={12}>
             <PopupFormListManager
-              field={'names'}
+              field={'names_former'}
               label={'Former Names'}
               formApi={formApi}
               renderDisplayValue={renderFormerNames}
