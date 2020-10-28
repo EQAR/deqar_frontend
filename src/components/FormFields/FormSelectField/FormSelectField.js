@@ -87,6 +87,9 @@ const FormSelectField = asField(({ fieldState, fieldApi, optionsAPI, ...props })
   };
 
   const changeValue = value =>  {
+    if (value === null) {
+      value = [];
+    }
     setError('');
     setValue(value);
     setTouched();
