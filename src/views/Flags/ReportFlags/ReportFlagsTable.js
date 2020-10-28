@@ -7,7 +7,7 @@ import {Link} from "react-router-dom";
 import style from "./ReportFlagsTable.module.css";
 import ReportsTableFilters from "./ReportFlagsTableFilters";
 import DataTableRedux from "../../../components/DataTable/DataTableRedux";
-import {createdAtRender, dateRender, flagRender} from "../../../utils/tableColumnRenderers";
+import {createdAtRender, flagRender} from "../../../utils/tableColumnRenderers";
 
 const ReportFlagsTable = (props) => {
   const linkRenderer = (row) => {

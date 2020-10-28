@@ -4,7 +4,6 @@ import {
   validateDate,
   validateDateFromRequired,
   validateRequired,
-  validateUnique,
   validateURL
 } from "../../../../../utils/validators";
 import withPopupFormManager from "../../../../../components/FormManager/PopupFormManagerHOC";

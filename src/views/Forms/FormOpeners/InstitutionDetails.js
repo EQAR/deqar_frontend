@@ -11,7 +11,6 @@ import {
 import {
   decodeHierarhicalLinks,
   decodeHistoricalLinks,
-  decodeNames
 } from "../FormFields/InstitutionForm/normalizers/formDecoders";
 
 const InstitutionDetails = ({userIsAdmin, ...props}) => {

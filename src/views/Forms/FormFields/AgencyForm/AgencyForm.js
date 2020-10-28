@@ -58,7 +58,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
   };
 
   const renderNames = (value) => {
-    const {former_primary_name, ...values} = value;
+    const {former_primary_name} = value;
     if (former_primary_name.length > 0) {
       const name = former_primary_name[0]['name'];
       const acronym = former_primary_name[0]['acronym'];

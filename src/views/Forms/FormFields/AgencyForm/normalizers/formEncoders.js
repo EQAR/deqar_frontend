@@ -2,15 +2,15 @@ export const encodeNameData = (formValues) => {
   let {current_name_data, current_primary_name, current_alternative_names, names_former, ...values} = formValues;
   values['names'] = [];
 
-  current_primary_name.map(name => {
+  current_primary_name.forEach(name => {
     name['name_is_primary'] = true;
     name['acronym_is_primary'] = true;
   });
   current_name_data['agency_name_versions'] = [...current_primary_name, ...current_alternative_names];
 
   const former_name_data = [];
-  names_former.map(name => {
-    name['former_primary_name'].map(primaryName => {
+  names_former.forEach(name => {
+    name['former_primary_name'].forEach(primaryName => {
       primaryName['name_is_primary'] = true;
       primaryName['acronym_is_primary'] = true;
     });

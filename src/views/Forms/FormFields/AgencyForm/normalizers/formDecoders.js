@@ -9,7 +9,7 @@ export const decodeNameData = (data) => {
   values['current_name_data'] = names_current;
 
   values['names_former'] = [];
-  names_former.map(name => {
+  names_former.forEach(name => {
     if (name['agency_name_versions'].length > 0) {
       name['former_primary_name'] = [name['agency_name_versions'].shift()];
       name['former_alternative_names'] = name['agency_name_versions'];

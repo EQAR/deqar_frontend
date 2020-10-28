@@ -1,16 +1,11 @@
 import React from 'react';
 import {Col, FormGroup, Label, Row} from "reactstrap";
 import withPopupFormManager from "../../../../../components/FormManager/PopupFormManagerHOC";
-import FormTextField from "../../../../../components/FormFields/FormTextField/FormTextField";
 import {TextArea} from "informed";
 import FormManyMultipleField from "../../../../../components/FormFieldsUncontrolled/FormManyMultipleField/FormManyMultipleField";
 import {
-  validateMultipleRequiredDate,
   validateRequiredDate,
-  validateRequiredUnique
 } from "../../../../../utils/validators";
-import validatePrimaryCheckbox from "../validators/validatePrimaryCheckbox";
-import FormCheckbox from "../../../../../components/FormFields/FormCheckbox/FormCheckbox";
 import FormTextTransliterated from "../../../../../components/FormFields/FormTextTransliterated/FormTextTransliterated";
 import FormDatePickerField from "../../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 

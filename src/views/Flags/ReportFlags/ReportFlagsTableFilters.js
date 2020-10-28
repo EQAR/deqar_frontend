@@ -3,7 +3,6 @@ import {Col, Collapse, FormGroup, Input, Row} from "reactstrap";
 import SelectFilter from "../../../components/DataTableFilters/SelectFilter";
 import {connect} from "react-redux";
 import agency from "../../../services/Agency";
-import list from "../../../services/List";
 
 class ReportFlagsTableFilters extends Component {
   constructor(props) {

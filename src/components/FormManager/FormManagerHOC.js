@@ -7,7 +7,6 @@ import FormButtons from "./components/FormButtons";
 import FormInfoBox from "./components/FormInfoBox";
 import {toast} from "react-toastify";
 import confirm from 'reactstrap-confirm';
-import report from "../../services/Report";
 import FormAlert from "./components/FormAlert";
 
 const withFormManager = (OriginalForm) => {

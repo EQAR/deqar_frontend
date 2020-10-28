@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
-  Col, Collapse,
-  FormGroup, FormText,
+  Col,
+  FormGroup,
   Label,
   Row
 } from "reactstrap";
