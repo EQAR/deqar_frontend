@@ -26,10 +26,10 @@ class Agency {
   };
 
   selectActivity = (agencyID, params) => {
-    if(agencyID) {
+    if (agencyID) {
       return axios.get(`${GET_ACTIVITIES}${agencyID}/`);
     } else {
-      return axios.get(`${GET_ACTIVITIES}`, params);
+      return axios.get(`${GET_ACTIVITIES}`, {params: params});
     }
   };
 
