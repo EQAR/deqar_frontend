@@ -101,20 +101,14 @@ class FormInfoBox extends Component {
     const {formState} = this.props;
 
     if (Object.entries(formState).length !== 0) {
-      const institutions = formState['institutions'];
-      if(institutions) {
+      const report_id = formState['id'];
+      if(report_id) {
         return(
-          <React.Fragment>
-          {institutions.map((institution, idx) => {
-            return(
-              <ListGroupItem key={idx} className={style.ListGroupItem}>
-                <a href={`https://www.eqar.eu/qa-results/institution/?id=${institution.id}`} target={'new'}>
-                  {`https://www.eqar.eu/qa-results/institution/?id=${institution.id}`}
-                </a>
-              </ListGroupItem>
-            )
-          })}
-          </React.Fragment>
+          <ListGroupItem className={style.ListGroupItem}>
+            <a href={process.env.REACT_APP_WEBSITE_REPORT.replace('{id}', report_id)} target={'new'}>
+              {process.env.REACT_APP_WEBSITE_REPORT.replace('{id}', report_id)}
+            </a>
+          </ListGroupItem>
         )
       }
     }
@@ -128,8 +122,8 @@ class FormInfoBox extends Component {
       if(country_id) {
         return(
           <ListGroupItem className={style.ListGroupItem}>
-            <a href={`https://www.eqar.eu/kb/country-information/country/?id=${country_id}`} target={'new'}>
-              {`https://www.eqar.eu/kb/country-information/country/?id=${country_id}`}
+            <a href={process.env.REACT_APP_WEBSITE_COUNTRY.replace('{id}', country_id)} target={'new'}>
+              {process.env.REACT_APP_WEBSITE_COUNTRY.replace('{id}', country_id)}
             </a>
           </ListGroupItem>
         )
@@ -145,8 +139,8 @@ class FormInfoBox extends Component {
       if(agency_id) {
         return(
           <ListGroupItem className={style.ListGroupItem}>
-            <a href={`https://www.eqar.eu/register/agencies/agency/?id=${agency_id}`} target={'new'}>
-              {`https://www.eqar.eu/register/agencies/agency/?id=${agency_id}`}
+            <a href={process.env.REACT_APP_WEBSITE_AGENCY.replace('{id}', agency_id)} target={'new'}>
+              {process.env.REACT_APP_WEBSITE_AGENCY.replace('{id}', agency_id)}
             </a>
           </ListGroupItem>
         )
@@ -161,7 +155,7 @@ class FormInfoBox extends Component {
     if (name_primary && id) {
       return (
         <React.Fragment>
-          <a href={`https://www.eqar.eu/qa-results/institution/?id=${id}`} target={'new'}>
+          <a href={process.env.REACT_APP_WEBSITE_INSTITUTION.replace('{id}', id)} target={'new'}>
             {name_primary}
           </a>
         </React.Fragment>
