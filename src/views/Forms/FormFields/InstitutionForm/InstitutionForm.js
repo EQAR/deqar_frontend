@@ -15,9 +15,7 @@ import FormSelectField from "../../../../components/FormFields/FormSelectField/F
 import list from "../../../../services/List";
 import {
   validateDateFromRequired,
-  validateRequired,
   validateRequiredURL,
-  validateRoman
 } from "../../../../utils/validators";
 import FormManyMultipleField
   from "../../../../components/FormFieldsUncontrolled/FormManyMultipleField/FormManyMultipleField";

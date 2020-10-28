@@ -36,6 +36,7 @@ const InstitutionDetails = ({userIsAdmin, ...props}) => {
         api={{
           read: institution.getInstitution,
           update: institution.updateInstitution,
+          create: institution.submitInstitution
         }}
         decoders={[decodeHistoricalLinks, decodeHierarhicalLinks]}
         encoders = {[encodeNames, encodeIdentifiers, encodeHierarchicalLink, encodeHistoricalLink]}

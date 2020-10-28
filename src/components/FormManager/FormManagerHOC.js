@@ -113,6 +113,8 @@ const withFormManager = (OriginalForm) => {
           return backPath;
         case 'edit':
           return `${backPath}view/${recordID}`;
+        case 'create':
+          return backPath;
         default:
           break;
       }

@@ -33,15 +33,17 @@ export const encodeHierarchicalLink = (formValues) => {
   values['hierarchical_parent'] = [];
   values['hierarchical_child'] = [];
 
-  if (hierarchical_links.length > 0) {
-    hierarchical_links.forEach(link => {
-      link['institution'] = link['institution'][0];
-      if (link.relationship.id === 'parent') {
-        values['hierarchical_child'].push(link);
-      } else {
-        values['hierarchical_parent'].push(link);
-      }
-    });
+  if (hierarchical_links) {
+    if (hierarchical_links.length > 0) {
+      hierarchical_links.forEach(link => {
+        link['institution'] = link['institution'][0];
+        if (link.relationship.id === 'parent') {
+          values['hierarchical_child'].push(link);
+        } else {
+          values['hierarchical_parent'].push(link);
+        }
+      });
+    }
   }
   return values;
 };
@@ -52,18 +54,19 @@ export const encodeHistoricalLink = (formValues) => {
   values['historical_source'] = [];
   values['historical_target'] = [];
 
-  if (historical_links.length > 0) {
-    historical_links.forEach(link => {
-      const direction = link['relationship_type']['institution_direction'];
-      link['institution'] = link['institution'][0];
-      link['relationship_type'] = {id: link['relationship_type']['relationship_type_id']};
-      if (direction === 'target') {
-        values['historical_source'].push(link);
-      } else {
-        values['historical_target'].push(link);
-      }
-    });
+  if (historical_links) {
+    if (historical_links.length > 0) {
+      historical_links.forEach(link => {
+        const direction = link['relationship_type']['institution_direction'];
+        link['institution'] = link['institution'][0];
+        link['relationship_type'] = {id: link['relationship_type']['relationship_type_id']};
+        if (direction === 'target') {
+          values['historical_source'].push(link);
+        } else {
+          values['historical_target'].push(link);
+        }
+      });
+    }
   }
-
   return values;
 };
