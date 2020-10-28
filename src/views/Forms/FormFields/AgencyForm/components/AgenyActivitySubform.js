@@ -1,6 +1,12 @@
 import React from 'react';
 import {Col, FormGroup, Label, Row} from "reactstrap";
-import {validateDate, validateDateFromRequired, validateRequired, validateURL} from "../../../../../utils/validators";
+import {
+  validateDate,
+  validateDateFromRequired,
+  validateRequired,
+  validateUnique,
+  validateURL
+} from "../../../../../utils/validators";
 import withPopupFormManager from "../../../../../components/FormManager/PopupFormManagerHOC";
 import FormTextField from "../../../../../components/FormFields/FormTextField/FormTextField";
 import FormSelectField from "../../../../../components/FormFields/FormSelectField/FormSelectField";
