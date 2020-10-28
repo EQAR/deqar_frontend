@@ -14,7 +14,7 @@ import FormDatePickerField from "../../../../components/FormFields/FormDatePicke
 import FormSelectField from "../../../../components/FormFields/FormSelectField/FormSelectField";
 import list from "../../../../services/List";
 import {
-  validateDateFromRequired,
+  validateDateFromRequired, validateRequired,
   validateRequiredURL,
 } from "../../../../utils/validators";
 import FormManyMultipleField
@@ -88,6 +88,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
           field={'name_official'}
           transliterationField={'name_official_transliterated'}
           readOnly={readOnly}
+          required={true}
         />
         <Row>
           <Col md={12}>
@@ -205,6 +206,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
                       labelField={'name_english'}
                       valueField={'id'}
                       disabled={readOnly}
+                      validate={validateRequired}
                     />
                   </FormGroup>
                 </Col>
