@@ -22,6 +22,10 @@ const InstitutionSelect = ({onChange, selectedValues, emptyAfterChange=true, ...
       height: '36px',
       minHeight: '36px',
     }),
+    indicatorsContainer: (provided, state) => ({
+      ...provided,
+      display: 'none'
+    }),
     singleValue: (provided, state) => ({
       ...provided,
       top: '46%',
@@ -40,6 +44,7 @@ const InstitutionSelect = ({onChange, selectedValues, emptyAfterChange=true, ...
   return(
     <AsyncPaginate
       {...props}
+      openMenuOnClick={false}
       value={value}
       placeholder={'Enter institution name, ETER ID, city or country'}
       styles={customStyles}
