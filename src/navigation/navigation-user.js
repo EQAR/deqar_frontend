@@ -51,6 +51,10 @@ const navUser = {
           name: 'Institutions',
           url: '/reference/institutions',
           icon: 'icon-graduation'
+        }, {
+          name: 'Countries',
+          url: '/reference/countries',
+          icon: 'icon-globe'
         }
       ]
     },

@@ -29,13 +29,13 @@ import resetUser from "./actions/resetUser";
 
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
-const DefaultLayout = (props) => {
+const DefaultLayout = ({is_admin, resetUser, ...props}) => {
   const loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
   const signOut = (e) => {
     e.preventDefault();
     auth.removeToken();
-    props.resetUser();
+    resetUser();
     props.history.push('/login')
   };
 
@@ -44,11 +44,11 @@ const DefaultLayout = (props) => {
   };
 
   const getRoutes = () => {
-    return props.is_admin ? routes.filter(r => r.users === 'all') : routes;
+    return is_admin ? routes.filter(r => r.users === 'all') : routes;
   };
 
   const getStartPage = () => {
-    return props.is_admin ? <Redirect from="/" exact to="/reference/reports"/> : <Redirect from="/" exact to="/my-reports" />
+    return is_admin ? <Redirect from="/" exact to="/reference/reports"/> : <Redirect from="/" exact to="/my-reports" />
   };
 
   const generateRoutes = () => {
@@ -93,7 +93,7 @@ const DefaultLayout = (props) => {
           <AppSidebarHeader />
           <AppSidebarForm />
           <Suspense>
-            <AppSidebarNav navConfig={props.is_admin ? navAdmin : navUser} {...props} />
+            <AppSidebarNav navConfig={is_admin ? navAdmin : navUser} {...props} />
           </Suspense>
           <AppSidebarFooter />
           <AppSidebarMinimizer />
@@ -117,10 +117,10 @@ const mapDispatchToProps = (dispatch) => {
   }
 };
 
-const mapStateToProps = (store) => {
-  return {
+const mapStateToProps = (store) => (
+  {
     is_admin: store.user.is_admin
   }
-};
+);
 
 export default connect(mapStateToProps, mapDispatchToProps)(DefaultLayout);

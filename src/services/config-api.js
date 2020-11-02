@@ -39,7 +39,7 @@ export const MANAGE_MY_AGENCY = ADMINAPI_URL + '/my_agency/';
 export const POST_AGENCY_DECISION_FILE = ADMINAPI_URL + '/submit/decision';
 export const POST_AGENCY_DECISION_EXTRA_FILE = ADMINAPI_URL + '/submit/decision_extra';
 
-// Report related endpoints 
+// Report related endpoints
 export const GET_STATUSES = ADMINAPI_URL + '/select/report_status/';
 export const GET_DECISIONS = ADMINAPI_URL + '/select/report_decision/';
 export const GET_MY_REPORTS = ADMINAPI_URL + '/browse/my/reports/';
@@ -51,6 +51,7 @@ export const REMOVE_REPORT_FLAG = ADMINAPI_URL + '/reports/remove_flag';
 // Institution endpoints
 export const GET_INSTITUTIONS = ADMINAPI_URL + '/select/institutions/';
 export const GET_INSTITUTION = ADMINAPI_URL + '/institutions/';
+export const GET_HIERARCHICAL_RELATION_TYPES = ADMINAPI_URL + '/select/institution_hierarchical_relationship_types/';
 export const GET_HISTORICAL_RELATION_TYPES = ADMINAPI_URL + '/select/institution_historical_relationship_types/';
 export const MANAGE_INSTITUTION = ADMINAPI_URL + '/institutions/';
 
@@ -59,8 +60,15 @@ export const GET_LANGUAGES = ADMINAPI_URL + '/select/language/';
 
 // Country endpoints
 export const GET_COUNTRIES = ADMINAPI_URL + '/select/country/';
+export const GET_COUNTRIES_LIST = ADMINAPI_URL + '/countries/';
 export const GET_INSTITUTION_COUNTRIES = ADMINAPI_URL + '/select/institutions/country/';
+export const GET_PERMISSION_TYPES = ADMINAPI_URL + '/select/permission_type/';
+export const GET_QA_REQUIREMENT_TYPE = ADMINAPI_URL + '/select/qa_requirement_type/';
+export const MANAGE_COUNTRIES = ADMINAPI_URL + '/countries/';
 
 // List endpoints
 export const GET_QFEHEA_LEVELS = ADMINAPI_URL + '/select/qf_ehea_level/';
 export const GET_FLAGS = ADMINAPI_URL + '/select/flag/';
+
+// Flag endpoints
+export const GET_REPORT_FLAGS = ADMINAPI_URL + '/flags/reports/';

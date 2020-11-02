@@ -1,0 +1,40 @@
+const validateProgrammes = (value, values) => {
+  let programmes = values.programmes;
+  programmes = programmes ? programmes : [];
+  const activityType = values.activity ? values.activity.activity_type : undefined;
+
+  // If activity is 'joint programme'
+  if (activityType === 'joint programme') {
+    if(!(programmes.length === 1)) {
+      return "One program record is required"
+    }
+  }
+
+  // If activity is 'programme'
+  if (activityType === 'programme') {
+    if(programmes.length === 0) {
+      return "At least one program record is required"
+    }
+  }
+
+  // Mark duplicates
+  let names = [];
+  programmes.forEach((programme) => {
+    names.push(
+      {
+        name: programme.name_primary,
+        qfehea: programme.hasOwnProperty('qf_ehea_level') ? programme.qf_ehea_level.level : ''
+      }
+    );
+  });
+
+  const keys = ['name', 'qfehea'];
+  const filteredProgrammes = names.filter(
+    (s => o => (k => !s.has(k) && s.add(k))(keys.map(k => o[k]).join('|')))(new Set())
+  );
+  if (filteredProgrammes.length !== names.length) {
+    return "You have duplicates in your programme names!"
+  }
+};
+
+export default validateProgrammes;

@@ -51,6 +51,13 @@ export const dateRender = (row, valid_from_field, valid_to_field) => {
   }
 };
 
+export const createdAtRender = (row) => {
+  let {created_at} = row.original;
+  const date = moment(created_at, moment.ISO_8601).format("YYYY-MM-DD");
+  const time = moment(created_at, moment.ISO_8601).format("HH:mm");
+  return (<div className={'text-center'}>{date}<br/>{time}</div>);
+};
+
 export const uploadDateRender = (row) => {
   let {date_created} = row.original;
   const date = moment(date_created, moment.ISO_8601).format("YYYY-MM-DD");

@@ -3,8 +3,8 @@ import {
   GET_INSTITUTIONS,
   GET_INSTITUTION,
   GET_HISTORICAL_RELATION_TYPES,
-  MANAGE_INSTITUTION
- } from "./config-api";
+  MANAGE_INSTITUTION, GET_HIERARCHICAL_RELATION_TYPES
+} from "./config-api";
 
 
 class Institution {
@@ -34,6 +34,10 @@ class Institution {
 
   getInstitution = (id) => {
     return axios.get(`${GET_INSTITUTION}${id}`);
+  }
+
+  getHierarchicalRelationTypes = () => {
+    return axios.get(GET_HIERARCHICAL_RELATION_TYPES);
   }
 
   getHistoricalRelationTypes = () => {

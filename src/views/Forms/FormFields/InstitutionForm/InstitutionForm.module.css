@@ -1,0 +1,36 @@
+.FormLeft {
+    border-right: 1px solid #CCCCCC;
+}
+
+.Button {
+    margin-left: 10px;
+}
+
+.removeTransliteration {
+    color: hsl(0,0%,40%);
+    border-bottom: 1px dotted;
+    cursor: pointer;
+}
+
+.Checkbox {
+    margin-top: 10px;
+}
+
+.GroupLabel {
+    border-bottom: 1px dotted;
+    margin-bottom: 20px;
+}
+
+.infoFooter {
+    background-color: hsl(0,0%,97%);
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.noFormGroupMargin {
+    margin-bottom: 0px;
+}
+
+.Transliteration {
+    margin-top: 1rem;
+}

@@ -2,8 +2,8 @@ import axios from 'axios';
 import {GET_LANGUAGES} from "./config-api";
 
 class Language {
-  select = () => {
-    return axios.get(GET_LANGUAGES);
+  select = (configParams) => {
+    return axios.get(GET_LANGUAGES, configParams);
   };
 }
 

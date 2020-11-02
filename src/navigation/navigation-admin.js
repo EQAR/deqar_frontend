@@ -36,10 +36,22 @@ const navAdmin = {
           name: 'Institutions',
           url: '/reference/institutions',
           icon: 'icon-graduation'
+        }, {
+          name: 'Countries',
+          url: '/reference/countries',
+          icon: 'icon-globe'
         }
       ]
-    },
-    {
+    }, {
+      name: 'Flags',
+      icon: 'icon-flag',
+      url: '/flags',
+      children: [{
+        name: 'Report Flags',
+        url: '/flags/reports',
+        icon: 'icon-docs',
+      }]
+    }, {
       name: 'Statistics',
       url: '#',
       icon: 'icon-chart'

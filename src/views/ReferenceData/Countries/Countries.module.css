@@ -1,0 +1,20 @@
+.CountriesCard {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    margin: 0;
+}
+
+.CountriesCardBody {
+    padding: 10px;
+}
+
+.Link {
+    color: #fff;
+}
+
+.Link:hover {
+    color: #fff;
+    text-decoration: none;
+}

@@ -12,8 +12,7 @@ import {
   Row
 } from 'reactstrap';
 import { Form, Text } from 'informed';
-import LaddaButton, { EXPAND_RIGHT } from 'react-ladda';
-import 'ladda/dist/ladda-themeless.min.css';
+import LaddaButton, { EXPAND_RIGHT } from '@zumper/react-ladda';
 import { Link } from 'react-router-dom';
 import {validateEmail} from '../../utils/validators';
 import auth from '../../services/Auth'

@@ -1,9 +1,8 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import ReactDOM from 'react-dom';
 import {Router, Route, Switch, Redirect} from 'react-router-dom';
 import {Provider} from 'react-redux';
 import { createBrowserHistory } from 'history';
-import Loadable from 'react-loadable';
 import store from "./store/store";
 import auth from './services/Auth';
 import './scss/app.scss'
@@ -27,39 +26,29 @@ const loading = () => {
 };
 
 // Login
-const Login = Loadable({
-  loader: () => import('./views/Login/Login'),
-  loading
-});
+const Login = React.lazy(() => import('./views/Login/Login'));
 
 // Forgot Password
-const ForgotPassword = Loadable({
-  loader: () => import('./views/Login/ForgotPassword'),
-  loading
-});
+const ForgotPassword = React.lazy(() => import('./views/Login/ForgotPassword'));
 
 // Password Reset Confirm
-const PasswordResetConfirm = Loadable({
-  loader: () => import('./views/Login/PasswordResetConfirm'),
-  loading
-});
+const PasswordResetConfirm = React.lazy(() => import('./views/Login/PasswordResetConfirm'));
 
 // Containers
-const DefaultLayout = Loadable({
-  loader: () => import('./components/DefaultLayout/DefaultLayout'),
-  loading
-});
+const DefaultLayout = React.lazy(() => import('./components/DefaultLayout/DefaultLayout'));
 
 const App = () => {
   return (
     <Provider store={store}>
       <Router history={history}>
-        <Switch>
-          <Route exact path="/login" name="Login Page" component={Login}/>
-          <Route exact path="/forgot-password" name="Forgot Password" component={ForgotPassword}/>
-          <Route path="/password-reset/:uid/:token" name="Password Reset Confirm" component={PasswordResetConfirm}/>
-          <PrivateRoute path="/" name="Home" component={DefaultLayout} />
-        </Switch>
+        <Suspense fallback={loading()}>
+          <Switch>
+            <Route exact path="/login" name="Login Page" component={Login}/>
+            <Route exact path="/forgot-password" name="Forgot Password" component={ForgotPassword}/>
+            <Route path="/password-reset/:uid/:token" name="Password Reset Confirm" component={PasswordResetConfirm}/>
+            <PrivateRoute path="/" name="Home" component={DefaultLayout} />
+          </Switch>
+        </Suspense>
       </Router>
     </Provider>
   )

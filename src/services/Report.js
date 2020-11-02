@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {
   GET_DECISIONS,
-  GET_MY_REPORTS,
+  GET_MY_REPORTS, GET_REPORT_FLAGS,
   GET_REPORTS,
   GET_REPORTS_BY_AGENCY,
   GET_STATUSES,
@@ -30,12 +30,12 @@ class Report {
     return axios.put(`${POST_FILE}/${reportFileID}/${file.name}`, file);
   };
 
-  selectStatus = () => {
-    return axios.get(GET_STATUSES);
+  selectStatus = (configParams) => {
+    return axios.get(GET_STATUSES, configParams);
   };
 
-  selectDecisions = () => {
-    return axios.get(GET_DECISIONS);
+  selectDecisions = (configParams) => {
+    return axios.get(GET_DECISIONS, configParams);
   };
 
   getReports = (params) => {
@@ -44,6 +44,10 @@ class Report {
 
   getMyReports = (params) => {
     return axios.get(GET_MY_REPORTS, { params: params });
+  };
+
+  createReport = (formValues) => {
+    return axios.post(`${MANAGE_REPORT}/`, formValues);
   };
 
   getReport = (reportID) => {
@@ -58,9 +62,13 @@ class Report {
     return axios.delete(`${MANAGE_REPORT}/${reportID}`);
   };
 
-  deleteReportFlag = (flagID) => {
+  deleteFlag = (flagID) => {
     return axios.delete(`${REMOVE_REPORT_FLAG}/${flagID}`);
-  }
+  };
+
+  listFlags = (params) => {
+    return axios.get(GET_REPORT_FLAGS, { params: params });
+  };
 }
 
 const report = new Report();
