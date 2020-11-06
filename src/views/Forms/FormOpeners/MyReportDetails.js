@@ -15,6 +15,7 @@ const MyReportDetails = ({...props}) => {
           read: report.getReport,
           create: report.submitReport,
           update: report.updateReport,
+          delete: report.deleteReport,
         }}
         encoders={[encodeProgrammeNameData]}
         decoders={[decodeProgrammeNameData]}

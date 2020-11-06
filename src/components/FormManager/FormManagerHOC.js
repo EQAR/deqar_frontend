@@ -244,7 +244,7 @@ const withFormManager = (OriginalForm) => {
     };
 
     render() {
-      const {formTitle, formID, userIsAdmin, formType, recordID, module} = this.props;
+      const {formTitle, formID, userIsAdmin = false, formType, recordID, module} = this.props;
       const {isSubmitted, readOnly, infoBoxOpen, loading} = this.state;
       const buttonText = module.substr(0, 1).toUpperCase() + module.substr(1).toLowerCase();
 

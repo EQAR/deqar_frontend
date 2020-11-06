@@ -246,6 +246,10 @@ class FormInfoBox extends Component {
   }
 }
 
+FormInfoBox.defaultValues = {
+  userIsAdmin: false
+};
+
 FormInfoBox.propTypes = {
   id: PropTypes.string.isRequired,
   formState: PropTypes.object,
