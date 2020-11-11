@@ -15,7 +15,7 @@ import {
   validateDateFromRequired, validateEmailRequired,
   validateRequired,
   validateRequiredDate,
-  validateRequiredURL
+  validateRequiredURL, validateURL
 } from "../../../../utils/validators";
 import {withRouter} from "react-router-dom";
 import withFormManager from "../../../../components/FormManager/FormManagerHOC";
@@ -168,6 +168,19 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
                 field={'website_link'}
                 placeholder={'Enter agency website'}
                 validate={validateRequiredURL}
+                disabled={readOnly}
+              />
+            </FormGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            <FormGroup>
+              <Label>Reports by the agency</Label>
+              <FormTextField
+                field={'reports_link'}
+                placeholder={'Link to reports on website website'}
+                validate={validateURL}
                 disabled={readOnly}
               />
             </FormGroup>
