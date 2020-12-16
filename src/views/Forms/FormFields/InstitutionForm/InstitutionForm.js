@@ -14,6 +14,7 @@ import FormDatePickerField from "../../../../components/FormFields/FormDatePicke
 import FormSelectField from "../../../../components/FormFields/FormSelectField/FormSelectField";
 import list from "../../../../services/List";
 import {
+  validateDateFrom,
   validateDateFromRequired, validateRequired,
   validateRequiredURL,
 } from "../../../../utils/validators";
@@ -231,7 +232,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
                 field={'founding_date'}
                 placeholderText={'YYYY-MM-DD'}
                 disabled={readOnly}
-                validate={(value) => validateDateFromRequired(
+                validate={(value) => validateDateFrom(
                   value,
                   formState.values.closing_date,
                   "Founding date should be eariler than closing date!"
