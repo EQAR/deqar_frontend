@@ -13,8 +13,8 @@ const MyAgency = ({userIsAdmin, match, agencies, ...props}) => {
     <React.Fragment>
       <AgencyForm
         api={{
-          read: agency.getAgency,
-          update: agency.updateAgency,
+          read: agency.getMyAgency,
+          update: agency.updateMyAgency,
         }}
         encoders={[encodeNameData]}
         decoders={[decodeNameData]}

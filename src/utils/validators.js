@@ -93,7 +93,13 @@ export const validateDateFromRequired = (value, date_to, errorMessage) => {
   }
 };
 
-export const validateMultipleDate = (value, formerNames) => formerNames.some(n => n.name_valid_to === value) ? 'Date belongs to other name set' : null;
+export const validateMultipleDate = (value, formerNames) => {
+  if (formerNames) {
+    return formerNames.some(n => n.name_valid_to === value) ? 'Date belongs to other name set' : null;
+  } else {
+    return null;
+  }
+};
 
 export const validateMultipleRequiredDate = (value, formerNames) => (
   validateRequiredDate(value)
