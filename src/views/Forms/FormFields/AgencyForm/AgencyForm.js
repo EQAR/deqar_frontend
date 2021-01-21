@@ -80,7 +80,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
               counter={1}
               field={'name'}
               transliterationField={'name_transliterated'}
-              readOnly={readOnly}
+              readOnly={module === 'myAgency' ? true : readOnly}
             />
           </Col>
           <Col md={5}>
@@ -93,7 +93,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
               counter={1}
               field={'acronym'}
               transliterationField={'acronym_transliterated'}
-              readOnly={readOnly}
+              readOnly={module === 'myAgency' ? true : readOnly}
             />
           </Col>
         </Row>
@@ -104,7 +104,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
             scopeName={'current_alternative_names'}
             formApi={formApi}
             data={formState.values['current_alternative_names']}
-            disabled={readOnly}
+            disabled={module === 'myAgency' ? true : readOnly}
             extra={0}
             addButtonText={'Add Alternative Name / Acronym'}
             render={({counter, scope, data}) => (
@@ -120,7 +120,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
                     formApi={formApi}
                     field={'name'}
                     transliterationField={'name_transliterated'}
-                    readOnly={readOnly}
+                    readOnly={module === 'myAgency' ? true : readOnly}
                   />
                 </Col>
                 <Col md={4}>
@@ -134,7 +134,7 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
                     formApi={formApi}
                     field={'acronym'}
                     transliterationField={'acronym_transliterated'}
-                    readOnly={readOnly}
+                    readOnly={module === 'myAgency' ? true : readOnly}
                   />
                 </Col>
               </React.Fragment>
