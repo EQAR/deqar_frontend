@@ -234,7 +234,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
                 disabled={readOnly}
                 validate={(value) => validateDateFrom(
                   value,
-                  formState.values.closing_date,
+                  formState.values.closure_date,
                   "Founding date should be eariler than closing date!"
                 )}
               />
@@ -242,9 +242,9 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
           </Col>
           <Col md={6}>
             <FormGroup>
-              <Label for="closing_date" >Closing Date</Label>
+              <Label for="closure_date" >Closing Date</Label>
               <FormDatePickerField
-                field={'closing_date'}
+                field={'closure_date'}
                 placeholderText={'YYYY-MM-DD'}
                 disabled={readOnly}
               />
