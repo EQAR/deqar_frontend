@@ -61,9 +61,9 @@ export const encodeHistoricalLink = (formValues) => {
         link['institution'] = link['institution'][0];
         link['relationship_type'] = {id: link['relationship_type']['relationship_type_id']};
         if (direction === 'target') {
-          values['historical_source'].push(link);
-        } else {
           values['historical_target'].push(link);
+        } else {
+          values['historical_source'].push(link);
         }
       });
     }
