@@ -5,10 +5,10 @@ export const SUBMISSIONAPI_URL = BACKEND_DOMAIN + '/submissionapi/v1';
 export const WEBAPI_URL = BACKEND_DOMAIN + '/webapi/v1';
 
 // Authentication endpoints
-export const POST_PASSWORD = BACKEND_DOMAIN + '/auth/password/';
-export const POST_PASSWORD_RESET = BACKEND_DOMAIN + '/auth/password/reset/';
-export const POST_PASSWORD_RESET_CONFIRM = BACKEND_DOMAIN + '/auth/password/reset/confirm/';
-export const GET_USER = BACKEND_DOMAIN + '/auth/me/';
+export const POST_PASSWORD = BACKEND_DOMAIN + '/auth/users/set_password/';
+export const POST_PASSWORD_RESET = BACKEND_DOMAIN + '/auth/users/reset_password/';
+export const POST_PASSWORD_RESET_CONFIRM = BACKEND_DOMAIN + '/auth/users/reset_password_confirm/';
+export const GET_USER = BACKEND_DOMAIN + '/auth/users/me/';
 
 // User account endpoints
 export const GET_TOKEN = BACKEND_DOMAIN + '/accounts/get_token/';
