@@ -33,7 +33,7 @@ class Institution {
   };
 
   getInstitution = (id) => {
-    return axios.get(`${GET_INSTITUTION}${id}`);
+    return axios.get(`${GET_INSTITUTION}${id}/`);
   }
 
   getHierarchicalRelationTypes = () => {
