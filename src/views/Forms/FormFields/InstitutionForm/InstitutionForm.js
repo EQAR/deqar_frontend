@@ -15,7 +15,7 @@ import FormSelectField from "../../../../components/FormFields/FormSelectField/F
 import list from "../../../../services/List";
 import {
   validateDateFrom,
-  validateDateFromRequired, validateRequired,
+  validateRequired,
   validateRequiredURL,
 } from "../../../../utils/validators";
 import FormManyMultipleField
@@ -107,7 +107,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
             <FormGroup>
               <FormManyTextField
                 label={'Alternative Institution Name'}
-                data={formState.values['alternative_names']}
+                data={formState.values['names_actual'] ? formState.values['names_actual'][0]['alternative_names'] : undefined}
                 scopeName={'names_actual[0].alternative_names'}
                 field={'name'}
                 addButtonText={'Add Alternative Name'}
