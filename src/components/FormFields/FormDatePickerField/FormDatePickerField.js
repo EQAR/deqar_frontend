@@ -15,11 +15,11 @@ const FormDatePickerField = asField(({ fieldState, fieldApi, ...props }) => {
   const { onChange, onBlur, initialValue, placeholderText, disabled, yearPlus, ...rest } = props;
 
   const setDateValue = (value) => {
-    return value ? moment(value).format('YYYY-MM-DD') : null;
+    return value ? moment(value).format('YYYY-MM-DD') : '';
   };
 
   const getDateValue = (value) => {
-    return value? moment(value, 'YYYY-MM-DD').toDate() : null;
+    return value? moment(value, 'YYYY-MM-DD').toDate() : value;
   };
 
   const onYearPlusClick = () => {
