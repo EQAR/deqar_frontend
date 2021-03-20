@@ -21,7 +21,7 @@ const AgencyActivitySubform = ({formApi, formState, disabled, submitDisabled, fo
             <Label for="activity" className={'required'}>Activity</Label>
             <FormTextField
               field={'activity'}
-              placeholderText={'Enter full activity name'}
+              placeholder={'Enter full activity name'}
               disabled={disabled}
               validate={validateRequired}
             />
@@ -50,7 +50,7 @@ const AgencyActivitySubform = ({formApi, formState, disabled, submitDisabled, fo
             <Label for="activity_description">Short Display Form</Label>
             <FormTextField
               field={'activity_description'}
-              placeholderText={'Enter short display form of name'}
+              placeholder={'Enter short display form of name'}
               disabled={disabled}
             />
           </FormGroup>
@@ -62,7 +62,7 @@ const AgencyActivitySubform = ({formApi, formState, disabled, submitDisabled, fo
             <Label for="activity_local_identifier">Activity Local ID</Label>
             <FormTextField
               field={'activity_local_identifier'}
-              placeholderText={'Enter local ID for activity'}
+              placeholder={'Enter local ID for activity'}
               disabled={formType === 'view'}
             />
           </FormGroup>
@@ -74,7 +74,7 @@ const AgencyActivitySubform = ({formApi, formState, disabled, submitDisabled, fo
             <Label for="reports_link">Documentation link</Label>
             <FormTextField
               field={'reports_link'}
-              placeholderText={'Enter URL'}
+              placeholder={'Enter URL'}
               disabled={disabled}
               validate={validateURL}
             />
