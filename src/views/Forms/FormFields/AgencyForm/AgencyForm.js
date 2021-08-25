@@ -71,30 +71,48 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
       <Col md={6} className={style.reportFormLeft}>
         <Row>
           <Col md={7}>
-            <FormTextTransliterated
-              label={'Agency Name, Primary'}
-              formType={formType}
-              formApi={formApi}
-              values={formState.values.hasOwnProperty('current_primary_name') ? formState.values['current_primary_name'][0] : undefined}
-              scopeName={'current_primary_name[0]'}
-              counter={1}
-              field={'name'}
-              transliterationField={'name_transliterated'}
-              readOnly={module === 'myAgency' ? true : readOnly}
-            />
+            { module === 'myAgency' ?
+              <FormGroup>
+                <Label>Agency Name, Primary</Label>
+                <FormTextField
+                  field={'current_primary_name[0].name'}
+                  disabled={module === 'myAgency' ? true : readOnly}
+                />
+              </FormGroup> :
+              <FormTextTransliterated
+                label={'Agency Name, Primary'}
+                formType={formType}
+                formApi={formApi}
+                values={formState.values.hasOwnProperty('current_primary_name') ? formState.values['current_primary_name'][0] : undefined}
+                scopeName={'current_primary_name[0]'}
+                counter={1}
+                field={'name'}
+                transliterationField={'name_transliterated'}
+                readOnly={module === 'myAgency' ? true : readOnly}
+              />
+            }
           </Col>
           <Col md={5}>
-            <FormTextTransliterated
-              label={'Agency Acronym, Primary'}
-              formType={formType}
-              formApi={formApi}
-              values={formState.values.hasOwnProperty('current_primary_name') ? formState.values['current_primary_name'][0] : undefined}
-              scopeName={'current_primary_name[0]'}
-              counter={1}
-              field={'acronym'}
-              transliterationField={'acronym_transliterated'}
-              readOnly={module === 'myAgency' ? true : readOnly}
-            />
+            { module === 'myAgency' ?
+              <FormGroup>
+                <Label className={'required'}>Agency Acronym, Primary</Label>
+                <FormTextField
+                  field={'current_primary_name[0].acronym'}
+                  disabled={module === 'myAgency' ? true : readOnly}
+                />
+              </FormGroup> :
+              <FormTextTransliterated
+                label={'Agency Acronym, Primary'}
+                formType={formType}
+                formApi={formApi}
+                values={formState.values.hasOwnProperty('current_primary_name') ? formState.values['current_primary_name'][0] : undefined}
+                scopeName={'current_primary_name[0]'}
+                counter={1}
+                field={'acronym'}
+                transliterationField={'acronym_transliterated'}
+                readOnly={module === 'myAgency' ? true : readOnly}
+              />
+            }
           </Col>
         </Row>
         <Row>
