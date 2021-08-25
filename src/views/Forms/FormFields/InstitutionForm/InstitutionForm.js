@@ -29,6 +29,7 @@ import OtherIDSubform from "./components/OtherIDSubform";
 import HierarchicalLinkSubform from "./components/HierarchicalLinkSubform";
 import HistoricalLinkSubform from "./components/HistoricalLinkSubform";
 import FormTextTransliterated from "../../../../components/FormFields/FormTextTransliterated/FormTextTransliterated";
+import FormCheckbox from "../../../../components/FormFields/FormCheckbox/FormCheckbox";
 
 const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...props}) => {
   const renderFormerNames = (value) => {
@@ -198,7 +199,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
             data={formState.values['countries']}
             render={({counter}) => (
               <React.Fragment>
-                <Col md={6}>
+                <Col md={5}>
                   <FormGroup>
                     <FormSelectField
                       field={'country'}
@@ -211,13 +212,24 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
                     />
                   </FormGroup>
                 </Col>
-                <Col md={5}>
+                <Col md={4}>
                   <FormGroup>
                     <FormTextField
                       field={'city'}
                       placeholder={'Please enter city name'}
                       disabled={readOnly}
                     />
+                  </FormGroup>
+                </Col>
+                <Col md={2}>
+                  <FormGroup>
+                    <FormCheckbox
+                      field={'country_verified'}
+                      disabled={readOnly}
+                      className={'form-control'}
+                      style={{marginTop: 10, marginRight: '10px'}}
+                    />
+                    <Label for="country_is_official">Official</Label>
                   </FormGroup>
                 </Col>
               </React.Fragment>
