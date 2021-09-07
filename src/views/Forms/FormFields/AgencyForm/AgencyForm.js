@@ -12,6 +12,7 @@ import FormTextField from "../../../../components/FormFields/FormTextField/FormT
 import FormDatePickerField from "../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 import FormTextAreaFormatted from "../../../../components/FormFields/FormTextArea/FormTextAreaFormatted";
 import {
+  validateDateFrom,
   validateDateFromRequired, validateEmailRequired,
   validateRequired,
   validateRequiredDate,
