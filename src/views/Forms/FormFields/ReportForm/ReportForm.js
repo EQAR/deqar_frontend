@@ -23,6 +23,8 @@ import ReportLinkSubform from "./components/ReportLinkSubform";
 import FileSubform from "./components/FileSubform";
 import validateInstitutions from "./validators/validateInstitutions";
 import validateProgrammes from "./validators/validateProgrammes";
+import FormTextAreaFormatted from "../../../../components/FormFields/FormTextArea/FormTextAreaFormatted";
+import language from "../../../../services/Language";
 
 const ReportForm = ({formType, formApi, formState, readOnly}) => {
   const isAgencyDisabled = () => {
@@ -128,6 +130,34 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
                 field={'local_identifier'}
                 placeholder={'Enter local report ID'}
                 disabled={readOnly}
+              />
+            </FormGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            <FormGroup>
+              <Label for="contributing_agencies">Contributing Agencies</Label>
+              <FormSelectField
+                field={'contributing_agencies'}
+                optionsAPI={agency.selectMySubmissionAgency}
+                placeholder={'Please select multiple, if necessary'}
+                labelField={'acronym_primary'}
+                valueField={'id'}
+                isMulti
+                disabled={readOnly}
+              />
+            </FormGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            <FormGroup>
+              <Label for="summary">Summary</Label>
+              <FormTextAreaFormatted
+                field={'summary'}
+                disabled={readOnly}
+                height={'100px'}
               />
             </FormGroup>
           </Col>

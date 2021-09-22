@@ -5,7 +5,7 @@ import 'suneditor/dist/css/suneditor.min.css';
 
 import style from './FormTextAreaFormatted.module.css';
 
-const FormTextAreaFormatted = asField(({ fieldState, fieldApi, onChange, disabled, height, ...props }) => {
+const FormTextAreaFormatted = asField(({ fieldState, fieldApi, onChange, disabled, height='100%', ...props }) => {
   const { value, error } = fieldState;
   const { setValue } = fieldApi;
 
@@ -29,10 +29,10 @@ const FormTextAreaFormatted = asField(({ fieldState, fieldApi, onChange, disable
     <React.Fragment>
       <div className={disabled ? style.SunEditorDisabled : style.SunEditor}>
         <SunEditor
-          height={'100%'}
+          height={height}
           showToolbar={!disabled}
           disable={disabled}
-          setContents={value}
+          setContents={value === null ? "" : value}
           onChange={handleChange}
           setOptions={options}
         />
