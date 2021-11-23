@@ -71,11 +71,13 @@ const FormSelectField = asField(({ fieldState, fieldApi, optionsAPI, ...props })
       const val = value || initialValue || [];
 
       if (val.hasOwnProperty(labelField)) {
+        const id = idField ? idField : 'id';
+
         if (includeID) {
           if (includeID === 'back') {
-            return `${val[labelField]} - ID ${val['id']}`
+            return `${val[labelField]} - ID ${val[id]}`
           } else {
-            return `${val['id']} - ${val[labelField]}`
+            return `${val[id]} - ${val[labelField]}`
           }
         } else {
           return val[labelField]

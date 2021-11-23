@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 const IngestInfo = ({clickedRowIndex, ingestResponse, ...props}) => {
 
-
   const collectErrors = (errors) => {
     let errorMsg = [];
 
