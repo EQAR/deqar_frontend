@@ -143,7 +143,7 @@ class DataTableRedux extends Component {
   getPagesNumber = (itemCount) => {
     const {tableState} = this.props;
     const {pageSize} = tableState;
-    return Math.floor(itemCount / pageSize);
+    return Math.floor(itemCount / pageSize) + 1;
   };
 
   makeHeader = () => {
