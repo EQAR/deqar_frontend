@@ -242,6 +242,7 @@ class DataTableRedux extends Component {
           onPageChange={this.onPageChange}
           pageSize={pageSize}
           onPageSizeChange={this.onPageSizeChange}
+          minRows = {0}
           sorted={sorted}
           onSortedChange={this.onSortedChange}
           filtered={filtered}
