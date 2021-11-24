@@ -16,11 +16,11 @@ const validateOriginalLocation = (value, values) => {
     }
   }
 
-  if (value.length > 500) {
-    return "Please ensure that the URL has no more than 500 characters!"
-  }
-
   if(value) {
+    if (value.length > 500) {
+      return "Please ensure that the URL has no more than 500 characters!"
+    }
+
     return validateURL(value)
   }
 };
