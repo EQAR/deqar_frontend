@@ -13,10 +13,10 @@ import FormDatePickerField from "../../../../components/FormFields/FormDatePicke
 import FormTextAreaFormatted from "../../../../components/FormFields/FormTextArea/FormTextAreaFormatted";
 import {
   validateDateFrom,
-  validateDateFromRequired, validateEmailRequired,
+  validateEmailRequired,
   validateRequired,
-  validateRequiredDate,
-  validateRequiredURL, validateURL
+  validateRequiredURL,
+  validateURL
 } from "../../../../utils/validators";
 import {withRouter} from "react-router-dom";
 import withFormManager from "../../../../components/FormManager/FormManagerHOC";

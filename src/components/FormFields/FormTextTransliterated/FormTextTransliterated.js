@@ -17,7 +17,7 @@ const FormTextTransliterated = ({field, label, scopeName, counter, transliterati
         }
       }
     }
-  }, [values]);
+  }, [values, transliterationField]);
 
   const getFieldName = (field) => {
     let fieldName = field;
