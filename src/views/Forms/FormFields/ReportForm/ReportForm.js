@@ -24,7 +24,6 @@ import FileSubform from "./components/FileSubform";
 import validateInstitutions from "./validators/validateInstitutions";
 import validateProgrammes from "./validators/validateProgrammes";
 import FormTextAreaFormatted from "../../../../components/FormFields/FormTextArea/FormTextAreaFormatted";
-import language from "../../../../services/Language";
 
 const ReportForm = ({formType, formApi, formState, readOnly}) => {
   const isAgencyDisabled = () => {
