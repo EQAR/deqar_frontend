@@ -139,7 +139,7 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
               <Label for="contributing_agencies">Contributing Agencies</Label>
               <FormSelectField
                 field={'contributing_agencies'}
-                optionsAPI={agency.selectMySubmissionAgency}
+                optionsAPI={agency.selectAllAgencies}
                 placeholder={'Please select multiple, if necessary'}
                 labelField={'acronym_primary'}
                 valueField={'id'}
