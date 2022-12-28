@@ -18,6 +18,7 @@ import country from "../../../../services/Country";
 import PopupFormListManager from "../../../../components/FormManager/PopupFormListManager";
 import QARequirmentsSubform from "./components/QARequirementsSubform";
 import QAARegulationsSubform from "./components/QAARegulationsSubform";
+import {validateRequired} from "../../../../utils/validators";
 
 const CountryForm = ({formType, formApi, formState, readOnly, module, ...props}) => {
   const renderQARequirements = (value) => {
@@ -33,6 +34,21 @@ const CountryForm = ({formType, formApi, formState, readOnly, module, ...props})
   return(
     <Row>
       <Col md={6} className={style.reportFormLeft}>
+        <Row>
+          <Col md={12}>
+            <FormGroup>
+              <Label for="parent">Parent Country</Label>
+              <FormSelectField
+                field={'parent'}
+                optionsAPI={country.select}
+                placeholder={'Please select parent country'}
+                labelField={'name_english'}
+                valueField={'id'}
+                disabled={readOnly}
+              />
+            </FormGroup>
+          </Col>
+        </Row>
         <Row>
           <Col md={4}>
             <FormGroup>
@@ -67,6 +83,26 @@ const CountryForm = ({formType, formApi, formState, readOnly, module, ...props})
               <FormTextField
                 field={'id'}
                 disabled={true}
+              />
+            </FormGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={6}>
+            <FormGroup>
+              <Label for="orgreg_subcountry_label">OrgReg SubCountry Label</Label>
+              <FormTextField
+                field={'orgreg_subcountry_label'}
+                disabled={readOnly}
+              />
+            </FormGroup>
+          </Col>
+          <Col md={6}>
+            <FormGroup>
+              <Label for="orgreg_eu_2_letter_code">OrgReg EU 2-letter Code</Label>
+              <FormTextField
+                field={'orgreg_eu_2_letter_code'}
+                disabled={readOnly}
               />
             </FormGroup>
           </Col>
@@ -172,6 +208,39 @@ const CountryForm = ({formType, formApi, formState, readOnly, module, ...props})
         </Row>
       </Col>
       <Col md={6}>
+        <Row>
+          <Col md={12}>
+            <FormGroup>
+              <Label for="eu_controlled_vocab_country">EU Controlled Vocabulary - Country</Label>
+              <FormTextField
+                field={'eu_controlled_vocab_country'}
+                disabled={readOnly}
+              />
+            </FormGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            <FormGroup>
+              <Label for="eu_controlled_vocab_atu">EU Controlled Vocabulary - ATU</Label>
+              <FormTextField
+                field={'eu_controlled_vocab_atu'}
+                disabled={readOnly}
+              />
+            </FormGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            <FormGroup>
+              <Label for="generic_url">Generic URL</Label>
+              <FormTextField
+                field={'generic_url'}
+                disabled={readOnly}
+              />
+            </FormGroup>
+          </Col>
+        </Row>
         <Row>
           <Col md={12}>
             <FormGroup>
