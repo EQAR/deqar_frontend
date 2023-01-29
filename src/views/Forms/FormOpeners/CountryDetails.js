@@ -26,6 +26,7 @@ const CountryDetails = ({userIsAdmin, ...props}) => {
         api={{
           read: country.read,
           update: country.update,
+          create: country.create
         }}
         decoders={[]}
         encoders = {[]}
