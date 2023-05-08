@@ -6,28 +6,39 @@ const IngestInfo = ({clickedRowIndex, ingestResponse, ...props}) => {
 
   const collectErrors = (errors) => {
     let errorMsg = [];
-
     errors.forEach((error) => {
-      if(error.hasOwnProperty('non_field_errors')) {
-        errorMsg.push(...error['non_field_errors']);
-      } else {
-        Object.keys(error).forEach((key) => {
-          if(Array.isArray(error)) {
-            errorMsg.push(...error[key]);
-          } else {
-            Object.keys(error[key]).forEach((k) => {
-              errorMsg.push(...error[key][k])
-            })
-          }
-        });
-      }
+      errorMsg.push(getErrorFromErrorMessage(error))
     });
-
     return Array.from(new Set(errorMsg));
   };
 
+  const getErrorFromErrorMessage = (error) => {
+    if (error.hasOwnProperty('non_field_errors')) {
+      return error['non_field_errors'];
+    } else {
+      // If object
+      if (typeof error === 'object' && error !== null) {
+        return Object.keys(error).map((key) => {
+          return getErrorFromErrorMessage(error[key])
+        });
+      }
+
+      // If array
+      if (Array.isArray(error)) {
+        return error.map(e => {
+          return getErrorFromErrorMessage(e)
+        })
+      }
+
+      // If string, then return the message
+      if (typeof error === 'string' || error instanceof String) {
+        return [error]
+      }
+    }
+  }
+
   const renderErrorMessage = () => {
-    if(ingestResponse[clickedRowIndex].submission_status === 'errors') {
+    if (ingestResponse[clickedRowIndex].submission_status === 'errors') {
       const errors = ingestResponse[clickedRowIndex].errors;
       let errorMsg = [];
 
