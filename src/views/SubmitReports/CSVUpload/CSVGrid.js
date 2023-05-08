@@ -38,7 +38,7 @@ class CSVGrid extends Component {
     const response = ingestResponse[rowIndex];
 
     // If there is already a response object.
-    if(response) {
+    if (response) {
       switch (response.submission_status) {
         case "success":
           return 'bg-success';
@@ -57,7 +57,7 @@ class CSVGrid extends Component {
       field: 'row_number',
       resizable: true
     }];
-    if(!csvHeader.includes('report_id')) {
+    if (!csvHeader.includes('report_id')) {
       columns.push({
         headerName: 'report_id',
         field: 'report_id',
@@ -80,7 +80,7 @@ class CSVGrid extends Component {
     this.props.afterIngest(results);
     this.gridAPI.forEachNode((node, idx) => {
       const data = results[idx];
-      if(data.submission_status === 'success') {
+      if (data.submission_status === 'success') {
         node.data['report_id'] = data.submitted_report['report_id'];
       }
       res.push(node.data);
