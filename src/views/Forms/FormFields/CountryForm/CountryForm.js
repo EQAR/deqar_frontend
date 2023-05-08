@@ -52,19 +52,21 @@ const CountryForm = ({formType, formApi, formState, readOnly, module, ...props})
         <Row>
           <Col md={4}>
             <FormGroup>
-              <Label for="name_english">English Country Name</Label>
+              <Label for="name_english" className={'required'}>English Country Name</Label>
               <FormTextField
                 field={'name_english'}
                 disabled={readOnly}
+                validate={validateRequired}
               />
             </FormGroup>
           </Col>
           <Col md={3}>
             <FormGroup>
-              <Label for="iso_3166_alpha2">Alpha-2 Code</Label>
+              <Label for="iso_3166_alpha2" className={'required'}>Alpha-2 Code</Label>
               <FormTextField
                 field={'iso_3166_alpha2'}
                 disabled={readOnly}
+                validate={validateRequired}
               />
             </FormGroup>
           </Col>
