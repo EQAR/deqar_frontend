@@ -43,6 +43,7 @@
     "react-select-async-paginate": "^0.3.2",
     "react-table": "^6.11.5",
     "react-toastify": "^4.5.2",
+    "react-use": "^17.4.0",
     "react-user-avatar": "^1.10.0",
     "reactstrap": "^8.4.1",
     "reactstrap-confirm": "^1.2.0",

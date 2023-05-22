@@ -38,26 +38,28 @@ const IngestInfo = ({clickedRowIndex, ingestResponse, ...props}) => {
   }
 
   const renderErrorMessage = () => {
-    if (ingestResponse[clickedRowIndex].submission_status === 'errors') {
-      const errors = ingestResponse[clickedRowIndex].errors;
-      let errorMsg = [];
+    if (ingestResponse[clickedRowIndex]) {
+      if (ingestResponse[clickedRowIndex].submission_status === 'errors') {
+        const errors = ingestResponse[clickedRowIndex].errors;
+        let errorMsg = [];
 
-      Object.entries(errors).forEach((error) => {
-        const [key, value] = error;
-        if (key === 'non_field_errors') {
-          errorMsg.push(...value);
-        } else {
-          const errorMessages = collectErrors(value);
-          errorMsg.push(`${errorMessages.join(' ')} (${key})`)
-        }
-      });
+        Object.entries(errors).forEach((error) => {
+          const [key, value] = error;
+          if (key === 'non_field_errors') {
+            errorMsg.push(...value);
+          } else {
+            const errorMessages = collectErrors(value);
+            errorMsg.push(`${errorMessages.join(' ')} (${key})`)
+          }
+        });
 
-      const errorItems = errorMsg.map((emsg, idx) => {
-        return(<h6 key={idx}>{emsg}</h6>)
-      });
-      return(<div>{errorItems}</div>)
-    } else {
-      return(<h6>Record was successfully ingested.</h6>)
+        const errorItems = errorMsg.map((emsg, idx) => {
+          return(<h6 key={idx}>{emsg}</h6>)
+        });
+        return(<div>{errorItems}</div>)
+      } else {
+        return(<h6>Record was successfully ingested.</h6>)
+      }
     }
   };
 
