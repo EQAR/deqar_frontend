@@ -1,4 +1,5 @@
 const validateProgrammes = (value, values) => {
+  console.log(values)
   let programmes = values.programmes;
   programmes = programmes ? programmes : [];
   const activityType = values.activity ? values.activity.activity_type : undefined;
@@ -19,11 +20,21 @@ const validateProgrammes = (value, values) => {
 
   // Mark duplicates
   let names = [];
+
+  const getProgrammeQFEHEALevel = (programme) => {
+    if (programme.hasOwnProperty('qf_ehea_level')) {
+      if (programme.qf_ehea_level !== null && programme.qf_ehea_level !== '') {
+        return programme.qf_ehea_level.level
+      }
+    }
+    return ''
+  }
+
   programmes.forEach((programme) => {
     names.push(
       {
         name: programme.name_primary,
-        qfehea: programme.hasOwnProperty('qf_ehea_level') ? programme.qf_ehea_level.hasOwnProperty('level') ? programme.qf_ehea_level.level : '' : ''
+        qfehea: getProgrammeQFEHEALevel(programme)
       }
     );
   });
