@@ -23,7 +23,7 @@ const validateProgrammes = (value, values) => {
     names.push(
       {
         name: programme.name_primary,
-        qfehea: programme.hasOwnProperty('qf_ehea_level') ? programme.qf_ehea_level.level : ''
+        qfehea: programme.hasOwnProperty('qf_ehea_level') ? programme.qf_ehea_level.hasOwnProperty('level') ? programme.qf_ehea_level.level : '' : ''
       }
     );
   });

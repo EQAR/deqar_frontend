@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import {Col, Row} from "reactstrap";
 import CSVInfo from "./CSVInfo";
 import FileUpload from "./FileUpload";
-import CSVGrid from "./CSVGrid";
 import IngestInfo from "./IngestInfo";
 import cx from 'classnames';
 import style from './CSVUpload.module.css';
+import CSVGridNew from "./CSVGridNew";
 
 class CSVUpload extends Component {
   constructor(props) {
@@ -47,7 +47,7 @@ class CSVUpload extends Component {
     if(csvHeader.length > 0) {
       return (
         <Col md={12}>
-          <CSVGrid
+          <CSVGridNew
             csvHeader={csvHeader}
             csvData={csvData}
             afterIngest={this.afterIngest}
