@@ -30,6 +30,8 @@ import HierarchicalLinkSubform from "./components/HierarchicalLinkSubform";
 import HistoricalLinkSubform from "./components/HistoricalLinkSubform";
 import FormTextTransliterated from "../../../../components/FormFields/FormTextTransliterated/FormTextTransliterated";
 import FormCheckbox from "../../../../components/FormFields/FormCheckbox/FormCheckbox";
+import report from "../../../../services/Report";
+import institution from "../../../../services/Institution";
 
 const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...props}) => {
   const renderFormerNames = (value) => {
@@ -77,6 +79,33 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
               <FormTextField
                 field={'eter_id'}
                 disabled={true}
+              />
+            </FormGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={6}>
+            <FormGroup>
+              <Label for="is_alternative_provider">Alternative Provider</Label>
+              <FormCheckbox
+                field={'is_alternative_provider'}
+                disabled={readOnly}
+                className={'form-control'}
+                style={{display: 'block', marginTop: 0, marginLeft: '10px'}}
+              />
+            </FormGroup>
+          </Col>
+          <Col md={6}>
+            <FormGroup>
+              <Label for="organization_type">Organization Type</Label>
+              <FormSelectField
+                field={'organization_type'}
+                placeholder={'Select organization type...'}
+                optionsAPI={institution.getOrganizationTypes}
+                labelField={'type'}
+                valueField={'id'}
+                includeID={'front'}
+                disabled={readOnly}
               />
             </FormGroup>
           </Col>

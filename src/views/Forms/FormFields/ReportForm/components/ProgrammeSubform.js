@@ -5,8 +5,11 @@ import FormTextField from "../../../../../components/FormFields/FormTextField/Fo
 import FormSelectField from "../../../../../components/FormFields/FormSelectField/FormSelectField";
 import list from "../../../../../services/List";
 import country from "../../../../../services/Country";
-import {validateRequiredUnique, validateUnique} from "../../../../../utils/validators";
+import {validateEmailRequired, validateRequiredUnique, validateUnique} from "../../../../../utils/validators";
 import FormManyMultipleField from "../../../../../components/FormFieldsUncontrolled/FormManyMultipleField/FormManyMultipleField";
+import FormCheckbox from "../../../../../components/FormFields/FormCheckbox/FormCheckbox";
+import FormTextArea from "../../../../../components/FormFields/FormTextArea/FormTextArea";
+import FormManyTextField from "../../../../../components/FormFields/FormManyTextField/FormManyTextField";
 
 
 const ProgrammeSubform = ({formApi, formState, disabled}) => {
@@ -14,7 +17,7 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
     <Row>
       <Col md={6}>
         <FormGroup>
-          <Label for="name_primary" className={'required'}>Programme Name</Label>
+          <Label for="name_primary" className={'required'}>Programme name</Label>
           <FormTextField
             field={'name_primary'}
             placeholder={'Enter programme name for display'}
@@ -29,7 +32,7 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
       </Col>
       <Col md={6}>
         <FormGroup>
-          <Label for="qualification_primary">Qualification Name</Label>
+          <Label for="qualification_primary">Qualification name</Label>
           <FormTextField
             field={'qualification_primary'}
             placeholder={'Enter qualification name for display'}
@@ -38,7 +41,7 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
         </FormGroup>
       </Col>
       <FormManyMultipleField
-        label={'Agency Alternative Names / Qualifications'}
+        label={'Agency alternative names / qualifications'}
         deleteInRow={true}
         disabled={disabled}
         scopeName={'alternative_names'}
@@ -76,7 +79,7 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
       />
       <Col md={6}>
         <FormGroup>
-          <Label for="qf_ehea_level">QF-EHEA Level</Label>
+          <Label for="qf_ehea_level">QF-EHEA level</Label>
           <FormSelectField
             field={'qf_ehea_level'}
             optionsAPI={list.selectQFEHEALevels}
@@ -91,7 +94,7 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
       </Col>
       <Col md={6}>
         <FormGroup>
-          <Label for="nqf_level">NQF Level</Label>
+          <Label for="nqf_level">NQF level</Label>
           <FormTextField
             field={'nqf_level'}
             placeholder={'Enter programme NQF Level'}
@@ -109,6 +112,74 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
             labelField={'name_english'}
             valueField={'id'}
             isMulti
+            disabled={disabled}
+          />
+        </FormGroup>
+      </Col>
+      <Col md={3}>
+        <FormGroup>
+          <Label for="degree_outcome">Degree outcome</Label>
+          <FormCheckbox
+            field={'degree_outcome'}
+            disabled={disabled}
+            className={'form-control'}
+            style={{display: 'block', marginTop: 0, marginLeft: '10px'}}
+          />
+        </FormGroup>
+      </Col>
+      <Col md={3}>
+        <FormGroup>
+          <Label for="workload_ects">ECTS credits</Label>
+          <FormTextField
+            field={'workload_ects'}
+            placeholder={'Enter ECTS Credits'}
+            disabled={disabled}
+          />
+        </FormGroup>
+      </Col>
+      <Col md={6}>
+        <FormGroup>
+          <Label for="assessment_certification">Assessment and certification</Label>
+          <FormSelectField
+            field={'assessment_certification'}
+            optionsAPI={list.selectAssessments}
+            placeholder={'Select assessment'}
+            labelField={'assessment'}
+            valueField={'id'}
+            includeID={'front'}
+            disabled={disabled}
+          />
+        </FormGroup>
+      </Col>
+      <Col md={12}>
+        <FormGroup>
+          <Label for="field_study">Field of study (ISCED-F)</Label>
+          <FormTextField
+            field={'field_study'}
+            placeholder={'Enter ISCED-F URL'}
+            disabled={disabled}
+          />
+        </FormGroup>
+      </Col>
+      <Col md={12}>
+        <FormGroup>
+          <FormManyTextField
+            label={'Learning outcomes'}
+            data={formState.values['learning_outcomes']}
+            scopeName={'learning_outcomes'}
+            field={'learning_outcome'}
+            disabled={disabled}
+            formApi={formApi}
+            placeholder={'Enter ESCO URL'}
+          />
+        </FormGroup>
+      </Col>
+      <Col md={12}>
+        <FormGroup>
+          <Label for="learning_outcome_description">Learning outcome description</Label>
+          <FormTextArea
+            field={'learning_outcome_description'}
+            placeholder={'Enter learning outcome explanation'}
             disabled={disabled}
           />
         </FormGroup>

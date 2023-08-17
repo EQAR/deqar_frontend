@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Col, Collapse, Input, Row } from "reactstrap";
+import {Col, Collapse, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Row} from "reactstrap";
 import { connect } from "react-redux";
 import SelectFilter from "../../../components/DataTableFilters/SelectFilter";
 import FormGroup from "reactstrap/es/FormGroup";
+import style from "../../../components/DataTableFilters/ActiveDateFilter.module.css";
 
 class InstitutionsTableFilters extends Component {
   componentDidUpdate = (prevProps) => {
@@ -88,11 +89,25 @@ class InstitutionsTableFilters extends Component {
             </Col>
             <Col md={4}>
               <FormGroup>
-                <Input
-                  value={this.getValue('query')}
-                  onChange={(e) => this.onFilter(e.target.value, 'query')}
-                  placeholder={'Filter by Institution'}
-                />
+                <InputGroup>
+                  <Input
+                    value={this.getValue('query')}
+                    onChange={(e) => this.onFilter(e.target.value, 'query')}
+                    placeholder={'Filter by Institution'}
+                  />
+                  <InputGroupAddon addonType="append">
+                    <InputGroupText className={style.filterInputGroup}>
+                      <input
+                        type={'checkbox'}
+                        onChange={(e) => this.onFilter(!this.getValue('alternative_provider'), 'alternative_provider')}
+                        checked={this.getValue('alternative_provider') || false}
+                      />
+                      <Label check className={style.activeFilter}>
+                        AP
+                      </Label>
+                    </InputGroupText>
+                  </InputGroupAddon>
+                </InputGroup>
               </FormGroup>
             </Col>
             <Col md={2}>

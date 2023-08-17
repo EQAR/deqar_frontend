@@ -3,7 +3,7 @@ import {
   GET_INSTITUTIONS,
   GET_INSTITUTION,
   GET_HISTORICAL_RELATION_TYPES,
-  MANAGE_INSTITUTION, GET_HIERARCHICAL_RELATION_TYPES
+  MANAGE_INSTITUTION, GET_HIERARCHICAL_RELATION_TYPES, GET_ORGANIZATION_TYPES
 } from "./config-api";
 
 
@@ -50,6 +50,10 @@ class Institution {
 
   updateInstitution = (formValues, institutionID) => {
     return axios.put(`${MANAGE_INSTITUTION}${institutionID}/`, formValues);
+  }
+
+  getOrganizationTypes = () => {
+    return axios.get(GET_ORGANIZATION_TYPES);
   }
 }
 

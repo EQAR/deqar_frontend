@@ -30,6 +30,8 @@ export const GET_ALL_AGENCIES = ADMINAPI_URL + '/select/agency_all/';
 export const GET_ACTIVITIES = ADMINAPI_URL + '/select/agency_esg_activity/';
 export const GET_ACTIVITY_TYPES = ADMINAPI_URL + '/select/activity_type/';
 export const GET_ASSOCIATIONS = ADMINAPI_URL + '/select/association/';
+export const GET_ASSESSMENTS = ADMINAPI_URL + '/select/assessment/';
+
 export const GET_EQAR_DECISIONS = ADMINAPI_URL + '/select/eqar_decision_type/';
 export const GET_AGENCIES = ADMINAPI_URL + '/browse/all/agencies/';
 export const GET_MY_AGENCIES = ADMINAPI_URL + '/browse/my/agencies/';
@@ -54,6 +56,7 @@ export const GET_INSTITUTION = ADMINAPI_URL + '/institutions/';
 export const GET_HIERARCHICAL_RELATION_TYPES = ADMINAPI_URL + '/select/institution_hierarchical_relationship_types/';
 export const GET_HISTORICAL_RELATION_TYPES = ADMINAPI_URL + '/select/institution_historical_relationship_types/';
 export const MANAGE_INSTITUTION = ADMINAPI_URL + '/institutions/';
+export const GET_ORGANIZATION_TYPES = ADMINAPI_URL + '/select/institutions/organization_type/'
 
 // Language endpoints
 export const GET_LANGUAGES = ADMINAPI_URL + '/select/language/';

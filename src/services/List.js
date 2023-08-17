@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {
+  GET_ASSESSMENTS,
   GET_ASSOCIATIONS,
   GET_EQAR_DECISIONS,
   GET_FLAGS,
@@ -18,6 +19,10 @@ class List {
 
   selectAssociations = () => {
     return axios.get(GET_ASSOCIATIONS);
+  };
+
+  selectAssessments = () => {
+    return axios.get(GET_ASSESSMENTS);
   };
 
   selectDecisions = () => {

@@ -24,6 +24,7 @@ import FileSubform from "./components/FileSubform";
 import validateInstitutions from "./validators/validateInstitutions";
 import validateProgrammes from "./validators/validateProgrammes";
 import FormTextAreaFormatted from "../../../../components/FormFields/FormTextArea/FormTextAreaFormatted";
+import FormCheckbox from "../../../../components/FormFields/FormCheckbox/FormCheckbox";
 
 const ReportForm = ({formType, formApi, formState, readOnly}) => {
   const isAgencyDisabled = () => {
@@ -202,6 +203,19 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
               onClick={(idx) => console.log(idx)}
               disabled={readOnly}
             />
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            <FormGroup>
+              <Label for="micro_credentials_covered">Micro credentials covered</Label>
+              <FormCheckbox
+                field={'micro_credentials_covered'}
+                disabled={readOnly}
+                className={'form-control'}
+                style={{display: 'block', marginTop: 0, marginLeft: '10px'}}
+              />
+            </FormGroup>
           </Col>
         </Row>
         {renderProgrammeField()}
