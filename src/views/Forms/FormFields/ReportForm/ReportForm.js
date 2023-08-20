@@ -239,7 +239,7 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
           </Col>
           <Col md={6}>
             <FormGroup>
-              <Label for="status" className={'required'}>Decision</Label>
+              <Label for="decision" className={'required'}>Decision</Label>
               <FormSelectField
                 field={'decision'}
                 placeholder={'Select decision...'}
