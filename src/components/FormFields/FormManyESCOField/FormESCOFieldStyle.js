@@ -2,6 +2,7 @@ export const style = (borderColor) => {
   return {
     container: (provided) => ({
       ...provided,
+      width: '95%',
       '&:focus': {
         borderColor: 'none'
       },

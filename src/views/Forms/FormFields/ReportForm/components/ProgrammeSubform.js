@@ -5,13 +5,12 @@ import FormTextField from "../../../../../components/FormFields/FormTextField/Fo
 import FormSelectField from "../../../../../components/FormFields/FormSelectField/FormSelectField";
 import list from "../../../../../services/List";
 import country from "../../../../../services/Country";
-import {validateEmailRequired, validateRequiredUnique, validateUnique} from "../../../../../utils/validators";
+import {validateRequiredUnique, validateUnique} from "../../../../../utils/validators";
 import FormManyMultipleField from "../../../../../components/FormFieldsUncontrolled/FormManyMultipleField/FormManyMultipleField";
 import FormCheckbox from "../../../../../components/FormFields/FormCheckbox/FormCheckbox";
 import FormTextArea from "../../../../../components/FormFields/FormTextArea/FormTextArea";
-import FormManyTextField from "../../../../../components/FormFields/FormManyTextField/FormManyTextField";
-import FormESCOField from "../../../../../components/FormFields/FormESCOField/FormESCOField";
 import FormISCEDField from "../../../../../components/FormFields/FormISCEDField/FormISCEDField";
+import FormManyESCOField from "../../../../../components/FormFields/FormManyESCOField/FormManyESCOField";
 
 
 const ProgrammeSubform = ({formApi, formState, disabled}) => {
@@ -165,7 +164,7 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
       </Col>
       <Col md={12}>
         <FormGroup>
-          <FormManyTextField
+          <FormManyESCOField
             label={'Learning outcomes'}
             data={formState.values['learning_outcomes']}
             scopeName={'learning_outcomes'}

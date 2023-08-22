@@ -3,8 +3,9 @@ import { asField } from 'informed';
 import Select from 'react-select';
 import { style } from './FormESCOFieldStyle';
 import axios from 'axios';
+import {Button, InputGroup, InputGroupAddon} from "reactstrap";
 
-const FormESCOField = asField(({ fieldState, fieldApi,...props }) => {
+const FormESCOField = asField(({ fieldState, fieldApi,onRemoveButtonClick, ...props }) => {
   var qs = require('qs');
 
   const [options, setOptions] = useState([]);
@@ -76,23 +77,34 @@ const FormESCOField = asField(({ fieldState, fieldApi,...props }) => {
 
   return (
     <React.Fragment>
-      <Select
-        styles={customStyles}
-        ref={forwardedRef}
-        defaultValue={value || initialValue || ''}
-        value={givenValue || value || initialValue || ''}
-        onInputChange={(value, action) => changeInputValue(value, action)}
-        onChange={(value, action) => changeValue(value, action)}
-        onBlur={() => setOpenMenu(false)}
-        getOptionLabel={getLabel}
-        getOptionValue={(option) => option['uri']}
-        classNamePrefix="react-select"
-        isDisabled={disabled}
-        placeholder={disabled ? "" : placeholder}
-        isClearable={true}
-        options={options}
-        menuIsOpen={openMenu}
-      />
+      <InputGroup>
+        <Select
+          styles={customStyles}
+          ref={forwardedRef}
+          defaultValue={value || initialValue || ''}
+          value={givenValue || value || initialValue || ''}
+          onInputChange={(value, action) => changeInputValue(value, action)}
+          onChange={(value, action) => changeValue(value, action)}
+          onBlur={() => setOpenMenu(false)}
+          getOptionLabel={getLabel}
+          getOptionValue={(option) => option['uri']}
+          classNamePrefix="react-select"
+          isDisabled={disabled}
+          placeholder={disabled ? "" : placeholder}
+          options={options}
+          menuIsOpen={openMenu}
+        />
+        {!disabled && (
+          <InputGroupAddon addonType="append">
+            <Button
+              color="secondary"
+              onClick={(e) => onRemoveButtonClick()}
+            >
+              <i className="fa fa-trash-o"> </i>
+            </Button>
+          </InputGroupAddon>
+        )}
+      </InputGroup>
       {fieldState.error ? (
         <small name="scroll-to-element" className="help-block form-text text-danger">{fieldState.error}</small>
       ) : null}

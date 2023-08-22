@@ -4,13 +4,12 @@ import Select from 'react-select';
 import { style } from './FormISCEDFieldStyle';
 import axios from 'axios';
 
-const FormISCEDField = asField(({ fieldState, fieldApi,...props }) => {
+const FormISCEDField = asField(({ fieldState, fieldApi, ...props }) => {
   const [options, setOptions] = useState([]);
 
   const { value } = fieldState;
   const { setValue, setTouched, setError } = fieldApi;
-  const { onChange, onBlur, initialValue, forwardedRef, labelField, valueField, idField, disabled, placeholder, includeID,
-    isMulti, givenValue, staticOptions, ...rest } = props;
+  const { disabled, givenValue, staticOptions, ...rest } = props;
   const borderColor = fieldApi.getError() ? '#f86c6b' : '#e4e7ea';
   const customStyles = style(borderColor);
 
@@ -31,7 +30,7 @@ const FormISCEDField = asField(({ fieldState, fieldApi,...props }) => {
       if (data['total'] > 0) {
         const results = data['_embedded']['results']
         setOptions(results.map(r => {
-          return {uri: r['uri'], title: r['title']}
+          return {id: r['uri'], title: r['title']}
         }));
       } else {
         setOptions([])
@@ -47,7 +46,7 @@ const FormISCEDField = asField(({ fieldState, fieldApi,...props }) => {
   }, [])
 
   const getLabel = (option) => {
-    return `${option['title']} - ${option['uri']}`
+    return `${option['title']} - ${option['id']}`
   }
 
   const changeValue = value =>  {
@@ -58,20 +57,27 @@ const FormISCEDField = asField(({ fieldState, fieldApi,...props }) => {
 
   return (
     <React.Fragment>
-      <Select
-        styles={customStyles}
-        ref={forwardedRef}
-        defaultValue={value || initialValue || ''}
-        value={givenValue || value || initialValue || ''}
-        onChange={(value, action) => changeValue(value, action)}
-        getOptionLabel={getLabel}
-        getOptionValue={(option) => option['uri']}
-        classNamePrefix="react-select"
-        isDisabled={disabled}
-        placeholder={disabled ? "" : placeholder}
-        isClearable={true}
-        options={options}
-      />
+      {disabled ?
+        <input
+          readOnly={disabled}
+          value={value}
+          {...rest}
+          className={'form-control'}
+        /> :
+        <Select
+          {...rest}
+          styles={customStyles}
+          defaultValue={value || ''}
+          value={value || ''}
+          onChange={(value, action) => changeValue(value, action)}
+          getOptionLabel={getLabel}
+          getOptionValue={(option) => option['uri']}
+          classNamePrefix="react-select"
+          isDisabled={disabled}
+          isClearable={true}
+          options={options}
+        />
+      }
       {fieldState.error ? (
         <small name="scroll-to-element" className="help-block form-text text-danger">{fieldState.error}</small>
       ) : null}
