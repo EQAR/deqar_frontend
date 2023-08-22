@@ -10,6 +10,8 @@ import FormManyMultipleField from "../../../../../components/FormFieldsUncontrol
 import FormCheckbox from "../../../../../components/FormFields/FormCheckbox/FormCheckbox";
 import FormTextArea from "../../../../../components/FormFields/FormTextArea/FormTextArea";
 import FormManyTextField from "../../../../../components/FormFields/FormManyTextField/FormManyTextField";
+import FormESCOField from "../../../../../components/FormFields/FormESCOField/FormESCOField";
+import FormISCEDField from "../../../../../components/FormFields/FormISCEDField/FormISCEDField";
 
 
 const ProgrammeSubform = ({formApi, formState, disabled}) => {
@@ -154,9 +156,9 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
       <Col md={12}>
         <FormGroup>
           <Label for="field_study">Field of study (ISCED-F)</Label>
-          <FormTextField
+          <FormISCEDField
             field={'field_study'}
-            placeholder={'Enter ISCED-F URL'}
+            placeholder={'Select ISCED-F value...'}
             disabled={disabled}
           />
         </FormGroup>
