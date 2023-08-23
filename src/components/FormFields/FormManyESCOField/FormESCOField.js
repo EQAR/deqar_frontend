@@ -92,7 +92,6 @@ const FormESCOField = asField(({ fieldState, fieldApi,onRemoveButtonClick, ...pr
           getOptionValue={(option) => option['id']}
           classNamePrefix="react-select"
           isDisabled={disabled}
-          placeholder={disabled ? "" : placeholder}
           options={options}
           menuIsOpen={openMenu}
         />
