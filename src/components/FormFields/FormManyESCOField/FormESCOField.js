@@ -6,8 +6,6 @@ import axios from 'axios';
 import {Button, InputGroup, InputGroupAddon} from "reactstrap";
 
 const FormESCOField = asField(({ fieldState, fieldApi,onRemoveButtonClick, ...props }) => {
-  var qs = require('qs');
-
   const [options, setOptions] = useState([]);
   const [openMenu, setOpenMenu] = useState(false);
   const [search, setSearch] = useState(undefined);
@@ -37,7 +35,7 @@ const FormESCOField = asField(({ fieldState, fieldApi,onRemoveButtonClick, ...pr
         if (data['total'] > 0) {
           const results = data['_embedded']['results']
           setOptions(results.map(r => {
-            return {uri: r['uri'], title: r['title']}
+            return {id: r['uri'], title: r['title']}
           }));
           setOpenMenu(true);
         } else {
@@ -66,7 +64,7 @@ const FormESCOField = asField(({ fieldState, fieldApi,onRemoveButtonClick, ...pr
   }
 
   const getLabel = (option) => {
-    return `${option['title']} - ${option['uri']}`
+    return `${option['title']} - ${option['id']}`
   }
 
   const changeValue = value =>  {
@@ -79,6 +77,7 @@ const FormESCOField = asField(({ fieldState, fieldApi,onRemoveButtonClick, ...pr
     <React.Fragment>
       <InputGroup>
         <Select
+          {...rest}
           styles={customStyles}
           ref={forwardedRef}
           defaultValue={value || initialValue || ''}
@@ -87,7 +86,7 @@ const FormESCOField = asField(({ fieldState, fieldApi,onRemoveButtonClick, ...pr
           onChange={(value, action) => changeValue(value, action)}
           onBlur={() => setOpenMenu(false)}
           getOptionLabel={getLabel}
-          getOptionValue={(option) => option['uri']}
+          getOptionValue={(option) => option['id']}
           classNamePrefix="react-select"
           isDisabled={disabled}
           placeholder={disabled ? "" : placeholder}
@@ -111,9 +110,5 @@ const FormESCOField = asField(({ fieldState, fieldApi,onRemoveButtonClick, ...pr
     </React.Fragment>
   )
 });
-
-FormESCOField.defaultProps = {
-  includeID: false
-};
 
 export default FormESCOField;

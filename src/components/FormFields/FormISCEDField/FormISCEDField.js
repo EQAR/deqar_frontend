@@ -71,7 +71,7 @@ const FormISCEDField = asField(({ fieldState, fieldApi, ...props }) => {
           value={value || ''}
           onChange={(value, action) => changeValue(value, action)}
           getOptionLabel={getLabel}
-          getOptionValue={(option) => option['uri']}
+          getOptionValue={(option) => option['id']}
           classNamePrefix="react-select"
           isDisabled={disabled}
           isClearable={true}
@@ -84,9 +84,5 @@ const FormISCEDField = asField(({ fieldState, fieldApi, ...props }) => {
     </React.Fragment>
   )
 });
-
-FormISCEDField.defaultProps = {
-  includeID: false
-};
 
 export default FormISCEDField;

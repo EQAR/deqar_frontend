@@ -1,7 +1,6 @@
 export const updateFormNormalizer = (formValues) => {
   let normalizedForm = {};
 
-
   Object.keys(formValues).forEach(key => {
     const value = formValues[key];
     if (value) {
@@ -14,8 +13,8 @@ export const updateFormNormalizer = (formValues) => {
         case Array:
           normalizedForm[key] = [];
           value.forEach((v) => {
-            if('id' in v) {
-              if(['programmes', 'report_files'].includes(key)) {
+            if ('id' in v) {
+              if (['programmes', 'report_files', 'learning_outcomes'].includes(key)) {
                 normalizedForm[key].push(updateFormNormalizer(v))
               } else if ('alternative_names' === key) {
                 normalizedForm[key].push(v);
@@ -35,5 +34,6 @@ export const updateFormNormalizer = (formValues) => {
       normalizedForm[key] = value;
     }
   });
+  console.log(normalizedForm)
   return normalizedForm;
 };
