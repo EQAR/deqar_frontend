@@ -83,8 +83,8 @@ const FormESCOField = asField(({ fieldState, fieldApi,onRemoveButtonClick, ...pr
         <Select
           {...rest}
           styles={customStyles}
-          defaultValue={value || initialValue || ''}
-          value={value || initialValue || ''}
+          defaultValue={value || ''}
+          value={value || ''}
           onInputChange={(value, action) => changeInputValue(value, action)}
           onChange={(value, action) => changeValue(value, action)}
           onBlur={() => setOpenMenu(false)}
