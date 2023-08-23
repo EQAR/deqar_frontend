@@ -10,10 +10,10 @@ const FormESCOField = asField(({ fieldState, fieldApi,onRemoveButtonClick, ...pr
   const [openMenu, setOpenMenu] = useState(false);
   const [search, setSearch] = useState(undefined);
 
+
   const { value } = fieldState;
   const { setValue, setTouched, setError } = fieldApi;
-  const { onChange, onBlur, initialValue, forwardedRef, labelField, valueField, idField, disabled, placeholder, includeID,
-    isMulti, givenValue, staticOptions, ...rest } = props;
+  const { disabled, givenValue, staticOptions, ...rest } = props;
   const borderColor = fieldApi.getError() ? '#f86c6b' : '#e4e7ea';
   const customStyles = style(borderColor);
 
@@ -64,7 +64,11 @@ const FormESCOField = asField(({ fieldState, fieldApi,onRemoveButtonClick, ...pr
   }
 
   const getLabel = (option) => {
-    return `${option['title']} - ${option['id']}`
+    if (option['title'] !== '') {
+      return `${option['title']} - ${option['id']}`
+    } else {
+      return `${option['id']}`
+    }
   }
 
   const changeValue = value =>  {
@@ -79,9 +83,8 @@ const FormESCOField = asField(({ fieldState, fieldApi,onRemoveButtonClick, ...pr
         <Select
           {...rest}
           styles={customStyles}
-          ref={forwardedRef}
           defaultValue={value || initialValue || ''}
-          value={givenValue || value || initialValue || ''}
+          value={value || initialValue || ''}
           onInputChange={(value, action) => changeInputValue(value, action)}
           onChange={(value, action) => changeValue(value, action)}
           onBlur={() => setOpenMenu(false)}

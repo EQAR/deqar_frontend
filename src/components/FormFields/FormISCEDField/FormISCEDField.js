@@ -46,7 +46,11 @@ const FormISCEDField = asField(({ fieldState, fieldApi, ...props }) => {
   }, [])
 
   const getLabel = (option) => {
-    return `${option['title']} - ${option['id']}`
+    if (option['title'] !== '') {
+      return `${option['title']} - ${option['id']}`
+    } else {
+      return `${option['id']}`
+    }
   }
 
   const changeValue = value =>  {
@@ -57,27 +61,19 @@ const FormISCEDField = asField(({ fieldState, fieldApi, ...props }) => {
 
   return (
     <React.Fragment>
-      {disabled ?
-        <input
-          readOnly={disabled}
-          value={value}
-          {...rest}
-          className={'form-control'}
-        /> :
-        <Select
-          {...rest}
-          styles={customStyles}
-          defaultValue={value || ''}
-          value={value || ''}
-          onChange={(value, action) => changeValue(value, action)}
-          getOptionLabel={getLabel}
-          getOptionValue={(option) => option['id']}
-          classNamePrefix="react-select"
-          isDisabled={disabled}
-          isClearable={true}
-          options={options}
-        />
-      }
+      <Select
+        {...rest}
+        styles={customStyles}
+        defaultValue={value || ''}
+        value={value || ''}
+        onChange={(value, action) => changeValue(value, action)}
+        getOptionLabel={getLabel}
+        getOptionValue={(option) => option['id']}
+        classNamePrefix="react-select"
+        isDisabled={disabled}
+        isClearable={true}
+        options={options}
+      />
       {fieldState.error ? (
         <small name="scroll-to-element" className="help-block form-text text-danger">{fieldState.error}</small>
       ) : null}
