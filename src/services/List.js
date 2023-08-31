@@ -5,7 +5,8 @@ import {
   GET_EQAR_DECISIONS,
   GET_FLAGS,
   GET_QA_REQUIREMENT_TYPE,
-  GET_QFEHEA_LEVELS
+  GET_QFEHEA_LEVELS,
+  GET_DEGREE_OUTCOMES
 } from "./config-api";
 
 class List {
@@ -23,6 +24,10 @@ class List {
 
   selectAssessments = () => {
     return axios.get(GET_ASSESSMENTS);
+  };
+
+  selectDegreeOutcomes = () => {
+    return axios.get(GET_DEGREE_OUTCOMES);
   };
 
   selectDecisions = () => {

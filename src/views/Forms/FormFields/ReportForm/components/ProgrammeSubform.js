@@ -5,15 +5,15 @@ import FormTextField from "../../../../../components/FormFields/FormTextField/Fo
 import FormSelectField from "../../../../../components/FormFields/FormSelectField/FormSelectField";
 import list from "../../../../../services/List";
 import country from "../../../../../services/Country";
-import {validateRequiredUnique, validateUnique} from "../../../../../utils/validators";
+import {validateRequired, validateRequiredUnique, validateUnique} from "../../../../../utils/validators";
 import FormManyMultipleField from "../../../../../components/FormFieldsUncontrolled/FormManyMultipleField/FormManyMultipleField";
-import FormCheckbox from "../../../../../components/FormFields/FormCheckbox/FormCheckbox";
 import FormTextArea from "../../../../../components/FormFields/FormTextArea/FormTextArea";
 import FormISCEDField from "../../../../../components/FormFields/FormISCEDField/FormISCEDField";
 import FormManyESCOField from "../../../../../components/FormFields/FormManyESCOField/FormManyESCOField";
 
 
-const ProgrammeSubform = ({formApi, formState, disabled}) => {
+const ProgrammeSubform = ({formApi, formState, institutions, disabled}) => {
+
   return (
     <Row>
       <Col md={6}>
@@ -80,7 +80,7 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
       />
       <Col md={6}>
         <FormGroup>
-          <Label for="qf_ehea_level">QF-EHEA level</Label>
+          <Label for="qf_ehea_level" className={'required'}>QF-EHEA level</Label>
           <FormSelectField
             field={'qf_ehea_level'}
             optionsAPI={list.selectQFEHEALevels}
@@ -90,6 +90,7 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
             includeID={'front'}
             idField={'code'}
             disabled={disabled}
+            validate={validateRequired}
           />
         </FormGroup>
       </Col>
@@ -117,30 +118,40 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
           />
         </FormGroup>
       </Col>
-      <Col md={3}>
+      <Col md={6}>
         <FormGroup>
           <Label for="degree_outcome">Degree outcome</Label>
-          <FormCheckbox
+          <FormSelectField
             field={'degree_outcome'}
-            disabled={disabled}
-            className={'form-control'}
-            style={{display: 'block', marginTop: 0, marginLeft: '10px'}}
-          />
-        </FormGroup>
-      </Col>
-      <Col md={3}>
-        <FormGroup>
-          <Label for="workload_ects">ECTS credits</Label>
-          <FormTextField
-            field={'workload_ects'}
-            placeholder={'Enter ECTS Credits'}
+            optionsAPI={list.selectDegreeOutcomes}
+            placeholder={'Select Degree Outcome'}
+            labelField={'outcome'}
+            valueField={'id'}
+            includeID={'front'}
             disabled={disabled}
           />
         </FormGroup>
       </Col>
       <Col md={6}>
         <FormGroup>
-          <Label for="assessment_certification">Assessment and certification</Label>
+          <Label for="workload_ects" className={
+            formState.values['degree_outcome']['id'] === 2 && 'required'
+          }>Workload expressed in ECTS</Label>
+          <FormTextField
+            field={'workload_ects'}
+            placeholder={'Enter ECTS Credits'}
+            disabled={disabled}
+            validate={
+              formState.values['degree_outcome']['id'] === 2 && validateRequired
+            }
+          />
+        </FormGroup>
+      </Col>
+      <Col md={6}>
+        <FormGroup>
+          <Label for="assessment_certification" className={
+            formState.values['degree_outcome']['id'] === 2 && 'required'
+          }>Assessment and certification</Label>
           <FormSelectField
             field={'assessment_certification'}
             optionsAPI={list.selectAssessments}
@@ -149,10 +160,13 @@ const ProgrammeSubform = ({formApi, formState, disabled}) => {
             valueField={'id'}
             includeID={'front'}
             disabled={disabled}
+            validate={
+              formState.values['degree_outcome']['id'] === 2 && validateRequired
+            }
           />
         </FormGroup>
       </Col>
-      <Col md={12}>
+      <Col md={6}>
         <FormGroup>
           <Label for="field_study">Field of study (ISCED-F)</Label>
           <FormISCEDField
