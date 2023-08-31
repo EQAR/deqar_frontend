@@ -10,7 +10,6 @@ const FormESCOField = asField(({ fieldState, fieldApi,onRemoveButtonClick, ...pr
   const [openMenu, setOpenMenu] = useState(false);
   const [search, setSearch] = useState(undefined);
 
-
   const { value } = fieldState;
   const { setValue, setTouched, setError } = fieldApi;
   const { disabled, givenValue, staticOptions, ...rest } = props;
