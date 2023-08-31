@@ -30,7 +30,6 @@ import HierarchicalLinkSubform from "./components/HierarchicalLinkSubform";
 import HistoricalLinkSubform from "./components/HistoricalLinkSubform";
 import FormTextTransliterated from "../../../../components/FormFields/FormTextTransliterated/FormTextTransliterated";
 import FormCheckbox from "../../../../components/FormFields/FormCheckbox/FormCheckbox";
-import report from "../../../../services/Report";
 import institution from "../../../../services/Institution";
 
 const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...props}) => {
@@ -89,7 +88,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
               <Label for="is_alternative_provider">Alternative Provider</Label>
               <FormCheckbox
                 field={'is_alternative_provider'}
-                disabled={readOnly}
+                disabled={formType !== 'create'}
                 className={'form-control'}
                 style={{display: 'block', marginTop: 0, marginLeft: '10px'}}
               />
@@ -105,7 +104,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
                 labelField={'type'}
                 valueField={'id'}
                 includeID={'front'}
-                disabled={readOnly}
+                disabled={readOnly || !formState.values['is_alternative_provider']}
               />
             </FormGroup>
           </Col>
@@ -295,7 +294,9 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
         <Row>
           <Col md={12}>
             <FormGroup>
-              <Label for="qf_ehea_levels">QF-EHEA Levels</Label>
+              <Label for="qf_ehea_levels" className={
+                formState.values['is_alternative_provider'] && 'required'
+              }>QF-EHEA Levels</Label>
               <FormSelectField
                 field={'qf_ehea_levels'}
                 optionsAPI={list.selectQFEHEALevels}
@@ -303,6 +304,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
                 labelField={'level'}
                 valueField={'id'}
                 isMulti
+                validate={formState.values['is_alternative_provider'] && validateRequired}
                 disabled={readOnly}
               />
             </FormGroup>
