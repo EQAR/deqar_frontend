@@ -14,6 +14,10 @@ import FormManyESCOField from "../../../../../components/FormFields/FormManyESCO
 
 const ProgrammeSubform = ({formApi, formState, institutions, disabled}) => {
 
+  const requiredIfDegreeOutcomeNotFull = () => {
+    return formState.values['degree_outcome'] && formState.values['degree_outcome']['id'] === 2
+  }
+
   return (
     <Row>
       <Col md={6}>
@@ -135,14 +139,14 @@ const ProgrammeSubform = ({formApi, formState, institutions, disabled}) => {
       <Col md={6}>
         <FormGroup>
           <Label for="workload_ects" className={
-            formState.values['degree_outcome']['id'] === 2 && 'required'
+            requiredIfDegreeOutcomeNotFull() && 'required'
           }>Workload expressed in ECTS</Label>
           <FormTextField
             field={'workload_ects'}
             placeholder={'Enter ECTS Credits'}
             disabled={disabled}
             validate={
-              formState.values['degree_outcome']['id'] === 2 && validateRequired
+              requiredIfDegreeOutcomeNotFull() && validateRequired
             }
           />
         </FormGroup>
@@ -150,7 +154,7 @@ const ProgrammeSubform = ({formApi, formState, institutions, disabled}) => {
       <Col md={6}>
         <FormGroup>
           <Label for="assessment_certification" className={
-            formState.values['degree_outcome']['id'] === 2 && 'required'
+            requiredIfDegreeOutcomeNotFull() && 'required'
           }>Assessment and certification</Label>
           <FormSelectField
             field={'assessment_certification'}
@@ -161,7 +165,7 @@ const ProgrammeSubform = ({formApi, formState, institutions, disabled}) => {
             includeID={'front'}
             disabled={disabled}
             validate={
-              formState.values['degree_outcome']['id'] === 2 && validateRequired
+              requiredIfDegreeOutcomeNotFull() && validateRequired
             }
           />
         </FormGroup>
