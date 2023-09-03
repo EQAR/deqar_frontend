@@ -31,6 +31,7 @@ import HistoricalLinkSubform from "./components/HistoricalLinkSubform";
 import FormTextTransliterated from "../../../../components/FormFields/FormTextTransliterated/FormTextTransliterated";
 import FormCheckbox from "../../../../components/FormFields/FormCheckbox/FormCheckbox";
 import institution from "../../../../services/Institution";
+import agency from "../../../../services/Agency";
 
 const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...props}) => {
   const renderFormerNames = (value) => {
@@ -347,6 +348,18 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
             >
               <HierarchicalLinkSubform />
             </PopupFormListManager>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            <FormGroup>
+              <Label for={'source_of_information'} className={'required'}>Source of information about the provider</Label>
+              <FormTextField
+                field={'source_of_information'}
+                disabled={readOnly}
+                validate={validateRequired}
+              />
+            </FormGroup>
           </Col>
         </Row>
       </Col>
