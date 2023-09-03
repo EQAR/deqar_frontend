@@ -6,7 +6,7 @@ const validateStatusData = (value, values) => {
 
   if (institutions) {
     const aps = institutions.filter(
-      i => i.hasOwnProperty('alternative_provider_facet') && i['alternative_provider_facet']
+      i => i.hasOwnProperty('alternative_provider') && i['alternative_provider']
     )
     all_aps = institutions.length === aps.length
     if (all_aps && value['id'] === 1) {

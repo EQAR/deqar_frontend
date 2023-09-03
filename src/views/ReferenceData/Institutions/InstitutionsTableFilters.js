@@ -25,12 +25,38 @@ class InstitutionsTableFilters extends Component {
     }
   };
 
+  getAPFilterOptions = () => {
+    return [
+      {value: 'ap', label: 'Only APs'},
+      {value: 'hei', label: 'Only HEI(s)'},
+    ]
+  }
+
   onFilterRemove = (field) => {
     this.onFilter('', field)
   };
 
   onFilter = (value, field) => {
     let { filterState: { filtered } } = this.props;
+
+    // AP filter handling
+    if (field === 'is_alternative_provider') {
+      if (value === "") {
+        filtered = filtered.filter(f => f.id !== 'alternative_provider');
+      } else {
+        switch (value['value']) {
+          case 'hei':
+            filtered.push({id: 'alternative_provider', value: 'hei'});
+            break;
+          case 'ap':
+            filtered.push({id: 'alternative_provider', value: 'ap'});
+            break;
+          case 'all':
+            filtered = filtered.filter(f => f.id !== 'alternative_provider');
+            break;
+        }
+      }
+    }
 
     if (!value) {
       filtered = filtered.filter(f => f.id !== field);
@@ -95,19 +121,20 @@ class InstitutionsTableFilters extends Component {
                     onChange={(e) => this.onFilter(e.target.value, 'query')}
                     placeholder={'Filter by Institution'}
                   />
-                  <InputGroupAddon addonType="append">
-                    <InputGroupText className={style.filterInputGroup}>
-                      <input
-                        type={'checkbox'}
-                        onChange={(e) => this.onFilter(!this.getValue('alternative_provider'), 'alternative_provider')}
-                        checked={this.getValue('alternative_provider') || false}
-                      />
-                      <Label check className={style.activeFilter}>
-                        AP
-                      </Label>
-                    </InputGroupText>
-                  </InputGroupAddon>
                 </InputGroup>
+              </FormGroup>
+            </Col>
+            <Col md={2}>
+              <FormGroup>
+                <SelectFilter
+                  field={'is_alternative_provider'}
+                  value={this.getValue('is_alternative_provider')}
+                  onFilter={this.onFilter}
+                  onFilterRemove={this.onFilterRemove}
+                  placeholder={'HEI / AP'}
+                  selectFilterOptions={this.getAPFilterOptions()}
+                  menuPlacement={'bottom'}
+                />
               </FormGroup>
             </Col>
             <Col md={2}>
@@ -119,16 +146,7 @@ class InstitutionsTableFilters extends Component {
                   onFilterRemove={this.onFilterRemove}
                   placeholder={'Filter by Country'}
                   selectFilterOptions={this.getSelectFilterOptions('country_facet')}
-                  menuPlacement={'top'}
-                />
-              </FormGroup>
-            </Col>
-            <Col md={2}>
-              <FormGroup>
-                <Input
-                  value={this.getValue('city')}
-                  onChange={(e) => this.onFilter(e.target.value, 'city')}
-                  placeholder={'City'}
+                  menuPlacement={'bottom'}
                 />
               </FormGroup>
             </Col>

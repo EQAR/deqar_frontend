@@ -24,7 +24,7 @@ const ProgrammeSubform = ({formApi, formState, institutions, disabled}) => {
     if (institutions) {
       if (institutions.length > 0) {
         const aps = institutions.filter(
-          i => i.hasOwnProperty('alternative_provider_facet') && i['alternative_provider_facet']
+          i => i.hasOwnProperty('alternative_provider') && i['alternative_provider']
         )
         all_aps = institutions.length === aps.length
       }

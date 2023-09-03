@@ -9,8 +9,21 @@ import {
 import withPopupFormManager from "../../../../../components/FormManager/PopupFormManagerHOC";
 import FormDatePickerField from "../../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 import FormTextArea from "../../../../../components/FormFields/FormTextArea/FormTextArea";
+import FormSelectField from "../../../../../components/FormFields/FormSelectField/FormSelectField";
+import list from "../../../../../services/List";
+
 
 const OtherIDSubform = ({formApi, formState, disabled}) => {
+  const handleIdentifierSourceChange = (value) => {
+    if (value) {
+      if (!Array.isArray(value)) {
+        if (value['resource'] !== 'other') {
+          formApi.setValue('resource', value['resource'])
+        }
+      }
+    }
+  }
+
   return (
     <React.Fragment>
       <Row>
@@ -34,6 +47,22 @@ const OtherIDSubform = ({formApi, formState, disabled}) => {
               field={'identifier'}
               placeholder={'Enter identifier'}
               validate={validateRequired}
+              disabled={disabled}
+            />
+          </FormGroup>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <FormGroup>
+            <Label for="source">Identifier Source</Label>
+            <FormSelectField
+              field={'source'}
+              placeholder={'Select source...'}
+              optionsAPI={list.selectIdentifierSource}
+              labelField={'source'}
+              valueField={'id'}
+              onChange={handleIdentifierSourceChange}
               disabled={disabled}
             />
           </FormGroup>
