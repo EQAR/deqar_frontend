@@ -25,6 +25,8 @@ import validateInstitutions from "./validators/validateInstitutions";
 import validateProgrammes from "./validators/validateProgrammes";
 import FormTextAreaFormatted from "../../../../components/FormFields/FormTextArea/FormTextAreaFormatted";
 import FormCheckbox from "../../../../components/FormFields/FormCheckbox/FormCheckbox";
+import validateStatus from "./validators/validateStatus";
+import validateMicroCredentials from "./validators/validateMicroCredentials";
 
 const ReportForm = ({formType, formApi, formState, readOnly}) => {
   const isAgencyDisabled = () => {
@@ -214,6 +216,7 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
                 disabled={readOnly}
                 className={'form-control'}
                 style={{display: 'block', marginTop: 0, marginLeft: '10px'}}
+                validate={validateMicroCredentials}
               />
             </FormGroup>
           </Col>
@@ -232,7 +235,7 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
                 labelField={'status'}
                 valueField={'id'}
                 includeID={'front'}
-                validate={validateRequired}
+                validate={validateStatus}
                 disabled={readOnly}
               />
             </FormGroup>

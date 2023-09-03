@@ -34,6 +34,5 @@ export const updateFormNormalizer = (formValues) => {
       normalizedForm[key] = value;
     }
   });
-  console.log(normalizedForm)
   return normalizedForm;
 };

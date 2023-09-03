@@ -12,7 +12,7 @@ const validateProgrammes = (value, values) => {
 
   // If activity is 'programme'
   if (activityType === 'programme') {
-    if(programmes.length === 0) {
+    if (programmes.length === 0) {
       return "At least one program record is required"
     }
   }

@@ -18,6 +18,31 @@ const ProgrammeSubform = ({formApi, formState, institutions, disabled}) => {
     return formState.values['degree_outcome'] && formState.values['degree_outcome']['id'] === 2
   }
 
+  const detectAllAP = () => {
+    let all_aps = false;
+
+    if (institutions) {
+      if (institutions.length > 0) {
+        const aps = institutions.filter(
+          i => i.hasOwnProperty('alternative_provider_facet') && i['alternative_provider_facet']
+        )
+        all_aps = institutions.length === aps.length
+      }
+    }
+    return all_aps;
+  }
+
+  const validateDegreeOutcomeData = (value, values) => {
+    if (detectAllAP() && value['id'] === 1) {
+      return 'Degree outcome should be \'2 / no full degree\' if all the ' +
+        'organisations are alternative providers'
+    }
+  }
+
+  const validateDegreeOutcome = (value, values) => {
+    return validateRequired(value) || validateDegreeOutcomeData(value, values)
+  }
+
   return (
     <Row>
       <Col md={6}>
@@ -84,7 +109,9 @@ const ProgrammeSubform = ({formApi, formState, institutions, disabled}) => {
       />
       <Col md={6}>
         <FormGroup>
-          <Label for="qf_ehea_level" className={'required'}>QF-EHEA level</Label>
+          <Label for="qf_ehea_level" className={
+            requiredIfDegreeOutcomeNotFull() ? 'required' : ''
+          }>QF-EHEA level</Label>
           <FormSelectField
             field={'qf_ehea_level'}
             optionsAPI={list.selectQFEHEALevels}
@@ -94,8 +121,9 @@ const ProgrammeSubform = ({formApi, formState, institutions, disabled}) => {
             includeID={'front'}
             idField={'code'}
             disabled={disabled}
-            validate={validateRequired}
-          />
+            validate={
+              requiredIfDegreeOutcomeNotFull() && validateRequired
+            }/>
         </FormGroup>
       </Col>
       <Col md={6}>
@@ -124,7 +152,7 @@ const ProgrammeSubform = ({formApi, formState, institutions, disabled}) => {
       </Col>
       <Col md={6}>
         <FormGroup>
-          <Label for="degree_outcome">Degree outcome</Label>
+          <Label for="degree_outcome" className={'required'}>Degree outcome</Label>
           <FormSelectField
             field={'degree_outcome'}
             optionsAPI={list.selectDegreeOutcomes}
@@ -133,13 +161,14 @@ const ProgrammeSubform = ({formApi, formState, institutions, disabled}) => {
             valueField={'id'}
             includeID={'front'}
             disabled={disabled}
+            validate={validateDegreeOutcome || validateRequired}
           />
         </FormGroup>
       </Col>
       <Col md={6}>
         <FormGroup>
           <Label for="workload_ects" className={
-            requiredIfDegreeOutcomeNotFull() && 'required'
+            requiredIfDegreeOutcomeNotFull() ? 'required' : ''
           }>Workload expressed in ECTS</Label>
           <FormTextField
             field={'workload_ects'}
@@ -154,7 +183,7 @@ const ProgrammeSubform = ({formApi, formState, institutions, disabled}) => {
       <Col md={6}>
         <FormGroup>
           <Label for="assessment_certification" className={
-            requiredIfDegreeOutcomeNotFull() && 'required'
+            requiredIfDegreeOutcomeNotFull() ? 'required' : ''
           }>Assessment and certification</Label>
           <FormSelectField
             field={'assessment_certification'}
