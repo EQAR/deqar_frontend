@@ -32,7 +32,7 @@ export const GET_ACTIVITY_TYPES = ADMINAPI_URL + '/select/activity_type/';
 export const GET_ASSOCIATIONS = ADMINAPI_URL + '/select/association/';
 export const GET_ASSESSMENTS = ADMINAPI_URL + '/select/assessment/';
 export const GET_DEGREE_OUTCOMES = ADMINAPI_URL + '/select/degree_outcome/';
-
+export const GET_IDENTIFIER_SOURCES = ADMINAPI_URL + '/select/identifier_source/';
 export const GET_EQAR_DECISIONS = ADMINAPI_URL + '/select/eqar_decision_type/';
 export const GET_AGENCIES = ADMINAPI_URL + '/browse/all/agencies/';
 export const GET_MY_AGENCIES = ADMINAPI_URL + '/browse/my/agencies/';

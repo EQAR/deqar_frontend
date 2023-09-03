@@ -207,8 +207,9 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
               label={'Other ID'}
               formApi={formApi}
               renderDisplayValue={value => (`${value.identifier} (${value.resource})`)}
-              labelShowRequired={false}
+              labelShowRequired={true}
               disabled={readOnly}
+              validate={validateRequired}
             >
               <OtherIDSubform />
             </PopupFormListManager>
