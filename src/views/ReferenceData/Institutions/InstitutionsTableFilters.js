@@ -27,8 +27,8 @@ class InstitutionsTableFilters extends Component {
 
   getAPFilterOptions = () => {
     return [
-      {value: 'ap', label: 'Only APs'},
-      {value: 'hei', label: 'Only HEI(s)'},
+      {value: 'true', label: 'Only APs'},
+      {value: 'false', label: 'Only HEI(s)'},
     ]
   }
 
@@ -39,25 +39,6 @@ class InstitutionsTableFilters extends Component {
   onFilter = (value, field) => {
     let { filterState: { filtered } } = this.props;
 
-    // AP filter handling
-    if (field === 'is_alternative_provider') {
-      if (value === "") {
-        filtered = filtered.filter(f => f.id !== 'alternative_provider');
-      } else {
-        switch (value['value']) {
-          case 'hei':
-            filtered.push({id: 'alternative_provider', value: 'hei'});
-            break;
-          case 'ap':
-            filtered.push({id: 'alternative_provider', value: 'ap'});
-            break;
-          case 'all':
-            filtered = filtered.filter(f => f.id !== 'alternative_provider');
-            break;
-        }
-      }
-    }
-
     if (!value) {
       filtered = filtered.filter(f => f.id !== field);
     } else if (filtered.some(f => f.id === field)) {
@@ -67,9 +48,20 @@ class InstitutionsTableFilters extends Component {
         }
       })
     } else {
-      field === 'country' ?
-        filtered.push({id: field, value: value.value}) :
-        filtered.push({id: field, value: value});
+      switch (field) {
+        case 'country':
+          filtered.push({id: 'country', value: value['value']})
+          break;
+        case 'alternative_provider':
+          if (value['value'] === 'all') {
+              filtered = filtered.filter(f => f.id !== 'alternative_provider')
+          } else {
+              filtered.push({id: 'alternative_provider', value: value['value']});
+          }
+          break;
+        default:
+          filtered.push({id: field, value: value});
+      }
     }
 
     this.props.onFilter(filtered);
@@ -78,7 +70,11 @@ class InstitutionsTableFilters extends Component {
   getValue = id => {
     const { filterState: { filtered } } = this.props;
     const filter = filtered.find(filter => filter.id === id);
-    return filter ? filter.value : '';
+    if (id === 'alternative_provider') {
+      return filter ? filter['label'] : '';
+    } else {
+      return filter ? filter.value : '';
+    }
   }
 
   getCountryValue = () => {
@@ -127,8 +123,8 @@ class InstitutionsTableFilters extends Component {
             <Col md={2}>
               <FormGroup>
                 <SelectFilter
-                  field={'is_alternative_provider'}
-                  value={this.getValue('is_alternative_provider')}
+                  field={'alternative_provider'}
+                  value={this.getValue('alternative_provider')}
                   onFilter={this.onFilter}
                   onFilterRemove={this.onFilterRemove}
                   placeholder={'HEI / AP'}
