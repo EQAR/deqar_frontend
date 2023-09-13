@@ -14,27 +14,20 @@ import list from "../../../../../services/List";
 
 
 const OtherIDSubform = ({formApi, formState, disabled}) => {
-  const handleIdentifierSourceChange = (value) => {
-    if (value) {
-      if (!Array.isArray(value)) {
-        if (value['resource'] !== 'other') {
-          formApi.setValue('resource', value['resource'])
-        }
-      }
-    }
-  }
-
   return (
     <React.Fragment>
       <Row>
         <Col>
           <FormGroup>
-            <Label for="resource" className={'required'}>Resource</Label>
-            <FormTextField
+            <Label for="resource" className={'required'}>Identifier Resource</Label>
+            <FormSelectField
               field={'resource'}
-              placeholder={'Enter resource'}
-              validate={validateRequired}
+              placeholder={'Select resource...'}
+              optionsAPI={list.selectIdentifierResource}
+              labelField={'resource'}
+              valueField={'resource'}
               disabled={disabled}
+              validate={validateRequired}
             />
           </FormGroup>
         </Col>
@@ -47,22 +40,6 @@ const OtherIDSubform = ({formApi, formState, disabled}) => {
               field={'identifier'}
               placeholder={'Enter identifier'}
               validate={validateRequired}
-              disabled={disabled}
-            />
-          </FormGroup>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <FormGroup>
-            <Label for="source">Identifier Source</Label>
-            <FormSelectField
-              field={'source'}
-              placeholder={'Select source...'}
-              optionsAPI={list.selectIdentifierSource}
-              labelField={'source'}
-              valueField={'id'}
-              onChange={handleIdentifierSourceChange}
               disabled={disabled}
             />
           </FormGroup>

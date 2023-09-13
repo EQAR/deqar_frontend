@@ -206,7 +206,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
               field={'identifiers_national'}
               label={'Other ID'}
               formApi={formApi}
-              renderDisplayValue={value => (`${value.identifier} (${value.resource})`)}
+              renderDisplayValue={value => (`${value.identifier} (${value.resource ? value.resource['resource'] : ''})`)}
               labelShowRequired={true}
               disabled={readOnly}
               validate={validateRequired}

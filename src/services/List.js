@@ -6,7 +6,7 @@ import {
   GET_FLAGS,
   GET_QA_REQUIREMENT_TYPE,
   GET_QFEHEA_LEVELS,
-  GET_DEGREE_OUTCOMES, GET_IDENTIFIER_SOURCES
+  GET_DEGREE_OUTCOMES, GET_IDENTIFIER_RESOURCES
 } from "./config-api";
 
 class List {
@@ -30,8 +30,8 @@ class List {
     return axios.get(GET_DEGREE_OUTCOMES);
   };
 
-  selectIdentifierSource = () => {
-    return axios.get(GET_IDENTIFIER_SOURCES);
+  selectIdentifierResource = () => {
+    return axios.get(GET_IDENTIFIER_RESOURCES);
   };
 
   selectDecisions = () => {
