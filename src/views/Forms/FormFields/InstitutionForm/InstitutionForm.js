@@ -32,6 +32,7 @@ import FormTextTransliterated from "../../../../components/FormFields/FormTextTr
 import FormCheckbox from "../../../../components/FormFields/FormCheckbox/FormCheckbox";
 import institution from "../../../../services/Institution";
 import agency from "../../../../services/Agency";
+import FormAutoSuggestField from "../../../../components/FormFields/FormAutoSuggestField/FormAutoSuggestField";
 
 const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...props}) => {
   const renderFormerNames = (value) => {
@@ -296,9 +297,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
         <Row>
           <Col md={12}>
             <FormGroup>
-              <Label for="qf_ehea_levels" className={
-                formState.values['is_alternative_provider'] && 'required'
-              }>QF-EHEA Levels</Label>
+              <Label for="qf_ehea_levels" className={formState.values['is_alternative_provider'] ? 'required' : ''}>QF-EHEA Levels</Label>
               <FormSelectField
                 field={'qf_ehea_levels'}
                 optionsAPI={list.selectQFEHEALevels}
@@ -355,8 +354,10 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
           <Col md={12}>
             <FormGroup>
               <Label for={'source_of_information'} className={'required'}>Source of information about the provider</Label>
-              <FormTextField
+              <FormAutoSuggestField
                 field={'source_of_information'}
+                optionsAPI={agency.selectAllAgencies}
+                valueKey={'acronym_primary'}
                 disabled={readOnly}
                 validate={validateRequired}
               />
