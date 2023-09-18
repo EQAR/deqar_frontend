@@ -3,7 +3,7 @@ const validateMicroCredentials = (value, values) => {
 
   if (programmes) {
     const noFullDegreeProgrammes = programmes.filter(
-      i => i.hasOwnProperty('degree_outcome') && i['degree_outcome']['id'] === 2
+      i => i.hasOwnProperty('degree_outcome') && i['degree_outcome'] && i['degree_outcome']['id'] === 2
     )
     if (noFullDegreeProgrammes.length > 0) {
       if (!value) {
