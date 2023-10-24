@@ -115,7 +115,7 @@ class InstitutionsTableFilters extends Component {
                   <Input
                     value={this.getValue('query')}
                     onChange={(e) => this.onFilter(e.target.value, 'query')}
-                    placeholder={'Filter by Institution'}
+                    placeholder={'Filter by Education provider'}
                   />
                 </InputGroup>
               </FormGroup>

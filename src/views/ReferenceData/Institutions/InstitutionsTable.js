@@ -43,7 +43,7 @@ const InstitutionsTable = (props) => {
     },
     {
       field: 'name_display',
-      label: 'Institution',
+      label: 'Education provider',
       sortable: true,
       minWidth: 180,
       render: linkRenderer,

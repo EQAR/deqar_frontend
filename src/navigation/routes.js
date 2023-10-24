@@ -30,7 +30,7 @@ const routes = [
   { path: '/reference/agencies', exact: true, name: 'Agencies Referece Datas', component: Agencies, users: 'all'},
   { path: '/reference/agencies/:param/:id', exact: true, name: 'Agency Form', component: AgencyDetails, users: 'all'},
   { path: '/reference/activities', exact: true, name: 'Activities', component: AgencyActivities, users: 'all'},
-  { path: '/reference/institutions', exact: true, name: 'Institutions Referece Datas', component: Institutions, users: 'all'},
+  { path: '/reference/institutions', exact: true, name: 'Institutions Reference Datas', component: Institutions, users: 'all'},
   { path: '/reference/institutions/:param', exact: true, name: 'Institution Form', component: InstitutionDetails, users: 'all'},
   { path: '/reference/institutions/:param/:id', exact: true, name: 'Institution Form', component: InstitutionDetails, users: 'all'},
   { path: '/reference/reports', exact: true, name: 'Reports', component: Reports, users: 'all'},

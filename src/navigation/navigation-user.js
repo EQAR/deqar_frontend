@@ -48,7 +48,7 @@ const navUser = {
           url: '/reference/activities',
           icon: 'icon-tag'
         }, {
-          name: 'Institutions',
+          name: 'Edu. providers',
           url: '/reference/institutions',
           icon: 'icon-graduation'
         }, {
