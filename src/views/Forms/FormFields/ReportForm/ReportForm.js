@@ -207,20 +207,6 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
             />
           </Col>
         </Row>
-        <Row>
-          <Col md={12}>
-            <FormGroup>
-              <Label for="micro_credentials_covered">Micro credentials covered</Label>
-              <FormCheckbox
-                field={'micro_credentials_covered'}
-                disabled={readOnly}
-                className={'form-control'}
-                style={{display: 'block', marginTop: 0, marginLeft: '10px'}}
-                validate={validateMicroCredentials}
-              />
-            </FormGroup>
-          </Col>
-        </Row>
         {renderProgrammeField()}
       </Col>
       <Col md={6}>
