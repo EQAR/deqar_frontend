@@ -12,7 +12,7 @@ import FormSelectField from "../../../../../components/FormFields/FormSelectFiel
 import FormDatePickerField from "../../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 import agency from "../../../../../services/Agency";
 
-const AgencyActivitySubform = ({formApi, formState, disabled, submitDisabled, formType}) => {
+const AgencyActivitySubform = ({formState, disabled, formType}) => {
   return (
     <React.Fragment>
       <Row>
@@ -38,7 +38,7 @@ const AgencyActivitySubform = ({formApi, formState, disabled, submitDisabled, fo
               placeholder={'Please select'}
               labelField={'type'}
               valueField={'id'}
-              disabled={disabled}
+              disabled={disabled || formType === 'edit'}
               validate={validateRequired}
             />
           </FormGroup>
