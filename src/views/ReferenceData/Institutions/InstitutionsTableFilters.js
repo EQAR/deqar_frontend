@@ -52,11 +52,11 @@ class InstitutionsTableFilters extends Component {
         case 'country':
           filtered.push({id: 'country', value: value['value']})
           break;
-        case 'alternative_provider':
+        case 'other_provider':
           if (value['value'] === 'all') {
-              filtered = filtered.filter(f => f.id !== 'alternative_provider')
+              filtered = filtered.filter(f => f.id !== 'other_provider')
           } else {
-              filtered.push({id: 'alternative_provider', value: value['value']});
+              filtered.push({id: 'other_provider', value: value['value']});
           }
           break;
         default:
@@ -70,7 +70,7 @@ class InstitutionsTableFilters extends Component {
   getValue = id => {
     const { filterState: { filtered } } = this.props;
     const filter = filtered.find(filter => filter.id === id);
-    if (id === 'alternative_provider') {
+    if (id === 'other_provider') {
       return filter ? filter['label'] : '';
     } else {
       return filter ? filter.value : '';
@@ -123,8 +123,8 @@ class InstitutionsTableFilters extends Component {
             <Col md={2}>
               <FormGroup>
                 <SelectFilter
-                  field={'alternative_provider'}
-                  value={this.getValue('alternative_provider')}
+                  field={'other_provider'}
+                  value={this.getValue('other_provider')}
                   onFilter={this.onFilter}
                   onFilterRemove={this.onFilterRemove}
                   placeholder={'HEI / AP'}

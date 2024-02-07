@@ -87,9 +87,9 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
         <Row>
           <Col md={6}>
             <FormGroup>
-              <Label for="is_alternative_provider">Alternative Provider</Label>
+              <Label for="is_other_provider">Other Provider</Label>
               <FormCheckbox
-                field={'is_alternative_provider'}
+                field={'is_other_provider'}
                 disabled={formType !== 'create'}
                 className={'form-control'}
                 style={{display: 'block', marginTop: 0, marginLeft: '10px'}}
@@ -106,7 +106,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
                 labelField={'type'}
                 valueField={'id'}
                 includeID={'front'}
-                disabled={readOnly || !formState.values['is_alternative_provider']}
+                disabled={readOnly || !formState.values['is_other_provider']}
               />
             </FormGroup>
           </Col>
@@ -297,7 +297,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
         <Row>
           <Col md={12}>
             <FormGroup>
-              <Label for="qf_ehea_levels" className={formState.values['is_alternative_provider'] ? 'required' : ''}>QF-EHEA Levels</Label>
+              <Label for="qf_ehea_levels" className={formState.values['is_other_provider'] ? 'required' : ''}>QF-EHEA Levels</Label>
               <FormSelectField
                 field={'qf_ehea_levels'}
                 optionsAPI={list.selectQFEHEALevels}
@@ -305,7 +305,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
                 labelField={'level'}
                 valueField={'id'}
                 isMulti
-                validate={formState.values['is_alternative_provider'] && validateRequired}
+                validate={formState.values['is_other_provider'] && validateRequired}
                 disabled={readOnly}
               />
             </FormGroup>

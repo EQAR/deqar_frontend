@@ -6,11 +6,11 @@ const validateStatusData = (value, values) => {
 
   if (institutions) {
     const aps = institutions.filter(
-      i => i.hasOwnProperty('alternative_provider') && i['alternative_provider']
+      i => i.hasOwnProperty('other_provider') && i['other_provider']
     )
     all_aps = institutions.length === aps.length
     if (all_aps && value['id'] === 1) {
-      return 'Status should be \'voluntary\' if all organisations are alternative providers.'
+      return 'Status should be \'voluntary\' if all organisations are other providers.'
     }
   }
 }
