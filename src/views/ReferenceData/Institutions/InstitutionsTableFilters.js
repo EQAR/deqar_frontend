@@ -27,7 +27,7 @@ class InstitutionsTableFilters extends Component {
 
   getAPFilterOptions = () => {
     return [
-      {value: 'true', label: 'Only APs'},
+      {value: 'true', label: 'Only OPs'},
       {value: 'false', label: 'Only HEI(s)'},
     ]
   }
