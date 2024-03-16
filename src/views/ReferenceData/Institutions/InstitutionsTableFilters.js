@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Col, Collapse, Input, Row } from "reactstrap";
+import {Col, Collapse, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Row} from "reactstrap";
 import { connect } from "react-redux";
 import SelectFilter from "../../../components/DataTableFilters/SelectFilter";
 import FormGroup from "reactstrap/es/FormGroup";
+import style from "../../../components/DataTableFilters/ActiveDateFilter.module.css";
 
 class InstitutionsTableFilters extends Component {
   componentDidUpdate = (prevProps) => {
@@ -24,6 +25,13 @@ class InstitutionsTableFilters extends Component {
     }
   };
 
+  getAPFilterOptions = () => {
+    return [
+      {value: 'true', label: 'Only OPs'},
+      {value: 'false', label: 'Only HEI(s)'},
+    ]
+  }
+
   onFilterRemove = (field) => {
     this.onFilter('', field)
   };
@@ -40,9 +48,20 @@ class InstitutionsTableFilters extends Component {
         }
       })
     } else {
-      field === 'country' ?
-        filtered.push({id: field, value: value.value}) :
-        filtered.push({id: field, value: value});
+      switch (field) {
+        case 'country':
+          filtered.push({id: 'country', value: value['value']})
+          break;
+        case 'other_provider':
+          if (value['value'] === 'all') {
+              filtered = filtered.filter(f => f.id !== 'other_provider')
+          } else {
+              filtered.push({id: 'other_provider', value: value['value']});
+          }
+          break;
+        default:
+          filtered.push({id: field, value: value});
+      }
     }
 
     this.props.onFilter(filtered);
@@ -51,7 +70,11 @@ class InstitutionsTableFilters extends Component {
   getValue = id => {
     const { filterState: { filtered } } = this.props;
     const filter = filtered.find(filter => filter.id === id);
-    return filter ? filter.value : '';
+    if (id === 'other_provider') {
+      return filter ? filter['label'] : '';
+    } else {
+      return filter ? filter.value : '';
+    }
   }
 
   getCountryValue = () => {
@@ -88,10 +111,25 @@ class InstitutionsTableFilters extends Component {
             </Col>
             <Col md={4}>
               <FormGroup>
-                <Input
-                  value={this.getValue('query')}
-                  onChange={(e) => this.onFilter(e.target.value, 'query')}
-                  placeholder={'Filter by Institution'}
+                <InputGroup>
+                  <Input
+                    value={this.getValue('query')}
+                    onChange={(e) => this.onFilter(e.target.value, 'query')}
+                    placeholder={'Filter by Education provider'}
+                  />
+                </InputGroup>
+              </FormGroup>
+            </Col>
+            <Col md={2}>
+              <FormGroup>
+                <SelectFilter
+                  field={'other_provider'}
+                  value={this.getValue('other_provider')}
+                  onFilter={this.onFilter}
+                  onFilterRemove={this.onFilterRemove}
+                  placeholder={'HEI / AP'}
+                  selectFilterOptions={this.getAPFilterOptions()}
+                  menuPlacement={'bottom'}
                 />
               </FormGroup>
             </Col>
@@ -104,16 +142,7 @@ class InstitutionsTableFilters extends Component {
                   onFilterRemove={this.onFilterRemove}
                   placeholder={'Filter by Country'}
                   selectFilterOptions={this.getSelectFilterOptions('country_facet')}
-                  menuPlacement={'top'}
-                />
-              </FormGroup>
-            </Col>
-            <Col md={2}>
-              <FormGroup>
-                <Input
-                  value={this.getValue('city')}
-                  onChange={(e) => this.onFilter(e.target.value, 'city')}
-                  placeholder={'City'}
+                  menuPlacement={'bottom'}
                 />
               </FormGroup>
             </Col>

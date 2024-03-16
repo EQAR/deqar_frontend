@@ -1,7 +1,7 @@
 // Function to tailor the programme_data - alternative_names for proper display
 export const decodeProgrammeNameData = (data) => {
   let {programmes} = data;
-  if(programmes) {
+  if (programmes) {
     programmes.forEach((programme) => {
       let {alternative_names} = programme;
       alternative_names.forEach((aname, idx) => {
@@ -19,7 +19,7 @@ export const decodeProgrammeNameData = (data) => {
 
 export const encodeProgrammeNameData = (formValues) => {
   let {programmes} = formValues;
-  if(programmes) {
+  if (programmes) {
     programmes.forEach((programme) => {
       if (!('alternative_names' in programme)) {
         programme['alternative_names'] = []

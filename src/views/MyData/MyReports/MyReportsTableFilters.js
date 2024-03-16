@@ -102,7 +102,7 @@ class MyReportsTableFilters extends Component {
                 <Input
                   value={query || ""}
                   onChange={(e) => this.onFilterChange(e.target.value, 'query')}
-                  placeholder={'Filter by Institution / Programme'}
+                  placeholder={'Filter by Education provider / Programme'}
                 />
               </FormGroup>
             </Col>

@@ -89,7 +89,7 @@ const DefaultLayout = ({is_admin, resetUser, ...props}) => {
         </Suspense>
       </AppHeader>
       <div className="app-body">
-        <AppSidebar fixed display="lg" width={300}>
+        <AppSidebar fixed display="lg">
           <AppSidebarHeader />
           <AppSidebarForm />
           <Suspense>

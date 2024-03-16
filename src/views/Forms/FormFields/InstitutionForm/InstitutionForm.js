@@ -30,6 +30,9 @@ import HierarchicalLinkSubform from "./components/HierarchicalLinkSubform";
 import HistoricalLinkSubform from "./components/HistoricalLinkSubform";
 import FormTextTransliterated from "../../../../components/FormFields/FormTextTransliterated/FormTextTransliterated";
 import FormCheckbox from "../../../../components/FormFields/FormCheckbox/FormCheckbox";
+import institution from "../../../../services/Institution";
+import agency from "../../../../services/Agency";
+import FormAutoSuggestField from "../../../../components/FormFields/FormAutoSuggestField/FormAutoSuggestField";
 
 const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...props}) => {
   const renderFormerNames = (value) => {
@@ -77,6 +80,33 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
               <FormTextField
                 field={'eter_id'}
                 disabled={true}
+              />
+            </FormGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={6}>
+            <FormGroup>
+              <Label for="is_other_provider">Other Provider</Label>
+              <FormCheckbox
+                field={'is_other_provider'}
+                disabled={formType !== 'create'}
+                className={'form-control'}
+                style={{display: 'block', marginTop: 0, marginLeft: '10px'}}
+              />
+            </FormGroup>
+          </Col>
+          <Col md={6}>
+            <FormGroup>
+              <Label for="organization_type">Organization Type</Label>
+              <FormSelectField
+                field={'organization_type'}
+                placeholder={'Select organization type...'}
+                optionsAPI={institution.getOrganizationTypes}
+                labelField={'type'}
+                valueField={'id'}
+                includeID={'front'}
+                disabled={readOnly || !formState.values['is_other_provider']}
               />
             </FormGroup>
           </Col>
@@ -177,9 +207,10 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
               field={'identifiers_national'}
               label={'Other ID'}
               formApi={formApi}
-              renderDisplayValue={value => (`${value.identifier} (${value.resource})`)}
-              labelShowRequired={false}
+              renderDisplayValue={value => (`${value.identifier} (${value.resource ? value.resource['resource'] : ''})`)}
+              labelShowRequired={true}
               disabled={readOnly}
+              validate={validateRequired}
             >
               <OtherIDSubform />
             </PopupFormListManager>
@@ -266,7 +297,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
         <Row>
           <Col md={12}>
             <FormGroup>
-              <Label for="qf_ehea_levels">QF-EHEA Levels</Label>
+              <Label for="qf_ehea_levels" className={formState.values['is_other_provider'] ? 'required' : ''}>QF-EHEA Levels</Label>
               <FormSelectField
                 field={'qf_ehea_levels'}
                 optionsAPI={list.selectQFEHEALevels}
@@ -274,6 +305,7 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
                 labelField={'level'}
                 valueField={'id'}
                 isMulti
+                validate={formState.values['is_other_provider'] && validateRequired}
                 disabled={readOnly}
               />
             </FormGroup>
@@ -316,6 +348,20 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
             >
               <HierarchicalLinkSubform />
             </PopupFormListManager>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            <FormGroup>
+              <Label for={'source_of_information'} className={'required'}>Source of information about the provider</Label>
+              <FormAutoSuggestField
+                field={'source_of_information'}
+                optionsAPI={agency.selectAllAgencies}
+                valueKey={'acronym_primary'}
+                disabled={readOnly}
+                validate={validateRequired}
+              />
+            </FormGroup>
           </Col>
         </Row>
       </Col>

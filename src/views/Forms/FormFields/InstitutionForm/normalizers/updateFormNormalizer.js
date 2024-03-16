@@ -8,6 +8,10 @@ export const updateFormNormalizer = (formValues) => {
         case Object:
           if ('id' in value) {
             normalizedForm[key] = value.id
+          } else {
+            if (key === 'resource') {
+              normalizedForm[key] = value['resource']
+            }
           }
           break;
         case Array:

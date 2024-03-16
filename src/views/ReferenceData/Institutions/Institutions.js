@@ -25,10 +25,10 @@ const Institutions = (props) => {
     <div className="animated fadeIn">
       <Card className={style.InstitutionsCard}>
         <CardHeader>
-          Reference Data » Institutions
+          Reference Data » Education providers
           <DataTableHeader
             storeName={'institutionsTable'}
-            filterText={'Number of institutions'}
+            filterText={'Number of education providers'}
             onFilterClick={onFilterClick}
           />
         </CardHeader>
@@ -46,7 +46,7 @@ const Institutions = (props) => {
                 to={{pathname: '/reference/institutions/create'}}
                 className={style.Link}
               >
-                Add New Institution
+                Add New Education provider
               </Link>
             </Button>
           </CardFooter>

@@ -19,11 +19,11 @@ const InstitutionDetails = ({userIsAdmin, ...props}) => {
   const renderFormTitle = () => {
     switch (param) {
       case 'view':
-        return `Reference Data » Institutions » View : Institution ID ${id}`;
+        return `Reference Data » Education providers » View : Education provider ID ${id}`;
       case 'edit':
-        return `Reference Data » Institutions » Edit : Institution ID ${id}`;
+        return `Reference Data » Education providers » Edit : Education provider ID ${id}`;
       case 'create':
-        return `Reference Data » Institutions » Create`;
+        return `Reference Data » Education providers » Create`;
       default:
         break;
     }

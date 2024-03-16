@@ -1,10 +1,12 @@
 import axios from 'axios';
 import {
+  GET_ASSESSMENTS,
   GET_ASSOCIATIONS,
   GET_EQAR_DECISIONS,
   GET_FLAGS,
   GET_QA_REQUIREMENT_TYPE,
-  GET_QFEHEA_LEVELS
+  GET_QFEHEA_LEVELS,
+  GET_DEGREE_OUTCOMES, GET_IDENTIFIER_RESOURCES
 } from "./config-api";
 
 class List {
@@ -18,6 +20,18 @@ class List {
 
   selectAssociations = () => {
     return axios.get(GET_ASSOCIATIONS);
+  };
+
+  selectAssessments = () => {
+    return axios.get(GET_ASSESSMENTS);
+  };
+
+  selectDegreeOutcomes = () => {
+    return axios.get(GET_DEGREE_OUTCOMES);
+  };
+
+  selectIdentifierResource = () => {
+    return axios.get(GET_IDENTIFIER_RESOURCES);
   };
 
   selectDecisions = () => {

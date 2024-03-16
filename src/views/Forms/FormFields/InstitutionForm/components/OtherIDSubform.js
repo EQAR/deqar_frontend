@@ -9,6 +9,9 @@ import {
 import withPopupFormManager from "../../../../../components/FormManager/PopupFormManagerHOC";
 import FormDatePickerField from "../../../../../components/FormFields/FormDatePickerField/FormDatePickerField";
 import FormTextArea from "../../../../../components/FormFields/FormTextArea/FormTextArea";
+import FormSelectField from "../../../../../components/FormFields/FormSelectField/FormSelectField";
+import list from "../../../../../services/List";
+
 
 const OtherIDSubform = ({formApi, formState, disabled}) => {
   return (
@@ -16,12 +19,15 @@ const OtherIDSubform = ({formApi, formState, disabled}) => {
       <Row>
         <Col>
           <FormGroup>
-            <Label for="resource" className={'required'}>Resource</Label>
-            <FormTextField
+            <Label for="resource" className={'required'}>Identifier Resource</Label>
+            <FormSelectField
               field={'resource'}
-              placeholder={'Enter resource'}
-              validate={validateRequired}
+              placeholder={'Select resource...'}
+              optionsAPI={list.selectIdentifierResource}
+              labelField={'resource'}
+              valueField={'resource'}
               disabled={disabled}
+              validate={validateRequired}
             />
           </FormGroup>
         </Col>

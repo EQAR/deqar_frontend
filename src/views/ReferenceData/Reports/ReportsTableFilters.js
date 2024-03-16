@@ -13,6 +13,7 @@ class ReportsTableFilters extends Component {
       country: undefined,
       agency: undefined,
       activity_type: undefined,
+      programme_type: undefined,
       flag: undefined,
       year: '',
       active: false
@@ -27,6 +28,7 @@ class ReportsTableFilters extends Component {
       agency: this.getFilterValue('agency', 'select'),
       activity_type: this.getFilterValue('activity_type', 'select'),
       flag: this.getFilterValue('flag', 'select'),
+      programme_type: this.getFilterValue('programme_type', 'select'),
       year: this.getFilterValue('year', 'text'),
       active: this.getFilterValue('active', 'boolean')
     });
@@ -89,18 +91,18 @@ class ReportsTableFilters extends Component {
   render() {
     const {filterState} = this.props;
     const {filterOpen} = filterState;
-    const {query, id, country, agency, activity_type, flag, year, active} = this.state;
+    const {query, id, country, agency, activity_type, programme_type, flag, year, active} = this.state;
 
     return(
       <React.Fragment>
         <Collapse isOpen={filterOpen}>
           <Row form>
-            <Col md={6}>
+            <Col md={3}>
               <FormGroup>
                 <Input
                   value={query || ""}
                   onChange={(e) => this.onFilterChange(e.target.value, 'query')}
-                  placeholder={'Filter by Institution / Programme'}
+                  placeholder={'Filter by Education provider / Programme'}
                 />
               </FormGroup>
             </Col>
@@ -121,6 +123,18 @@ class ReportsTableFilters extends Component {
                   active={active}
                   placeholder={'Filter by Date'}
                   onFilter={this.onFilterChange}
+                />
+              </FormGroup>
+            </Col>
+            <Col md={3}>
+              <FormGroup>
+                <SelectFilter
+                    field={'programme_type'}
+                    value={programme_type}
+                    onFilter={this.onFilterChange}
+                    onFilterRemove={this.onFilterRemove}
+                    placeholder={'Filter by Programme Type'}
+                    selectFilterOptions={this.getSelectFilterOptions('programme_type_facet')}
                 />
               </FormGroup>
             </Col>
