@@ -38,7 +38,7 @@ const AgencyActivitySubform = ({formState, disabled, formType}) => {
               placeholder={'Please select'}
               labelField={'type'}
               valueField={'id'}
-              disabled={disabled || formType === 'edit'}
+              disabled={disabled}
               validate={validateRequired}
             />
           </FormGroup>
