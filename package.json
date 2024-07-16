@@ -68,6 +68,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "ajv": "^6.12.6",
     "redux-devtools-extension": "^2.13.7"
   }
 }
