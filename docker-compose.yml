@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  admin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${DEQAR_ADMIN_PORT}:80"
+
