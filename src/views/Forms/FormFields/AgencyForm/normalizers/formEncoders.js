@@ -9,12 +9,21 @@ export const encodeNameData = (formValues) => {
   current_name_data['agency_name_versions'] = [...current_primary_name, ...current_alternative_names];
 
   const former_name_data = [];
+
   names_former.forEach(name => {
     name['former_primary_name'].forEach(primaryName => {
       primaryName['name_is_primary'] = true;
       primaryName['acronym_is_primary'] = true;
     });
-    name['agency_name_versions'] = [...name['former_primary_name'], ...name['former_alternative_names']];
+
+    console.log(name)
+
+    if (name.hasOwnProperty('former_alternative_names')) {
+      name['agency_name_versions'] = [...name['former_primary_name'], ...name['former_alternative_names']];
+    } else {
+      name['agency_name_versions'] = [...name['former_primary_name']]
+    }
+    
     delete(name['former_primary_name']);
     delete(name['former_alternative_names']);
     former_name_data.push(name);

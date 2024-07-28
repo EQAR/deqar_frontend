@@ -208,9 +208,9 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
               label={'Other ID'}
               formApi={formApi}
               renderDisplayValue={value => (`${value.identifier} (${value.resource ? value.resource['resource'] : ''})`)}
-              labelShowRequired={true}
+              labelShowRequired={!formState.values['is_other_provider']}
               disabled={readOnly}
-              validate={validateRequired}
+              validate={!formState.values['is_other_provider'] && validateRequired}
             >
               <OtherIDSubform />
             </PopupFormListManager>
@@ -353,13 +353,15 @@ const InstitutionForm = ({formType, formApi, formState, readOnly, module, ...pro
         <Row>
           <Col md={12}>
             <FormGroup>
-              <Label for={'source_of_information'} className={'required'}>Source of information about the provider</Label>
+              <Label for={'source_of_information'} className={formState.values['is_other_provider'] ? 'required' : ''}>
+                Source of information about the provider
+              </Label>
               <FormAutoSuggestField
                 field={'source_of_information'}
                 optionsAPI={agency.selectAllAgencies}
                 valueKey={'acronym_primary'}
                 disabled={readOnly}
-                validate={validateRequired}
+                validate={formState.values['is_other_provider'] && validateRequired}
               />
             </FormGroup>
           </Col>
