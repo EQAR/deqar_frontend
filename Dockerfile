@@ -1,9 +1,10 @@
 # build environment
-FROM node:12.2.0-alpine AS build
+FROM node:14-alpine AS build
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json /app/
-RUN npm install --silent
+RUN apk add --no-cache python3 py3-pip make g++
+RUN npm install
 COPY public /app/public/
 COPY src /app/src/
 COPY .env.* /app/
