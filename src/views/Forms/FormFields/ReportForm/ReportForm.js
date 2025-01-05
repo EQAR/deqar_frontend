@@ -35,9 +35,9 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
 
   const onInstitutionSelected = (value) => {
     let institutions = formApi.getValue('institutions');
-    if(institutions) {
+    if (institutions) {
       const institution_ids = institutions.map(i => i.id.toString());
-      if(!(institution_ids.includes(value.id))) {
+      if (!institution_ids.includes(value.id)) {
         institutions.push(value)
       }
     } else {
@@ -45,6 +45,22 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
     }
     formApi.setValue('institutions', institutions);
   };
+
+  const onActivitySelected = (value) => {
+    let activities = formApi.getValue('activities');
+
+    if (activities) {
+      const activity_ids = activities.map(i => i.id.toString());
+      if (!(activity_ids.includes(value.id))) {
+        activities.push(value)
+      }
+    } else {
+      activities = [value]
+    }
+    formApi.setValue('activities', activities);
+  };
+
+
 
   // Report Links
   const renderLinksDisplayValue = (value) => {
@@ -107,6 +123,21 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
     }
   };
 
+  const getAgencyValues = () => {
+    const agencies = [];
+    const agency = formState.values['agency'];
+    const contributing_agencies = formState.values['contributing_agencies'];
+
+    agency && agencies.push(agency.id);
+
+    if (contributing_agencies) {
+      contributing_agencies.forEach((contributing_agency) => {
+        agencies.push(contributing_agency.id);
+      });
+    }
+    return agencies;
+  }
+
   return(
     <Row>
       <Col md={6} className={style.reportFormLeft}>
@@ -164,22 +195,34 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
             </FormGroup>
           </Col>
         </Row>
+        { readOnly ? "" :
+            <Row>
+              <Col md={12}>
+                <FormGroup>
+                  <Label for="activities" className={'required'}>Activities</Label>
+                  <FormDependentSelectField
+                      field={''}
+                      placeholder={'Select agency ESG activity...'}
+                      optionsAPI={agency.selectActivityByAgencies}
+                      optionsID={getAgencyValues()}
+                      labelFunction={(option) => `${option['activity']} (${option['agency']}) - ID ${option['id']}`}
+                      valueField={'id'}
+                      disabled={readOnly}
+                      onChange={onActivitySelected}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+        }
         <Row>
           <Col md={12}>
-            <FormGroup>
-              <Label for="activity" className={'required'}>Activity</Label>
-              <FormDependentSelectField
-                field={'activity'}
-                placeholder={'Select agency ESG activity...'}
-                optionsAPI={agency.selectActivity}
-                optionsID={formState.values['agency'] ? formState.values['agency']['id'] : 0}
-                labelField={'activity'}
-                valueField={'id'}
-                validate={validateRequired}
+            { readOnly ? <Label for="activities" className={'required'}>Activities</Label> : null}
+            <FormAssignedList
+                field={'activities'}
+                labelShowRequired={true}
+                renderDisplayValue={(value) => (`${value['activity']} (${value['agency']}) - ID ${value['id']}`)}
                 disabled={readOnly}
-                includeID={'back'}
-              />
-            </FormGroup>
+            />
           </Col>
         </Row>
         { readOnly ? "" :

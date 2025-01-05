@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {
-  GET_ACTIVITIES,
+  GET_ACTIVITIES, GET_ACTIVITIES_BY_AGENCY,
   GET_ACTIVITY_TYPES,
   GET_AGENCIES, GET_ALL_AGENCIES, GET_MY_AGENCIES,
   GET_MY_SUBMISSION_AGENCIES,
@@ -25,12 +25,17 @@ class Agency {
     return axios.put(`${MANAGE_MY_AGENCY}${agencyID}/`, formValues);
   };
 
-  selectActivity = (agencyID, params) => {
-    if (agencyID) {
-      return axios.get(`${GET_ACTIVITIES}${agencyID}/`);
-    } else {
-      return axios.get(`${GET_ACTIVITIES}`, {params: params});
-    }
+  selectActivityByAgencies = (agencies) => {
+      return axios.get(`${GET_ACTIVITIES_BY_AGENCY}`, {
+        params: { agencies: agencies },
+        paramsSerializer: {
+          indexes: null, // use brackets with indexes
+        }
+      });
+  };
+
+  selectAllActivities = (params) => {
+    return axios.get(`${GET_ACTIVITIES}`, {params: params});
   };
 
   selectActivityType = () => {

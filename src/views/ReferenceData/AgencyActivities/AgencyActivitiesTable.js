@@ -37,7 +37,7 @@ const AgencyActivitiesTable = (props) => {
 
   const onFetchData = (state) => {
     const params = createTableAPIParams(state, columnConfig);
-    return agency.selectActivity(null, params);
+    return agency.selectAllActivities(params);
   };
 
   const saveState = (state) => {

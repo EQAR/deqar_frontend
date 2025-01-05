@@ -23,7 +23,7 @@ export const encodeNameData = (formValues) => {
     } else {
       name['agency_name_versions'] = [...name['former_primary_name']]
     }
-    
+
     delete(name['former_primary_name']);
     delete(name['former_alternative_names']);
     former_name_data.push(name);
