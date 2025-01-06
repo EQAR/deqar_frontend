@@ -27,6 +27,7 @@ import FormTextAreaFormatted from "../../../../components/FormFields/FormTextAre
 import FormCheckbox from "../../../../components/FormFields/FormCheckbox/FormCheckbox";
 import validateStatus from "./validators/validateStatus";
 import validateMicroCredentials from "./validators/validateMicroCredentials";
+import {detectActivityType} from "../../../../utils/detectActivityType";
 
 const ReportForm = ({formType, formApi, formState, readOnly}) => {
   const isAgencyDisabled = () => {
@@ -103,23 +104,21 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
   };
 
   const renderProgrammeField = () => {
-    const activity = formState.values['activity'];
-    if (activity) {
-      const activityType = activity.activity_type;
-      if(activityType !== 'institutional') {
-        return(
-          <PopupFormListManager
-            field={'programmes'}
-            formApi={formApi}
-            renderDisplayValue={renderProgrammeDisplayValue}
-            labelShowRequired={true}
-            disabled={readOnly}
-            validate={validateProgrammes}
-          >
-            <ProgrammeSubform size={'lg'} institutions={formState.values['institutions']} />
-          </PopupFormListManager>
-        )
-      }
+    const activities = formState.values['activities'];
+    const activityType = detectActivityType(activities);
+    if (activityType !== 'institutional') {
+      return(
+        <PopupFormListManager
+          field={'programmes'}
+          formApi={formApi}
+          renderDisplayValue={renderProgrammeDisplayValue}
+          labelShowRequired={true}
+          disabled={readOnly}
+          validate={validateProgrammes}
+        >
+          <ProgrammeSubform size={'lg'} institutions={formState.values['institutions']} />
+        </PopupFormListManager>
+      )
     }
   };
 
@@ -202,6 +201,7 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
                   <Label for="activities" className={'required'}>Activities</Label>
                   <FormDependentSelectField
                       field={''}
+                      emptyAfterChange={true}
                       placeholder={'Select agency ESG activity...'}
                       optionsAPI={agency.selectActivityByAgencies}
                       optionsID={getAgencyValues()}
