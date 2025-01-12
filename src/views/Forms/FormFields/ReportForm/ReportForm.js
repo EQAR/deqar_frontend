@@ -28,6 +28,7 @@ import FormCheckbox from "../../../../components/FormFields/FormCheckbox/FormChe
 import validateStatus from "./validators/validateStatus";
 import validateMicroCredentials from "./validators/validateMicroCredentials";
 import {detectActivityType} from "../../../../utils/detectActivityType";
+import validateActivities from "./validators/validateActivities";
 
 const ReportForm = ({formType, formApi, formState, readOnly}) => {
   const isAgencyDisabled = () => {
@@ -38,7 +39,7 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
     let institutions = formApi.getValue('institutions');
     if (institutions) {
       const institution_ids = institutions.map(i => i.id.toString());
-      if (!institution_ids.includes(value.id)) {
+      if (!institution_ids.includes(value.id.toString())) {
         institutions.push(value)
       }
     } else {
@@ -52,7 +53,8 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
 
     if (activities) {
       const activity_ids = activities.map(i => i.id.toString());
-      if (!(activity_ids.includes(value.id))) {
+
+      if (!(activity_ids.includes(value.id.toString()))) {
         activities.push(value)
       }
     } else {
@@ -221,6 +223,7 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
                 field={'activities'}
                 labelShowRequired={true}
                 renderDisplayValue={(value) => (`${value['activity']} (${value['agency']}) - ID ${value['id']}`)}
+                validate={validateActivities}
                 disabled={readOnly}
             />
           </Col>
