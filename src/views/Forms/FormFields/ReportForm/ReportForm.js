@@ -33,8 +33,8 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
     return formType !== 'create';
   };
 
-  const onInstitutionSelected = (value) => {
-    let institutions = formApi.getValue('institutions');
+  const onInstitutionSelected = (value, field='institutions') => {
+    let institutions = formApi.getValue(field);
     if(institutions) {
       const institution_ids = institutions.map(i => i.id.toString());
       if(!(institution_ids.includes(value.id))) {
@@ -43,7 +43,7 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
     } else {
       institutions = [value]
     }
-    formApi.setValue('institutions', institutions);
+    formApi.setValue(field, institutions);
   };
 
   // Report Links
@@ -186,7 +186,7 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
           <Row>
             <Col md={12}>
               <FormGroup>
-                <Label for="institution" className={'required'}>Institutions</Label>
+                <Label for="institution" className={'required'}>Education Provider(s)</Label>
                 <InstitutionSelect
                   onChange={onInstitutionSelected}
                 />
@@ -196,7 +196,7 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
         }
         <Row>
           <Col md={12}>
-            { readOnly ? <Label for="institution" className={'required'}>Institutions</Label> : null}
+            { readOnly ? <Label for="institution" className={'required'}>Education Provider(s)</Label> : null}
             <FormAssignedList
               field={'institutions'}
               validate={validateInstitutions}
@@ -204,6 +204,30 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
               renderDisplayValue={(value) => (value['name_primary'])}
               onClick={(idx) => console.log(idx)}
               disabled={readOnly}
+            />
+          </Col>
+        </Row>
+        { readOnly ? "" :
+            <Row>
+              <Col md={12}>
+                <FormGroup>
+                  <Label for="platform" className={'required'}>Platforms</Label>
+                  <InstitutionSelect
+                      onChange={(value) => onInstitutionSelected(value, 'platforms')}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+        }
+        <Row>
+          <Col md={12}>
+            { readOnly ? <Label for="platform" className={'required'}>Platforms</Label> : null}
+            <FormAssignedList
+                field={'platforms'}
+                labelShowRequired={true}
+                renderDisplayValue={(value) => (value['name_primary'])}
+                onClick={(idx) => console.log(idx)}
+                disabled={readOnly}
             />
           </Col>
         </Row>
