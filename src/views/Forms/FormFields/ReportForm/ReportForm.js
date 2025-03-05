@@ -211,7 +211,7 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
             <Row>
               <Col md={12}>
                 <FormGroup>
-                  <Label for="platform" className={'required'}>Platforms</Label>
+                  <Label for="platform">Platforms</Label>
                   <InstitutionSelect
                       onChange={(value) => onInstitutionSelected(value, 'platforms')}
                   />
@@ -221,10 +221,10 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
         }
         <Row>
           <Col md={12}>
-            { readOnly ? <Label for="platform" className={'required'}>Platforms</Label> : null}
+            { readOnly ? <Label for="platform">Platforms</Label> : null}
             <FormAssignedList
                 field={'platforms'}
-                labelShowRequired={true}
+                labelShowRequired={false}
                 renderDisplayValue={(value) => (value['name_primary'])}
                 onClick={(idx) => console.log(idx)}
                 disabled={readOnly}
