@@ -171,7 +171,7 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
                 <FormDependentSelectField
                     field={'activity'}
                     placeholder={'Select agency ESG activity...'}
-                    optionsAPI={agency.selectActivity}
+                    optionsAPI={agency.selectActivityByAgencies}
                     optionsID={formState.values['agency'] ? formState.values['agency']['id'] : 0}
                     labelField={'activity'}
                     valueField={'id'}
