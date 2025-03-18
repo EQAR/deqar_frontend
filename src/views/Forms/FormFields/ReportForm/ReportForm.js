@@ -27,24 +27,43 @@ import FormTextAreaFormatted from "../../../../components/FormFields/FormTextAre
 import FormCheckbox from "../../../../components/FormFields/FormCheckbox/FormCheckbox";
 import validateStatus from "./validators/validateStatus";
 import validateMicroCredentials from "./validators/validateMicroCredentials";
+import {detectActivityType} from "../../../../utils/detectActivityType";
+import validateActivities from "./validators/validateActivities";
 
 const ReportForm = ({formType, formApi, formState, readOnly}) => {
   const isAgencyDisabled = () => {
     return formType !== 'create';
   };
 
-  const onInstitutionSelected = (value, field='institutions') => {
-    let institutions = formApi.getValue(field);
-    if(institutions) {
+  const onInstitutionSelected = (value) => {
+    let institutions = formApi.getValue('institutions');
+    if (institutions) {
       const institution_ids = institutions.map(i => i.id.toString());
-      if(!(institution_ids.includes(value.id))) {
+      if (!institution_ids.includes(value.id.toString())) {
         institutions.push(value)
       }
     } else {
       institutions = [value]
     }
-    formApi.setValue(field, institutions);
+    formApi.setValue('institutions', institutions);
   };
+
+  const onActivitySelected = (value) => {
+    let activities = formApi.getValue('activities');
+
+    if (activities) {
+      const activity_ids = activities.map(i => i.id.toString());
+
+      if (!(activity_ids.includes(value.id.toString()))) {
+        activities.push(value)
+      }
+    } else {
+      activities = [value]
+    }
+    formApi.setValue('activities', activities);
+  };
+
+
 
   // Report Links
   const renderLinksDisplayValue = (value) => {
@@ -87,25 +106,38 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
   };
 
   const renderProgrammeField = () => {
-    const activity = formState.values['activity'];
-    if (activity) {
-      const activityType = activity.activity_type;
-      if(activityType !== 'institutional') {
-        return(
-            <PopupFormListManager
-                field={'programmes'}
-                formApi={formApi}
-                renderDisplayValue={renderProgrammeDisplayValue}
-                labelShowRequired={true}
-                disabled={readOnly}
-                validate={validateProgrammes}
-            >
-              <ProgrammeSubform size={'lg'} institutions={formState.values['institutions']} />
-            </PopupFormListManager>
-        )
-      }
+    const activities = formState.values['activities'];
+    const activityType = detectActivityType(activities);
+    if (activityType !== 'institutional') {
+      return(
+          <PopupFormListManager
+              field={'programmes'}
+              formApi={formApi}
+              renderDisplayValue={renderProgrammeDisplayValue}
+              labelShowRequired={true}
+              disabled={readOnly}
+              validate={validateProgrammes}
+          >
+            <ProgrammeSubform size={'lg'} institutions={formState.values['institutions']} />
+          </PopupFormListManager>
+      )
     }
   };
+
+  const getAgencyValues = () => {
+    const agencies = [];
+    const agency = formState.values['agency'];
+    const contributing_agencies = formState.values['contributing_agencies'];
+
+    agency && agencies.push(agency.id);
+
+    if (contributing_agencies) {
+      contributing_agencies.forEach((contributing_agency) => {
+        agencies.push(contributing_agency.id);
+      });
+    }
+    return agencies;
+  }
 
   return(
       <Row>
@@ -164,29 +196,43 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
               </FormGroup>
             </Col>
           </Row>
+          { readOnly ? "" :
+              <Row>
+                <Col md={12}>
+                  <FormGroup>
+                    <Label for="activities" className={'required'}>Activities</Label>
+                    <FormDependentSelectField
+                        field={''}
+                        emptyAfterChange={true}
+                        placeholder={'Select agency ESG activity...'}
+                        optionsAPI={agency.selectActivityByAgencies}
+                        optionsID={getAgencyValues()}
+                        labelFunction={(option) => `${option['activity']} (${option['agency']}) - ID ${option['id']}`}
+                        valueField={'id'}
+                        disabled={readOnly}
+                        onChange={onActivitySelected}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+          }
           <Row>
             <Col md={12}>
-              <FormGroup>
-                <Label for="activity" className={'required'}>Activity</Label>
-                <FormDependentSelectField
-                    field={'activity'}
-                    placeholder={'Select agency ESG activity...'}
-                    optionsAPI={agency.selectActivityByAgencies}
-                    optionsID={formState.values['agency'] ? formState.values['agency']['id'] : 0}
-                    labelField={'activity'}
-                    valueField={'id'}
-                    validate={validateRequired}
-                    disabled={readOnly}
-                    includeID={'back'}
-                />
-              </FormGroup>
+              { readOnly ? <Label for="activities" className={'required'}>Activities</Label> : null}
+              <FormAssignedList
+                  field={'activities'}
+                  labelShowRequired={true}
+                  renderDisplayValue={(value) => (`${value['activity']} (${value['agency']}) - ID ${value['id']}`)}
+                  validate={validateActivities}
+                  disabled={readOnly}
+              />
             </Col>
           </Row>
           { readOnly ? "" :
               <Row>
                 <Col md={12}>
                   <FormGroup>
-                    <Label for="institution" className={'required'}>Education Provider(s)</Label>
+                    <Label for="institution" className={'required'}>Institutions</Label>
                     <InstitutionSelect
                         onChange={onInstitutionSelected}
                     />
@@ -196,35 +242,11 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
           }
           <Row>
             <Col md={12}>
-              { readOnly ? <Label for="institution" className={'required'}>Education Provider(s)</Label> : null}
+              { readOnly ? <Label for="institution" className={'required'}>Institutions</Label> : null}
               <FormAssignedList
                   field={'institutions'}
                   validate={validateInstitutions}
                   labelShowRequired={true}
-                  renderDisplayValue={(value) => (value['name_primary'])}
-                  onClick={(idx) => console.log(idx)}
-                  disabled={readOnly}
-              />
-            </Col>
-          </Row>
-          { readOnly ? "" :
-              <Row>
-                <Col md={12}>
-                  <FormGroup>
-                    <Label for="platform">Platforms</Label>
-                    <InstitutionSelect
-                        onChange={(value) => onInstitutionSelected(value, 'platforms')}
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-          }
-          <Row>
-            <Col md={12}>
-              { readOnly ? <Label for="platform">Platforms</Label> : null}
-              <FormAssignedList
-                  field={'platforms'}
-                  labelShowRequired={false}
                   renderDisplayValue={(value) => (value['name_primary'])}
                   onClick={(idx) => console.log(idx)}
                   disabled={readOnly}
