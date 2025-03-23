@@ -24,9 +24,7 @@ import FileSubform from "./components/FileSubform";
 import validateInstitutions from "./validators/validateInstitutions";
 import validateProgrammes from "./validators/validateProgrammes";
 import FormTextAreaFormatted from "../../../../components/FormFields/FormTextArea/FormTextAreaFormatted";
-import FormCheckbox from "../../../../components/FormFields/FormCheckbox/FormCheckbox";
 import validateStatus from "./validators/validateStatus";
-import validateMicroCredentials from "./validators/validateMicroCredentials";
 import {detectActivityType} from "../../../../utils/detectActivityType";
 import validateActivities from "./validators/validateActivities";
 
@@ -49,18 +47,20 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
   };
 
   const onActivitySelected = (value) => {
-    let activities = formApi.getValue('activities');
+    if (value) {
+      let activities = formApi.getValue('activities');
 
-    if (activities) {
-      const activity_ids = activities.map(i => i.id.toString());
+      if (activities) {
+        const activity_ids = activities.map(i => i.id.toString());
 
-      if (!(activity_ids.includes(value.id.toString()))) {
-        activities.push(value)
+        if (!(activity_ids.includes(value.id.toString()))) {
+          activities.push(value)
+        }
+      } else {
+        activities = [value]
       }
-    } else {
-      activities = [value]
+      formApi.setValue('activities', activities);
     }
-    formApi.setValue('activities', activities);
   };
 
 
@@ -212,7 +212,7 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
                   <FormGroup>
                     <Label for="activities" className={'required'}>Activities</Label>
                     <FormDependentSelectField
-                        field={''}
+                        field={'activities'}
                         emptyAfterChange={true}
                         placeholder={'Select agency ESG activity...'}
                         optionsAPI={agency.selectActivityByAgencies}
