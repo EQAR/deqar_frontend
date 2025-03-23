@@ -139,6 +139,16 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
     return agencies;
   }
 
+  const renderActivityLabel = (option) => {
+    const activityGroup = option['activity_group'];
+
+    if (activityGroup['activity'] === option['activity']) {
+      return `${option['activity']} (${option['agency']}) - ID ${option['id']} - Activity Group ${activityGroup['id']}`;
+    } else {
+      return `${option['activity']} (${option['agency']}) - ID ${option['id']} - ${activityGroup['activity']} - Activity Group ${activityGroup['id']}`;
+    }
+  }
+
   return(
       <Row>
         <Col md={6} className={style.reportFormLeft}>
@@ -207,7 +217,7 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
                         placeholder={'Select agency ESG activity...'}
                         optionsAPI={agency.selectActivityByAgencies}
                         optionsID={getAgencyValues()}
-                        labelFunction={(option) => `${option['activity']} (${option['agency']}) - ID ${option['id']}`}
+                        labelFunction={renderActivityLabel}
                         valueField={'id'}
                         disabled={readOnly}
                         onChange={onActivitySelected}
