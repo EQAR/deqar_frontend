@@ -232,7 +232,7 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
               <FormAssignedList
                   field={'activities'}
                   labelShowRequired={true}
-                  renderDisplayValue={(value) => (`${value['activity']} (${value['agency']}) - ID ${value['id']}`)}
+                  renderDisplayValue={renderActivityLabel}
                   validate={validateActivities}
                   disabled={readOnly}
               />
