@@ -61,7 +61,7 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
       }
       formApi.setValue('activities', activities);
     }
-  };
+  }
 
 
 
@@ -212,7 +212,7 @@ const ReportForm = ({formType, formApi, formState, readOnly}) => {
                   <FormGroup>
                     <Label for="activities" className={'required'}>Activities</Label>
                     <FormDependentSelectField
-                        field={'activities'}
+                        field={''}
                         emptyAfterChange={true}
                         placeholder={'Select agency ESG activity...'}
                         optionsAPI={agency.selectActivityByAgencies}
