@@ -13,6 +13,7 @@ export const createFormNormalizer = (formValues) => {
                   normalizedForm[key].push(v.iso_639_1);
                   break;
                 case "institutions":
+                case "platforms":
                   normalizedForm[key].push({deqar_id: v.deqar_id});
                   break;
                 case "countries":
