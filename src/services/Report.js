@@ -7,7 +7,6 @@ import {
   GET_STATUSES,
   MANAGE_REPORT,
   POST_CSV,
-  POST_FILE,
   POST_REPORT, REMOVE_REPORT_FLAG
 } from "./config-api";
 
@@ -24,10 +23,6 @@ class Report {
 
   submitReport = (formValues) => {
     return axios.post(POST_REPORT, formValues);
-  };
-
-  submitReportFile = (file, reportFileID) => {
-    return axios.put(`${POST_FILE}/${reportFileID}/${file.name}`, file);
   };
 
   selectStatus = (configParams) => {
