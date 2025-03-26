@@ -1,8 +1,7 @@
 const BACKEND_DOMAIN = process.env.REACT_APP_BACKEND_API;
 
 export const ADMINAPI_URL = BACKEND_DOMAIN + '/adminapi/v1';
-export const SUBMISSIONAPI_URL = BACKEND_DOMAIN + '/submissionapi/v1';
-export const WEBAPI_URL = BACKEND_DOMAIN + '/webapi/v1';
+export const SUBMISSIONAPI_URL = BACKEND_DOMAIN + '/submissionapi/v2';
 
 // Authentication endpoints
 export const POST_PASSWORD = BACKEND_DOMAIN + '/auth/users/set_password/';
@@ -21,7 +20,6 @@ export const GET_REPORTS_BY_AGENCY = ADMINAPI_URL + '/reports_by_agency/';
 
 // Submission endpoints
 export const POST_REPORT = SUBMISSIONAPI_URL + '/submit/report';
-export const POST_FILE = SUBMISSIONAPI_URL + '/submit/reportfile';
 export const POST_CSV = SUBMISSIONAPI_URL + '/submit/csv';
 
 // Agency endpoints
