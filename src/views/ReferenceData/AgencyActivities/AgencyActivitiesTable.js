@@ -7,6 +7,12 @@ import DataTableRedux from "../../../components/DataTable/DataTableRedux";
 import AgencyActivitiesTableFilters from "./AgencyActivitiesTableFilters";
 
 const AgencyActivitiesTable = (props) => {
+  const activityGroupRenderer = (row) => {
+    return (
+        <div>{row.original.activity_group.activity} - ID {row.original.activity_group.id}</div>
+    )
+  }
+
   const columnConfig = [
     {
       field: 'id',
@@ -22,9 +28,10 @@ const AgencyActivitiesTable = (props) => {
       sortable: true,
       sortQueryParam: 'agency__acronym_primary'
     }, {
-      field: 'activity',
-      label: 'Activity Description',
+      field: 'activity_group',
+      label: 'Activity Group',
       minWidth: 250,
+      render: activityGroupRenderer,
       resizable: true,
       sortable: true,
     }, {
@@ -37,7 +44,7 @@ const AgencyActivitiesTable = (props) => {
 
   const onFetchData = (state) => {
     const params = createTableAPIParams(state, columnConfig);
-    return agency.selectActivity(null, params);
+    return agency.selectAllActivities(params);
   };
 
   const saveState = (state) => {

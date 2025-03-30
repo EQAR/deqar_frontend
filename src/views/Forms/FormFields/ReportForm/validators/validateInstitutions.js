@@ -1,7 +1,10 @@
+import {detectActivityType} from "../../../../../utils/detectActivityType";
+
 const validateInstitutions = (value, values) => {
   let institutions = values.institutions;
   institutions = institutions ? institutions : [];
-  const activityType = values.activity ? values.activity.activity_type : undefined;
+
+  const activityType = detectActivityType(values.activities)
 
   // If activity is 'joint programme'
   if (activityType === 'joint programme') {

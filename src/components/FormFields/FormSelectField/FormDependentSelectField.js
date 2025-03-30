@@ -9,8 +9,8 @@ const FormDependentSelectField = asField(({ fieldState, fieldApi, ...props }) =>
 
   const { value } = fieldState;
   const { setValue, setTouched, setError } = fieldApi;
-  const { onChange, onBlur, initialValue, forwardedRef, labelField, valueField, disabled, placeholder, includeID,
-    isMulti, givenValue, optionsID, optionsAPI,...rest } = props;
+  const { onChange, onBlur, initialValue, forwardedRef, labelFunction, labelField, valueField, disabled, placeholder, includeID,
+    isMulti, givenValue, emptyAfterChange, optionsID, optionsAPI,...rest } = props;
   const borderColor = fieldApi.getError() ? '#f86c6b' : '#e4e7ea';
   const customStyles = style(borderColor);
 
@@ -41,6 +41,10 @@ const FormDependentSelectField = asField(({ fieldState, fieldApi, ...props }) =>
   }, [optionsID, optionsAPI]);
 
   const getLabel = (option) => {
+    if (labelFunction) {
+        return labelFunction(option)
+    }
+
     if (includeID) {
       if (includeID === 'back') {
         return (<React.Fragment>{option[labelField]} - ID {option['id']}</React.Fragment>)
@@ -87,10 +91,12 @@ const FormDependentSelectField = asField(({ fieldState, fieldApi, ...props }) =>
 
   const changeValue = value =>  {
     setError('');
-    setValue(value);
+
     if (onChange) {
       onChange(value);
     }
+
+    emptyAfterChange ? setValue('') : setValue(value);
   };
 
   return (

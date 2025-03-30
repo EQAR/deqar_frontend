@@ -21,7 +21,7 @@ import {
 import {withRouter} from "react-router-dom";
 import withFormManager from "../../../../components/FormManager/FormManagerHOC";
 import PopupFormListManager from "../../../../components/FormManager/PopupFormListManager";
-import AgencyActivitySubform from "./components/AgenyActivitySubform";
+import AgencyActivitySubform from "./components/AgencyActivitySubform";
 import MembershipSubform from "./components/MembershipSubform";
 import FormSelectField from "../../../../components/FormFields/FormSelectField/FormSelectField";
 import country from "../../../../services/Country";
@@ -40,9 +40,9 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
   };
 
   const renderActivities = (value) => {
-    const {id, activity_type, activity, activity_local_identifier, activity_valid_to} = value;
+    const {id, activity_group, activity, activity_local_identifier, activity_valid_to} = value;
     return `${activity} - ID ${id} 
-       (${activity_type['type']}${activity_local_identifier ? `; ${activity_local_identifier})` : ')'}
+       (${activity_group['activity_type']}${activity_local_identifier ? `; ${activity_local_identifier})` : ')'}
        ${activity_valid_to ? activity_valid_to : ''}`;
   };
 

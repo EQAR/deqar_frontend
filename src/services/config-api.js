@@ -1,8 +1,7 @@
 const BACKEND_DOMAIN = process.env.REACT_APP_BACKEND_API;
 
 export const ADMINAPI_URL = BACKEND_DOMAIN + '/adminapi/v1';
-export const SUBMISSIONAPI_URL = BACKEND_DOMAIN + '/submissionapi/v1';
-export const WEBAPI_URL = BACKEND_DOMAIN + '/webapi/v1';
+export const SUBMISSIONAPI_URL = BACKEND_DOMAIN + '/submissionapi/v2';
 
 // Authentication endpoints
 export const POST_PASSWORD = BACKEND_DOMAIN + '/auth/users/set_password/';
@@ -21,14 +20,16 @@ export const GET_REPORTS_BY_AGENCY = ADMINAPI_URL + '/reports_by_agency/';
 
 // Submission endpoints
 export const POST_REPORT = SUBMISSIONAPI_URL + '/submit/report';
-export const POST_FILE = SUBMISSIONAPI_URL + '/submit/reportfile';
 export const POST_CSV = SUBMISSIONAPI_URL + '/submit/csv';
 
 // Agency endpoints
 export const GET_MY_SUBMISSION_AGENCIES = ADMINAPI_URL + '/select/agency/';
 export const GET_ALL_AGENCIES = ADMINAPI_URL + '/select/agency_all/';
 export const GET_ACTIVITIES = ADMINAPI_URL + '/select/agency_esg_activity/';
+export const GET_ACTIVITIES_BY_AGENCY = ADMINAPI_URL + '/select/agency_esg_activity_by_agency/';
 export const GET_ACTIVITY_TYPES = ADMINAPI_URL + '/select/activity_type/';
+export const GET_ACTIVITY_GROUPS = ADMINAPI_URL + '/select/activity_group';
+export const MANAGE_ACTIVITY_GROUP = ADMINAPI_URL + '/agencies/activity_group';
 export const GET_ASSOCIATIONS = ADMINAPI_URL + '/select/association/';
 export const GET_ASSESSMENTS = ADMINAPI_URL + '/select/assessment/';
 export const GET_DEGREE_OUTCOMES = ADMINAPI_URL + '/select/degree_outcome/';

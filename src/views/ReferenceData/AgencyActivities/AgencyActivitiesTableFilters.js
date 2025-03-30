@@ -9,19 +9,23 @@ class AgencyActivitiesTableFilters extends Component {
     super(props);
     this.state = {
       agency: undefined,
-      activity_type: undefined,
-      activity_id: '',
       agencyOptions: [],
-      activityTypeOptions: []
+      activity_type: undefined,
+      activityTypeOptions: [],
+      activity_id: '',
+      activity_group: undefined,
+      activityGroupOptions: []
     };
   }
 
   componentDidMount() {
     this.populateAgency();
     this.populateActivityType();
+    this.populateActivityGroup();
     this.setState({
       agency: this.getFilterValue('agency', 'select'),
       activity_type: this.getFilterValue('activity_type', 'select'),
+      activity_group: this.getFilterValue('activity_group', 'select'),
       activity_id: this.getFilterValue('activity_id', 'text'),
     });
   }
@@ -34,6 +38,18 @@ class AgencyActivitiesTableFilters extends Component {
       });
       this.setState({
         agencyOptions: options
+      })
+    })
+  };
+
+  // Populate selects
+  populateActivityGroup = () => {
+    agency.selectActivityGroup().then((response) => {
+      const options = response.data.map(r => {
+        return {label: r.display_value, value: r.id}
+      });
+      this.setState({
+        activityGroupOptions: options
       })
     })
   };
@@ -92,7 +108,7 @@ class AgencyActivitiesTableFilters extends Component {
   render() {
     const {filterState} = this.props;
     const {filterOpen} = filterState;
-    const {agency, activity_type, activity_id, agencyOptions, activityTypeOptions} = this.state;
+    const {agency, activity_type, activity_id, activity_group, agencyOptions, activityTypeOptions, activityGroupOptions} = this.state;
 
     return(
       <React.Fragment>
@@ -107,7 +123,7 @@ class AgencyActivitiesTableFilters extends Component {
                 />
               </FormGroup>
             </Col>
-            <Col md={5}>
+            <Col md={2}>
               <FormGroup>
                 <SelectFilter
                   field={'agency'}
@@ -119,7 +135,7 @@ class AgencyActivitiesTableFilters extends Component {
                 />
               </FormGroup>
             </Col>
-            <Col md={5}>
+            <Col md={2}>
               <FormGroup>
                 <SelectFilter
                   field={'activity_type'}
@@ -128,6 +144,18 @@ class AgencyActivitiesTableFilters extends Component {
                   onFilterRemove={this.onFilterRemove}
                   placeholder={'Filter by Activity Type'}
                   selectFilterOptions={activityTypeOptions}
+                />
+              </FormGroup>
+            </Col>
+            <Col md={6}>
+              <FormGroup>
+                <SelectFilter
+                    field={'activity_group'}
+                    value={activity_group}
+                    onFilter={this.onFilterChange}
+                    onFilterRemove={this.onFilterRemove}
+                    placeholder={'Filter by Activity Group'}
+                    selectFilterOptions={activityGroupOptions}
                 />
               </FormGroup>
             </Col>
