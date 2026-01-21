@@ -108,63 +108,72 @@ const CSVGridNew = ({csvData, csvHeader, afterIngest, onCellClick}) => {
     }
   };
 
-  const onButtonIngest = () => {
+  // New ingest function, that goes line-by-line synchronously
+  const onButtonIngest = async () => {
     loadingToggle();
 
-    // Get CSV
-    const replacer = (key, value) => value === null ? '' : value // specify how you want to handle null values here
-    const header = createColumns().map(column => column['field'])
+    const replacer = (key, value) => (value === null ? '' : value);
+    const header = createColumns().map(column => column['field']);
 
-    const id = toast(`Ingesting (${ingestStats['ingested']} / ${ingestStats['total']})...`, {
-      autoClose: false,
-    })
+    const toastId = toast(
+        `Ingesting (${ingestStats.ingested} / ${ingestStats.total})...`,
+        { autoClose: false }
+    );
 
-    gridAPI.forEachNode((rowNode, index) => {
-      if (rowNode.data.ingest_status !== 'OK') {
-        // Assemble CSV Data
-        const csvData = [
-          header.join(','),
-          header.map(fieldName => JSON.stringify(rowNode.data[fieldName], replacer)).join(',')
-        ].join('\r\n')
+    // Collect nodes in an array so we can access them by index
+    const nodes = [];
+    gridAPI.forEachNode(node => nodes.push(node));
 
-        // Submit CSV line by line
-        report.submitCSV(csvData).then((response) => {
-          // Update toast message
-          toast.update(id, {
-            render: `Ingesting (${index + 1} / ${ingestStats['total']})...`,
-            autoClose: true,
-          })
+    for (let index = 0; index < nodes.length; index++) {
+      const rowNode = nodes[index];
 
-          // Update responseData
-          const responseData = response.data[0]
-          responseDataFunctions.updateAt(index, responseData);
+      if (rowNode.data.ingest_status === 'OK') {
+        continue; // Skip already ingested rows
+      }
 
-          // If successful write the report id in the CSV table.
-          const rowData = rowNode.data;
-          if (responseData.submission_status === 'success') {
-            rowData['report_id'] = responseData.submitted_report['report_id'];
-            rowData['ingest_status'] = 'OK'
-          } else {
-            rowData['ingest_status'] = 'NOT OK - ReIngest'
-          }
-          gridDataFunctions.updateAt(index, rowData);
+      // Build CSV for this row
+      const csvData = [
+        header.join(','),
+        header.map(field => JSON.stringify(rowNode.data[field], replacer)).join(',')
+      ].join('\r\n');
 
-          // Loading spinner off
-          if (index + 1 === gridData.length) {
-            setLoading(false)
-          }
-        }).catch((error) => {
-          toast.update(id, {
-            render: `Ingesting (${index + 1} / ${ingestStats['total']})... - Error!`,
-            autoClose: true,
-          })
-          // Loading spinner off
-          if (index + 1 === gridData.length) {
-            setLoading(false)
-          }
+      try {
+        const response = await report.submitCSV(csvData);
+
+        // Update toast
+        toast.update(toastId, {
+          render: `Ingesting (${index + 1} / ${ingestStats.total})...`,
+          autoClose: false
+        });
+
+        // Store response
+        const thisResponse = response.data[0];
+        responseDataFunctions.updateAt(index, thisResponse);
+
+        // Update row in grid
+        const rowData = { ...rowNode.data };
+        if (thisResponse.submission_status === 'success') {
+          rowData['report_id'] = thisResponse.submitted_report.report_id;
+          rowData['ingest_status'] = 'OK';
+        } else {
+          rowData['ingest_status'] = 'NOT OK - ReIngest';
+        }
+        gridDataFunctions.updateAt(index, rowData);
+
+      } catch (error) {
+        toast.update(toastId, {
+          render: `Ingesting (${index + 1} / ${ingestStats.total})... - Error!`,
+          autoClose: false
         });
       }
+    }
+
+    // All done
+    toast.update(toastId, {
+      render: `Completed ${ingestStats.total} rows`,
+      autoClose: true
     });
+    setLoading(false);
   };
 
   return (
