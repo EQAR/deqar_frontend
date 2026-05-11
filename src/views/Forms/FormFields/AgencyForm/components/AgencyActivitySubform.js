@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Button, ButtonGroup, Col, Collapse, FormGroup, Label, Row} from "reactstrap";
 import {
   validateDate,
+  validateRequiredDate,
   validateDateFromRequired,
   validateRequired,
   validateURL
@@ -14,8 +15,9 @@ import agency from "../../../../../services/Agency";
 import style from './AgencyActivitySubform.module.css';
 import FormDependentSelectField from "../../../../../components/FormFields/FormSelectField/FormDependentSelectField";
 import AgencyGroupSubform from "./AgencyGroupSubform";
+import moment from "moment";
 
-const AgencyActivitySubform = ({formApi, formState, disabled, formType}) => {
+const AgencyActivitySubform = ({formApi, formState, disabled, formType, registrationStart, registrationValidTo}) => {
   const [groupFilter, setGroupFilter] = useState('all');
   const [activityGroupFormOpen, setActivityGroupFormOpen] = useState(false);
   const [activityGroupFormAction, setActivityGroupFormAction] = useState(null);
@@ -33,6 +35,35 @@ const AgencyActivitySubform = ({formApi, formState, disabled, formType}) => {
 
   const afterAgencyGroupSave = (values) => {
     formApi.setValue('activity_group', {id: values.id, display_value: values.display_value});
+  }
+
+  const validateActivityValidFrom = (value) => {
+    const activityWindowError = validateDateFromRequired(
+      value,
+      formState.values.activity_valid_to,
+      "Activity valid from date should be eariler than valid to date!"
+    );
+    if (activityWindowError) {
+      return activityWindowError;
+    }
+
+    if (!registrationStart || validateRequiredDate(registrationStart)) {
+      return null;
+    }
+
+    if (moment(value).isBefore(registrationStart)) {
+      return 'Activity valid from date should be on or after registration start date!';
+    }
+
+    if (!registrationValidTo || validateDate(registrationValidTo)) {
+      return null;
+    }
+
+    if (!moment(value).isBefore(registrationValidTo)) {
+      return 'Activity valid from date should be earlier than registration valid to date!';
+    }
+
+    return null;
   }
 
   return (
@@ -182,11 +213,7 @@ const AgencyActivitySubform = ({formApi, formState, disabled, formType}) => {
               field={'activity_valid_from'}
               placeholderText={'YYYY-MM-DD'}
               disabled={disabled}
-              validate={(value) => validateDateFromRequired(
-                value,
-                formState.values.activity_valid_to,
-                "Activity valid from date should be eariler than valid to date!"
-              )}
+              validate={validateActivityValidFrom}
             />
           </FormGroup>
         </Col>
