@@ -392,6 +392,8 @@ const AgencyForm = ({formType, formApi, formState, readOnly, module, ...props}) 
               <AgencyActivitySubform
                 formType={formType}
                 submitDisabled={formType === 'view'}
+                registrationStart={formState.values.registration_start}
+                registrationValidTo={formState.values.registration_valid_to}
               />
             </PopupFormListManager>
           </Col>
